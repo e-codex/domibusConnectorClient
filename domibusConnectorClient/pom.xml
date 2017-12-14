@@ -8,5 +8,8 @@
   <packaging>pom</packaging>
   <modules>
 		<module>domibusConnectorClientRunnable</module>
+		<module>domibusConnectorClientLibrary</module>
+		<module>domibusConnectorClientConfiguration</module>
+		<module>domibusConnectorClientDistribution</module>
   </modules>
 </project>
