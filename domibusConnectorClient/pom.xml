@@ -5,4 +5,8 @@
   <version>0.0.1-SNAPSHOT</version>
   <name>domibusConnectorClient</name>
   <description>Project for developing the client for the domibusConnectorWebApp</description>
+  <packaging>pom</packaging>
+  <modules>
+		<module>domibusConnectorClientRunnable</module>
+  </modules>
 </project>
