@@ -180,7 +180,7 @@ InitializingBean {
 					.getFromParty().getPartyId(), messageReceived);
 			LOGGER.debug("Generated national message ID for incoming message {}", natMessageId);
 			message.getMessageDetails().setNationalMessageId(natMessageId);
-			util.mergeMessage(message);
+//			util.mergeMessage(message); //TODO: FIX!
 		}
 		String pathname = incomingMessagesDir.getAbsolutePath() + File.separator + natMessageId;
 		LOGGER.debug("Deliver new message into folder {}", pathname);
@@ -265,7 +265,8 @@ InitializingBean {
 	@Override
 	public Message[] requestConfirmations() throws DomibusConnectorNationalBackendClientException,
 	ImplementationMissingException {
-		List<Message> unconfirmed = util.findUnconfirmedMessages();
+//		List<Message> unconfirmed = util.findUnconfirmedMessages(); //TODO: FIX!
+        List<Message> unconfirmed = new ArrayList<>();
 		if (!CollectionUtils.isEmpty(unconfirmed)) {
 			LOGGER.info("Found {} unconfirmed incoming messages.", unconfirmed.size());
 			List<Message> confirmationMessages = new ArrayList<Message>();
@@ -288,7 +289,8 @@ InitializingBean {
 	@Override
 	public void deliverLastEvidenceForMessage(Message confirmationMessage)
 			throws DomibusConnectorNationalBackendClientException, ImplementationMissingException {
-		Message originalMessage = util.findOriginalMessage(confirmationMessage.getMessageDetails().getRefToMessageId());
+		Message originalMessage = null;
+        //util.findOriginalMessage(confirmationMessage.getMessageDetails().getRefToMessageId()); //TODO: FIX!
 
 		if (originalMessage == null) {
 			throw new DomibusConnectorNationalBackendClientException(
@@ -321,7 +323,7 @@ InitializingBean {
 							.getMessageDetails().getFromParty().getPartyId(), new Date());
 					LOGGER.debug("Generated national message ID for incoming message {}", natMessageId);
 					originalMessage.getMessageDetails().setNationalMessageId(natMessageId);
-					util.mergeMessage(originalMessage);
+					//util.mergeMessage(originalMessage); //TODO: FIX!
 				}
 				String pathname = incomingMessagesDir.getAbsolutePath() + File.separator + natMessageId;
 				messageFolder = new File(pathname);
@@ -397,12 +399,12 @@ InitializingBean {
 
 	private void processMessageFolderFiles(Message message, File workMessageFolder, DomibusConnectorMessageProperties messageProperties)
 			throws DomibusConnectorNationalBackendClientException {
-		try {
-			util.convertMessagePropertiesToMessageDetails(messageProperties, message.getMessageDetails());
-		} catch (DomibusConnectorRunnableException e) {
-			throw new DomibusConnectorNationalBackendClientException(
-					"Error converting message details from message properties!", e);
-		}
+//		try {
+//			util.convertMessagePropertiesToMessageDetails(messageProperties, message.getMessageDetails());
+//		} catch (DomibusConnectorRunnableException e) {
+//			throw new DomibusConnectorNationalBackendClientException(
+//					"Error converting message details from message properties!", e);
+//		} //TODO: FIX!
 
 		String contentXmlFileName = messageProperties.getContentXmlFileName();
 		if (!StringUtils.hasText(contentXmlFileName)) {

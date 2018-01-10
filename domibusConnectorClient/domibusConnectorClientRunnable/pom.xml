@@ -18,12 +18,12 @@
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>domibusConnectorCommon</artifactId>
+            <artifactId>domibusConnectorNationalBackend35Client</artifactId>
             <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>domibusConnectorNationalBackend35Client</artifactId>
+            <artifactId>domibusConnector35ClientCommon</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>

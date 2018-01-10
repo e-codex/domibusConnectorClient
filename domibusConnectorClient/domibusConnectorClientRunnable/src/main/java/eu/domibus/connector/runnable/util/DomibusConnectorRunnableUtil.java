@@ -17,7 +17,7 @@ import org.springframework.util.StringUtils;
 import eu.domibus.connector.common.db.model.DomibusConnectorAction;
 import eu.domibus.connector.common.db.model.DomibusConnectorParty;
 import eu.domibus.connector.common.db.model.DomibusConnectorService;
-import eu.domibus.connector.common.db.service.DomibusConnectorPersistenceService;
+//import eu.domibus.connector.common.db.service.DomibusConnectorPersistenceService;
 import eu.domibus.connector.common.enums.EvidenceType;
 import eu.domibus.connector.common.message.Message;
 import eu.domibus.connector.common.message.MessageConfirmation;
@@ -40,11 +40,11 @@ public class DomibusConnectorRunnableUtil {
     @Value("${gateway.role}")
     private String gatewayRole;
 
-    private DomibusConnectorPersistenceService persistenceService;
-
-    public void setPersistenceService(DomibusConnectorPersistenceService persistenceService) {
-        this.persistenceService = persistenceService;
-    }
+//    private DomibusConnectorPersistenceService persistenceService;
+//
+//    public void setPersistenceService(DomibusConnectorPersistenceService persistenceService) {
+//        this.persistenceService = persistenceService;
+//    }
 
     public static byte[] fileToByteArray(File file) throws IOException {
         FileInputStream fileInputStream = new FileInputStream(file);
@@ -64,74 +64,74 @@ public class DomibusConnectorRunnableUtil {
         fos.flush();
         fos.close();
     }
-
-    public void convertMessagePropertiesToMessageDetails(DomibusConnectorMessageProperties properties,
-            MessageDetails messageDetails) throws DomibusConnectorRunnableException {
-
-        messageDetails.setFinalRecipient(properties.getFinalRecipient());
-        messageDetails.setOriginalSender(properties.getOriginalSender());
-        String fromPartyId = properties.getFromPartyId();
-        String fromPartyRole = properties.getFromPartyRole();
-        if (!StringUtils.hasText(fromPartyId)) {
-            fromPartyId = gatewayName;
-        }
-        if (!StringUtils.hasText(fromPartyRole)) {
-            fromPartyRole = gatewayRole;
-        }
-        if (fromPartyId != null && fromPartyRole != null) {
-            DomibusConnectorParty fromParty = persistenceService.getParty(fromPartyId, fromPartyRole);
-            if (fromParty == null) {
-                throw new DomibusConnectorRunnableException("Could not find Party with id '" + fromPartyId
-                        + "' and role '" + fromPartyRole + "'!");
-            }
-            messageDetails.setFromParty(fromParty);
-        } else {
-            throw new DomibusConnectorRunnableException(
-                    "Cannot process message without definition of fromPartyId and fromPartyRole!");
-        }
-        String toPartyId = properties.getToPartyId();
-        String toPartyRole = properties.getToPartyRole();
-        if (toPartyId != null && toPartyRole != null) {
-            DomibusConnectorParty toParty = persistenceService.getParty(toPartyId, toPartyRole);
-            if (toParty == null) {
-                throw new DomibusConnectorRunnableException("Could not find Party with id '" + toPartyId
-                        + "' and role '" + toPartyRole + "'!");
-            }
-            messageDetails.setToParty(toParty);
-        } else {
-            throw new DomibusConnectorRunnableException(
-                    "Cannot process message without definition of toPartyId and toPartyRole!");
-        }
-
-        String action = properties.getAction();
-        if (StringUtils.hasText(action)) {
-            DomibusConnectorAction dbAction = persistenceService.getAction(action);
-            if (dbAction == null) {
-                throw new DomibusConnectorRunnableException("Could not find Action in database by set action '" + action
-                        + "'!");
-            }
-            messageDetails.setAction(dbAction);
-        } else {
-            throw new DomibusConnectorRunnableException("Cannot process message without definition of action!");
-        }
-
-        String service = properties.getService();
-        if (StringUtils.hasText(service)) {
-            DomibusConnectorService dbService = persistenceService.getService(service);
-            if (dbService == null) {
-                throw new DomibusConnectorRunnableException("Could not find Service in database by set service '"
-                        + service + "'!");
-            }
-            messageDetails.setService(dbService);
-        } else {
-            throw new DomibusConnectorRunnableException("Cannot process message without definition of service!");
-        }
-
-        String conversationId = properties.getConversationId();
-        if(StringUtils.hasText(conversationId)){
-        	messageDetails.setConversationId(conversationId);
-        }
-    }
+//
+//    public void convertMessagePropertiesToMessageDetails(DomibusConnectorMessageProperties properties,
+//            MessageDetails messageDetails) throws DomibusConnectorRunnableException {
+//
+//        messageDetails.setFinalRecipient(properties.getFinalRecipient());
+//        messageDetails.setOriginalSender(properties.getOriginalSender());
+//        String fromPartyId = properties.getFromPartyId();
+//        String fromPartyRole = properties.getFromPartyRole();
+//        if (!StringUtils.hasText(fromPartyId)) {
+//            fromPartyId = gatewayName;
+//        }
+//        if (!StringUtils.hasText(fromPartyRole)) {
+//            fromPartyRole = gatewayRole;
+//        }
+//        if (fromPartyId != null && fromPartyRole != null) {
+//            DomibusConnectorParty fromParty = persistenceService.getParty(fromPartyId, fromPartyRole);
+//            if (fromParty == null) {
+//                throw new DomibusConnectorRunnableException("Could not find Party with id '" + fromPartyId
+//                        + "' and role '" + fromPartyRole + "'!");
+//            }
+//            messageDetails.setFromParty(fromParty);
+//        } else {
+//            throw new DomibusConnectorRunnableException(
+//                    "Cannot process message without definition of fromPartyId and fromPartyRole!");
+//        }
+//        String toPartyId = properties.getToPartyId();
+//        String toPartyRole = properties.getToPartyRole();
+//        if (toPartyId != null && toPartyRole != null) {
+//            DomibusConnectorParty toParty = persistenceService.getParty(toPartyId, toPartyRole);
+//            if (toParty == null) {
+//                throw new DomibusConnectorRunnableException("Could not find Party with id '" + toPartyId
+//                        + "' and role '" + toPartyRole + "'!");
+//            }
+//            messageDetails.setToParty(toParty);
+//        } else {
+//            throw new DomibusConnectorRunnableException(
+//                    "Cannot process message without definition of toPartyId and toPartyRole!");
+//        }
+//
+//        String action = properties.getAction();
+//        if (StringUtils.hasText(action)) {
+//            DomibusConnectorAction dbAction = persistenceService.getAction(action);
+//            if (dbAction == null) {
+//                throw new DomibusConnectorRunnableException("Could not find Action in database by set action '" + action
+//                        + "'!");
+//            }
+//            messageDetails.setAction(dbAction);
+//        } else {
+//            throw new DomibusConnectorRunnableException("Cannot process message without definition of action!");
+//        }
+//
+//        String service = properties.getService();
+//        if (StringUtils.hasText(service)) {
+//            DomibusConnectorService dbService = persistenceService.getService(service);
+//            if (dbService == null) {
+//                throw new DomibusConnectorRunnableException("Could not find Service in database by set service '"
+//                        + service + "'!");
+//            }
+//            messageDetails.setService(dbService);
+//        } else {
+//            throw new DomibusConnectorRunnableException("Cannot process message without definition of service!");
+//        }
+//
+//        String conversationId = properties.getConversationId();
+//        if(StringUtils.hasText(conversationId)){
+//        	messageDetails.setConversationId(conversationId);
+//        }
+//    }
 
     public static DomibusConnectorMessageProperties convertMessageDetailsToMessageProperties(
             MessageDetails messageDetails, Date messageReceived) {
@@ -228,24 +228,24 @@ public class DomibusConnectorRunnableUtil {
         return mimeMap.getContentType(file.getName());
     }
 
-    public Message findOriginalMessage(String refToMessageId) {
-        Message originalMessage = null;
-        try {
-            originalMessage = persistenceService.findMessageByEbmsId(refToMessageId);
-        } catch (NoResultException e) {
-            originalMessage = persistenceService.findMessageByNationalId(refToMessageId);
-        }
+//    public Message findOriginalMessage(String refToMessageId) {
+//        Message originalMessage = null;
+//        try {
+//            originalMessage = persistenceService.findMessageByEbmsId(refToMessageId);
+//        } catch (NoResultException e) {
+//            originalMessage = persistenceService.findMessageByNationalId(refToMessageId);
+//        }
+//
+//        return originalMessage;
+//
+//    }
 
-        return originalMessage;
-
-    }
-
-    public void mergeMessage(Message message) {
-        persistenceService.mergeMessageWithDatabase(message);
-    }
-
-    public List<Message> findUnconfirmedMessages() {
-        return persistenceService.findIncomingUnconfirmedMessages();
-    }
+//    public void mergeMessage(Message message) {
+//        persistenceService.mergeMessageWithDatabase(message);
+//    }
+//
+//    public List<Message> findUnconfirmedMessages() {
+//        return persistenceService.findIncomingUnconfirmedMessages();
+//    }
 
 }
