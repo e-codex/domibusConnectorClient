@@ -12,6 +12,7 @@ import eu.domibus.connector.common.enums.EvidenceType;
  * @author riederb
  * 
  */
+@Deprecated
 public class MessageConfirmation {
 
     private EvidenceType evidenceType;

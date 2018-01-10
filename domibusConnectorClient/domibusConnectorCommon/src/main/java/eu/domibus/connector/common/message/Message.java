@@ -11,7 +11,7 @@ import eu.domibus.connector.common.db.model.DomibusConnectorMessage;
  * @author riederb
  * 
  */
-
+@Deprecated
 public class Message {
 
     private final MessageDetails messageDetails;

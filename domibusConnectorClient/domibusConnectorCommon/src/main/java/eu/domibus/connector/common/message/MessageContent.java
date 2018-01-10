@@ -10,6 +10,7 @@ import eu.domibus.connector.common.enums.DetachedSignatureMimeType;
  * @author riederb
  * 
  */
+@Deprecated
 public class MessageContent {
 
     private byte[] nationalXmlContent;

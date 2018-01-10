@@ -14,6 +14,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.TableGenerator;
 
+@Deprecated
 @Entity
 @Table(name = "DOMIBUS_CONNECTOR_MESSAGE_INFO")
 public class DomibusConnectorMessageInfo {

@@ -18,6 +18,7 @@ import javax.persistence.TableGenerator;
 
 import eu.domibus.connector.common.enums.MessageDirection;
 
+@Deprecated
 @Entity
 @Table(name = "DOMIBUS_CONNECTOR_MESSAGES")
 public class DomibusConnectorMessage {

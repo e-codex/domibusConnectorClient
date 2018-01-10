@@ -19,6 +19,7 @@ package eu.domibus.connector.common.message;
  * @author riederb
  * 
  */
+@Deprecated
 public class MessageAttachment {
 
 	private final String identifier;

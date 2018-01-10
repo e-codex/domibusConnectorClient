@@ -1,5 +1,6 @@
 package eu.domibus.connector.common;
 
+@Deprecated
 public class CommonConnectorProperties {
 
     String gatewayEndpointAddress;

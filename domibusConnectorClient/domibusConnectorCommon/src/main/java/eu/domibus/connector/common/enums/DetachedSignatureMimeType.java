@@ -1,5 +1,6 @@
 package eu.domibus.connector.common.enums;
 
+@Deprecated
 public enum DetachedSignatureMimeType {
     /**
      * application/octet-stream

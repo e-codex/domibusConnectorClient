@@ -1,5 +1,6 @@
 package eu.domibus.connector.common;
 
+@Deprecated
 public class CommonConnectorGlobalConstants {
 
     public static final String MAIN_DOCUMENT_NAME = "mainDocument";

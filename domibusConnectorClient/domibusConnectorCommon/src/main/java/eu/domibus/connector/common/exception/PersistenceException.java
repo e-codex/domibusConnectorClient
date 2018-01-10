@@ -1,5 +1,6 @@
 package eu.domibus.connector.common.exception;
 
+@Deprecated
 public class PersistenceException extends Exception {
 
     public PersistenceException() {

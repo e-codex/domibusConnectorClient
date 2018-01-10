@@ -11,6 +11,7 @@ import eu.domibus.connector.common.db.model.DomibusConnectorService;
  * @author riederb
  * 
  */
+@Deprecated
 public class MessageDetails {
 
     private String nationalMessageId;
