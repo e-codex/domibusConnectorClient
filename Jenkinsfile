@@ -78,7 +78,11 @@ node {
 				
 				stage ('Post') {
 					if (currentBuild.result == null || currentBuild.result != 'FAILURE') {
-						junit '**/surefire-reports/*.xml,**/failsafe-reports/*.xml,**/dbunit-reports/*.xml'  //publish test reports
+						try {
+							junit '**/surefire-reports/*.xml,**/failsafe-reports/*.xml,**/dbunit-reports/*.xml'  //publish test reports
+						} catch (e) {
+							//ignore junit publish failures
+						}
 						try {
 							jacoco() //ignore failures
 						} catch (e) {
