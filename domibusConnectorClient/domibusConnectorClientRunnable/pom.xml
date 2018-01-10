@@ -3,7 +3,28 @@
   <parent>
     <groupId>eu.domibus.connector.client</groupId>
     <artifactId>domibusConnectorClient</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>3.9.0-SNAPSHOT</version>
   </parent>
   <artifactId>domibusConnectorClientRunnable</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnectorClientConfiguration</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>commons-lang</groupId>
+            <artifactId>commons-lang</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnectorCommon</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnectorNationalBackend35Client</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
 </project>

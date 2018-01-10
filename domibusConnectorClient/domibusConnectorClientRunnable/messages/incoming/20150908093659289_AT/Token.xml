@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?><TrustOkToken xmlns:ds="http://www.w3.org/2000/09/xmldsig#">
+    <Issuer>
+        <ServiceProvider>ERV</ServiceProvider>
+        <Country>AT</Country>
+        <AdvancedElectronicSystem>Authentication-based</AdvancedElectronicSystem>
+    </Issuer>
+    <Document>
+        <Filename>mainDocument.pdf</Filename>
+        <Type>PDF</Type>
+        <ds:DigestMethod Algorithm="SHA-256"/>
+        <ds:DigestValue>UnV1UWI3TzlRSWYwNTVWQWYrKzJlbDdpblNtZWNHaHkrTDhIeGpBT3dWdz0=</ds:DigestValue>
+    </Document>
+    <Validation>
+        <VerificationTime>2015-09-08T09:35:48.000+02:00</VerificationTime>
+        <VerificationData>
+            <SignatureData>
+                <SigningTime>2013-01-20T15:53:52.000+01:00</SigningTime>
+                <SignatureInformation>
+                    <SignatureVerification>false</SignatureVerification>
+                    <StructureVerification>true</StructureVerification>
+                    <SignatureFormat>PAdES_BASELINE_B</SignatureFormat>
+                    <SignatureLevel>AdES</SignatureLevel>
+                </SignatureInformation>
+                <CertificateInformation>
+                    <Issuer>CN=eCodexServer,OU=Test Environment,O=ITTIG-CNR,L=Florence,ST=Italy,C=IT</Issuer>
+                    <CertificateVerification>true</CertificateVerification>
+                    <ValidityAtSigningTime>true</ValidityAtSigningTime>
+                </CertificateInformation>
+            </SignatureData>
+        </VerificationData>
+        <TechnicalResult>
+            <TrustLevel>FAIL</TrustLevel>
+            <Comments>The signature is not mathematically correct.</Comments>
+        </TechnicalResult>
+        <LegalResult>
+            <TrustLevel>NOT_SUCCESSFUL</TrustLevel>
+            <Disclaimer>e-CODEX does not approve the validity of the document.</Disclaimer>
+        </LegalResult>
+        <OriginalValidationReport>
+<SimpleReport xmlns="http://dss.markt.ec.europa.eu/validation/diagnostic">
+	<Policy>
+		<PolicyName>ECodex-based</PolicyName>
+		<PolicyDescription>eCODEX validation policy</PolicyDescription>
+	</Policy>
+	<ValidationTime>2015-09-08T09:35:48Z</ValidationTime>
+	<DocumentName>mainDocument.pdf</DocumentName>
+	<Signature Id="FF85BD1C4848D093BFE89F1C8AC3099A" SignatureFormat="PAdES_BASELINE_B">
+		<SigningTime>2013-01-20T15:53:52Z</SigningTime>
+		<SignedBy>eCodexServer</SignedBy>
+		<Indication>INVALID</Indication>
+		<SubIndication>FORMAT_FAILURE</SubIndication>
+		<Error NameId="BBB_ICS_ICDVV_ANS">The signing certificate digest value does not match!</Error>
+		<SignatureLevel>AdES</SignatureLevel>
+		<SignatureScopes>
+			<SignatureScope name="Full PDF" scope="FullSignatureScope">Full document</SignatureScope>
+		</SignatureScopes>
+	</Signature>
+	<ValidSignaturesCount>0</ValidSignaturesCount>
+	<SignaturesCount>1</SignaturesCount>
+</SimpleReport>
+</OriginalValidationReport>
+
+    </Validation>
+<ds:Signature Id="id-C605803F89C7214A2C392692D39F8548" xmlns:ds="http://www.w3.org/2000/09/xmldsig#"><ds:SignedInfo><ds:CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><ds:SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1"/><ds:Reference Id="xml_ref_id" URI=""><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature"/><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/><ds:Transform Algorithm="http://www.w3.org/TR/1999/REC-xpath-19991116"><ds:XPath>not(ancestor-or-self::ds:Signature)</ds:XPath></ds:Transform></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>jkZW2GD594+0m1QB/pmAfnXAuWM=</ds:DigestValue></ds:Reference><ds:Reference Type="http://uri.etsi.org/01903#SignedProperties" URI="#xades-id-C605803F89C7214A2C392692D39F8548"><ds:Transforms><ds:Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#"/></ds:Transforms><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>M86jxFyDzxT8L/Vd4etM3QZZTbQ=</ds:DigestValue></ds:Reference></ds:SignedInfo><ds:SignatureValue Id="value-id-C605803F89C7214A2C392692D39F8548">TXqJ6W3GaUJU9JL5rcZe/Idv8MkMCLqIdDj6UkCg3ZXLPZUK7ZbJuqmh1hPZgluCgPSBsBVWdayWSUrlAM6KJVdylGvJW/omHNhiuJp2sDcPOXPbh/6CUF95waJNOh6sTf+UKpmC8pTh6HxFowRf7AJ4ftp16VJf4jQwMX3eyGba2l2xVxuRf2aowA73IAX4Unx3aT68ztR/a1M6UdvuQzVwR0vJcziWUyxGwkK+n1uYORr1dizkQ/Du1Qbv8it7CYdPkrM0fLXdZsHWmNkO0/65p+93oWhv2yZk56s06oTn8BHb/XneMDdg1rvjn/9vX26FYkoaUPJKUPG6vfA+oA==</ds:SignatureValue><ds:KeyInfo><ds:X509Data><ds:X509Certificate>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</ds:X509Certificate></ds:X509Data></ds:KeyInfo><ds:Object><xades:QualifyingProperties xmlns:xades="http://uri.etsi.org/01903/v1.3.2#" Target="#id-C605803F89C7214A2C392692D39F8548"><xades:SignedProperties Id="xades-id-C605803F89C7214A2C392692D39F8548"><xades:SignedSignatureProperties><xades:SigningTime>2015-09-08T07:35:51Z</xades:SigningTime><xades:SigningCertificate><xades:Cert><xades:CertDigest><ds:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1"/><ds:DigestValue>bQbV72vNUhEVfmv+n5jb6xnJtuA=</ds:DigestValue></xades:CertDigest><xades:IssuerSerial><ds:X509IssuerName>CN=a-sign-SSL-05,OU=a-sign-SSL-05,O=A-Trust Ges. f. Sicherheitssysteme im elektr. Datenverkehr GmbH,C=AT</ds:X509IssuerName><ds:X509SerialNumber>1455152</ds:X509SerialNumber></xades:IssuerSerial></xades:Cert></xades:SigningCertificate></xades:SignedSignatureProperties><xades:SignedDataObjectProperties><xades:DataObjectFormat ObjectReference="#xml_ref_id"><xades:MimeType>text/xml</xades:MimeType></xades:DataObjectFormat></xades:SignedDataObjectProperties></xades:SignedProperties></xades:QualifyingProperties></ds:Object></ds:Signature></TrustOkToken>
