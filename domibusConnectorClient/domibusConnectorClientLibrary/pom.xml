@@ -7,4 +7,10 @@
   </parent>
   <description>WebConnector 4.x Client Library</description>
   <artifactId>domibusConnectorClientLibrary</artifactId>
+    <dependencies>
+        <dependency>
+            <groupId>eu.domibus.connector</groupId>
+            <artifactId>domibusConnectorDomain</artifactId>
+        </dependency>
+    </dependencies>
 </project>
