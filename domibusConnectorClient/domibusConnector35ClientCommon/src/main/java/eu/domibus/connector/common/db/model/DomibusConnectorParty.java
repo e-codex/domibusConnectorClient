@@ -6,7 +6,6 @@ import javax.persistence.Id;
 import javax.persistence.IdClass;
 import javax.persistence.Table;
 
-@Deprecated
 @Entity
 @IdClass(DomibusConnectorPartyPK.class)
 @Table(name = "DOMIBUS_CONNECTOR_PARTY")

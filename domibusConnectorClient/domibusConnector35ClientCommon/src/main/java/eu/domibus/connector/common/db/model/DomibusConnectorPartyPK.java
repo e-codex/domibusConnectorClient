@@ -4,7 +4,6 @@ import java.io.Serializable;
 
 import javax.persistence.Column;
 
-@Deprecated
 public class DomibusConnectorPartyPK implements Serializable {
 
     /**

@@ -16,7 +16,6 @@ import javax.persistence.TableGenerator;
 
 import eu.domibus.connector.common.enums.EvidenceType;
 
-@Deprecated
 @Entity
 @Table(name = "DOMIBUS_CONNECTOR_EVIDENCES")
 public class DomibusConnectorEvidence {

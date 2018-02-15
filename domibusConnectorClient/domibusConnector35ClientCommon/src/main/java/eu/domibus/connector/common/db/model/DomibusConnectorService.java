@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Deprecated
 @Entity
 @Table(name = "DOMIBUS_CONNECTOR_SERVICE")
 public class DomibusConnectorService {
