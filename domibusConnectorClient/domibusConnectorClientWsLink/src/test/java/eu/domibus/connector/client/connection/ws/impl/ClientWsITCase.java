@@ -64,6 +64,7 @@ public class ClientWsITCase {
         assertThat(submitMessage.getConnectorMessageId()).isNotNull();
     }
     
+    
     @Test
     public void testRequestMessagesFromServer() {
         List<DomibusConnectorMessage> fetchMessages = transportWs.fetchMessages();

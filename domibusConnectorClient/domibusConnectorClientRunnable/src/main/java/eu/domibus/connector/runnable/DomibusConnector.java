@@ -9,6 +9,9 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.StringUtils;
 
 import eu.domibus.connector.gui.config.properties.ConnectorProperties;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.context.ConfigurableApplicationContext;
 
 public class DomibusConnector {
 
@@ -76,18 +79,28 @@ public class DomibusConnector {
         		
         }
 
-        AbstractApplicationContext context = null;
+        ConfigurableApplicationContext context = null;
         
-        if(startWithGUI){
-        	System.out.println("Start Connector with GUI.");
-        	context = new ClassPathXmlApplicationContext(
-        			"classpath:spring/context/DomibusConnectorRunnableWithGUI.xml");
-        }else{
-        	System.out.println("Start Connector without GUI");
-        	context = new ClassPathXmlApplicationContext(
-        			"classpath:spring/context/DomibusConnectorRunnableContext.xml");
-        	
-        }
+        SpringApplicationBuilder builder = new SpringApplicationBuilder();
+        SpringApplication springApp = builder
+                .sources(DomibusClientGuiConfiguration.class) //TODO: load context
+                .web(false)
+                .properties("spring.config.name=" + System.getProperty("connector.properties"))
+                .build();
+        
+        context = springApp.run(args);
+        
+        
+//        if(startWithGUI){
+//        	System.out.println("Start Connector with GUI.");
+//        	context = new ClassPathXmlApplicationContext(
+//        			"classpath:spring/context/DomibusConnectorRunnableWithGUI.xml");
+//        }else{
+//        	System.out.println("Start Connector without GUI");
+//        	context = new ClassPathXmlApplicationContext(
+//        			"classpath:spring/context/DomibusConnectorRunnableContext.xml");
+//        	
+//        }
         
         context.registerShutdownHook();
     }

@@ -119,3 +119,7 @@ local.properties
 .worksheet
 
 
+/domibusConnectorClient/domibusConnectorClientWsLink/src/main/resources/wsdl/eu.domibus.connector.domain.transition/DomibusConnectorTransitionModel.xsd
+/domibusConnectorClient/domibusConnectorClientWsLink/src/main/resources/wsdl/
+/domibusConnectorClient/domibusConnectorClientWsLink/nbproject/
+/domibusConnectorClient/domibusConnectorNationalBackend35Client/nbproject/
