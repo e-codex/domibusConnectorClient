@@ -33,19 +33,17 @@ http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd "
                 <prop key="org.apache.ws.security.crypto.provider">org.apache.wss4j.common.crypto.Merlin</prop>
                 <prop key="org.apache.ws.security.crypto.merlin.keystore.type">jks</prop>
                 <prop key="org.apache.ws.security.crypto.merlin.keystore.password">12345</prop>
-                <prop key="org.apache.ws.security.crypto.merlin.keystore.file">domibusClient.jks</prop>
+                <prop key="org.apache.ws.security.crypto.merlin.keystore.file">connectorclient.jks</prop>
             </props>
         </property>
     </bean>
     
     
-    <jaxws:client id="backendClient"
+    <jaxws:client id="connectorWsClient"
                 serviceClass="eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWebService"
                 address="${connector.backend.ws.address}" >
          
          <jaxws:properties>
-<!--            <entry key="security.username" value="bob" />
-            <entry key="security.password" value="test" />            -->
             <entry key="security.encryption.properties" value-ref="encryptProperties"  />
             <entry key="security.signature.properties" value-ref="encryptProperties" />
             <entry key="security.encryption.username" value="connector" />

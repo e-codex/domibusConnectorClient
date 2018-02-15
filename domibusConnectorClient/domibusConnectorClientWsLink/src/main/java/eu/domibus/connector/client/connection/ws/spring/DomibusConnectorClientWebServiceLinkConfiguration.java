@@ -1,6 +1,8 @@
 
 package eu.domibus.connector.client.connection.ws.spring;
 
+import eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWebService;
+import javax.annotation.Resource;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
@@ -12,6 +14,6 @@ import org.springframework.context.annotation.ImportResource;
 @ImportResource("classpath:/webservice/connectorclient.xml")
 public class DomibusConnectorClientWebServiceLinkConfiguration {
 
-    
-    
+
+       
 }
