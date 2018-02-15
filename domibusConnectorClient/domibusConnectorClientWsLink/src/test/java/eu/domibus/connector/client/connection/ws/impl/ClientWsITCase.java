@@ -26,24 +26,27 @@ public class ClientWsITCase {
     static ApplicationContext clientContext;
     
     @BeforeClass
-    public static void beforeClass() {
+    public static void beforeClass() throws InterruptedException {
         String[] serverProfiles = new String[] {};
         String[] serverProperties = new String[] {"server.port=0"};
         backendContext = BackendServer.startSpringApplication(serverProfiles, serverProperties);
         
-        String port = backendContext.getEnvironment().getProperty("local.port");
+        String port = backendContext.getEnvironment().getProperty("local.server.port");
         String backendAddress = "http://localhost:" + port + "/services/backend";
+        System.out.println("Backend address is: " + backendAddress);
+        
         
         String[] clientProfiles = new String[] {};
         String[] clientProperties = new String[] {"server.port=0", 
             "connector.backend.ws.address=" + backendAddress, 
             "ws.backendclient.name=bob" };
         
-        //clientContext = BackendClient.startSpringApplication(clientProfiles, clientProperties);
+        clientContext = BackendClient.startSpringApplication(clientProfiles, clientProperties);
         
+        //Thread.sleep(20000);
     }
     
-    List<DomibusConnectorMessageType> messages;
+    List<DomibusConnectorMessage> messages;
     
     DomibusConnectorClientWsTransportMessageService transportWs;
     
@@ -60,6 +63,15 @@ public class ClientWsITCase {
         
         assertThat(submitMessage.getConnectorMessageId()).isNotNull();
     }
+    
+    @Test
+    public void testRequestMessagesFromServer() {
+        List<DomibusConnectorMessage> fetchMessages = transportWs.fetchMessages();
+
+        assertThat(fetchMessages).hasSize(1);
+    }
+    
+    
     
     
 }

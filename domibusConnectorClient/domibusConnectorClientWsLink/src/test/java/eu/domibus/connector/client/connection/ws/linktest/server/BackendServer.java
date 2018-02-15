@@ -1,6 +1,8 @@
 
 package eu.domibus.connector.client.connection.ws.linktest.server;
 
+import eu.domibus.connector.domain.model.DomibusConnectorMessage;
+import eu.domibus.connector.domain.transformer.DomibusConnectorDomainMessageTransformer;
 import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
@@ -11,6 +13,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -30,6 +34,7 @@ import org.springframework.context.annotation.ImportResource;
 @ImportResource("classpath:/testservice.xml")
 public class BackendServer {
 
+    private final static Logger LOGGER = LoggerFactory.getLogger(BackendServer.class);
     
     public static ApplicationContext startSpringApplication(String[] profiles, String[] properties) {
 
@@ -49,24 +54,27 @@ public class BackendServer {
     }
     
     @Bean("submittedMessages")
-    public List<DomibusConnectorMessageType> submittedMessages() {
+    public List<DomibusConnectorMessage> submittedMessages() {
         return Collections.synchronizedList(new ArrayList<>());
     }
     
     @Bean("connectorBackendImpl")
     public DomibusConnectorBackendWebService domibusConnectorBackendWebService() {
         
-        List<DomibusConnectorMessageType> submittedMessages = submittedMessages();
+        List<DomibusConnectorMessage> submittedMessages = submittedMessages();
         
         DomibusConnectorBackendWebService backend = new DomibusConnectorBackendWebService() {
             @Override
             public DomibusConnectorMessagesType requestMessages(EmptyRequestType requestMessagesRequest) {
+                LOGGER.debug("#requestMessages");
                 return TransitionCreator.createMessages();
             }
 
             @Override
             public DomibsConnectorAcknowledgementType submitMessage(DomibusConnectorMessageType submitMessageRequest) {
-                submittedMessages.add(submitMessageRequest);
+                LOGGER.debug("#submitMessage");
+                DomibusConnectorMessage transformTransitionToDomain = DomibusConnectorDomainMessageTransformer.transformTransitionToDomain(submitMessageRequest);
+                submittedMessages.add(transformTransitionToDomain);
                 DomibsConnectorAcknowledgementType response = new DomibsConnectorAcknowledgementType();
                 response.setMessageId(UUID.randomUUID().toString());
                 response.setResult(true);
