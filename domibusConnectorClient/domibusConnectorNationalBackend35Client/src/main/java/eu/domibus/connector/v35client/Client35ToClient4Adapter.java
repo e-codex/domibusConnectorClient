@@ -1,6 +1,7 @@
 
 package eu.domibus.connector.v35client;
 
+import eu.domibus.connector.client.connection.SubmitMessageToConnector;
 import eu.domibus.connector.common.exception.ImplementationMissingException;
 import eu.domibus.connector.common.message.Message;
 import eu.domibus.connector.common.message.MessageContent;
@@ -14,25 +15,45 @@ import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 /**
  * This Service maps the old {@link eu.domibus.connector.nbc.DomibusConnectorNationalBackendClient} 
- * to the new webservice
+ * to the new service a adapter between the client35 and client4
  * this is part of the client35 lib
  * 
  * 
  * @author {@literal Stephan Spindler <stephan.spindler@extern.brz.gv.at> }
  */
-public class TranslateBetween35And4Client {
+@Service
+public class Client35ToClient4Adapter {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(TranslateBetween35And4Client.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(Client35ToClient4Adapter.class);
     
     @Autowired
     DomibusConnectorNationalBackendClient nationalBackendClient;
     
+    @Autowired
+    SubmitMessageToConnector submitMessageToConnectorService;
     
+    @Autowired
+    Map35MessageTov4Message map35MessageTov4Message;
+
+
+    //SETTER
+    public void setNationalBackendClient(DomibusConnectorNationalBackendClient nationalBackendClient) {
+        this.nationalBackendClient = nationalBackendClient;
+    }
+
+    public void setSubmitMessageToConnectorService(SubmitMessageToConnector submitMessageToConnectorService) {
+        this.submitMessageToConnectorService = submitMessageToConnectorService;
+    }
+    public void setMap35MessageTov4Message(Map35MessageTov4Message map35MessageTov4Message) {
+        this.map35MessageTov4Message = map35MessageTov4Message;
+    }
     
-    //must be called by timer job!
+
+    //TODO: must be called by timer job!
     public void transportMessagesToController() {
         try {
             String[] unsentMessageIds = nationalBackendClient.requestMessagesUnsent();
@@ -44,18 +65,22 @@ public class TranslateBetween35And4Client {
             String error = "clientException from national backend occured!";
             LOGGER.error(error, clientException);
             throw new RuntimeException(clientException);
-        } catch (ImplementationMissingException ex) {            
-            throw new RuntimeException(ex);            
+        } catch (ImplementationMissingException ex) {
+            throw new RuntimeException(ex);
         }        
     }
     
     void transportOneMessageToController(String id) {
-        try {
-            Message nationalMessage = getMessageFromNational(id);
-            
+        
+        try {            
+            Message nationalMessage = getMessageFromNational(id);        
+            DomibusConnectorMessage domibusMessage = map35MessageTov4Message.map35MessageTov4Message(nationalMessage);
+            submitMessageToConnectorService.submitMessage(domibusMessage);            
         } catch (Exception e) {            
             String error = String.format("Sending national message with id [%s] to domibusConnector failed!", id);            
             LOGGER.error(error, e);
+            //TODO: mark message as failed! AND INFORM client!
+            //Maybe create a NonDelivery Message?
         }
     }
     
@@ -75,5 +100,6 @@ public class TranslateBetween35And4Client {
     }
     
     
+    //TODO: transport messages from controller to National
     
 }
