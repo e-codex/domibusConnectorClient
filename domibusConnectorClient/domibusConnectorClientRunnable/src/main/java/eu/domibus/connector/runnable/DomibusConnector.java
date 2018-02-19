@@ -21,63 +21,63 @@ public class DomibusConnector {
     @SuppressWarnings("resource")
 	public static void main(String[] args) {
 
-    	boolean startWithGUI = false;
-    	if(ArrayUtils.contains(args, "-gui")){
-    		startWithGUI=true;
-    	}
-    	
-        String connectorProperties = System.getProperty("connector.properties");
-        if (!StringUtils.hasText(connectorProperties)) {
-            connectorProperties = System.getenv("connector.properties");
-        }
-        if (!StringUtils.hasText(connectorProperties)) {
-            connectorProperties = ConnectorProperties.CONNECTOR_PROPERTIES_FILE_PATH;
-        }
-        if(StringUtils.hasText(connectorProperties)){
-        	System.setProperty("connector.properties", connectorProperties);
-        }
-        try{
-        	ConnectorProperties.loadConnectorProperties();
-        }catch(Exception e){
-        	
-        }
-        if (!ConnectorProperties.CONNECTOR_PROPERTIES_FILE.exists() && startWithGUI) {
-        	
-        	try {
-				Process process = new ProcessBuilder(
-						"java", "-jar","domibusConnectorConfigurator.jar").start();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-        	
-        	System.exit(0);
-        }
-        
-        
-        if(!ConnectorProperties.CONNECTOR_PROPERTIES_FILE.exists()){
-        	try{
-                ConnectorProperties.loadConnectorProperties();
-                }catch(Exception e){
-                	throw new RuntimeException("Connector Properties could not be loaded!");
-                }
-		}
-
-        String loggingProperties = System.getProperty("logging.properties");
-        if (!StringUtils.hasText(loggingProperties)) {
-            loggingProperties = System.getenv("logging.properties");
-        }
-
-
-        if (!StringUtils.hasText(loggingProperties)) {
-        	DomibusConnector.class.getResource("log4j.properties");
-        	File classpathLog4j = new File(DomibusConnector.class.getClassLoader().getResource("log4j.properties").getFile());
-        	if(classpathLog4j.exists())
-            System.setProperty("logging.properties", classpathLog4j.getAbsolutePath());
-        	else{
-        		System.setProperty("logging.properties", ConnectorProperties.LOG4J_CONFIG_FILE_PATH);
-        	}
-        		
-        }
+//    	boolean startWithGUI = false;
+//    	if(ArrayUtils.contains(args, "-gui")){
+//    		startWithGUI=true;
+//    	}
+//    	
+//        String connectorProperties = System.getProperty("connector.properties");
+//        if (!StringUtils.hasText(connectorProperties)) {
+//            connectorProperties = System.getenv("connector.properties");
+//        }
+//        if (!StringUtils.hasText(connectorProperties)) {
+//            connectorProperties = ConnectorProperties.CONNECTOR_PROPERTIES_FILE_PATH;
+//        }
+//        if(StringUtils.hasText(connectorProperties)){
+//        	System.setProperty("connector.properties", connectorProperties);
+//        }
+//        try{
+//        	ConnectorProperties.loadConnectorProperties();
+//        }catch(Exception e){
+//        	
+//        }
+//        if (!ConnectorProperties.CONNECTOR_PROPERTIES_FILE.exists() && startWithGUI) {
+//        	
+//        	try {
+//				Process process = new ProcessBuilder(
+//						"java", "-jar","domibusConnectorConfigurator.jar").start();
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//        	
+//        	System.exit(0);
+//        }
+//        
+//        
+//        if(!ConnectorProperties.CONNECTOR_PROPERTIES_FILE.exists()){
+//        	try{
+//                ConnectorProperties.loadConnectorProperties();
+//                }catch(Exception e){
+//                	throw new RuntimeException("Connector Properties could not be loaded!");
+//                }
+//		}
+//
+//        String loggingProperties = System.getProperty("logging.properties");
+//        if (!StringUtils.hasText(loggingProperties)) {
+//            loggingProperties = System.getenv("logging.properties");
+//        }
+//
+//
+//        if (!StringUtils.hasText(loggingProperties)) {
+//        	DomibusConnector.class.getResource("log4j.properties");
+//        	File classpathLog4j = new File(DomibusConnector.class.getClassLoader().getResource("log4j.properties").getFile());
+//        	if(classpathLog4j.exists())
+//            System.setProperty("logging.properties", classpathLog4j.getAbsolutePath());
+//        	else{
+//        		System.setProperty("logging.properties", ConnectorProperties.LOG4J_CONFIG_FILE_PATH);
+//        	}
+//        		
+//        }
 
         ConfigurableApplicationContext context = null;
         
@@ -85,7 +85,9 @@ public class DomibusConnector {
         SpringApplication springApp = builder
                 .sources(DomibusClientGuiConfiguration.class) //TODO: load context
                 .web(false)
-                .properties("spring.config.name=" + System.getProperty("connector.properties"))
+//                .properties("spring.config.name=connector.properties")
+                .profiles("swing-gui")
+                .headless(false)
                 .build();
         
         context = springApp.run(args);

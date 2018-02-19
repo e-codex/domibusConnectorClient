@@ -6,7 +6,11 @@ import eu.domibus.connector.gui.config.properties.ConnectorProperties;
 import eu.domibus.connector.gui.main.data.Message;
 import eu.domibus.connector.gui.main.reader.MessagesReader;
 import eu.domibus.connector.runnable.util.DomibusConnectorRunnableConstants;
+import eu.domibus.connector.runnable.util.StandaloneClientProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SentMessagesTab extends MessagesTab {
 
 	/**
@@ -19,13 +23,18 @@ public class SentMessagesTab extends MessagesTab {
 	static final String STATUS_SENT = "SENT";
 	static final String STATUS_FAILED = "FAILED";
 	
+    
+    @Autowired
+    StandaloneClientProperties standaloneClientProperties;
+    
 	public SentMessagesTab() {
 		super();
 	}
 
 	@Override
 	public List<Message> loadMessages() throws Exception {
-		return MessagesReader.readMessages(ConnectorProperties.OTHER_OUTGOING_MSG_DIR_KEY, ConnectorProperties.outgoingMessagesDirectory);
+        return MessagesReader.readMessagesFromDirectory(standaloneClientProperties.getMessages().getOutgoing().getDirectory());
+		//return MessagesReader.readMessages(ConnectorProperties.OTHER_OUTGOING_MSG_DIR_KEY, ConnectorProperties.outgoingMessagesDirectory);
 	}
 
 	@Override

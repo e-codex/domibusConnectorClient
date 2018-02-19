@@ -29,6 +29,9 @@ import eu.domibus.connector.gui.main.details.ExportMessagesDetail;
 import eu.domibus.connector.gui.main.details.NewMessageDetail;
 import eu.domibus.connector.gui.main.details.StoredMessageDetail;
 import eu.domibus.connector.gui.utils.ButtonColumn;
+import eu.domibus.connector.runnable.util.StandaloneClientProperties;
+import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
 
 public abstract class MessagesTab extends JPanel implements ActionListener {
 
@@ -47,7 +50,13 @@ public abstract class MessagesTab extends JPanel implements ActionListener {
 	File exportFolder = null;
 	boolean exportAsZip = false;
 	
-	public MessagesTab(){
+	public MessagesTab(){}
+        
+    @Autowired
+    StandaloneClientProperties standaloneClientProperties;
+    
+    @PostConstruct
+    public void init() {
 		JPanel gridPanel = new JPanel();
 		gridPanel.setLayout(new GridBagLayout());
 		buildAndAddButtonPanel();
@@ -199,9 +208,9 @@ public abstract class MessagesTab extends JPanel implements ActionListener {
 		        String status = (String) ((DefaultTableModel)table.getModel()).getValueAt(modelRow, 8);
 		        Message selected = (Message) ((DefaultTableModel)table.getModel()).getValueAt(modelRow, 10);
 		        if(status.equals(SentMessagesTab.STATUS_NEW)){
-		        	new NewMessageDetail(selected, MessagesTab.this);
+		        	new NewMessageDetail(selected, MessagesTab.this, standaloneClientProperties);
 		        }else{
-		        	new StoredMessageDetail(selected, getMessageType(), MessagesTab.this);
+		        	new StoredMessageDetail(selected, getMessageType(), MessagesTab.this, standaloneClientProperties);
 		        }
 		    }
 		};

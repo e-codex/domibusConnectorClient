@@ -3,24 +3,28 @@ package eu.domibus.connector.gui.main;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
+import javax.annotation.PostConstruct;
 
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DomibusConnectorMainMenu extends JMenuBar implements ActionListener {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = -3537576845229906480L;
-
-	public DomibusConnectorMainMenu(){
-		JMenu fileMenu = buildFileMenu();
+    
+    
+    @PostConstruct
+    public void init() {
+        JMenu fileMenu = buildFileMenu();
 		this.add(fileMenu);
-		
-	}
+    }
 	
 	private JMenu buildFileMenu() {
 		JMenu fileMenu = new JMenu("File");

@@ -12,7 +12,16 @@ import javax.swing.UnsupportedLookAndFeelException;
 import eu.domibus.connector.gui.config.properties.ConnectorProperties;
 import eu.domibus.connector.gui.main.DomibusConnectorMainMenu;
 import eu.domibus.connector.gui.main.DomibusConnectorMainTab;
+import javax.annotation.PostConstruct;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
 
+@Component
+@Profile("swing-gui")
 public class DomibusConnectorUI extends JFrame {
 
 	
@@ -21,14 +30,24 @@ public class DomibusConnectorUI extends JFrame {
 	 */
 	private static final long serialVersionUID = -6655274520853778448L;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(DomibusConnectorUI.class);
+    
+    @Autowired
+    DomibusConnectorMainTab mainTab;
+    
+    @Autowired
+    DomibusConnectorMainMenu mainMenu;
+    
+    @PostConstruct
 	public void init(){
-		if(ConnectorProperties.CONNECTOR_PROPERTIES_FILE.exists()){
-			try {
-				ConnectorProperties.loadConnectorProperties();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
+        LOGGER.debug("#init");
+//		if(ConnectorProperties.CONNECTOR_PROPERTIES_FILE.exists()){
+//			try {
+//				ConnectorProperties.loadConnectorProperties();
+//			} catch (Exception e) {
+//				e.printStackTrace();
+//			}
+//		}
 		try {
 			UIManager.setLookAndFeel(
 			        UIManager.getSystemLookAndFeelClassName());
@@ -54,8 +73,8 @@ public class DomibusConnectorUI extends JFrame {
         setTitle("DomibusConnector");
 
         setState(Frame.NORMAL);
-        getContentPane().add(new DomibusConnectorMainMenu(), BorderLayout.NORTH);
-        getContentPane().add(new DomibusConnectorMainTab(), BorderLayout.CENTER);
+        getContentPane().add(mainMenu, BorderLayout.NORTH);
+        getContentPane().add(mainTab, BorderLayout.CENTER);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);

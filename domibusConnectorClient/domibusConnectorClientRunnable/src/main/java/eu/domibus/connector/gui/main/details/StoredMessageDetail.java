@@ -18,7 +18,7 @@ import javax.swing.UIManager;
 import org.apache.commons.io.FileUtils;
 
 import eu.domibus.connector.common.enums.EvidenceType;
-import eu.domibus.connector.gui.config.properties.ConnectorProperties;
+//import eu.domibus.connector.gui.config.properties.ConnectorProperties;
 import eu.domibus.connector.gui.config.tabs.ConfigTabHelper;
 import eu.domibus.connector.gui.layout.SpringUtilities;
 import eu.domibus.connector.gui.main.data.Message;
@@ -26,6 +26,7 @@ import eu.domibus.connector.gui.main.tab.MessagesTab;
 import eu.domibus.connector.runnable.util.DomibusConnectorMessageProperties;
 import eu.domibus.connector.runnable.util.DomibusConnectorRunnableConstants;
 import eu.domibus.connector.runnable.util.DomibusConnectorRunnableUtil;
+import eu.domibus.connector.runnable.util.StandaloneClientProperties;
 
 public class StoredMessageDetail extends MessageDetail {
 	
@@ -34,9 +35,11 @@ public class StoredMessageDetail extends MessageDetail {
 	 */
 	private static final long serialVersionUID = 7470963454138533680L;
 
-	public StoredMessageDetail(final Message selected, final int messageType, MessagesTab list){
+    private StandaloneClientProperties standaloneClientProperties;
+    
+	public StoredMessageDetail(final Message selected, final int messageType, MessagesTab list, StandaloneClientProperties standaloneClientProperties){
 		super(selected, list, messageType);
-		
+		this.standaloneClientProperties = standaloneClientProperties;
 		
 	}
 	
@@ -113,8 +116,10 @@ public class StoredMessageDetail extends MessageDetail {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				String nationalMessageId = DomibusConnectorRunnableUtil.generateNationalMessageId(ConnectorProperties.gatewayNameValue, new Date());
-				File messageFolder = new File(ConnectorProperties.outgoingMessagesDirectory + File.separator + nationalMessageId + DomibusConnectorRunnableConstants.MESSAGE_NEW_FOLDER_POSTFIX);
+                String gatewayName = standaloneClientProperties.getGateway().getName();
+				String nationalMessageId = DomibusConnectorRunnableUtil.generateNationalMessageId(gatewayName, new Date());
+                String outgoingMessagesDirectoryName = standaloneClientProperties.getMessages().getOutgoing().getDirectory();
+				File messageFolder = new File(outgoingMessagesDirectoryName + File.separator + nationalMessageId + DomibusConnectorRunnableConstants.MESSAGE_NEW_FOLDER_POSTFIX);
 				if(!messageFolder.mkdir()){
 					JOptionPane.showMessageDialog(StoredMessageDetail.this, "The Folder "+messageFolder.getAbsolutePath()+" could not be created!", "Exception", JOptionPane.ERROR_MESSAGE);
 				}
@@ -184,11 +189,12 @@ public class StoredMessageDetail extends MessageDetail {
 						}
 					}
 				}
-				File messagePropertiesFile = new File(messageFolder, ConnectorProperties.messagePropertiesFileName);
+                String messagePropertiesFileName = standaloneClientProperties.getMessagePropertiesFileName();
+				File messagePropertiesFile = new File(messageFolder, messagePropertiesFileName);
 				DomibusConnectorRunnableUtil.storeMessagePropertiesToFile(messageProperties, messagePropertiesFile);
 				messageDetailFrame.setVisible(false);
 				messageDetailFrame.dispose();
-				new NewMessageDetail(newMessage, parent);
+				//new NewMessageDetail(newMessage, parent, standaloneClientProperties);
 		        
 			}
 		});

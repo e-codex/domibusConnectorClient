@@ -4,6 +4,7 @@ import eu.domibus.connector.common.exception.ImplementationMissingException;
 import eu.domibus.connector.common.message.Message;
 import eu.domibus.connector.common.message.MessageContent;
 import eu.domibus.connector.mapping.exception.DomibusConnectorContentMapperException;
+import org.springframework.stereotype.Component;
 
 /**
  * This is a very simple example for the implementation of the interface
@@ -12,6 +13,7 @@ import eu.domibus.connector.mapping.exception.DomibusConnectorContentMapperExcep
  * @author riederb
  * 
  */
+@Component
 public class DomibusConnectorContentMapperDefaultImpl implements DomibusConnectorContentMapper {
 
     /**

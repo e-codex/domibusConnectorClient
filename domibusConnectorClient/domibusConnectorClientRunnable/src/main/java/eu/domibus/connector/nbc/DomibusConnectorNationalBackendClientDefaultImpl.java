@@ -28,7 +28,10 @@ import eu.domibus.connector.runnable.exception.DomibusConnectorRunnableException
 import eu.domibus.connector.runnable.util.DomibusConnectorMessageProperties;
 import eu.domibus.connector.runnable.util.DomibusConnectorRunnableConstants;
 import eu.domibus.connector.runnable.util.DomibusConnectorRunnableUtil;
+import eu.domibus.connector.runnable.util.StandaloneClientProperties;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DomibusConnectorNationalBackendClientDefaultImpl implements DomibusConnectorNationalBackendClient,
 InitializingBean {
 
@@ -38,15 +41,18 @@ InitializingBean {
 
 	private File outgoingMessagesDir;
 
-	@Value("${incoming.messages.directory:}")
-	private String incomingMessagesDirectory;
-
-	@Value("${outgoing.messages.directory:}")
-	private String outgoingMessagesDirectory;
+    @Autowired
+    StandaloneClientProperties standaloneClientProperties;
+    
+//	@Value("${incoming.messages.directory:'./msg/incoming'}")
+//	private String incomingMessagesDirectory;
+//
+//	@Value("${outgoing.messages.directory:'./msg/outgoing/'}")
+//	private String outgoingMessagesDirectory;
 
 	@Value("${message.properties.file.name:}")
 	private String messagePropertiesFileName;
-
+   
 	@Autowired
 	private DomibusConnectorRunnableUtil util;
 
@@ -360,6 +366,9 @@ InitializingBean {
 	public void afterPropertiesSet() throws Exception {
 		String path = System.getProperty("user.dir");
 
+        String incomingMessagesDirectory = standaloneClientProperties.getMessages().getIncoming().getDirectory();
+        boolean createIncomingMessageDirectories = standaloneClientProperties.getMessages().getIncoming().isCreateDirectory();
+        
 		if (!StringUtils.hasText(incomingMessagesDirectory)) {
 			incomingMessagesDirectory = path + File.separator
 					+ DomibusConnectorRunnableConstants.INCOMING_MESSAGES_DEFAULT_DIR;
@@ -368,7 +377,9 @@ InitializingBean {
 		LOGGER.debug("Initializing set incoming messages directory {}", incomingMessagesDirectory);
 		incomingMessagesDir = new File(incomingMessagesDirectory);
 
-		if (!incomingMessagesDir.exists()) {
+        if (createIncomingMessageDirectories && !incomingMessagesDir.exists()) {
+            incomingMessagesDir.mkdirs();
+        } else if (!incomingMessagesDir.exists()) {
 			throw new DomibusConnectorRunnableException("Directory '" + incomingMessagesDirectory + "' does not exist!");
 		}
 
@@ -376,6 +387,10 @@ InitializingBean {
 			throw new DomibusConnectorRunnableException("'" + incomingMessagesDirectory + "' is not a directory!");
 		}
 
+        
+        String outgoingMessagesDirectory = standaloneClientProperties.getMessages().getOutgoing().getDirectory();
+        boolean createOutgoingMessageDirectories = standaloneClientProperties.getMessages().getOutgoing().isCreateDirectory();
+        
 		if (!StringUtils.hasText(outgoingMessagesDirectory)) {
 			outgoingMessagesDirectory = path + File.separator
 					+ DomibusConnectorRunnableConstants.OUTGOING_MESSAGES_DEFAULT_DIR;
@@ -384,7 +399,9 @@ InitializingBean {
 		LOGGER.debug("Initializing set outgoing messages directory {}", outgoingMessagesDirectory);
 		outgoingMessagesDir = new File(outgoingMessagesDirectory);
 
-		if (!outgoingMessagesDir.exists()) {
+        if (createOutgoingMessageDirectories && !outgoingMessagesDir.isDirectory()) {
+            outgoingMessagesDir.mkdirs();
+        } else if (!outgoingMessagesDir.exists()) {
 			throw new DomibusConnectorRunnableException("Directory '" + outgoingMessagesDirectory + "' does not exist!");
 		}
 

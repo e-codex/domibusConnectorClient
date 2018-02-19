@@ -24,7 +24,9 @@ import eu.domibus.connector.common.message.MessageConfirmation;
 import eu.domibus.connector.common.message.MessageDetails;
 import eu.domibus.connector.nbc.exception.DomibusConnectorNationalBackendClientException;
 import eu.domibus.connector.runnable.exception.DomibusConnectorRunnableException;
+import org.springframework.stereotype.Component;
 
+@Component
 public class DomibusConnectorRunnableUtil {
 
     static org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusConnectorRunnableUtil.class);
@@ -34,11 +36,11 @@ public class DomibusConnectorRunnableUtil {
 
     private static final MimetypesFileTypeMap mimeMap = new MimetypesFileTypeMap();
 
-    @Value("${gateway.name}")
-    private String gatewayName;
+//    @Value("${gateway.name}")
+//    private String gatewayName;
 
-    @Value("${gateway.role}")
-    private String gatewayRole;
+//    @Value("${gateway.role}")
+//    private String gatewayRole;
 
 //    private DomibusConnectorPersistenceService persistenceService;
 //

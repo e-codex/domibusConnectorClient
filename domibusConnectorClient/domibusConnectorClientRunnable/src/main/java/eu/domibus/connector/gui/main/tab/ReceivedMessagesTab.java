@@ -6,10 +6,16 @@ import eu.domibus.connector.gui.config.properties.ConnectorProperties;
 import eu.domibus.connector.gui.main.data.Message;
 import eu.domibus.connector.gui.main.reader.MessagesReader;
 import eu.domibus.connector.runnable.util.DomibusConnectorRunnableConstants;
+import eu.domibus.connector.runnable.util.StandaloneClientProperties;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ReceivedMessagesTab extends MessagesTab {
 
-	
+	@Autowired
+    StandaloneClientProperties standaloneClientProperties;
+    
 
 	/**
 	 * 
@@ -23,7 +29,8 @@ public class ReceivedMessagesTab extends MessagesTab {
 
 	@Override
 	public List<Message> loadMessages() throws Exception {
-		return MessagesReader.readMessages(ConnectorProperties.OTHER_INCOMING_MSG_DIR_KEY, ConnectorProperties.incomingMessagesDirectory);
+        return MessagesReader.readMessagesFromDirectory(standaloneClientProperties.getMessages().getIncoming().getDirectory());
+		//return MessagesReader.readMessagesFromDirectory(ConnectorProperties.incomingMessagesDirectory);
 	}
 
 	@Override

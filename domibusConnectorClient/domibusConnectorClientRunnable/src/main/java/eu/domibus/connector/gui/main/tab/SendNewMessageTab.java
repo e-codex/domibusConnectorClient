@@ -16,10 +16,16 @@ import eu.domibus.connector.gui.config.properties.ConnectorProperties;
 import eu.domibus.connector.gui.config.tabs.ConfigTabHelper;
 import eu.domibus.connector.gui.main.data.Message;
 import eu.domibus.connector.gui.main.details.NewMessageDetail;
+import eu.domibus.connector.gui.main.details.NewMessageDetailFactory;
 import eu.domibus.connector.runnable.util.DomibusConnectorMessageProperties;
 import eu.domibus.connector.runnable.util.DomibusConnectorRunnableConstants;
 import eu.domibus.connector.runnable.util.DomibusConnectorRunnableUtil;
+import eu.domibus.connector.runnable.util.StandaloneClientProperties;
+import javax.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class SendNewMessageTab extends JPanel {
 
 	/**
@@ -27,15 +33,27 @@ public class SendNewMessageTab extends JPanel {
 	 */
 	private static final long serialVersionUID = -9030411701417070566L;
 	private File messageFolder;
-	private String nationalMessageId;
+//	private String nationalMessageId;
 	
+    @Autowired
+    private StandaloneClientProperties standaloneClientProperties;
+    
+    @Autowired
+    private NewMessageDetailFactory newMessageDetailFactory;
+    
+    
 	public SendNewMessageTab(){
+
+    }
+		
+
+    @PostConstruct
+    public void init() {        
 //		JPanel helpPanel = ConfigTabHelper.buildHelpPanel("Send new message Help", "DatabaseConfigurationHelp.htm");
 //		BorderLayout mgr = new BorderLayout();
 //		setLayout(mgr);
 //		add(helpPanel, BorderLayout.EAST);
-
-		
+        
 		JPanel disp = new JPanel();
 		
 		if(messageFolder==null || !messageFolder.exists() || !messageFolder.isDirectory()){
@@ -66,21 +84,8 @@ public class SendNewMessageTab extends JPanel {
 			
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				nationalMessageId = DomibusConnectorRunnableUtil.generateNationalMessageId(ConnectorProperties.gatewayNameValue, new Date());
-				messageFolder = new File(ConnectorProperties.outgoingMessagesDirectory + File.separator + nationalMessageId + DomibusConnectorRunnableConstants.MESSAGE_NEW_FOLDER_POSTFIX);
-				if(!messageFolder.mkdir()){
-					JOptionPane.showMessageDialog(SendNewMessageTab.this, "The Folder "+messageFolder.getAbsolutePath()+" could not be created!", "Exception", JOptionPane.ERROR_MESSAGE);
-				}
-				Message newMessage = new Message();
-				DomibusConnectorMessageProperties messageProperties = new DomibusConnectorMessageProperties();
-				newMessage.setMessageProperties(messageProperties);
-				newMessage.getMessageProperties().setNationalMessageId(nationalMessageId);
-				newMessage.setMessageDir(messageFolder);
-				newMessage.getMessageProperties().setFromPartyId(ConnectorProperties.gatewayNameValue);
-				newMessage.getMessageProperties().setFromPartyRole(ConnectorProperties.gatewayRoleValue);
-				File messagePropertiesFile = new File(messageFolder, ConnectorProperties.messagePropertiesFileName);
-				DomibusConnectorRunnableUtil.storeMessagePropertiesToFile(messageProperties, messagePropertiesFile);
-				new NewMessageDetail(newMessage, null);
+                newMessageDetailFactory.showNewMessageDetail();
+                
 			}
 		});
 		
