@@ -11,11 +11,16 @@ import eu.domibus.connector.gui.main.data.Message;
 import eu.domibus.connector.runnable.util.DomibusConnectorMessageProperties;
 import eu.domibus.connector.runnable.util.DomibusConnectorRunnableUtil;
 import javax.annotation.Nonnull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MessagesReader {
         
+    private final static Logger LOGGER = LoggerFactory.getLogger(MessagesReader.class);
+    
     public static List<Message> readMessagesFromDirectory(@Nonnull String msgDirPropertyValue) throws Exception {
         //TODO: check if msgDirPropertyValue is valid
+        LOGGER.debug("#readMessagesFromDirectory: dirProperty [{}]", msgDirPropertyValue);
         return readMessages("", msgDirPropertyValue);
     }
     
@@ -43,7 +48,7 @@ public class MessagesReader {
         List<Message> messages = new ArrayList<Message>();
 
         File[] contents = messagesDir.listFiles();
-
+        LOGGER.debug("#readMessages: messagesDir contains following files: [{}]", contents);        
         if (contents != null && contents.length > 0) {
             for (File subFile : contents) {
                 if (subFile.exists() && subFile.isDirectory()) {
@@ -86,7 +91,7 @@ public class MessagesReader {
                 }
             }
         }
-
+        LOGGER.debug("#readMessages: found [{}] messages", messages.size());
         return messages;
     }
 }

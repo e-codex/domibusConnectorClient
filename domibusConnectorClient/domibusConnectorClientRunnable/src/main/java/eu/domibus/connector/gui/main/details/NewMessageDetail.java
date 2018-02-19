@@ -40,6 +40,7 @@ public class NewMessageDetail extends MessageDetail {
     
 	public NewMessageDetail(Message newMessage, MessagesTab list, StandaloneClientProperties standaloneClientProperties) {
 		super(newMessage, list, 0);
+        this.standaloneClientProperties = standaloneClientProperties;
 		
 	}
 

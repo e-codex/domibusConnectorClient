@@ -25,13 +25,15 @@ public class DomibusConnectorMainTab extends JTabbedPane {
     @Autowired
     ReceivedMessagesTab receivedMessages; // = new ReceivedMessagesTab();
     
+    @Autowired
+    SendNewMessageTab sendMessageTab;
     
     @PostConstruct
     public void init() {
         this.add("Received messages", receivedMessages);
         this.add("Sent messages", sentMessages);
 
-        this.add("Send new message", new SendNewMessageTab());
+        this.add("Send new message", sendMessageTab);
         this.addChangeListener(new ChangeListener() {
 
             @Override

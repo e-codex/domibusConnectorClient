@@ -30,6 +30,7 @@ public class NewMessageDetailFactory {
         String outgoingMessagesDirectory = standaloneClientProperties.getMessages().getOutgoing().getDirectory();
 
         File messageFolder = new File(outgoingMessagesDirectory + File.separator + nationalMessageId + DomibusConnectorRunnableConstants.MESSAGE_NEW_FOLDER_POSTFIX);
+        messageFolder.mkdir();
 //        if (!messageFolder.mkdir()) {
 //            JOptionPane.showMessageDialog(SendNewMessageTab.this, "The Folder " + messageFolder.getAbsolutePath() + " could not be created!", "Exception", JOptionPane.ERROR_MESSAGE);
 //        }

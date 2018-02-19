@@ -32,11 +32,17 @@ public class DomibusConnectorUI extends JFrame {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DomibusConnectorUI.class);
     
-    @Autowired
+//    @Autowired
     DomibusConnectorMainTab mainTab;
+//    
+//    @Autowired
+    DomibusConnectorMainMenu mainMenu;
     
     @Autowired
-    DomibusConnectorMainMenu mainMenu;
+    public DomibusConnectorUI(DomibusConnectorMainTab mainTab, DomibusConnectorMainMenu mainMenu) {       
+        this.mainTab = mainTab;
+        this.mainMenu = mainMenu;
+    }
     
     @PostConstruct
 	public void init(){
@@ -77,6 +83,6 @@ public class DomibusConnectorUI extends JFrame {
         getContentPane().add(mainTab, BorderLayout.CENTER);
         pack();
         setLocationRelativeTo(null);
-        setVisible(true);
+
 	}
 }

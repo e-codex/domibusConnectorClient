@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
 /**
  *
@@ -14,6 +15,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
  */
 @SpringBootApplication(scanBasePackages="eu.domibus.connector")
 @EnableConfigurationProperties(StandaloneClientProperties.class)
+@EnableScheduling
 public class DomibusClientGuiConfiguration {
    
     //TODO: set correct scan folder

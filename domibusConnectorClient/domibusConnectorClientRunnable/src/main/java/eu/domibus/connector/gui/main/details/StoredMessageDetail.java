@@ -27,6 +27,8 @@ import eu.domibus.connector.runnable.util.DomibusConnectorMessageProperties;
 import eu.domibus.connector.runnable.util.DomibusConnectorRunnableConstants;
 import eu.domibus.connector.runnable.util.DomibusConnectorRunnableUtil;
 import eu.domibus.connector.runnable.util.StandaloneClientProperties;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class StoredMessageDetail extends MessageDetail {
 	
@@ -35,6 +37,8 @@ public class StoredMessageDetail extends MessageDetail {
 	 */
 	private static final long serialVersionUID = 7470963454138533680L;
 
+    private static final Logger LOGGER = LoggerFactory.getLogger(MessageDetail.class);
+    
     private StandaloneClientProperties standaloneClientProperties;
     
 	public StoredMessageDetail(final Message selected, final int messageType, MessagesTab list, StandaloneClientProperties standaloneClientProperties){
@@ -119,6 +123,7 @@ public class StoredMessageDetail extends MessageDetail {
                 String gatewayName = standaloneClientProperties.getGateway().getName();
 				String nationalMessageId = DomibusConnectorRunnableUtil.generateNationalMessageId(gatewayName, new Date());
                 String outgoingMessagesDirectoryName = standaloneClientProperties.getMessages().getOutgoing().getDirectory();
+                LOGGER.trace("#buildActionButton: outgoingMessagesDirectoryName is: [{}]", outgoingMessagesDirectoryName);
 				File messageFolder = new File(outgoingMessagesDirectoryName + File.separator + nationalMessageId + DomibusConnectorRunnableConstants.MESSAGE_NEW_FOLDER_POSTFIX);
 				if(!messageFolder.mkdir()){
 					JOptionPane.showMessageDialog(StoredMessageDetail.this, "The Folder "+messageFolder.getAbsolutePath()+" could not be created!", "Exception", JOptionPane.ERROR_MESSAGE);

@@ -56,16 +56,18 @@ public class SendNewMessageTab extends JPanel {
         
 		JPanel disp = new JPanel();
 		
-		if(messageFolder==null || !messageFolder.exists() || !messageFolder.isDirectory()){
+		if (messageFolder==null || !messageFolder.exists() || !messageFolder.isDirectory()){
 			JPanel createMessageFolderPanel = buildCreateMessageFolderPanel();
 			createMessageFolderPanel.setVisible(true);
 			disp.add(createMessageFolderPanel);
+            disp.setVisible(true);
 		}else{
 			
 		}
 		
 		
 		add(disp);
+        this.setVisible(true);
 	}
 	
 	private JPanel buildCreateMessageFolderPanel(){

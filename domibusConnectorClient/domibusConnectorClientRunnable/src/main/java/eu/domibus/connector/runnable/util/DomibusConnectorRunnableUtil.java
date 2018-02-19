@@ -1,22 +1,18 @@
 package eu.domibus.connector.runnable.util;
 
+import eu.domibus.connector.common.db.model.DomibusConnectorAction;
+import eu.domibus.connector.common.db.model.DomibusConnectorParty;
+import eu.domibus.connector.common.db.model.DomibusConnectorService;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.List;
 
 import javax.activation.MimetypesFileTypeMap;
-import javax.persistence.NoResultException;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.StringUtils;
 
-import eu.domibus.connector.common.db.model.DomibusConnectorAction;
-import eu.domibus.connector.common.db.model.DomibusConnectorParty;
-import eu.domibus.connector.common.db.model.DomibusConnectorService;
 //import eu.domibus.connector.common.db.service.DomibusConnectorPersistenceService;
 import eu.domibus.connector.common.enums.EvidenceType;
 import eu.domibus.connector.common.message.Message;
@@ -24,18 +20,24 @@ import eu.domibus.connector.common.message.MessageConfirmation;
 import eu.domibus.connector.common.message.MessageDetails;
 import eu.domibus.connector.nbc.exception.DomibusConnectorNationalBackendClientException;
 import eu.domibus.connector.runnable.exception.DomibusConnectorRunnableException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class DomibusConnectorRunnableUtil {
 
-    static org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusConnectorRunnableUtil.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(DomibusConnectorRunnableUtil.class);
 
     private static final SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMddhhmmssSSS");
     private static final SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
 
     private static final MimetypesFileTypeMap mimeMap = new MimetypesFileTypeMap();
 
+    @Autowired
+    StandaloneClientProperties standaloneClientProperties;
+    
 //    @Value("${gateway.name}")
 //    private String gatewayName;
 
@@ -66,20 +68,29 @@ public class DomibusConnectorRunnableUtil {
         fos.flush();
         fos.close();
     }
-//
-//    public void convertMessagePropertiesToMessageDetails(DomibusConnectorMessageProperties properties,
-//            MessageDetails messageDetails) throws DomibusConnectorRunnableException {
-//
-//        messageDetails.setFinalRecipient(properties.getFinalRecipient());
-//        messageDetails.setOriginalSender(properties.getOriginalSender());
-//        String fromPartyId = properties.getFromPartyId();
-//        String fromPartyRole = properties.getFromPartyRole();
-//        if (!StringUtils.hasText(fromPartyId)) {
-//            fromPartyId = gatewayName;
-//        }
-//        if (!StringUtils.hasText(fromPartyRole)) {
-//            fromPartyRole = gatewayRole;
-//        }
+
+    
+    public void convertMessagePropertiesToMessageDetails(DomibusConnectorMessageProperties properties,
+            MessageDetails messageDetails) throws DomibusConnectorRunnableException {
+
+        messageDetails.setFinalRecipient(properties.getFinalRecipient());
+        messageDetails.setOriginalSender(properties.getOriginalSender());
+        
+        
+        //set from party...
+        String fromPartyId = properties.getFromPartyId();
+        String fromPartyRole = properties.getFromPartyRole();
+        
+        String gatewayName = standaloneClientProperties.getGateway().getName();
+        String gatewayRole = standaloneClientProperties.getGateway().getRole();
+        
+        if (!StringUtils.hasText(fromPartyId)) {
+            fromPartyId = gatewayName;
+        }
+        if (!StringUtils.hasText(fromPartyRole)) {
+            fromPartyRole = gatewayRole;
+        }
+        
 //        if (fromPartyId != null && fromPartyRole != null) {
 //            DomibusConnectorParty fromParty = persistenceService.getParty(fromPartyId, fromPartyRole);
 //            if (fromParty == null) {
@@ -91,8 +102,19 @@ public class DomibusConnectorRunnableUtil {
 //            throw new DomibusConnectorRunnableException(
 //                    "Cannot process message without definition of fromPartyId and fromPartyRole!");
 //        }
-//        String toPartyId = properties.getToPartyId();
-//        String toPartyRole = properties.getToPartyRole();
+        DomibusConnectorParty fromParty = new DomibusConnectorParty();
+        fromParty.setPartyId(fromPartyId);
+        fromParty.setRole(fromPartyRole);
+        messageDetails.setFromParty(fromParty);
+        
+
+        
+        String toPartyId = properties.getToPartyId();
+        String toPartyRole = properties.getToPartyRole();
+        DomibusConnectorParty toParty = new DomibusConnectorParty();
+        toParty.setPartyId(toPartyId);
+        toParty.setRole(toPartyRole);
+        messageDetails.setToParty(toParty);
 //        if (toPartyId != null && toPartyRole != null) {
 //            DomibusConnectorParty toParty = persistenceService.getParty(toPartyId, toPartyRole);
 //            if (toParty == null) {
@@ -104,8 +126,11 @@ public class DomibusConnectorRunnableUtil {
 //            throw new DomibusConnectorRunnableException(
 //                    "Cannot process message without definition of toPartyId and toPartyRole!");
 //        }
-//
-//        String action = properties.getAction();
+
+        String action = properties.getAction();
+        DomibusConnectorAction domibusConnectorAction = new DomibusConnectorAction();
+        domibusConnectorAction.setAction(action);
+        messageDetails.setAction(domibusConnectorAction);
 //        if (StringUtils.hasText(action)) {
 //            DomibusConnectorAction dbAction = persistenceService.getAction(action);
 //            if (dbAction == null) {
@@ -116,8 +141,12 @@ public class DomibusConnectorRunnableUtil {
 //        } else {
 //            throw new DomibusConnectorRunnableException("Cannot process message without definition of action!");
 //        }
-//
-//        String service = properties.getService();
+
+        String service = properties.getService();
+        DomibusConnectorService domibusConnectorService = new DomibusConnectorService();
+        domibusConnectorService.setService(service);
+        messageDetails.setService(domibusConnectorService);
+        
 //        if (StringUtils.hasText(service)) {
 //            DomibusConnectorService dbService = persistenceService.getService(service);
 //            if (dbService == null) {
@@ -128,12 +157,12 @@ public class DomibusConnectorRunnableUtil {
 //        } else {
 //            throw new DomibusConnectorRunnableException("Cannot process message without definition of service!");
 //        }
-//
-//        String conversationId = properties.getConversationId();
-//        if(StringUtils.hasText(conversationId)){
-//        	messageDetails.setConversationId(conversationId);
-//        }
-//    }
+
+        String conversationId = properties.getConversationId();
+        if(StringUtils.hasText(conversationId)){
+        	messageDetails.setConversationId(conversationId);
+        }
+    }
 
     public static DomibusConnectorMessageProperties convertMessageDetailsToMessageProperties(
             MessageDetails messageDetails, Date messageReceived) {
@@ -181,7 +210,7 @@ public class DomibusConnectorRunnableUtil {
     public static void createFile(File messageFolder, String fileName, byte[] content)
             throws DomibusConnectorNationalBackendClientException {
         String filePath = messageFolder.getAbsolutePath() + File.separator + fileName;
-        LOGGER.debug("Create file {}", filePath);
+        LOGGER.debug("#loadMessageProperties: Create file {}", filePath);
         File file = new File(filePath);
         try {
             DomibusConnectorRunnableUtil.byteArrayToFile(content, file);
@@ -193,10 +222,10 @@ public class DomibusConnectorRunnableUtil {
 
     public static DomibusConnectorMessageProperties loadMessageProperties(File message, String messagePropertiesFileName) {
         String pathname = message.getAbsolutePath() + File.separator + messagePropertiesFileName;
-        LOGGER.debug("Loading message properties from file {}", pathname);
+        LOGGER.debug("#loadMessageProperties: Loading message properties from file {}", pathname);
         File messagePropertiesFile = new File(pathname);
         if (!messagePropertiesFile.exists()) {
-            LOGGER.error("Message properties file '" + messagePropertiesFile.getAbsolutePath()
+            LOGGER.error("#loadMessageProperties: Message properties file '" + messagePropertiesFile.getAbsolutePath()
                     + "' does not exist. Message cannot be processed!");
             return null;
         }

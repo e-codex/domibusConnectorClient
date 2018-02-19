@@ -2,7 +2,6 @@ package eu.domibus.connector.runnable.util;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Properties;
@@ -30,25 +29,13 @@ public class DomibusConnectorMessageProperties {
 
     public void loadPropertiesFromFile(File messagePropertiesFile) {
         // properties = new Properties();
-        FileInputStream fileInputStream = null;
-        try {
-            fileInputStream = new FileInputStream(messagePropertiesFile);
-        } catch (FileNotFoundException e1) {
-            e1.printStackTrace();
-        }
-        try {
+        
+        try (FileInputStream fileInputStream = new FileInputStream(messagePropertiesFile)) {            
             properties.load(fileInputStream);
         } catch (IOException e1) {
-            e1.printStackTrace();
+            throw new RuntimeException(e1);
         }
 
-        if (fileInputStream != null) {
-            try {
-                fileInputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public void storePropertiesToFile(File messagePropertiesFile) {
@@ -56,30 +43,16 @@ public class DomibusConnectorMessageProperties {
             try {
                 messagePropertiesFile.createNewFile();
             } catch (IOException e) {
-                e.printStackTrace();
+                throw new RuntimeException(e);
             }
         }
-
-        FileOutputStream fos = null;
-        try {
-            fos = new FileOutputStream(messagePropertiesFile);
-        } catch (FileNotFoundException e2) {
-            e2.printStackTrace();
-        }
-
-        try {
+        
+        try (FileOutputStream fos = new FileOutputStream(messagePropertiesFile) ) {                    
             properties.store(fos, null);
         } catch (IOException e1) {
-            e1.printStackTrace();
+            throw new RuntimeException(e1);
         }
 
-        if (fos != null) {
-            try {
-                fos.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
     }
 
     public String getService() {

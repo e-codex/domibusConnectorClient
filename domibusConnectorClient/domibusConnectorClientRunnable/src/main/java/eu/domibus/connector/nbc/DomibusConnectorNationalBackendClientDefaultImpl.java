@@ -139,7 +139,7 @@ InitializingBean {
 				throw new DomibusConnectorNationalBackendClientException("Could not rename message folder "
 						+ messageFolder.getAbsolutePath() + " to " + workMessageFolder.getAbsolutePath());
 			}
-
+            
 			DomibusConnectorMessageProperties messageProperties = DomibusConnectorRunnableUtil.loadMessageProperties(
 					workMessageFolder, messagePropertiesFileName);
 			try {
@@ -416,12 +416,13 @@ InitializingBean {
 
 	private void processMessageFolderFiles(Message message, File workMessageFolder, DomibusConnectorMessageProperties messageProperties)
 			throws DomibusConnectorNationalBackendClientException {
-//		try {
-//			util.convertMessagePropertiesToMessageDetails(messageProperties, message.getMessageDetails());
-//		} catch (DomibusConnectorRunnableException e) {
-//			throw new DomibusConnectorNationalBackendClientException(
-//					"Error converting message details from message properties!", e);
-//		} //TODO: FIX!
+		
+        try {
+			util.convertMessagePropertiesToMessageDetails(messageProperties, message.getMessageDetails());
+		} catch (DomibusConnectorRunnableException e) {
+			throw new DomibusConnectorNationalBackendClientException(
+					"Error converting message details from message properties!", e);
+		} //TODO: FIX!
 
 		String contentXmlFileName = messageProperties.getContentXmlFileName();
 		if (!StringUtils.hasText(contentXmlFileName)) {
