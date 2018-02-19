@@ -3,13 +3,14 @@ package eu.domibus.connector.common.message;
 import eu.domibus.connector.common.db.model.DomibusConnectorAction;
 import eu.domibus.connector.common.db.model.DomibusConnectorParty;
 import eu.domibus.connector.common.db.model.DomibusConnectorService;
+import org.apache.commons.lang.builder.ToStringBuilder;
 
 /**
  * This is an object that contains informations concerning the message. It is
  * mandatory to build a {@link Message} object.
- * 
+ *
  * @author riederb
- * 
+ *
  */
 @Deprecated
 public class MessageDetails {
@@ -119,6 +120,18 @@ public class MessageDetails {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public String toString() {
+        return new ToStringBuilder(this)
+                .append("nationalMessageId", nationalMessageId)
+                .append("ebmsMessageId", ebmsMessageId)
+                .append("refToMessageId", refToMessageId)
+                .append("conversationId", conversationId)
+                .append("originalSender", originalSender)
+                .append("finalRecipient", finalRecipient)
+                .toString();
     }
 
 }
