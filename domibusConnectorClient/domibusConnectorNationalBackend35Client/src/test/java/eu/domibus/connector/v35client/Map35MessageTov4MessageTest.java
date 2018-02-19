@@ -110,6 +110,39 @@ public class Map35MessageTov4MessageTest {
         }
     }
     
+    @Test
+    public void testMap35MessageTov4Message_attachmentListAndConfirmationListNull() {
+        Message message = createv35TestMessage();
+        
+        message.setConfirmations(null);
+        message.setAttachments(null);
+        
+        DomibusConnectorMessage msg = mapper.map35MessageTov4Message(message);
+        
+        assertThat(msg).as("message must not be null").isNotNull();
+
+        assertThat(msg.getMessageContent()).as("message content must be null (evidence message)!").isNotNull();
+        
+        assertThat(msg.getMessageAttachments()).hasSize(0);
+        assertThat(msg.getMessageConfirmations()).hasSize(0);             
+    }
+    
+    @Test(expected=IllegalArgumentException.class)
+    public void testMap35MessageTov4Message_attachmentListAndConfirmationListAndMessageContentIsNull_shouldThrowIllegalArgumentException() {
+        Message message = createv35TestEvidenceMessage();
+        
+        message.setConfirmations(null);
+        message.setAttachments(null);
+        
+        DomibusConnectorMessage msg = mapper.map35MessageTov4Message(message);
+        
+        assertThat(msg).as("message must not be null").isNotNull();
+        assertThat(msg.getMessageDetails()).as("message details must not be null").isNotNull();
+        assertThat(msg.getMessageContent()).as("message content must be null (evidence message)!").isNull();
+        
+        assertThat(msg.getMessageAttachments()).hasSize(0);
+        assertThat(msg.getMessageConfirmations()).hasSize(0);             
+    }
 
     
     @Test

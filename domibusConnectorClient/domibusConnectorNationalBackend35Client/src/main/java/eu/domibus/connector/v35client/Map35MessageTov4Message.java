@@ -51,6 +51,7 @@ public class Map35MessageTov4Message {
     
     
     DomibusConnectorMessage map35MessageTov4Message(Message msg) {
+        LOGGER.debug("#map35MessageTov4Message: map message [{}]", msg);
         if (msg.getMessageDetails() == null) {
             throw new IllegalArgumentException("MessageDetails of message must be not null!");
         }
@@ -61,7 +62,7 @@ public class Map35MessageTov4Message {
             LOGGER.info("#map35MessageTov4Message: map normal message");
             DomibusConnectorMessageContent mapMessageContent = mapMessageContent(msg.getMessageContent());
             messageBuilder.setMessageContent(mapMessageContent);
-        } else if (msg.getConfirmations().size() > 0) {
+        } else if (msg.getConfirmations() != null && msg.getConfirmations().size() > 0) {
             LOGGER.info("#map35MessageTov4Message: message is a evidence message (contains no message content)");
         } else {            
             LOGGER.error("Throwing exception");
@@ -71,14 +72,18 @@ public class Map35MessageTov4Message {
         DomibusConnectorMessageDetails mapMessageDetails = mapMessageDetails(msg.getMessageDetails());
         messageBuilder.setMessageDetails(mapMessageDetails);
         
-        for (MessageConfirmation confirmation : msg.getConfirmations()) {
-            DomibusConnectorMessageConfirmation mappedConfirmation = mapConfirmation(confirmation);
-            messageBuilder.addConfirmation(mappedConfirmation);
+        if (msg.getConfirmations() != null) {
+            for (MessageConfirmation confirmation : msg.getConfirmations()) {
+                DomibusConnectorMessageConfirmation mappedConfirmation = mapConfirmation(confirmation);
+                messageBuilder.addConfirmation(mappedConfirmation);
+            }
         }
 
-        for (MessageAttachment attachment : msg.getAttachments()) {
-            DomibusConnectorMessageAttachment mappedAttachment = mapAttachment(attachment);
-            messageBuilder.addAttachment(mappedAttachment);            
+        if (msg.getAttachments() != null) {
+            for (MessageAttachment attachment : msg.getAttachments()) {
+                DomibusConnectorMessageAttachment mappedAttachment = mapAttachment(attachment);
+                messageBuilder.addAttachment(mappedAttachment);            
+            }
         }
         
         
@@ -163,6 +168,7 @@ public class Map35MessageTov4Message {
     
     
     DomibusConnectorMessageDetails mapMessageDetails(MessageDetails oldMessageDetails) {
+        
         DomibusConnectorMessageDetails messageDetails = new DomibusConnectorMessageDetails();
         
         BeanUtils.copyProperties(oldMessageDetails, messageDetails);
@@ -173,7 +179,8 @@ public class Map35MessageTov4Message {
         messageDetails.setFromParty(mapDomibusConnectorParty(oldMessageDetails.getFromParty()));
         messageDetails.setService(mapDomibusConnectorService(oldMessageDetails.getService()));
         messageDetails.setToParty(mapDomibusConnectorParty(oldMessageDetails.getToParty()));
-                
+        
+        LOGGER.debug("#mapMessageDetails: mapped messageDetails from [{}] to [{}]", oldMessageDetails, messageDetails);
         return messageDetails;
     }
     

@@ -9,12 +9,14 @@ import eu.domibus.connector.common.message.MessageDetails;
 import eu.domibus.connector.domain.model.DomibusConnectorMessage;
 import eu.domibus.connector.domain.model.DomibusConnectorMessageDetails;
 import eu.domibus.connector.domain.model.builder.DomibusConnectorMessageBuilder;
+import eu.domibus.connector.mapping.DomibusConnectorContentMapper;
 import eu.domibus.connector.nbc.DomibusConnectorNationalBackendClient;
 import eu.domibus.connector.nbc.exception.DomibusConnectorNationalBackendClientException;
 import java.util.logging.Level;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,30 +32,40 @@ public class Client35ToClient4Adapter {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(Client35ToClient4Adapter.class);
     
-    @Autowired
-    DomibusConnectorNationalBackendClient nationalBackendClient;
     
-    @Autowired
-    SubmitMessageToConnector submitMessageToConnectorService;
+    private DomibusConnectorNationalBackendClient nationalBackendClient;
+        
+    private SubmitMessageToConnector submitMessageToConnectorService;
+        
+    private Map35MessageTov4Message map35MessageTov4Message;
     
-    @Autowired
-    Map35MessageTov4Message map35MessageTov4Message;
+    private DomibusConnectorContentMapper domibusConnectorContentMapper;
 
 
     //SETTER
+    @Autowired
     public void setNationalBackendClient(DomibusConnectorNationalBackendClient nationalBackendClient) {
         this.nationalBackendClient = nationalBackendClient;
     }
 
+    @Autowired
     public void setSubmitMessageToConnectorService(SubmitMessageToConnector submitMessageToConnectorService) {
         this.submitMessageToConnectorService = submitMessageToConnectorService;
     }
+    
+    @Autowired
     public void setMap35MessageTov4Message(Map35MessageTov4Message map35MessageTov4Message) {
         this.map35MessageTov4Message = map35MessageTov4Message;
     }
     
+    @Autowired
+    public void setDomibusConnectorContentMapper(DomibusConnectorContentMapper domibusConnectorContentMapper) {
+        this.domibusConnectorContentMapper = domibusConnectorContentMapper;
+    }
+    
 
     //TODO: must be called by timer job!
+    @Scheduled(fixedDelay = 9000)
     public void transportMessagesToController() {
         try {
             String[] unsentMessageIds = nationalBackendClient.requestMessagesUnsent();
@@ -62,7 +74,7 @@ public class Client35ToClient4Adapter {
                 transportOneMessageToController(id);
             }            
         } catch (DomibusConnectorNationalBackendClientException clientException) {
-            String error = "clientException from national backend occured!";
+            String error = "#transportMessagesToController: clientException from national backend occured while retrieving national-ids of unsentMessages!";
             LOGGER.error(error, clientException);
             throw new RuntimeException(clientException);
         } catch (ImplementationMissingException ex) {
@@ -70,17 +82,27 @@ public class Client35ToClient4Adapter {
         }        
     }
     
+    
     void transportOneMessageToController(String id) {
         
         try {            
-            Message nationalMessage = getMessageFromNational(id);        
+            Message nationalMessage = getMessageFromNational(id);  
+            
+            LOGGER.info("#transportOneMessageToController: calling content mapper to map content from national to international");
+            domibusConnectorContentMapper.mapNationalToInternational(nationalMessage);
+            
+            LOGGER.info("#transportOneMessageToController: converting from old message format (v35) to new message format (v4)");
             DomibusConnectorMessage domibusMessage = map35MessageTov4Message.map35MessageTov4Message(nationalMessage);
+            
+            LOGGER.info("#transportOneMessageToController: passing message to SubmitMessageToConnector service");
             submitMessageToConnectorService.submitMessage(domibusMessage);            
         } catch (Exception e) {            
-            String error = String.format("Sending national message with id [%s] to domibusConnector failed!", id);            
+            String error = String.format("#transportOneMessageToController: sending national message with id [%s] to domibusConnector failed!", id);            
             LOGGER.error(error, e);
             //TODO: mark message as failed! AND INFORM client!
             //Maybe create a NonDelivery Message?
+            
+            
         }
     }
     
@@ -92,6 +114,7 @@ public class Client35ToClient4Adapter {
             MessageContent messageContent = new MessageContent();
             Message message = new Message(messageDetails, messageContent);
             message.getMessageDetails().setNationalMessageId(id);
+            LOGGER.info("Requesting message with id [{}] from national system", id);
             nationalBackendClient.requestMessage(message);
             return message;
         } catch (DomibusConnectorNationalBackendClientException | ImplementationMissingException ex) {
@@ -101,5 +124,8 @@ public class Client35ToClient4Adapter {
     
     
     //TODO: transport messages from controller to National
+
+
+
     
 }
