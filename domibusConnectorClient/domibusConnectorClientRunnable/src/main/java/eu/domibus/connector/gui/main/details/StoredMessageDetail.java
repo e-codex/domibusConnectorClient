@@ -199,7 +199,7 @@ public class StoredMessageDetail extends MessageDetail {
 				DomibusConnectorRunnableUtil.storeMessagePropertiesToFile(messageProperties, messagePropertiesFile);
 				messageDetailFrame.setVisible(false);
 				messageDetailFrame.dispose();
-				//new NewMessageDetail(newMessage, parent, standaloneClientProperties);
+				new NewMessageDetail(newMessage, parent, standaloneClientProperties);
 		        
 			}
 		});

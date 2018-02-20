@@ -4,7 +4,9 @@ package eu.domibus.connector.client.connection.ws.impl;
 import eu.domibus.connector.client.connection.ws.linktest.client.BackendClient;
 import eu.domibus.connector.client.connection.ws.linktest.server.BackendServer;
 import eu.domibus.connector.domain.model.DomibusConnectorMessage;
+import eu.domibus.connector.domain.model.builder.DomibusConnectorMessageBuilder;
 import eu.domibus.connector.domain.testutil.DomainEntityCreator;
+import static eu.domibus.connector.domain.testutil.DomainEntityCreator.createEvidenceNonDeliveryMessage;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import java.util.List;
 import static org.assertj.core.api.Assertions.*;
@@ -58,7 +60,16 @@ public class ClientWsITCase {
     
     @Test
     public void testSendMessageToServer() {
-        DomibusConnectorMessage message = DomainEntityCreator.createMessage();
+        DomibusConnectorMessage message = DomainEntityCreator.createMessage();      
+        DomibusConnectorMessage submitMessage = transportWs.submitMessage(message);
+        
+        assertThat(submitMessage.getConnectorMessageId()).isNotNull();
+    }
+    
+    @Test
+    public void testSendNonDeliveryMessageToServer() {
+        DomibusConnectorMessage message = createEvidenceNonDeliveryMessage();
+        
         DomibusConnectorMessage submitMessage = transportWs.submitMessage(message);
         
         assertThat(submitMessage.getConnectorMessageId()).isNotNull();
