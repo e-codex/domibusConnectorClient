@@ -19,11 +19,11 @@ http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd "
     -->
 
     
-    <cxf:bus>
+<!--    <cxf:bus>
         <cxf:features>
             <p:policies/>
         </cxf:features>
-    </cxf:bus>
+    </cxf:bus>-->
     
     <bean id="encryptProperties"
           class="org.springframework.beans.factory.config.PropertiesFactoryBean">
