@@ -19,8 +19,6 @@
 		<module>domibusConnectorClientLibrary</module>
 		<module>domibusConnectorClientConfiguration</module>
 		<module>domibusConnectorClientDistribution</module>
-        <module>domibusConnector35ClientLibrary</module>
-        <module>domibusConnector35ClientCommon</module>
         <module>domibusConnectorNationalBackend35Client</module>
         <module>domibusConnectorClientWsLink</module>
     <module>domibusConnectorClientApi</module>
