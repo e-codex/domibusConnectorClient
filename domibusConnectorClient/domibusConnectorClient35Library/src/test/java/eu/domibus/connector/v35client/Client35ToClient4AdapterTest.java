@@ -27,7 +27,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class Client35ToClient4AdapterTest {
 
-    Client35ToClient4Adapter translateService;
+    PushMessagesToControllerFrom35Client translateService;
     DomibusConnectorNationalBackendClient nationalBackendClient;    
     SubmitMessageToConnector submitMessageToConnectorService;
     Map35MessageTov4Message map35MessageTov4Message;
@@ -35,7 +35,7 @@ public class Client35ToClient4AdapterTest {
     
     @Before
     public void setUp() throws DomibusConnectorContentMapperException, ImplementationMissingException {
-        translateService = new Client35ToClient4Adapter();
+        translateService = new PushMessagesToControllerFrom35Client();
         
         nationalBackendClient = Mockito.mock(DomibusConnectorNationalBackendClient.class);        
         submitMessageToConnectorService = Mockito.mock(SubmitMessageToConnector.class);        

@@ -26,9 +26,9 @@ import org.springframework.stereotype.Service;
  * @author {@literal Stephan Spindler <stephan.spindler@extern.brz.gv.at> }
  */
 @Service
-public class Client35ToClient4Adapter {
+public class PushMessagesToControllerFrom35Client {
 
-    private final static Logger LOGGER = LoggerFactory.getLogger(Client35ToClient4Adapter.class);
+    private final static Logger LOGGER = LoggerFactory.getLogger(PushMessagesToControllerFrom35Client.class);
     
     
     private DomibusConnectorNationalBackendClient nationalBackendClient;
@@ -62,7 +62,7 @@ public class Client35ToClient4Adapter {
     }
     
 
-    //TODO: must be called by timer job!
+    //TODO: make configureable!
     @Scheduled(fixedDelay = 9000)
     public void transportMessagesToController() {
         try {
@@ -121,9 +121,6 @@ public class Client35ToClient4Adapter {
     }
     
     
-    //TODO: transport messages from controller to National
-
-
 
     
 }

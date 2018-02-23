@@ -46,12 +46,14 @@ import javax.xml.transform.stream.StreamSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 
 /**
  *
  * @author {@literal Stephan Spindler <stephan.spindler@extern.brz.gv.at> }
  */
+@Component
 public class MapV4TransitionMessageTo35Message {
 
     private final static Logger LOGGER = LoggerFactory.getLogger(MapV4TransitionMessageTo35Message.class);
