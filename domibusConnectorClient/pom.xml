@@ -12,6 +12,7 @@
     <maven.compiler.target>1.8</maven.compiler.target>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <connector-server.version>4.0-SNAPSHOT</connector-server.version>
+    <org.apache.cxf.version>3.3.1</org.apache.cxf.version>
   </properties>
   
   <modules>
@@ -40,6 +41,21 @@
   
   <build>
       
+      <pluginManagement>
+          <plugins>
+              <plugin>
+                  <groupId>org.apache.cxf</groupId>
+                  <artifactId>cxf-codegen-plugin</artifactId>
+                  <version>${org.apache.cxf.version}</version>
+              </plugin>
+              <plugin>
+                  <groupId>org.apache.maven.plugins</groupId>
+                  <artifactId>maven-site-plugin</artifactId>
+                  <version>3.3</version>
+              </plugin>
+          </plugins>
+      </pluginManagement>
+      
       <plugins>
           <plugin>
               <groupId>org.apache.maven.plugins</groupId>
@@ -56,6 +72,11 @@
               <configuration>
                   <encoding>${project.build.sourceEncoding}</encoding>
               </configuration>
+          </plugin>
+          
+          <plugin>
+              <groupId>org.apache.maven.plugins</groupId>
+              <artifactId>maven-site-plugin</artifactId>
           </plugin>
           
       </plugins>
