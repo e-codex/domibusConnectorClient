@@ -17,16 +17,6 @@
             <artifactId>commons-lang</artifactId>
         </dependency>
         <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>domibusConnectorNationalBackend35Client</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>domibusConnector35ClientCommon</artifactId>
-            <version>${project.version}</version>            
-        </dependency>
-        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot</artifactId>
         </dependency>
@@ -74,5 +64,19 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnector35ClientLibrary</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <version>1.5.8.RELEASE</version>
+            </plugin>
+        </plugins>
+    </build>
 </project>

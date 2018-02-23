@@ -60,6 +60,7 @@
                         <phase>generate-sources</phase>
                         <configuration>
                             <encoding>UTF-8</encoding>
+                            <sourceRoot>src/main/java/</sourceRoot>
                             <wsdlOptions>
                                 <wsdlOption>
                                     <wsdl>src/main/resources/wsdl/DomibusConnectorBackendDeliveryWebService.wsdl

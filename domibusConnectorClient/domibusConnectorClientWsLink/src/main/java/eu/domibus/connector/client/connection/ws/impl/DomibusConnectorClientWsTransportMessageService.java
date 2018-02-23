@@ -41,7 +41,8 @@ public class DomibusConnectorClientWsTransportMessageService implements FetchMes
     }
 
     @Override
-    public DomibsConnectorAcknowledgementType submitMessage(DomibusConnectorMessageType messageDTO) {        
+    public DomibsConnectorAcknowledgementType submitMessage(DomibusConnectorMessageType messageDTO) {  
+        LOGGER.debug("#submitMessage: submitting message [{}] to webServiceClient", messageDTO);
         DomibsConnectorAcknowledgementType submitMessageAck = webService.submitMessage(messageDTO);
                 
         return submitMessageAck;

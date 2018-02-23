@@ -128,3 +128,10 @@ local.properties
 /domibusConnectorClient/domibusConnectorClientApi/src/main/java/eu/domibus/connector/domain/transition/
 /domibusConnectorClient/domibusConnectorClientApi/src/main/resources/eu.domibus.connector.domain.transition/
 /domibusConnectorClient/domibusConnectorClientApi/src/main/java/META-INF/sun-jaxb.episode
+/domibusConnectorClient/domibusConnectorClientApi/nbproject/
+/domibusConnectorClient/domibusConnectorClientWsLink/src/main/resources/eu/domibus/connector/domain/transition/
+/domibusConnectorClient/domibusConnectorClientWsLink/src/main/resources/eu/domibus/connector/ws/backend/delivery/webservice/
+/domibusConnectorClient/domibusConnectorClientWsLink/src/main/resources/eu/domibus/connector/ws/backend/webservice/
+/domibusConnectorClient/domibusConnectorClientWsLink/src/main/java/eu/domibus/connector/domain/transition/
+/domibusConnectorClient/domibusConnectorClientWsLink/src/main/java/eu/domibus/connector/ws/backend/delivery/webservice/
+/domibusConnectorClient/domibusConnectorClientWsLink/src/main/java/eu/domibus/connector/ws/backend/webservice/
