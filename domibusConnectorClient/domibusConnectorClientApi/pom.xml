@@ -16,4 +16,65 @@
             <artifactId>domibusConnectorDomain</artifactId>
         </dependency>
     </dependencies>
+    
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>unpack-transition-model</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>unpack</goal>
+                        </goals>                                                
+                        <configuration>
+                            <artifactItems>
+                                <artifactItem>
+                                    <groupId>${project.groupId}</groupId>
+                                    <artifactId>domibusConnectorDomain</artifactId>
+                                    <version>${project.version}</version>
+                                    <classifier>transition</classifier>
+                                    <type>zip</type>
+                                    <overWrite>true</overWrite>
+                                    <outputDirectory>src/main/resources/</outputDirectory>                                    
+                                    <includes>**/DomibusConnectorTransitionModel.xsd</includes>
+                                </artifactItem>
+                            </artifactItems>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.jvnet.jaxb2.maven2</groupId>
+                <artifactId>maven-jaxb2-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>generate-transition-entities</id>
+                        <configuration>
+                            <!-- <forceRegenerate>true</forceRegenerate> -->
+                            <schemaDirectory>src/main/resources/eu.domibus.connector.domain.transition</schemaDirectory>
+                            <schemaIncludes>
+                                <include>DomibusConnectorTransitionModel.xsd</include>
+                            </schemaIncludes>
+                            <generateDirectory>src/main/java</generateDirectory>
+                            <strict>true</strict>
+                            <extension>true</extension>
+                            <args>
+                                <arg>-no-header</arg>
+                            </args>
+                        </configuration>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+    
+    
+    
 </project>
