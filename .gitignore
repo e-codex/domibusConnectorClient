@@ -125,3 +125,6 @@ local.properties
 /domibusConnectorClient/domibusConnectorNationalBackend35Client/nbproject/
 /domibusConnectorClient/domibusConnectorClientRunnable/nbproject/
 /domibusConnectorClient/domibusConnectorClient35Library/nbproject/
+/domibusConnectorClient/domibusConnectorClientApi/src/main/java/eu/domibus/connector/domain/transition/
+/domibusConnectorClient/domibusConnectorClientApi/src/main/resources/eu.domibus.connector.domain.transition/
+/domibusConnectorClient/domibusConnectorClientApi/src/main/java/META-INF/sun-jaxb.episode
