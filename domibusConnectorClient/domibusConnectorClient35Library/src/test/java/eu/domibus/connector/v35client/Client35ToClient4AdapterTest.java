@@ -5,6 +5,7 @@ import eu.domibus.connector.client.connection.SubmitMessageToConnector;
 import eu.domibus.connector.common.exception.ImplementationMissingException;
 import eu.domibus.connector.common.message.Message;
 import eu.domibus.connector.domain.model.DomibusConnectorMessage;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.mapping.DomibusConnectorContentMapper;
 import eu.domibus.connector.mapping.exception.DomibusConnectorContentMapperException;
 import eu.domibus.connector.nbc.DomibusConnectorNationalBackendClient;
@@ -60,7 +61,7 @@ public class Client35ToClient4AdapterTest {
         Mockito.verify(domibusConnectorContentMapper, Mockito.times(3)).mapNationalToInternational(any(Message.class));
         
         //3 messages should be handed over to submitMessageService
-        Mockito.verify(submitMessageToConnectorService, Mockito.times(3)).submitMessage(Mockito.any(DomibusConnectorMessage.class));       
+        Mockito.verify(submitMessageToConnectorService, Mockito.times(3)).submitMessage(Mockito.any(DomibusConnectorMessageType.class));       
     }
 
     @Test
@@ -73,7 +74,7 @@ public class Client35ToClient4AdapterTest {
         Mockito.verify(domibusConnectorContentMapper, Mockito.times(1)).mapNationalToInternational(any(Message.class));
         
         //1 Message should be handed over to submitMessageService
-        Mockito.verify(submitMessageToConnectorService, Mockito.times(1)).submitMessage(Mockito.any(DomibusConnectorMessage.class));  
+        Mockito.verify(submitMessageToConnectorService, Mockito.times(1)).submitMessage(Mockito.any(DomibusConnectorMessageType.class));  
     }
     
     
@@ -92,7 +93,7 @@ public class Client35ToClient4AdapterTest {
         Mockito.verify(domibusConnectorContentMapper, Mockito.times(0)).mapNationalToInternational(any(Message.class));
         
         //1 Message should be handed over to submitMessageService
-        Mockito.verify(submitMessageToConnectorService, Mockito.times(0)).submitMessage(Mockito.any(DomibusConnectorMessage.class));        
+        Mockito.verify(submitMessageToConnectorService, Mockito.times(0)).submitMessage(Mockito.any(DomibusConnectorMessageType.class));        
                 
     }
     

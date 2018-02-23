@@ -6,9 +6,7 @@ import eu.domibus.connector.common.exception.ImplementationMissingException;
 import eu.domibus.connector.common.message.Message;
 import eu.domibus.connector.common.message.MessageContent;
 import eu.domibus.connector.common.message.MessageDetails;
-import eu.domibus.connector.domain.model.DomibusConnectorMessage;
-import eu.domibus.connector.domain.model.DomibusConnectorMessageDetails;
-import eu.domibus.connector.domain.model.builder.DomibusConnectorMessageBuilder;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.mapping.DomibusConnectorContentMapper;
 import eu.domibus.connector.nbc.DomibusConnectorNationalBackendClient;
 import eu.domibus.connector.nbc.exception.DomibusConnectorNationalBackendClientException;
@@ -92,7 +90,7 @@ public class Client35ToClient4Adapter {
             domibusConnectorContentMapper.mapNationalToInternational(nationalMessage);
             
             LOGGER.info("#transportOneMessageToController: converting from old message format (v35) to new message format (v4)");
-            DomibusConnectorMessage domibusMessage = map35MessageTov4Message.map35MessageTov4Message(nationalMessage);
+            DomibusConnectorMessageType domibusMessage = map35MessageTov4Message.map35MessageTov4Message(nationalMessage);
             
             LOGGER.info("#transportOneMessageToController: passing message to SubmitMessageToConnector service");
             submitMessageToConnectorService.submitMessage(domibusMessage);            

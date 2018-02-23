@@ -15,15 +15,26 @@ import eu.domibus.connector.domain.model.DomibusConnectorMessageAttachment;
 import eu.domibus.connector.domain.model.DomibusConnectorMessageContent;
 import eu.domibus.connector.domain.model.DomibusConnectorMessageDetails;
 import eu.domibus.connector.domain.model.DomibusConnectorMessageDocument;
+import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureMimeType;
+import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageAttachmentType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageContentType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageDocumentType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.xml.transform.Source;
 import org.assertj.core.api.Assertions;
 import org.junit.Test;
 import static org.assertj.core.api.Assertions.*;
 import org.springframework.util.StreamUtils;
+import org.xmlunit.builder.Input;
+import org.xmlunit.diff.DOMDifferenceEngine;
+import org.xmlunit.diff.DifferenceEngine;
 
 /**
  *
@@ -37,7 +48,7 @@ public class Map35MessageTov4MessageTest {
     public void testMap35MessageTov4Message() {
         Message message = createv35TestMessage();
         
-        DomibusConnectorMessage msg = mapper.map35MessageTov4Message(message);
+        DomibusConnectorMessageType msg = mapper.map35MessageTov4Message(message);
         
         assertThat(msg).as("message must not be null").isNotNull();
         assertThat(msg.getMessageDetails()).as("message details must not be null").isNotNull();
@@ -72,7 +83,7 @@ public class Map35MessageTov4MessageTest {
     public void testMap35MessageTov4Message_isEvidenceMessage() {
         Message message = createv35TestEvidenceMessage();
         
-        DomibusConnectorMessage msg = mapper.map35MessageTov4Message(message);
+        DomibusConnectorMessageType msg = mapper.map35MessageTov4Message(message);
         
         assertThat(msg).as("message must not be null").isNotNull();
         assertThat(msg.getMessageDetails()).as("message details must not be null").isNotNull();
@@ -117,7 +128,7 @@ public class Map35MessageTov4MessageTest {
         message.setConfirmations(null);
         message.setAttachments(null);
         
-        DomibusConnectorMessage msg = mapper.map35MessageTov4Message(message);
+        DomibusConnectorMessageType msg = mapper.map35MessageTov4Message(message);
         
         assertThat(msg).as("message must not be null").isNotNull();
 
@@ -134,7 +145,7 @@ public class Map35MessageTov4MessageTest {
         message.setConfirmations(null);
         message.setAttachments(null);
         
-        DomibusConnectorMessage msg = mapper.map35MessageTov4Message(message);
+        DomibusConnectorMessageType msg = mapper.map35MessageTov4Message(message);
         
         assertThat(msg).as("message must not be null").isNotNull();
         assertThat(msg.getMessageDetails()).as("message details must not be null").isNotNull();
@@ -151,23 +162,28 @@ public class Map35MessageTov4MessageTest {
         MessageContent messageContent = createMessageContent();
         
         
-        DomibusConnectorMessageContent mapMessageContent = mapper.mapMessageContent(messageContent);
+        DomibusConnectorMessageContentType mapMessageContent = mapper.mapMessageContent(messageContent);
         
         assertThat(mapMessageContent).isNotNull();
         
-        assertThat(new String(mapMessageContent.getXmlContent(), "UTF-8")).isEqualTo("internationalContent");
         
-        DomibusConnectorMessageDocument document = mapMessageContent.getDocument();
+        DifferenceEngine diff = new DOMDifferenceEngine();
+        
+        Source source = Input.fromString(new String(messageContent.getInternationalContent(), "UTF-8")).build();
+        diff.compare(source, mapMessageContent.getXmlContent());
+        
+        
+        DomibusConnectorMessageDocumentType document = mapMessageContent.getDocument();
         assertThat(document).isNotNull();
         
         assertThat(document.getDocumentName()).isEqualTo("pdfDocumentName");
         assertThat(new String(StreamUtils.copyToByteArray(document.getDocument().getInputStream()), "UTF-8")).isEqualTo("pdfDocument");
         
-        DetachedSignature detachedSignature = document.getDetachedSignature();
+        DomibusConnectorDetachedSignatureType detachedSignature = document.getDetachedSignature();
         assertThat(detachedSignature).isNotNull();
         assertThat(detachedSignature.getDetachedSignatureName()).isEqualTo("detachedSignatureName");
         assertThat(new String(detachedSignature.getDetachedSignature(), "UTF-8")).isEqualTo("detachedSignature");
-        assertThat(detachedSignature.getMimeType()).isEqualTo(DetachedSignatureMimeType.BINARY);
+        assertThat(detachedSignature.getMimeType()).isEqualTo(DomibusConnectorDetachedSignatureMimeType.BINARY);
     }
 
     @Test
@@ -176,19 +192,25 @@ public class Map35MessageTov4MessageTest {
         MessageContent messageContent = createMessageContent();
         messageContent.setDetachedSignature(null);
         
-        DomibusConnectorMessageContent mapMessageContent = mapper.mapMessageContent(messageContent);
+        DomibusConnectorMessageContentType mapMessageContent = mapper.mapMessageContent(messageContent);
         
         assertThat(mapMessageContent).isNotNull();
         
-        assertThat(new String(mapMessageContent.getXmlContent(), "UTF-8")).isEqualTo("internationalContent");
+        //assertThat(new String(mapMessageContent.getXmlContent(), "UTF-8")).isEqualTo("internationalContent");
         
-        DomibusConnectorMessageDocument document = mapMessageContent.getDocument();
+        DifferenceEngine diff = new DOMDifferenceEngine();
+        String compare = new String(messageContent.getInternationalContent(), "UTF-8");
+        Source source = Input.fromString(compare).build();
+        diff.compare(source, mapMessageContent.getXmlContent());
+        
+        
+        DomibusConnectorMessageDocumentType document = mapMessageContent.getDocument();
         assertThat(document).isNotNull();
         
         assertThat(document.getDocumentName()).isEqualTo("pdfDocumentName");
         assertThat(new String(StreamUtils.copyToByteArray(document.getDocument().getInputStream()), "UTF-8")).isEqualTo("pdfDocument");
         
-        DetachedSignature detachedSignature = document.getDetachedSignature();
+        DomibusConnectorDetachedSignatureType detachedSignature = document.getDetachedSignature();
         assertThat(detachedSignature).isNull();        
     }
     
@@ -198,13 +220,18 @@ public class Map35MessageTov4MessageTest {
         MessageContent messageContent = createMessageContent();
         messageContent.setPdfDocument(null);
         
-        DomibusConnectorMessageContent mapMessageContent = mapper.mapMessageContent(messageContent);
+        DomibusConnectorMessageContentType mapMessageContent = mapper.mapMessageContent(messageContent);
         
         assertThat(mapMessageContent).isNotNull();
         
-        assertThat(new String(mapMessageContent.getXmlContent(), "UTF-8")).isEqualTo("internationalContent");
+//        assertThat(new String(mapMessageContent.getXmlContent(), "UTF-8")).isEqualTo("internationalContent");
+        DifferenceEngine diff = new DOMDifferenceEngine();
         
-        DomibusConnectorMessageDocument document = mapMessageContent.getDocument();
+        Source source = Input.fromString(new String(messageContent.getInternationalContent(), "UTF-8")).build();
+        diff.compare(source, mapMessageContent.getXmlContent());
+        
+        
+        DomibusConnectorMessageDocumentType document = mapMessageContent.getDocument();
         assertThat(document).isNull();
         
 //        assertThat(document.getDocumentName()).isEqualTo("pdfDocumentName");
@@ -219,7 +246,7 @@ public class Map35MessageTov4MessageTest {
         messageContent.setDetachedSignature("detachedSignature".getBytes());
         messageContent.setDetachedSignatureMimeType(eu.domibus.connector.common.enums.DetachedSignatureMimeType.BINARY);
         messageContent.setDetachedSignatureName("detachedSignatureName");
-        messageContent.setInternationalContent("internationalContent".getBytes()); 
+        messageContent.setInternationalContent("<internationalContent/>".getBytes()); 
         messageContent.setNationalXmlContent(null); //not mapped!
         messageContent.setPdfDocument("pdfDocument".getBytes());
         messageContent.setPdfDocumentName("pdfDocumentName");
@@ -231,7 +258,7 @@ public class Map35MessageTov4MessageTest {
         
         MessageDetails messageDetails = createMessageDetails();
         
-        DomibusConnectorMessageDetails mapMessageDetails = mapper.mapMessageDetails(messageDetails);
+        DomibusConnectorMessageDetailsType mapMessageDetails = mapper.mapMessageDetails(messageDetails);
         assertThat(mapMessageDetails).isNotNull();
         
         assertThat(mapMessageDetails.getAction()).isNotNull();
@@ -297,7 +324,7 @@ public class Map35MessageTov4MessageTest {
     public void testMapAttachment() throws UnsupportedEncodingException, IOException {
         MessageAttachment attachment = createAttachment();
 
-        DomibusConnectorMessageAttachment mapAttachment = mapper.mapAttachment(attachment);
+        DomibusConnectorMessageAttachmentType mapAttachment = mapper.mapAttachment(attachment);
         
         assertThat(mapAttachment.getDescription()).isEqualTo("description");
         assertThat(mapAttachment.getMimeType()).isEqualTo("application/pdf");

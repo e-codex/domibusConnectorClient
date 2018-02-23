@@ -7,31 +7,27 @@ import eu.domibus.connector.common.message.MessageAttachment;
 import eu.domibus.connector.common.message.MessageConfirmation;
 import eu.domibus.connector.common.message.MessageContent;
 import eu.domibus.connector.common.message.MessageDetails;
-import eu.domibus.connector.domain.enums.DomibusConnectorEvidenceType;
-import eu.domibus.connector.domain.model.DetachedSignature;
-import eu.domibus.connector.domain.model.DetachedSignatureMimeType;
-import eu.domibus.connector.domain.model.DomibusConnectorAction;
-import eu.domibus.connector.domain.model.DomibusConnectorBigDataReference;
-import eu.domibus.connector.domain.model.DomibusConnectorMessage;
-import eu.domibus.connector.domain.model.DomibusConnectorMessageAttachment;
-import eu.domibus.connector.domain.model.DomibusConnectorMessageConfirmation;
-import eu.domibus.connector.domain.model.DomibusConnectorMessageContent;
-import eu.domibus.connector.domain.model.DomibusConnectorMessageDetails;
-import eu.domibus.connector.domain.model.DomibusConnectorMessageDocument;
-import eu.domibus.connector.domain.model.DomibusConnectorParty;
-import eu.domibus.connector.domain.model.DomibusConnectorService;
-import eu.domibus.connector.domain.model.builder.DetachedSignatureBuilder;
-import eu.domibus.connector.domain.model.builder.DomibusConnectorActionBuilder;
-import eu.domibus.connector.domain.model.builder.DomibusConnectorMessageAttachmentBuilder;
-import eu.domibus.connector.domain.model.builder.DomibusConnectorMessageBuilder;
-import eu.domibus.connector.domain.model.builder.DomibusConnectorMessageContentBuilder;
-import eu.domibus.connector.domain.model.builder.DomibusConnectorMessageDocumentBuilder;
-import eu.domibus.connector.domain.model.builder.DomibusConnectorPartyBuilder;
-import eu.domibus.connector.domain.model.builder.DomibusConnectorServiceBuilder;
+import eu.domibus.connector.domain.transition.DomibusConnectorActionType;
+import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
+import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureMimeType;
+import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageAttachmentType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageContentType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageDocumentType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
+import eu.domibus.connector.domain.transition.DomibusConnectorPartyType;
+import eu.domibus.connector.domain.transition.DomibusConnectorServiceType;
 import java.io.ByteArrayInputStream;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.Arrays;
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
+import javax.xml.transform.stream.StreamSource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeanUtils;
@@ -50,18 +46,18 @@ public class Map35MessageTov4Message {
     private final static Logger LOGGER = LoggerFactory.getLogger(Map35MessageTov4Message.class);
     
     
-    DomibusConnectorMessage map35MessageTov4Message(Message msg) {
+    DomibusConnectorMessageType map35MessageTov4Message(Message msg) {
         LOGGER.debug("#map35MessageTov4Message: map message [{}]", msg);
         if (msg.getMessageDetails() == null) {
             throw new IllegalArgumentException("MessageDetails of message must be not null!");
         }
         
-        DomibusConnectorMessageBuilder messageBuilder = DomibusConnectorMessageBuilder.createBuilder();
+        DomibusConnectorMessageType message = new DomibusConnectorMessageType();
 
         if (msg.getMessageContent() != null) {
             LOGGER.info("#map35MessageTov4Message: map normal message");
-            DomibusConnectorMessageContent mapMessageContent = mapMessageContent(msg.getMessageContent());
-            messageBuilder.setMessageContent(mapMessageContent);
+            DomibusConnectorMessageContentType mapMessageContent = mapMessageContent(msg.getMessageContent());
+            message.setMessageContent(mapMessageContent);
         } else if (msg.getConfirmations() != null && msg.getConfirmations().size() > 0) {
             LOGGER.info("#map35MessageTov4Message: message is a evidence message (contains no message content)");
         } else {            
@@ -69,107 +65,113 @@ public class Map35MessageTov4Message {
             throw new IllegalArgumentException("Either the message must hava a message content (normal messsage) or a message confirmation (evidence message)!");
         }
         
-        DomibusConnectorMessageDetails mapMessageDetails = mapMessageDetails(msg.getMessageDetails());
-        messageBuilder.setMessageDetails(mapMessageDetails);
+        DomibusConnectorMessageDetailsType mapMessageDetails = mapMessageDetails(msg.getMessageDetails());
+        message.setMessageDetails(mapMessageDetails);
         
         if (msg.getConfirmations() != null) {
             for (MessageConfirmation confirmation : msg.getConfirmations()) {
-                DomibusConnectorMessageConfirmation mappedConfirmation = mapConfirmation(confirmation);
-                messageBuilder.addConfirmation(mappedConfirmation);
+                DomibusConnectorMessageConfirmationType mappedConfirmation = mapConfirmation(confirmation);
+                message.getMessageConfirmations().add(mappedConfirmation);
             }
         }
 
         if (msg.getAttachments() != null) {
             for (MessageAttachment attachment : msg.getAttachments()) {
-                DomibusConnectorMessageAttachment mappedAttachment = mapAttachment(attachment);
-                messageBuilder.addAttachment(mappedAttachment);            
+                DomibusConnectorMessageAttachmentType mappedAttachment = mapAttachment(attachment);
+                message.getMessageAttachments().add(mappedAttachment);            
             }
         }
-        
-        
-        return messageBuilder.build();
+                
+        return message;
     }
     
-    DomibusConnectorEvidenceType mapEvidenceType(@Nonnull EvidenceType evidenceType) {
-        return DomibusConnectorEvidenceType.valueOf(evidenceType.name());
+    DomibusConnectorConfirmationType mapEvidenceType(@Nonnull EvidenceType evidenceType) {
+        return DomibusConnectorConfirmationType.valueOf(evidenceType.name());
     }
     
-    DomibusConnectorMessageConfirmation mapConfirmation(MessageConfirmation oldConfirmation) {
-        DomibusConnectorMessageConfirmation confirmation = new DomibusConnectorMessageConfirmation();
-        confirmation.setEvidence(oldConfirmation.getEvidence());
+    DomibusConnectorMessageConfirmationType mapConfirmation(MessageConfirmation oldConfirmation) {
+        DomibusConnectorMessageConfirmationType confirmation = new DomibusConnectorMessageConfirmationType();
+        //confirmation.setEvidence(oldConfirmation.getEvidence());
         
-        confirmation.setEvidenceType(mapEvidenceType(oldConfirmation.getEvidenceType()));
+        StreamSource streamSource = new StreamSource(new ByteArrayInputStream(oldConfirmation.getEvidence()));
+        confirmation.setConfirmation(streamSource);
+        
+        confirmation.setConfirmationType(mapEvidenceType(oldConfirmation.getEvidenceType()));
+
         return confirmation;
     }
     
-    DomibusConnectorMessageAttachment mapAttachment(MessageAttachment oldAttachment) {
-        DomibusConnectorMessageAttachmentBuilder attachmentBuilder = DomibusConnectorMessageAttachmentBuilder.createBuilder();
+    DomibusConnectorMessageAttachmentType mapAttachment(MessageAttachment oldAttachment) {
+        DomibusConnectorMessageAttachmentType attachment = new DomibusConnectorMessageAttachmentType(); 
 
-        DomibusConnectorByteBasedBigDataReference dataRef = new DomibusConnectorByteBasedBigDataReference(oldAttachment.getAttachment());
+        DataHandler dataHandler = convertByteArrayToDataHandler(oldAttachment.getAttachment(), oldAttachment.getMimeType());
+        attachment.setAttachment(dataHandler);
+        attachment.setIdentifier(oldAttachment.getIdentifier());
         
-        attachmentBuilder.setAttachment(dataRef);
-        attachmentBuilder.setIdentifier(oldAttachment.getIdentifier());
-        
-        attachmentBuilder.withDescription(oldAttachment.getDescription());
-        attachmentBuilder.withMimeType(oldAttachment.getMimeType());
-        attachmentBuilder.withName(oldAttachment.getName());
+        attachment.setDescription(oldAttachment.getDescription());
+        attachment.setMimeType(oldAttachment.getMimeType());
+        attachment.setName(oldAttachment.getName());
                 
-        return attachmentBuilder.build();
+        return attachment;
     }
     
 
     
     
-    DomibusConnectorMessageContent mapMessageContent(MessageContent oldMessageContent) {
+    DomibusConnectorMessageContentType mapMessageContent(MessageContent oldMessageContent) {
         
-        DomibusConnectorMessageContentBuilder contentBuilder = DomibusConnectorMessageContentBuilder.createBuilder();
+        DomibusConnectorMessageContentType messageContent = new DomibusConnectorMessageContentType();
         
-        DomibusConnectorMessageDocumentBuilder documentBuilder = DomibusConnectorMessageDocumentBuilder.createBuilder();
+        DomibusConnectorMessageDocumentType document = new DomibusConnectorMessageDocumentType();
         
         if (oldMessageContent.getDetachedSignature() != null && oldMessageContent.getDetachedSignatureName() != null) {            
-            DetachedSignatureMimeType sigMimeType = mapDetachedSignatureMimeType(oldMessageContent.getDetachedSignatureMimeType());
+            DomibusConnectorDetachedSignatureMimeType sigMimeType = mapDetachedSignatureMimeType(oldMessageContent.getDetachedSignatureMimeType());
             String signatureName = oldMessageContent.getDetachedSignatureName();
             byte[] signatureBytes = oldMessageContent.getDetachedSignature();
 
-            DetachedSignature signature = DetachedSignatureBuilder.createBuilder()
-                    .setMimeType(sigMimeType)
-                    .setName(signatureName)
-                    .setSignature(signatureBytes)
-                    .build();
-            documentBuilder.withDetachedSignature(signature);
+            DomibusConnectorDetachedSignatureType detachedSignature = new DomibusConnectorDetachedSignatureType();
+            detachedSignature.setDetachedSignature(signatureBytes);
+            detachedSignature.setDetachedSignatureName(signatureName);
+            detachedSignature.setMimeType(sigMimeType);
+            
+            document.setDetachedSignature(detachedSignature);
+
         } else {
             LOGGER.info("mapMessageContent# v35 MessageContent contains no detachedsignature: either detachedSignature [{}] or or signature name [{}] is null", 
                     oldMessageContent.getDetachedSignature(),
                     oldMessageContent.getDetachedSignatureName());
         }
         
+        if (oldMessageContent.getInternationalContent() != null) {
+            StreamSource streamSource = new StreamSource(new ByteArrayInputStream(oldMessageContent.getInternationalContent()));
+            messageContent.setXmlContent(streamSource);
+        }
+        
+        
         String pdfDocumentName = oldMessageContent.getPdfDocumentName();
         byte[] pdfDocument = oldMessageContent.getPdfDocument();
         if (pdfDocument != null) {
-            DomibusConnectorByteBasedBigDataReference pdfDocFileRef = new DomibusConnectorByteBasedBigDataReference(pdfDocument);
-        
-            DomibusConnectorMessageDocument document = documentBuilder
-                .setName(pdfDocumentName)
-                .setContent(pdfDocFileRef)                
-                .build();
-            contentBuilder.setDocument(document);
+            DataHandler dataHandler = convertByteArrayToDataHandler(pdfDocument, "application/pdf");
+            
+            document.setDocumentName(pdfDocumentName);
+            document.setDocument(dataHandler);            
+            messageContent.setDocument(document);
+            LOGGER.info("#mapMessageContent# v35 messageContent document converted to transition document!");
         } else {
             LOGGER.info("#mapMessageContent# v35 messageContent contains no pdf document!");
         }
         
-        return contentBuilder
-                .setXmlContent(oldMessageContent.getInternationalContent())                
-                .build();   
+        return messageContent;
     }
     
-    DetachedSignatureMimeType mapDetachedSignatureMimeType(eu.domibus.connector.common.enums.DetachedSignatureMimeType mimeType35) {
-        return DetachedSignatureMimeType.valueOf(mimeType35.name());
+    DomibusConnectorDetachedSignatureMimeType mapDetachedSignatureMimeType(eu.domibus.connector.common.enums.DetachedSignatureMimeType mimeType35) {
+        return DomibusConnectorDetachedSignatureMimeType.fromValue(mimeType35.name());
     }
     
     
-    DomibusConnectorMessageDetails mapMessageDetails(MessageDetails oldMessageDetails) {
+    DomibusConnectorMessageDetailsType mapMessageDetails(MessageDetails oldMessageDetails) {
         
-        DomibusConnectorMessageDetails messageDetails = new DomibusConnectorMessageDetails();
+        DomibusConnectorMessageDetailsType messageDetails = new DomibusConnectorMessageDetailsType();
         
         BeanUtils.copyProperties(oldMessageDetails, messageDetails);
         
@@ -184,51 +186,125 @@ public class Map35MessageTov4Message {
         return messageDetails;
     }
     
-    @Nullable DomibusConnectorAction mapDomibusConnectorAction(@Nullable eu.domibus.connector.common.db.model.DomibusConnectorAction oldAction) {
+    @Nullable DomibusConnectorActionType mapDomibusConnectorAction(@Nullable eu.domibus.connector.common.db.model.DomibusConnectorAction oldAction) {
         if (oldAction == null) return null;
-        return DomibusConnectorActionBuilder.createBuilder()
-                .setAction(oldAction.getAction())
-                .withDocumentRequired(oldAction.isPdfRequired())
-                .build();
+        DomibusConnectorActionType action = new DomibusConnectorActionType();        
+        action.setAction(oldAction.getAction());
+        return action;
     }
     
-    @Nullable DomibusConnectorParty mapDomibusConnectorParty(@Nullable eu.domibus.connector.common.db.model.DomibusConnectorParty oldParty) {
+    @Nullable DomibusConnectorPartyType mapDomibusConnectorParty(@Nullable eu.domibus.connector.common.db.model.DomibusConnectorParty oldParty) {
         if (oldParty == null) return null;
-        return DomibusConnectorPartyBuilder.createBuilder()
-                .setPartyId(oldParty.getPartyId())
-                .setRole(oldParty.getRole())
-                .withPartyIdType(oldParty.getPartyIdType())
-                .build();
+        DomibusConnectorPartyType party = new DomibusConnectorPartyType();
+        party.setPartyId(oldParty.getPartyId());
+        party.setPartyIdType(oldParty.getPartyIdType());
+        party.setRole(oldParty.getRole());
+        return party;
+        
     }
     
-    @Nullable DomibusConnectorService mapDomibusConnectorService(@Nullable eu.domibus.connector.common.db.model.DomibusConnectorService oldService) {
+    @Nullable DomibusConnectorServiceType mapDomibusConnectorService(@Nullable eu.domibus.connector.common.db.model.DomibusConnectorService oldService) {
         if (oldService == null) return null;
-        return DomibusConnectorServiceBuilder.createBuilder()
-                .setService(oldService.getService())
-                .withServiceType(oldService.getServiceType())
-                .build();
+        DomibusConnectorServiceType service = new DomibusConnectorServiceType();
+        service.setService(oldService.getService());
+        service.setServiceType(oldService.getServiceType());
+        return service;
     }
     
     /**
-     * A read only implementation of DomibusConnectorBigDataReference
-     * which stores the content in a byte[] (in memory, breaks streaming)
+     * converts a byte[] by creating a copy of the provided byte array (because
+     * byte array is not immutable) and passing this byte array to DataHandler
+     * constructor
+     *
+     *
+     * @param array - the byte array
+     * @param mimeType - the provided mimeType, can be null, if null
+     * "application/octet-stream" mimeType will be set
+     *
+     * @return the DataHandler
      */
-    private static class DomibusConnectorByteBasedBigDataReference extends DomibusConnectorBigDataReference {
+    static @Nonnull
+    DataHandler convertByteArrayToDataHandler(@Nonnull byte[] array, @Nullable String mimeType) {
+        if (mimeType == null) {
+            mimeType = "application/octet-stream";
+        }
 
-        private final byte[] bytes;
-        
-        public DomibusConnectorByteBasedBigDataReference(byte[] bytes) {
+        ByteArrayDataSource rawData = new ByteArrayDataSource(array);
+        DataHandler dataHandler = new DataHandler(rawData);
+        return dataHandler;
+    }
+    
+    
+//    /**
+//     * A read only implementation of DomibusConnectorBigDataReference
+//     * which stores the content in a byte[] (in memory, breaks streaming)
+//     */
+//    private static class DomibusConnectorByteBasedBigDataReference extends DomibusConnectorBigDataReference {
+//
+//        private final byte[] bytes;
+//        
+//        public DomibusConnectorByteBasedBigDataReference(byte[] bytes) {
+//            this.bytes = bytes;
+//        }
+//        
+//        @Override
+//        public InputStream getInputStream() {
+//            return new ByteArrayInputStream(bytes);
+//        }
+//        
+//        @Override
+//        public boolean isReadable() { return true; }            
+//
+//    }
+    
+    
+    
+    private static class ByteArrayDataSource implements DataSource {
+
+        private byte[] bytes;
+
+        public ByteArrayDataSource(byte[] bytes) {
             this.bytes = bytes;
         }
         
+        public void setBytes(byte[] bytes) {
+            this.bytes = bytes;
+        }
+
+        public byte[] getBytes() {
+            return bytes;
+        }
+        private String contentType;
+
+        public void setContentType(String contentType) {
+            this.contentType = contentType;
+        }
+
+        @Override
+        public String getContentType() {
+            return contentType;
+        }
+
         @Override
         public InputStream getInputStream() {
             return new ByteArrayInputStream(bytes);
         }
-        
-        @Override
-        public boolean isReadable() { return true; }            
 
+        /**
+         * for completeness, here's how to implement the outputstream. this is
+         * unnecessary for what you're doing, you can just throw an
+         * UnsupportedOperationException.
+         * @return 
+         */
+        @Override
+        public OutputStream getOutputStream() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public String getName() {
+            return "";
+        }
     }
     
 }
