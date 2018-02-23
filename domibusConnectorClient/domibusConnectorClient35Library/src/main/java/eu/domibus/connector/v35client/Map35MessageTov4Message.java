@@ -104,7 +104,7 @@ public class Map35MessageTov4Message {
     DomibusConnectorMessageAttachmentType mapAttachment(MessageAttachment oldAttachment) {
         DomibusConnectorMessageAttachmentType attachment = new DomibusConnectorMessageAttachmentType(); 
 
-        DataHandler dataHandler = convertByteArrayToDataHandler(oldAttachment.getAttachment(), oldAttachment.getMimeType());
+        DataHandler dataHandler = convertByteArrayToDataHandler(oldAttachment.getAttachment());
         attachment.setAttachment(dataHandler);
         attachment.setIdentifier(oldAttachment.getIdentifier());
         
@@ -151,7 +151,7 @@ public class Map35MessageTov4Message {
         String pdfDocumentName = oldMessageContent.getPdfDocumentName();
         byte[] pdfDocument = oldMessageContent.getPdfDocument();
         if (pdfDocument != null) {
-            DataHandler dataHandler = convertByteArrayToDataHandler(pdfDocument, "application/pdf");
+            DataHandler dataHandler = convertByteArrayToDataHandler(pdfDocument);
             
             document.setDocumentName(pdfDocumentName);
             document.setDocument(dataHandler);            
@@ -223,12 +223,7 @@ public class Map35MessageTov4Message {
      *
      * @return the DataHandler
      */
-    static @Nonnull
-    DataHandler convertByteArrayToDataHandler(@Nonnull byte[] array, @Nullable String mimeType) {
-        if (mimeType == null) {
-            mimeType = "application/octet-stream";
-        }
-
+    static @Nonnull DataHandler convertByteArrayToDataHandler(@Nonnull byte[] array) {
         ByteArrayDataSource rawData = new ByteArrayDataSource(array);
         DataHandler dataHandler = new DataHandler(rawData);
         return dataHandler;

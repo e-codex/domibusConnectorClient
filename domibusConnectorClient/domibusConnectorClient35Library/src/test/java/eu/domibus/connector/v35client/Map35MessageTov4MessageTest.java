@@ -57,7 +57,7 @@ public class Map35MessageTov4MessageTest {
         assertThat(msg.getMessageAttachments()).hasSize(1);
         assertThat(msg.getMessageConfirmations()).hasSize(1);
         
-        //TODO: check message errors, attachments, confirmations!        
+        //TODO: check message errors     
     }
     
     
@@ -195,9 +195,7 @@ public class Map35MessageTov4MessageTest {
         DomibusConnectorMessageContentType mapMessageContent = mapper.mapMessageContent(messageContent);
         
         assertThat(mapMessageContent).isNotNull();
-        
-        //assertThat(new String(mapMessageContent.getXmlContent(), "UTF-8")).isEqualTo("internationalContent");
-        
+                
         DifferenceEngine diff = new DOMDifferenceEngine();
         String compare = new String(messageContent.getInternationalContent(), "UTF-8");
         Source source = Input.fromString(compare).build();
@@ -224,7 +222,6 @@ public class Map35MessageTov4MessageTest {
         
         assertThat(mapMessageContent).isNotNull();
         
-//        assertThat(new String(mapMessageContent.getXmlContent(), "UTF-8")).isEqualTo("internationalContent");
         DifferenceEngine diff = new DOMDifferenceEngine();
         
         Source source = Input.fromString(new String(messageContent.getInternationalContent(), "UTF-8")).build();
