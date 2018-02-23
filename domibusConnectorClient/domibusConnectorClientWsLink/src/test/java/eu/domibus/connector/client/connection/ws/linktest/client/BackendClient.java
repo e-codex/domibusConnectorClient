@@ -28,7 +28,7 @@ public class BackendClient {
         //TODO: edit for push test
         boolean web;
         List<String> p = Arrays.asList(profiles);
-        web = p.contains("push");
+        web = p.contains("push"); //if profile is push start webserver for push interface
                     
         SpringApplicationBuilder builder = new SpringApplicationBuilder();
         SpringApplication springApp = builder.bannerMode(Banner.Mode.OFF)

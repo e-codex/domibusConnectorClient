@@ -49,7 +49,7 @@ public class DomibusConnectorClientWsTransportMessageServiceTest {
     @Test
     public void testFetchMessages() {
         
-        List<DomibusConnectorMessage> fetchMessages = service.fetchMessages();
+        List<DomibusConnectorMessageType> fetchMessages = service.fetchMessages();
         assertThat(fetchMessages).hasSize(1);
         
     }
@@ -75,11 +75,11 @@ public class DomibusConnectorClientWsTransportMessageServiceTest {
             });
       
         
-        DomibusConnectorMessage msg = DomainEntityCreator.createMessage();        
+        DomibusConnectorMessageType msg = TransitionCreator.createEpoMessage();
         
-        DomibusConnectorMessage submitMessage = service.submitMessage(msg);
+        DomibsConnectorAcknowledgementType submitMessage = service.submitMessage(msg);
         
-        assertThat(submitMessage.getConnectorMessageId()).isEqualTo("MYID");
+        assertThat(submitMessage.getMessageId()).isEqualTo("MYID");
         assertThat(rcvMessages).hasSize(1);
         
     }

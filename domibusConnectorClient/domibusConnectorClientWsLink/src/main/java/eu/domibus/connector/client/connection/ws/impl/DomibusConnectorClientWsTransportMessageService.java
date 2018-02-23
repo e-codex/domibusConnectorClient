@@ -3,8 +3,6 @@ package eu.domibus.connector.client.connection.ws.impl;
 
 import eu.domibus.connector.client.connection.FetchMessagesFromConnector;
 import eu.domibus.connector.client.connection.SubmitMessageToConnector;
-import eu.domibus.connector.domain.model.DomibusConnectorMessage;
-import eu.domibus.connector.domain.transformer.DomibusConnectorDomainMessageTransformer;
 import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
@@ -34,25 +32,19 @@ public class DomibusConnectorClientWsTransportMessageService implements FetchMes
     }
     
     @Override
-    public List<DomibusConnectorMessage> fetchMessages() {
-        List<DomibusConnectorMessage> messages = new ArrayList<>();
+    public List<DomibusConnectorMessageType> fetchMessages() {
         DomibusConnectorMessagesType requestMessages = webService.requestMessages(new EmptyRequestType());
         
-        requestMessages.getMessages().forEach( (DomibusConnectorMessageType msg) -> {
-            DomibusConnectorMessage domainMessage = DomibusConnectorDomainMessageTransformer.transformTransitionToDomain(msg);
-            messages.add(domainMessage);
-        });
+        List<DomibusConnectorMessageType> messages = requestMessages.getMessages();
         
         return messages;
     }
 
     @Override
-    public DomibusConnectorMessage submitMessage(DomibusConnectorMessage message) {
-        DomibusConnectorMessageType messageDTO = DomibusConnectorDomainMessageTransformer.transformDomainToTransition(message);
-        DomibsConnectorAcknowledgementType submitMessage = webService.submitMessage(messageDTO);
-        String messageId = submitMessage.getMessageId();
-        message.setConnectorMessageId(messageId);
-        return message;
+    public DomibsConnectorAcknowledgementType submitMessage(DomibusConnectorMessageType messageDTO) {        
+        DomibsConnectorAcknowledgementType submitMessageAck = webService.submitMessage(messageDTO);
+                
+        return submitMessageAck;
     }
 
 }

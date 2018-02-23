@@ -7,7 +7,9 @@ import eu.domibus.connector.domain.model.DomibusConnectorMessage;
 import eu.domibus.connector.domain.model.builder.DomibusConnectorMessageBuilder;
 import eu.domibus.connector.domain.testutil.DomainEntityCreator;
 import static eu.domibus.connector.domain.testutil.DomainEntityCreator.createEvidenceNonDeliveryMessage;
+import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
+import eu.domibus.connector.domain.transition.testutil.TransitionCreator;
 import java.util.List;
 import static org.assertj.core.api.Assertions.*;
 import org.junit.Before;
@@ -60,25 +62,25 @@ public class ClientWsITCase {
     
     @Test
     public void testSendMessageToServer() {
-        DomibusConnectorMessage message = DomainEntityCreator.createMessage();      
-        DomibusConnectorMessage submitMessage = transportWs.submitMessage(message);
+        DomibusConnectorMessageType message = TransitionCreator.createMessage();      
+        DomibsConnectorAcknowledgementType submitMessage = transportWs.submitMessage(message);
         
-        assertThat(submitMessage.getConnectorMessageId()).isNotNull();
+        assertThat(submitMessage.getMessageId()).isNotNull();
     }
     
     @Test
     public void testSendNonDeliveryMessageToServer() {
-        DomibusConnectorMessage message = createEvidenceNonDeliveryMessage();
+        DomibusConnectorMessageType message = TransitionCreator.createEvidenceNonDeliveryMessage();
         
-        DomibusConnectorMessage submitMessage = transportWs.submitMessage(message);
+        DomibsConnectorAcknowledgementType submitMessage = transportWs.submitMessage(message);
         
-        assertThat(submitMessage.getConnectorMessageId()).isNotNull();
+        assertThat(submitMessage.getMessageId()).isNotNull();
     }
     
     
     @Test
     public void testRequestMessagesFromServer() {
-        List<DomibusConnectorMessage> fetchMessages = transportWs.fetchMessages();
+        List<DomibusConnectorMessageType> fetchMessages = transportWs.fetchMessages();
 
         assertThat(fetchMessages).hasSize(1);
     }

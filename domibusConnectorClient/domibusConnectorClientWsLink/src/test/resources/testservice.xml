@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xmlns:jaxws="http://cxf.apache.org/jaxws"
-    xmlns:wsp="http://www.w3.org/ns/ws-policy"
-    xmlns:p="http://cxf.apache.org/policy"
-    xmlns:cxf="http://cxf.apache.org/core"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:wsp="http://www.w3.org/ns/ws-policy"
+       xmlns:p="http://cxf.apache.org/policy"
+       xmlns:cxf="http://cxf.apache.org/core"
 
-    xsi:schemaLocation="
+       xsi:schemaLocation="
 http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
 http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd 
 http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200802 http://docs.oasis-open.org/ws-sx/ws-securitypolicy/v1.3/cd/ws-securitypolicy.xsd
@@ -16,20 +16,21 @@ http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd "
 >
 
     
-<!--    <cxf:bus>
+    <cxf:bus>
         <cxf:features>
             <p:policies/>
-            <cxf:logging/>            
+            <!--            <cxf:logging/>            -->
         </cxf:features>
-    </cxf:bus>-->
+    </cxf:bus>
     
     
     <jaxws:endpoint id="connectorBackendWS"
                     implementor="#connectorBackendImpl"
                     address="/backend"
-       
+                    serviceName="s:DomibusConnectorBackendWSService"    
                     xmlns:e="http://service.jaxws.cxf.apache.org/endpoint"
-                    xmlns:s="http://service.jaxws.cxf.apache.org/service"
+                    xmlns:s="http://connector.domibus.eu/ws/backend/webservice"  
+
                                                            
     >
         
@@ -44,7 +45,7 @@ http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd "
             <entry key="security.store.bytes.in.attachment" value="true" />
 
         </jaxws:properties>
-         <jaxws:features>
+        <jaxws:features>
             <p:policies>
                 <wsp:PolicyReference URI="classpath:/wsdl/backend.policy.xml"/>
             </p:policies>
