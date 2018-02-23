@@ -1,7 +1,6 @@
 
 package eu.domibus.connector.client.connection;
 
-import eu.domibus.connector.domain.model.DomibusConnectorMessage;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import java.util.List;
 
@@ -13,6 +12,6 @@ import java.util.List;
  */
 public interface FetchMessagesFromConnector {
 
-    public List<DomibusConnectorMessage> fetchMessages();
+    public List<DomibusConnectorMessageType> fetchMessages();
     
 }

@@ -1,7 +1,7 @@
 
 package eu.domibus.connector.client.connection;
 
-import eu.domibus.connector.domain.model.DomibusConnectorMessage;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 /**
  * PushMessage Service interface
@@ -13,6 +13,6 @@ import eu.domibus.connector.domain.model.DomibusConnectorMessage;
  */
 public interface ReceiveMessageFromConnector {
 
-    public void receiveMessageFromConnector(DomibusConnectorMessage message);
+    public void receiveMessageFromConnector(DomibusConnectorMessageType message);
     
 }
