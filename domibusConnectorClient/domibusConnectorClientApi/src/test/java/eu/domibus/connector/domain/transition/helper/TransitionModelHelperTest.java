@@ -23,7 +23,8 @@ public class TransitionModelHelperTest {
     @Test
     public void testIsEvidenceMessage_nonDelivery_shouldBeTrue() {
         DomibusConnectorMessageType nonDeliveryMessage = TransitionCreator.createEvidenceNonDeliveryMessage();
-        assertThat(TransitionModelHelper.isEvidenceMessage(nonDeliveryMessage)).isTrue();        
+        boolean isEvidenceMessage = TransitionModelHelper.isEvidenceMessage(nonDeliveryMessage);
+        assertThat(isEvidenceMessage).isTrue();        
     }
     
     
