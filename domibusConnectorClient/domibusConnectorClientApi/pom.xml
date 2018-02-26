@@ -79,6 +79,7 @@
                 <executions>
                     <execution>
                         <id>generate-transition-entities</id>
+                        <phase>generate-sources</phase>
                         <configuration>
                             <!-- <forceRegenerate>true</forceRegenerate> -->
                             <schemaDirectory>src/main/resources/eu.domibus.connector.domain.transition</schemaDirectory>
