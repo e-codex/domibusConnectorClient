@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="INFO">
     <Appenders>
-        <Console name="Console" target="SYSTEM_OUT" additivity="false">
+        <Console name="Console" target="SYSTEM_OUT">
             <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n" />
         </Console>
     </Appenders>
     <Loggers>
-        <Root level="info">
+        <Root level="info" additivity="false">
             <AppenderRef ref="Console" />
         </Root>
-        <logger name="eu.domibus.connector" level="debug" >
+        <logger name="eu.domibus.connector" level="debug" additivity="false">
             <AppenderRef ref="Console" />
         </logger>
     </Loggers>

@@ -33,10 +33,12 @@ public class DomibusConnectorClientWsTransportMessageService implements FetchMes
     
     @Override
     public List<DomibusConnectorMessageType> fetchMessages() {
+        LOGGER.debug("#fetchMessages: fetchMessages from connector");
         DomibusConnectorMessagesType requestMessages = webService.requestMessages(new EmptyRequestType());
         
         List<DomibusConnectorMessageType> messages = requestMessages.getMessages();
-        
+        LOGGER.debug("#fetchMessages: successfully fetched [{}] messages from connector", messages.size());
+
         return messages;
     }
 

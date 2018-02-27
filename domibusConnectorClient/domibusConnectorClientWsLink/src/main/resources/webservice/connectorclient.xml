@@ -22,7 +22,7 @@ http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd "
     <cxf:bus>
         <cxf:features>
             <p:policies/>
-            <cxf:logging />
+            <!--<cxf:logging />-->
         </cxf:features>
     </cxf:bus>
     
@@ -42,9 +42,9 @@ http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd "
     <jaxws:client id="connectorWsClient"
                   serviceClass="eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWebService"
                   address="${connector.backend.ws.address}" 
-                  serviceName="s:DomibusConnectorBackendWSService"    
-                  xmlns:e="http://service.jaxws.cxf.apache.org/endpoint"
-                  xmlns:s="http://connector.domibus.eu/ws/backend/webservice"        
+                  serviceName="s:DomibusConnectorBackendWSService"
+                  xmlns:s="http://connector.domibus.eu/ws/backend/webservice"
+                  wsdlLocation="wsdl/DomibusConnectorBackendWebService.wsdl"
     >
         
         <!--                  wsdlLocation="${connector.backend.ws.address}?wsdl"-->

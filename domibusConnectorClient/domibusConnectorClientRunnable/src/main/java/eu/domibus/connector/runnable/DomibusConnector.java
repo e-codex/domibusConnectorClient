@@ -3,9 +3,15 @@ package eu.domibus.connector.runnable;
 import java.io.File;
 import java.io.IOException;
 
+import eu.domibus.connector.runnable.util.StandaloneClientProperties;
 import org.apache.commons.lang.ArrayUtils;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.util.StringUtils;
 
 import eu.domibus.connector.gui.config.properties.ConnectorProperties;
@@ -13,6 +19,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
+@SpringBootApplication(scanBasePackages="eu.domibus.connector")
+@EnableConfigurationProperties(StandaloneClientProperties.class)
+@EnableScheduling
 public class DomibusConnector {
 
     /**
@@ -105,6 +114,12 @@ public class DomibusConnector {
 //        }
         
         context.registerShutdownHook();
+    }
+
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 
 }
