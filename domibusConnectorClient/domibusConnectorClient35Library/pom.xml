@@ -12,7 +12,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
-        <dependency>
+        <!-- <dependency>
             <groupId>eu.domibus.connector</groupId>
             <artifactId>domibusConnectorDomain</artifactId>
             <scope>test</scope>
@@ -23,7 +23,7 @@
             <classifier>tests</classifier>
             <version>${connector-server.version}</version>
             <scope>test</scope>
-        </dependency>
+        </dependency> -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>            

@@ -11,10 +11,11 @@
     <version>4.0-SNAPSHOT</version>
     <packaging>jar</packaging>
     <dependencies>
-<!--        <dependency>
+        <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>domibusConnectorDomain</artifactId>
-        </dependency>-->
+            <artifactId>domibusConnectorAPI</artifactId>
+            <version>${connector-server.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.google.code.findbugs</groupId>
             <artifactId>jsr305</artifactId>
@@ -50,7 +51,7 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
                 <executions>
-                    <execution>
+                    <!-- <execution>
                         <id>unpack-transition-model</id>
                         <phase>generate-sources</phase>
                         <goals>
@@ -70,10 +71,10 @@
                                 </artifactItem>
                             </artifactItems>
                         </configuration>
-                    </execution>
+                    </execution> -->
                 </executions>
             </plugin>
-            <plugin>
+           <!--  <plugin>
                 <groupId>org.jvnet.jaxb2.maven2</groupId>
                 <artifactId>maven-jaxb2-plugin</artifactId>
                 <executions>
@@ -81,7 +82,7 @@
                         <id>generate-transition-entities</id>
                         <phase>generate-sources</phase>
                         <configuration>
-                            <!-- <forceRegenerate>true</forceRegenerate> -->
+                            <forceRegenerate>true</forceRegenerate>
                             <schemaDirectory>src/main/resources/eu.domibus.connector.domain.transition</schemaDirectory>
                             <schemaIncludes>
                                 <include>DomibusConnectorTransitionModel.xsd</include>
@@ -99,7 +100,7 @@
                         
                     </execution>
                 </executions>
-            </plugin>
+            </plugin> -->
         </plugins>
     </build>
     

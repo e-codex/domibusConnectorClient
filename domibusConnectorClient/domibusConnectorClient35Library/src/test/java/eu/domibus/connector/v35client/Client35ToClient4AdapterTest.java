@@ -4,7 +4,6 @@ package eu.domibus.connector.v35client;
 import eu.domibus.connector.client.connection.SubmitMessageToConnector;
 import eu.domibus.connector.common.exception.ImplementationMissingException;
 import eu.domibus.connector.common.message.Message;
-import eu.domibus.connector.domain.model.DomibusConnectorMessage;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.mapping.DomibusConnectorContentMapper;
 import eu.domibus.connector.mapping.exception.DomibusConnectorContentMapperException;
