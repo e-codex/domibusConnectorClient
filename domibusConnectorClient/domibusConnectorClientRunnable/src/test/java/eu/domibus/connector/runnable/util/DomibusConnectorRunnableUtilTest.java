@@ -6,6 +6,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+
+import eu.domibus.connector.client.runnable.util.DomibusConnectorMessageProperties;
+import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableUtil;
+
 import static org.assertj.core.api.Assertions.*;
 
 /**

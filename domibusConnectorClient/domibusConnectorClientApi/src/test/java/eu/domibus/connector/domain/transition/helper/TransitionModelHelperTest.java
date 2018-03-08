@@ -13,19 +13,19 @@ import static org.assertj.core.api.Assertions.*;
 public class TransitionModelHelperTest {
 
 
-    @Test
-    public void testIsEvidenceMessage_epoMessage_shouldBeFalse() {
-        DomibusConnectorMessageType epoMessage = TransitionCreator.createEpoMessage();
-        assertThat(TransitionModelHelper.isEvidenceMessage(epoMessage)).isFalse();
-    }
-
-    
-    @Test
-    public void testIsEvidenceMessage_nonDelivery_shouldBeTrue() {
-        DomibusConnectorMessageType nonDeliveryMessage = TransitionCreator.createEvidenceNonDeliveryMessage();
-        boolean isEvidenceMessage = TransitionModelHelper.isEvidenceMessage(nonDeliveryMessage);
-        assertThat(isEvidenceMessage).isTrue();        
-    }
+//    @Test
+//    public void testIsEvidenceMessage_epoMessage_shouldBeFalse() {
+//        DomibusConnectorMessageType epoMessage = TransitionCreator.createEpoMessage();
+//        assertThat(TransitionModelHelper.isEvidenceMessage(epoMessage)).isFalse();
+//    }
+//
+//    
+//    @Test
+//    public void testIsEvidenceMessage_nonDelivery_shouldBeTrue() {
+//        DomibusConnectorMessageType nonDeliveryMessage = TransitionCreator.createEvidenceNonDeliveryMessage();
+//        boolean isEvidenceMessage = TransitionModelHelper.isEvidenceMessage(nonDeliveryMessage);
+//        assertThat(isEvidenceMessage).isTrue();        
+//    }
     
     
 }

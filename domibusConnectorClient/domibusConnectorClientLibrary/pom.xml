@@ -3,14 +3,28 @@
   <parent>
     <groupId>eu.domibus.connector.client</groupId>
     <artifactId>domibusConnectorClient</artifactId>
-    <version>3.9.0-SNAPSHOT</version>
+    <version>4.0-SNAPSHOT</version>
   </parent>
   <description>WebConnector 4.x Client Library</description>
   <artifactId>domibusConnectorClientLibrary</artifactId>
     <dependencies>
-        <dependency>
+        <!-- <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-context</artifactId>
+        </dependency> -->
+        <!-- <dependency>
+            <groupId>eu.domibus.connector</groupId>
+            <artifactId>domibusConnectorClientApi</artifactId>
+            <version>4.0-SNAPSHOT</version>
+        </dependency> -->
+        <dependency>
+            <groupId>eu.domibus.connector</groupId>
+            <artifactId>domibusConnectorClientWSLink</artifactId>
+            <version>4.0-SNAPSHOT</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
     </dependencies>
 </project>
