@@ -46,7 +46,7 @@
         </dependency>
         <dependency>
             <groupId>eu.domibus.connector</groupId>
-            <artifactId>domibusConnectorClientApi</artifactId>
+            <artifactId>domibusConnectorClientWSLink</artifactId>
             <version>4.0-SNAPSHOT</version>
         </dependency>
         <dependency>

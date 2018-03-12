@@ -1,7 +1,13 @@
 
 package eu.domibus.connector.v35client;
 
-import eu.domibus.connector.client.connection.SubmitMessageToConnector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import eu.domibus.connector.client.connection.ws.DomibusConnectorBackendWebServiceClient;
 import eu.domibus.connector.common.exception.ImplementationMissingException;
 import eu.domibus.connector.common.message.Message;
 import eu.domibus.connector.common.message.MessageContent;
@@ -10,12 +16,6 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.mapping.DomibusConnectorContentMapper;
 import eu.domibus.connector.nbc.DomibusConnectorNationalBackendClient;
 import eu.domibus.connector.nbc.exception.DomibusConnectorNationalBackendClientException;
-import java.util.logging.Level;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Service;
 
 /**
  * This Service maps the old {@link eu.domibus.connector.nbc.DomibusConnectorNationalBackendClient} 
@@ -33,7 +33,7 @@ public class PushMessagesToControllerFrom35Client {
     
     private DomibusConnectorNationalBackendClient nationalBackendClient;
         
-    private SubmitMessageToConnector submitMessageToConnectorService;
+    private DomibusConnectorBackendWebServiceClient backendClient;
         
     private Map35MessageTov4Message map35MessageTov4Message;
     
@@ -45,10 +45,10 @@ public class PushMessagesToControllerFrom35Client {
     public void setNationalBackendClient(DomibusConnectorNationalBackendClient nationalBackendClient) {
         this.nationalBackendClient = nationalBackendClient;
     }
-
+    
     @Autowired
-    public void setSubmitMessageToConnectorService(SubmitMessageToConnector submitMessageToConnectorService) {
-        this.submitMessageToConnectorService = submitMessageToConnectorService;
+    public void setBackendClient(DomibusConnectorBackendWebServiceClient backendClient) {
+    	this.backendClient = backendClient;
     }
     
     @Autowired
@@ -93,7 +93,7 @@ public class PushMessagesToControllerFrom35Client {
             DomibusConnectorMessageType domibusMessage = map35MessageTov4Message.map35MessageTov4Message(nationalMessage);
             
             LOGGER.info("#transportOneMessageToController: passing message to SubmitMessageToConnector service");
-            submitMessageToConnectorService.submitMessage(domibusMessage);            
+            backendClient.submitMessage(domibusMessage);            
         } catch (Exception e) {            
             String error = String.format("#transportOneMessageToController: sending national message with id [%s] to domibusConnector failed!", id);            
             LOGGER.error(error, e);

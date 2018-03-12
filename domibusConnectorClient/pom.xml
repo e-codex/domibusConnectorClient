@@ -22,7 +22,6 @@
 		<module>domibusConnectorClientDistribution</module>
         <module>domibusConnectorClient35Library</module>
         <module>domibusConnectorClientWsLink</module>
-        <module>domibusConnectorClientApi</module>
         <module>domibusConnectorClientScheduler</module>
   </modules>
   

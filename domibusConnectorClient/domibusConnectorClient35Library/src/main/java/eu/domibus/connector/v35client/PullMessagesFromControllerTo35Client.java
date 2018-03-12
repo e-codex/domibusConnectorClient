@@ -1,23 +1,24 @@
 
 package eu.domibus.connector.v35client;
 
-import eu.domibus.connector.client.connection.FetchMessagesFromConnector;
-import eu.domibus.connector.common.exception.ImplementationMissingException;
-import eu.domibus.connector.common.message.Message;
-import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
-import eu.domibus.connector.domain.transition.helper.TransitionModelHelper;
-import eu.domibus.connector.mapping.DomibusConnectorContentMapper;
-import eu.domibus.connector.mapping.exception.DomibusConnectorContentMapperException;
-import eu.domibus.connector.nbc.DomibusConnectorNationalBackendClient;
-import eu.domibus.connector.nbc.exception.DomibusConnectorNationalBackendClientException;
 import java.util.List;
-import java.util.logging.Level;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+
+import eu.domibus.connector.client.connection.exception.DomibusConnectorBackendWebServiceClientException;
+import eu.domibus.connector.client.connection.ws.DomibusConnectorBackendWebServiceClient;
+import eu.domibus.connector.common.exception.ImplementationMissingException;
+import eu.domibus.connector.common.message.Message;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
+import eu.domibus.connector.mapping.DomibusConnectorContentMapper;
+import eu.domibus.connector.mapping.exception.DomibusConnectorContentMapperException;
+import eu.domibus.connector.nbc.DomibusConnectorNationalBackendClient;
+import eu.domibus.connector.nbc.exception.DomibusConnectorNationalBackendClientException;
 
 /**
  *
@@ -31,7 +32,7 @@ public class PullMessagesFromControllerTo35Client {
         
     private DomibusConnectorNationalBackendClient nationalBackendClient;
         
-    private FetchMessagesFromConnector fetchMessagesFromConnector;
+    private DomibusConnectorBackendWebServiceClient backendClient;
         
     private MapV4TransitionMessageTo35Message mapTo35Message;
     
@@ -42,10 +43,10 @@ public class PullMessagesFromControllerTo35Client {
     public void setNationalBackendClient(DomibusConnectorNationalBackendClient nationalBackendClient) {
         this.nationalBackendClient = nationalBackendClient;
     }
-
+    
     @Autowired
-    public void setFetchMessagesFromConnector(FetchMessagesFromConnector fetchMessagesFromConnector) {
-        this.fetchMessagesFromConnector = fetchMessagesFromConnector;
+    public void setBackendClient(DomibusConnectorBackendWebServiceClient backendClient) {
+    	this.backendClient = backendClient;
     }
 
     @Autowired
@@ -61,7 +62,13 @@ public class PullMessagesFromControllerTo35Client {
     
     @Scheduled(fixedDelay = 9000)
     public void pullMessagesFromController() {
-        List<DomibusConnectorMessageType> fetchMessages = fetchMessagesFromConnector.fetchMessages();        
+        List<DomibusConnectorMessageType> fetchMessages = null;
+		try {
+			fetchMessages = backendClient.requestMessages();
+		} catch (DomibusConnectorBackendWebServiceClientException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
         fetchMessages.forEach(this::deliverMessageToNationalSystem);
     }
     
