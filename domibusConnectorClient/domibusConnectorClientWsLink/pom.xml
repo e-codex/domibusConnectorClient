@@ -38,7 +38,7 @@
         </dependency>
         <dependency>
             <groupId>eu.domibus.connector</groupId>
-            <artifactId>domibusConnectorApi</artifactId>
+            <artifactId>domibusConnectorAPI</artifactId>
             <version>4.0-SNAPSHOT</version>
         </dependency>
         <dependency>
