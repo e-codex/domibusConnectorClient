@@ -141,7 +141,7 @@ node {
 				
 						
 				//chdir to project directory and execute maven tasks					
-				dir ('domibusConnector') {
+				dir ('domibusConnectorClient') {
 					if (RELEASE || HOTFIX ) {
 						stage("INIT Release / Hotfix") {
 							versionName = versionName.split("_")[0] //split branch version name from additional text 
