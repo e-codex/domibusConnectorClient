@@ -38,8 +38,7 @@
         </dependency>
         <dependency>
             <groupId>eu.domibus.connector</groupId>
-            <artifactId>domibusConnectorAPI</artifactId>
-            <version>4.0-SNAPSHOT</version>
+            <artifactId>domibusConnectorAPI</artifactId>         
         </dependency>
         <dependency>
             <groupId>junit</groupId>
