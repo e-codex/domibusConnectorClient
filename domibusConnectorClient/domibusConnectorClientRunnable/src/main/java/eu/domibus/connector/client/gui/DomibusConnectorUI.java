@@ -4,22 +4,18 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.Frame;
 
+import javax.annotation.PostConstruct;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
-import eu.domibus.connector.client.gui.main.DomibusConnectorMainMenu;
-import eu.domibus.connector.client.gui.main.DomibusConnectorMainTab;
-import eu.domibus.connector.gui.config.properties.ConnectorProperties;
-
-import javax.annotation.PostConstruct;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
+
+import eu.domibus.connector.client.gui.main.DomibusConnectorMainMenu;
+import eu.domibus.connector.client.gui.main.DomibusConnectorMainTab;
 
 @Component
 @Profile("swing-gui")
@@ -55,14 +51,6 @@ public class DomibusConnectorUI extends JFrame {
 //				e.printStackTrace();
 //			}
 //		}
-		try {
-			UIManager.setLookAndFeel(
-			        UIManager.getSystemLookAndFeelClassName());
-			JFrame.setDefaultLookAndFeelDecorated(true);
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException
-				| UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
-		}
 		
 		this.addWindowListener(new java.awt.event.WindowAdapter() {
 		    @Override
