@@ -1,5 +1,6 @@
 package eu.domibus.connector.client.filesystem;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -311,7 +312,10 @@ public class DomibusStandaloneConnectorFileSystemReader {
 	}
 
 	private Source fileToSource(File file) throws IOException {
-		return new StreamSource(file);
+		byte[] bytes = fileToByteArray(file);
+		
+		
+		return new StreamSource(new ByteArrayInputStream(bytes));
 
 	}
 

@@ -2,28 +2,31 @@ package eu.domibus.connector.client.gui.main.reader;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import org.apache.cxf.common.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.stereotype.Component;
 
 import eu.domibus.connector.client.gui.main.data.Message;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorMessageProperties;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableUtil;
 import eu.domibus.connector.gui.config.properties.ConnectorProperties;
 
+@Component
 public class MessagesReader {
         
     private final static Logger LOGGER = LoggerFactory.getLogger(MessagesReader.class);
     
-    public static List<Message> readMessagesFromDirectory(String msgDirPropertyValue) throws Exception {
+    public List<Message> readMessagesFromDirectory(String msgDirPropertyValue) throws Exception {
         //TODO: check if msgDirPropertyValue is valid
         LOGGER.debug("#readMessagesFromDirectory: dirProperty [{}]", msgDirPropertyValue);
         return readMessages("", msgDirPropertyValue);
     }
     
-    public static List<Message> readMessages(String msgDirPropertyKey, String msgDirPropertyValue) throws Exception {
+    public List<Message> readMessages(String msgDirPropertyKey, String msgDirPropertyValue) throws Exception {
 
         if (msgDirPropertyValue == null) {
 
@@ -47,9 +50,10 @@ public class MessagesReader {
         List<Message> messages = new ArrayList<Message>();
 
         File[] contents = messagesDir.listFiles();
+        File[] copyOf = Arrays.copyOf(contents, contents.length);
         LOGGER.debug("#readMessages: messagesDir contains following files: [{}]", contents);        
-        if (contents != null && contents.length > 0) {
-            for (File subFile : contents) {
+        if (copyOf != null && copyOf.length > 0) {
+            for (File subFile : copyOf) {
                 if (subFile.exists() && subFile.isDirectory()) {
                     DomibusConnectorMessageProperties messageProperties = DomibusConnectorRunnableUtil.loadMessageProperties(
                             subFile, ConnectorProperties.messagePropertiesFileName);

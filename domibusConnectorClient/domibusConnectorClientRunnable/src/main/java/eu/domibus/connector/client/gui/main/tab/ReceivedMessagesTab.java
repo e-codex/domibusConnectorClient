@@ -14,9 +14,11 @@ import org.springframework.stereotype.Component;
 @Component
 public class ReceivedMessagesTab extends MessagesTab {
 
-	@Autowired
-    StandaloneClientProperties standaloneClientProperties;
+//	@Autowired
+//    StandaloneClientProperties standaloneClientProperties;
     
+	@Autowired
+	MessagesReader messagesReader;
 
 	/**
 	 * 
@@ -30,7 +32,7 @@ public class ReceivedMessagesTab extends MessagesTab {
 
 	@Override
 	public List<Message> loadMessages() throws Exception {
-        return MessagesReader.readMessagesFromDirectory(standaloneClientProperties.getMessages().getIncoming().getDirectory());
+        return messagesReader.readMessagesFromDirectory(standaloneClientProperties.getMessages().getIncoming().getDirectory());
 		//return MessagesReader.readMessagesFromDirectory(ConnectorProperties.incomingMessagesDirectory);
 	}
 

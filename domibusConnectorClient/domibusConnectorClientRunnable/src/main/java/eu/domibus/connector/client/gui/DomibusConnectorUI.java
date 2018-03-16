@@ -84,6 +84,7 @@ public class DomibusConnectorUI extends JFrame {
         getContentPane().add(mainTab, BorderLayout.CENTER);
         pack();
         setLocationRelativeTo(null);
-
+        repaint();
+        setVisible(true);
 	}
 }

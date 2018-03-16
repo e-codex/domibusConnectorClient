@@ -33,7 +33,7 @@ public class GetMessagesFromConnectorJob implements Job {
 	@Autowired
 	private DomibusConnectorNationalBackendClient nationalBackendClient;
 
-	@Value("${connector.client.submit.messages.period.ms}")
+	@Value("${connector.client.request.messages.period.ms}")
 	private long repeatInterval;
 
 

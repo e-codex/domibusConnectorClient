@@ -10,12 +10,15 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
+import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClient;
 import eu.domibus.connector.client.nbc.exception.DomibusConnectorNationalBackendClientException;
 import eu.domibus.connector.client.runnable.exception.DomibusConnectorRunnableException;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
 import eu.domibus.connector.client.runnable.util.StandaloneClientProperties;
+import eu.domibus.connector.client.service.DomibusConnectorClientService;
+import eu.domibus.connector.domain.transition.DomibusConnectorActionType;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType;
@@ -34,6 +37,9 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 	
 	@Autowired
 	DomibusStandaloneConnectorFileSystemWriter fileSystemWriter;
+	
+	@Autowired
+	private DomibusConnectorClientService clientService;
 
 	private File incomingMessagesDir;
 
@@ -98,11 +104,23 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 	private void confirmIncomingMessage(DomibusConnectorMessageType message) throws DomibusStandaloneConnectorFileSystemException {
 		DomibusConnectorMessageType deliveryMessage = createConfirmationMessage(DomibusConnectorConfirmationType.DELIVERY, message);
 		
-		fileSystemWriter.createConfirmationMessage(deliveryMessage, outgoingMessagesDir);
+//		fileSystemWriter.createConfirmationMessage(deliveryMessage, outgoingMessagesDir);
+		try {
+			clientService.submitMessageToConnector(deliveryMessage);
+		} catch (DomibusConnectorClientException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 		DomibusConnectorMessageType retrievalMessage = createConfirmationMessage(DomibusConnectorConfirmationType.RETRIEVAL, message);
 		
-		fileSystemWriter.createConfirmationMessage(retrievalMessage, outgoingMessagesDir);
+//		fileSystemWriter.createConfirmationMessage(retrievalMessage, outgoingMessagesDir);
+		try {
+			clientService.submitMessageToConnector(retrievalMessage);
+		} catch (DomibusConnectorClientException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 
@@ -112,6 +130,12 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 		details.setService(originalMessage.getMessageDetails().getService());
 		details.setFromParty(originalMessage.getMessageDetails().getToParty());
 		details.setToParty(originalMessage.getMessageDetails().getFromParty());
+		details.setFinalRecipient(originalMessage.getMessageDetails().getOriginalSender());
+		details.setOriginalSender(originalMessage.getMessageDetails().getFinalRecipient());
+		DomibusConnectorActionType action = new DomibusConnectorActionType();
+		action.setAction(evidenceType.value());
+		details.setAction(action);
+		details.setService(originalMessage.getMessageDetails().getService());
 
 		DomibusConnectorMessageConfirmationType confirmation = new DomibusConnectorMessageConfirmationType();
 		confirmation.setConfirmationType(evidenceType);

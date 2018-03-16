@@ -23,10 +23,8 @@ public interface DomibusConnectorContentMapper {
      *            - a {@link MessageContent} object containing the eCodex xml
      *            Content.
      * @throws DomibusConnectorContentMapperException
-     * @throws ImplementationMissingException
      */
-    public void mapInternationalToNational(DomibusConnectorMessageType message) throws DomibusConnectorContentMapperException,
-            ImplementationMissingException;
+    public void mapInternationalToNational(DomibusConnectorMessageType message) throws DomibusConnectorContentMapperException;
 
     /**
      * Method to map national XML to international eCodex format. Must be
@@ -37,9 +35,7 @@ public interface DomibusConnectorContentMapper {
      *            - a {@link MessageContent} object containing the national xml
      *            Content.
      * @throws DomibusConnectorContentMapperException
-     * @throws ImplementationMissingException
      */
-    public void mapNationalToInternational(DomibusConnectorMessageType message) throws DomibusConnectorContentMapperException,
-            ImplementationMissingException;
+    public void mapNationalToInternational(DomibusConnectorMessageType message) throws DomibusConnectorContentMapperException;
 
 }

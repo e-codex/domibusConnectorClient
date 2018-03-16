@@ -57,6 +57,7 @@ public class DomibusStandaloneConnectorFileSystemWriter {
 		
 		if (message.getMessageConfirmations() != null) {
 			for (DomibusConnectorMessageConfirmationType confirmation : message.getMessageConfirmations()) {
+				if(confirmation.getConfirmation()!=null)
 				createFile(messageFolder, confirmation.getConfirmationType().name()
 						+ DomibusConnectorRunnableConstants.XML_FILE_EXTENSION, sourceToByteArray(confirmation.getConfirmation()));
 			}
@@ -137,6 +138,25 @@ public class DomibusStandaloneConnectorFileSystemWriter {
 					throw new DomibusStandaloneConnectorFileSystemException("Could not process document! ", e);
 				}
 				createFile(messageFolder, fileName, document);
+				DomibusConnectorDetachedSignatureType detachedSignature = messageContent.getDocument().getDetachedSignature();
+				if (detachedSignature != null && detachedSignature.getDetachedSignature()!=null && detachedSignature.getDetachedSignature().length > 0
+						&& detachedSignature.getMimeType() != null) {
+					String fileName2 = null;
+					if (StringUtils.hasText(detachedSignature.getDetachedSignatureName())
+							&& !detachedSignature.getDetachedSignatureName().equals(
+									DomibusConnectorRunnableConstants.DETACHED_SIGNATURE_FILE_NAME)) {
+						fileName2 = detachedSignature.getDetachedSignatureName();
+					} else {
+						fileName2 = DomibusConnectorRunnableConstants.DETACHED_SIGNATURE_FILE_NAME;
+						if (detachedSignature.getMimeType().equals(DomibusConnectorDetachedSignatureMimeType.XML))
+							fileName2 += DomibusConnectorRunnableConstants.XML_FILE_EXTENSION;
+						else if (detachedSignature.getMimeType().equals(DomibusConnectorDetachedSignatureMimeType.PKCS_7))
+							fileName2 += DomibusConnectorRunnableConstants.PKCS7_FILE_EXTENSION;
+						
+					}
+					msgProps.setDetachedSignatureFileName(fileName2);
+					createFile(messageFolder, fileName2, detachedSignature.getDetachedSignature());
+				}
 			}
 			if (messageContent.getXmlContent() != null){
 				byte[] content = sourceToByteArray(messageContent.getXmlContent());
@@ -144,25 +164,6 @@ public class DomibusStandaloneConnectorFileSystemWriter {
 						: DomibusConnectorRunnableConstants.DEFAULT_XML_FILE_NAME;
 				msgProps.setContentXmlFileName(fileName);
 				createFile(messageFolder, fileName, content);
-			}
-			DomibusConnectorDetachedSignatureType detachedSignature = messageContent.getDocument().getDetachedSignature();
-			if (detachedSignature != null && detachedSignature.getDetachedSignature()!=null && detachedSignature.getDetachedSignature().length > 0
-					&& detachedSignature.getMimeType() != null) {
-				String fileName = null;
-				if (StringUtils.hasText(detachedSignature.getDetachedSignatureName())
-						&& !detachedSignature.getDetachedSignatureName().equals(
-								DomibusConnectorRunnableConstants.DETACHED_SIGNATURE_FILE_NAME)) {
-					fileName = detachedSignature.getDetachedSignatureName();
-				} else {
-					fileName = DomibusConnectorRunnableConstants.DETACHED_SIGNATURE_FILE_NAME;
-					if (detachedSignature.getMimeType().equals(DomibusConnectorDetachedSignatureMimeType.XML))
-						fileName += DomibusConnectorRunnableConstants.XML_FILE_EXTENSION;
-					else if (detachedSignature.getMimeType().equals(DomibusConnectorDetachedSignatureMimeType.PKCS_7))
-						fileName += DomibusConnectorRunnableConstants.PKCS7_FILE_EXTENSION;
-
-				}
-				msgProps.setDetachedSignatureFileName(fileName);
-				createFile(messageFolder, fileName, detachedSignature.getDetachedSignature());
 			}
 		}
 		LOGGER.debug("Store message properties to file {}", messagePropertiesFile.getAbsolutePath());

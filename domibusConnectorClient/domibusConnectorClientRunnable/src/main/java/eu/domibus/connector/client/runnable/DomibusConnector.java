@@ -90,6 +90,8 @@ public class DomibusConnector {
 
         ConfigurableApplicationContext context = null;
         
+        System.setProperty("crypto.policy", "unlimited");
+        
         SpringApplicationBuilder builder = new SpringApplicationBuilder();
         SpringApplication springApp = builder
                 .sources(DomibusClientGuiConfiguration.class) //TODO: load context

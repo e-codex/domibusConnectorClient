@@ -1,7 +1,12 @@
 
 package eu.domibus.connector.client.spring;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
+import eu.domibus.connector.client.mapping.DomibusConnectorContentMapper;
+import eu.domibus.connector.client.mapping.DomibusConnectorContentMapperDefaultImpl;
 
 /**
  *
@@ -10,6 +15,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class ConnectorClientConfiguration {
 
-    //TODO: load timer job if pull/pull
+    @Bean
+    @ConditionalOnMissingBean(DomibusConnectorContentMapper.class)
+    public DomibusConnectorContentMapper contentMapper() {
+    	return new DomibusConnectorContentMapperDefaultImpl();
+    }
     
 }

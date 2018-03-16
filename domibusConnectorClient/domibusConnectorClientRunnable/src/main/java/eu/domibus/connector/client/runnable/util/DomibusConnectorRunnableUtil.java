@@ -32,7 +32,7 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType
 import eu.domibus.connector.domain.transition.DomibusConnectorPartyType;
 import eu.domibus.connector.domain.transition.DomibusConnectorServiceType;
 
-@Component
+//@Component
 public class DomibusConnectorRunnableUtil {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DomibusConnectorRunnableUtil.class);
@@ -42,8 +42,8 @@ public class DomibusConnectorRunnableUtil {
 
     private static final MimetypesFileTypeMap mimeMap = new MimetypesFileTypeMap();
 
-    @Autowired
-    StandaloneClientProperties standaloneClientProperties;
+//    @Autowired
+//    StandaloneClientProperties standaloneClientProperties;
     
 
     public static void storeMessagePropertiesToFile(DomibusConnectorMessageProperties messageProperties,

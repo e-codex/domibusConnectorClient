@@ -11,7 +11,7 @@ public class DomibusStandaloneConnectorFileSystemUtil {
 	
 	static org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusStandaloneConnectorFileSystemUtil.class);
 	
-	private static final SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+	private static final SimpleDateFormat sdf2 = new SimpleDateFormat("yyyy-MM-dd HHmmss");
 	
 	public static File renameMessageFolder(File messageFolder, String folderPath, String newFolderPathExtension ) throws DomibusStandaloneConnectorFileSystemException {
 		File newMessageFolder = new File(folderPath + newFolderPathExtension);
