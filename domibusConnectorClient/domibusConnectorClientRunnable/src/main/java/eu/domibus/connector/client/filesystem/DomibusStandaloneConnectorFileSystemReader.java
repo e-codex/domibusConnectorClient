@@ -13,10 +13,12 @@ import javax.activation.FileDataSource;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
+import com.sun.xml.internal.ws.util.ByteArrayDataSource;
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 
 import eu.domibus.connector.client.runnable.exception.DomibusConnectorRunnableException;
@@ -134,8 +136,13 @@ public class DomibusStandaloneConnectorFileSystemReader {
 					continue;
 				} else if (isFile(sub.getName(),messageProperties.getContentPdfFileName())) {
 					LOGGER.debug("Found content pdf file with name {}", sub.getName());
-					document.setDocument(new DataHandler(new FileDataSource(sub)));
-					document.setDocumentName(sub.getName());
+					try {
+						document.setDocument(convertToDataHandler(sub));
+						document.setDocumentName(sub.getName());
+					} catch (IOException e) {
+						throw new DomibusConnectorRunnableException(
+								"Exception creating DataHandler object out of file " + sub.getName());
+					}
 
 
 					continue;
@@ -304,19 +311,20 @@ public class DomibusStandaloneConnectorFileSystemReader {
 	
 	private byte[] fileToByteArray(File file) throws IOException {
 		FileInputStream fileInputStream = new FileInputStream(file);
-		byte[] data = new byte[(int) file.length()];
-		fileInputStream.read(data);
-		fileInputStream.close();
-
+		byte[] data = StreamUtils.copyToByteArray(fileInputStream);
 		return data;
 	}
 
 	private Source fileToSource(File file) throws IOException {
 		byte[] bytes = fileToByteArray(file);
-		
-		
 		return new StreamSource(new ByteArrayInputStream(bytes));
+	}
 
+	private DataHandler convertToDataHandler(File file) throws IOException {
+		byte[] bytes = fileToByteArray(file);
+		ByteArrayDataSource dataSource = new ByteArrayDataSource(bytes, null);
+		DataHandler dh = new DataHandler(dataSource);
+		return dh;
 	}
 
 }

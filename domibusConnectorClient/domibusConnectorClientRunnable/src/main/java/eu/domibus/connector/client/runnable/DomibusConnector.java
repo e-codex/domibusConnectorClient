@@ -117,14 +117,14 @@ public class DomibusConnector {
 
 		if(startWithGUI) {
 			springApp = builder
-					.sources(DomibusClientGuiConfiguration.class) 
+					.sources(DomibusClientGuiConfiguration.class)
 					.web(false)
 					.profiles("swing-gui")
 					.headless(false)
 					.build();
 		}else {
 			springApp = builder
-					.sources(DomibusClientGuiConfiguration.class) 
+					.sources(DomibusClientGuiConfiguration.class)
 					.web(false)
 					.build();
 
