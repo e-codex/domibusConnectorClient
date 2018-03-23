@@ -1,8 +1,10 @@
 package eu.domibus.connector.client.connection.ws.impl;
 
+import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import javax.annotation.Resource;
+import javax.xml.bind.JAXB;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,7 +28,7 @@ public class DomibusConnectorBackendWebServiceClientImpl implements DomibusConne
 
 	@Override
 	public void submitMessage(DomibusConnectorMessageType messageDTO) throws DomibusConnectorBackendWebServiceClientException {
-		LOGGER.debug("submitting message [{}] to backendWebService", messageDTO);
+		LOGGER.debug("#submitMessage: submitting message [{}] to backendWebService", messageDTO);
 		try {
 			DomibsConnectorAcknowledgementType submitMessageAck = backendWebServiceClient.submitMessage(messageDTO);
 

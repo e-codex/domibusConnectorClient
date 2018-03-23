@@ -194,7 +194,7 @@ public class StoredMessageDetail extends MessageDetail {
 						}
 					}
 				}
-                String messagePropertiesFileName = standaloneClientProperties.getMessagePropertiesFileName();
+                String messagePropertiesFileName = standaloneClientProperties.getMessages().getMessagePropertiesFileName();
 				File messagePropertiesFile = new File(messageFolder, messagePropertiesFileName);
 				DomibusConnectorRunnableUtil.storeMessagePropertiesToFile(messageProperties, messagePropertiesFile);
 				messageDetailFrame.setVisible(false);

@@ -4,19 +4,20 @@ package eu.domibus.connector.client.runnable.util;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
+import static eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants.MESSAGE_PROPERTIES_DEFAULT_FILE_NAME;
+
 /**
  *
  * @author {@literal Stephan Spindler <stephan.spindler@extern.brz.gv.at> }
  */
-@ConfigurationProperties
+@Component
+@ConfigurationProperties(prefix="connector.client")
 public class StandaloneClientProperties {
 
     MessagesSettingsProperties messages = new MessagesSettingsProperties();
 
     GatewayProperties gateway = new GatewayProperties();
-    
-    String messagePropertiesFileName = "message.properties";
-    
+
     public MessagesSettingsProperties getMessages() {
         return messages;
     }
@@ -33,17 +34,10 @@ public class StandaloneClientProperties {
         this.gateway = gateway;
     }
 
-    public String getMessagePropertiesFileName() {
-        return messagePropertiesFileName;
-    }
-
-    public void setMessagePropertiesFileName(String messagePropertiesFileName) {
-        this.messagePropertiesFileName = messagePropertiesFileName;
-    }
-     
     public static class MessagesSettingsProperties {
         MessageFolderProperties incoming = new MessageFolderProperties();
         MessageFolderProperties outgoing = new MessageFolderProperties();
+        String messagePropertiesFileName = DomibusConnectorRunnableConstants.MESSAGE_PROPERTIES_DEFAULT_FILE_NAME;
 
         public MessageFolderProperties getIncoming() {
             return incoming;
@@ -61,6 +55,13 @@ public class StandaloneClientProperties {
             this.outgoing = outgoing;
         }
 
+        public String getMessagePropertiesFileName() {
+            return messagePropertiesFileName;
+        }
+
+        public void setMessagePropertiesFileName(String messagePropertiesFileName) {
+            this.messagePropertiesFileName = messagePropertiesFileName;
+        }
     }
     
     public static class MessageFolderProperties {        

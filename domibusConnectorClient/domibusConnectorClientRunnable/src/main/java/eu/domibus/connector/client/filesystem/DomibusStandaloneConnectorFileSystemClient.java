@@ -52,8 +52,10 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 			for(DomibusConnectorMessageType message:messages) {
 				try {
 					if(checkIfConfirmationMessage(message)) {
+						LOGGER.debug("#processMessagesFromConnector: message [{}] is a confirmation message!", message);
 						fileSystemWriter.writeConfirmationToFileSystem(message, incomingMessagesDir, outgoingMessagesDir);
 					}else {
+						LOGGER.debug("#processMessageFromConnector: message [{}] is a incoming business message", message);
 						fileSystemWriter.writeMessageToFileSystem(message, incomingMessagesDir);
 						confirmIncomingMessage(message);
 					}

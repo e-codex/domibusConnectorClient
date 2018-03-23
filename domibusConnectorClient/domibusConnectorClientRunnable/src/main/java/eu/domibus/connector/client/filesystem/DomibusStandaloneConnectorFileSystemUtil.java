@@ -21,8 +21,10 @@ public class DomibusStandaloneConnectorFileSystemUtil {
 		try {
 			FileUtils.moveDirectory(messageFolder, newMessageFolder);
 		} catch (IOException e1) {
-			throw new DomibusStandaloneConnectorFileSystemException("Could not rename folder "
-					+ messageFolder.getAbsolutePath() + " to " + newMessageFolder.getAbsolutePath());
+			String error = "Could not rename folder "
+					+ messageFolder.getAbsolutePath() + " to " + newMessageFolder.getAbsolutePath();
+			LOGGER.error(error, e1);
+			throw new DomibusStandaloneConnectorFileSystemException(error);
 		}
 		
 		return newMessageFolder;
