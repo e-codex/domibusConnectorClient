@@ -17,7 +17,8 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import eu.domibus.connector.client.runnable.util.StandaloneClientProperties;
+import eu.domibus.connector.client.runnable.configuration.DomibusConnectorClientConfiguration;
+import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
 
 @SpringBootApplication(scanBasePackages="eu.domibus.connector")
 @EnableConfigurationProperties(StandaloneClientProperties.class)
@@ -117,14 +118,14 @@ public class DomibusConnector {
 
 		if(startWithGUI) {
 			springApp = builder
-					.sources(DomibusClientGuiConfiguration.class)
+					.sources(DomibusConnectorClientConfiguration.class)
 					.web(false)
 					.profiles("swing-gui")
 					.headless(false)
 					.build();
 		}else {
 			springApp = builder
-					.sources(DomibusClientGuiConfiguration.class)
+					.sources(DomibusConnectorClientConfiguration.class)
 					.web(false)
 					.build();
 

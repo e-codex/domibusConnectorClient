@@ -30,8 +30,8 @@ import eu.domibus.connector.client.gui.main.details.ExportMessagesDetail;
 import eu.domibus.connector.client.gui.main.details.NewMessageDetail;
 import eu.domibus.connector.client.gui.main.details.StoredMessageDetail;
 import eu.domibus.connector.client.gui.utils.ButtonColumn;
+import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
 import eu.domibus.connector.client.runnable.util.EvidenceType;
-import eu.domibus.connector.client.runnable.util.StandaloneClientProperties;
 
 public abstract class MessagesTab extends JPanel implements ActionListener {
 

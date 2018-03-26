@@ -21,9 +21,9 @@ import org.apache.commons.lang.StringUtils;
 import eu.domibus.connector.client.gui.layout.SpringUtilities;
 import eu.domibus.connector.client.gui.main.data.Message;
 import eu.domibus.connector.client.gui.main.tab.MessagesTab;
+import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableUtil;
-import eu.domibus.connector.client.runnable.util.StandaloneClientProperties;
 import eu.domibus.connector.gui.config.tabs.ConfigTabHelper;
 
 

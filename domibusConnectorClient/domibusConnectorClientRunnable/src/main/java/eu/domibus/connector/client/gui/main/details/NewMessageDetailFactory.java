@@ -3,10 +3,10 @@ package eu.domibus.connector.client.gui.main.details;
 
 import eu.domibus.connector.client.gui.main.data.Message;
 import eu.domibus.connector.client.gui.main.tab.SendNewMessageTab;
+import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorMessageProperties;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableUtil;
-import eu.domibus.connector.client.runnable.util.StandaloneClientProperties;
 import eu.domibus.connector.gui.config.properties.ConnectorProperties;
 
 import java.io.File;

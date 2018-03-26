@@ -23,11 +23,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 
+import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
 import eu.domibus.connector.client.runnable.exception.DomibusConnectorRunnableException;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorMessageProperties;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableUtil;
-import eu.domibus.connector.client.runnable.util.StandaloneClientProperties;
 import eu.domibus.connector.domain.transition.DomibusConnectorActionType;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureMimeType;

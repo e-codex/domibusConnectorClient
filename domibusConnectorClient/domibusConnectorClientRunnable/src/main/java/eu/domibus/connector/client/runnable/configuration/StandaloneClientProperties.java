@@ -1,8 +1,10 @@
 
-package eu.domibus.connector.client.runnable.util;
+package eu.domibus.connector.client.runnable.configuration;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
 
 import static eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants.MESSAGE_PROPERTIES_DEFAULT_FILE_NAME;
 

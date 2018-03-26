@@ -1,6 +1,6 @@
 package eu.domibus.connector.client.filesystem;
 
-import eu.domibus.connector.client.runnable.util.StandaloneClientProperties;
+import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageContentType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageDocumentType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;

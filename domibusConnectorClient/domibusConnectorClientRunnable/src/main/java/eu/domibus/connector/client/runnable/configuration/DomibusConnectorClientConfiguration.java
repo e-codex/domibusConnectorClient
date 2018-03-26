@@ -1,5 +1,5 @@
 
-package eu.domibus.connector.client.runnable;
+package eu.domibus.connector.client.runnable.configuration;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -8,8 +8,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import eu.domibus.connector.client.runnable.util.StandaloneClientProperties;
-
 /**
  *
  * @author {@literal Stephan Spindler <stephan.spindler@extern.brz.gv.at> }
@@ -17,7 +15,7 @@ import eu.domibus.connector.client.runnable.util.StandaloneClientProperties;
 @SpringBootApplication(scanBasePackages="eu.domibus.connector")
 @EnableConfigurationProperties(StandaloneClientProperties.class)
 @EnableScheduling
-public class DomibusClientGuiConfiguration {
+public class DomibusConnectorClientConfiguration {
    
     //TODO: set correct scan folder
     

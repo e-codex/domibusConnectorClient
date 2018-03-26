@@ -4,8 +4,8 @@ import java.util.List;
 
 import eu.domibus.connector.client.gui.main.data.Message;
 import eu.domibus.connector.client.gui.main.reader.MessagesReader;
+import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
-import eu.domibus.connector.client.runnable.util.StandaloneClientProperties;
 import eu.domibus.connector.gui.config.properties.ConnectorProperties;
 
 import org.springframework.beans.factory.annotation.Autowired;

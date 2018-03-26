@@ -15,10 +15,10 @@ import javax.swing.JPanel;
 import eu.domibus.connector.client.gui.main.data.Message;
 import eu.domibus.connector.client.gui.main.details.NewMessageDetail;
 import eu.domibus.connector.client.gui.main.details.NewMessageDetailFactory;
+import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorMessageProperties;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableUtil;
-import eu.domibus.connector.client.runnable.util.StandaloneClientProperties;
 import eu.domibus.connector.gui.config.properties.ConnectorProperties;
 import eu.domibus.connector.gui.config.tabs.ConfigTabHelper;
 
