@@ -22,13 +22,12 @@ import org.slf4j.LoggerFactory;
 import eu.domibus.connector.client.gui.layout.SpringUtilities;
 import eu.domibus.connector.client.gui.main.data.Message;
 import eu.domibus.connector.client.gui.main.tab.MessagesTab;
-import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
+import eu.domibus.connector.client.gui.utils.ConfigTabHelper;
+import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorMessageProperties;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableUtil;
 import eu.domibus.connector.client.runnable.util.EvidenceType;
-//import eu.domibus.connector.gui.config.properties.ConnectorProperties;
-import eu.domibus.connector.gui.config.tabs.ConfigTabHelper;
 
 public class StoredMessageDetail extends MessageDetail {
 	
@@ -39,11 +38,8 @@ public class StoredMessageDetail extends MessageDetail {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MessageDetail.class);
     
-    private StandaloneClientProperties standaloneClientProperties;
-    
-	public StoredMessageDetail(final Message selected, final int messageType, MessagesTab list, StandaloneClientProperties standaloneClientProperties){
+	public StoredMessageDetail(final Message selected, final int messageType, MessagesTab list){
 		super(selected, list, messageType);
-		this.standaloneClientProperties = standaloneClientProperties;
 		
 	}
 	
@@ -120,9 +116,9 @@ public class StoredMessageDetail extends MessageDetail {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-                String gatewayName = standaloneClientProperties.getGateway().getName();
+                String gatewayName = ConnectorClientProperties.gatewayNameValue;
 				String nationalMessageId = DomibusConnectorRunnableUtil.generateNationalMessageId(gatewayName, new Date());
-                String outgoingMessagesDirectoryName = standaloneClientProperties.getMessages().getOutgoing().getDirectory();
+                String outgoingMessagesDirectoryName = ConnectorClientProperties.outgoingMessagesDirectory;
                 LOGGER.trace("#buildActionButton: outgoingMessagesDirectoryName is: [{}]", outgoingMessagesDirectoryName);
 				File messageFolder = new File(outgoingMessagesDirectoryName + File.separator + nationalMessageId + DomibusConnectorRunnableConstants.MESSAGE_NEW_FOLDER_POSTFIX);
 				if(!messageFolder.mkdir()){
@@ -194,12 +190,12 @@ public class StoredMessageDetail extends MessageDetail {
 						}
 					}
 				}
-                String messagePropertiesFileName = standaloneClientProperties.getMessages().getMessagePropertiesFileName();
+                String messagePropertiesFileName = ConnectorClientProperties.messagePropertiesFileName;
 				File messagePropertiesFile = new File(messageFolder, messagePropertiesFileName);
 				DomibusConnectorRunnableUtil.storeMessagePropertiesToFile(messageProperties, messagePropertiesFile);
 				messageDetailFrame.setVisible(false);
 				messageDetailFrame.dispose();
-				new NewMessageDetail(newMessage, parent, standaloneClientProperties);
+				new NewMessageDetail(newMessage, parent);
 		        
 			}
 		});

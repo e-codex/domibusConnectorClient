@@ -54,7 +54,8 @@ http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd "
             <entry key="security.encryption.properties" value-ref="encryptProperties"  />
             <entry key="security.signature.properties" value-ref="encryptProperties" />
             <entry key="security.encryption.username" value="connector" />
-            <entry key="security.signature.username" value="${connector.client.name}" />
+            <entry key="security.signature.username" value="${connector.client.key.alias}" />
+            <entry key="security.signature.password" value="${connector.client.key.password:''}" />
          </jaxws:properties>
          
          <jaxws:features>

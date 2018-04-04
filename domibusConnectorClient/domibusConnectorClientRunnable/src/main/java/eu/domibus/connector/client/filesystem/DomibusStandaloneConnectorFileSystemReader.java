@@ -4,6 +4,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
@@ -11,19 +13,16 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.activation.DataHandler;
-import javax.activation.FileDataSource;
-import javax.annotation.PostConstruct;
+import javax.activation.DataSource;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 
-import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
+import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
 import eu.domibus.connector.client.runnable.exception.DomibusConnectorRunnableException;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorMessageProperties;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
@@ -40,32 +39,11 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageDocumentTyp
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorPartyType;
 import eu.domibus.connector.domain.transition.DomibusConnectorServiceType;
-import java.io.InputStream;
-import java.io.OutputStream;
-import javax.activation.DataSource;
 
 @Component
 public class DomibusStandaloneConnectorFileSystemReader {
 
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusStandaloneConnectorFileSystemReader.class);
-
-    private String messagePropertiesFileName;
-
-	@Autowired
-	StandaloneClientProperties standaloneClientProperties;
-
-    public StandaloneClientProperties getStandaloneClientProperties() {
-        return standaloneClientProperties;
-    }
-
-    public void setStandaloneClientProperties(StandaloneClientProperties standaloneClientProperties) {
-        this.standaloneClientProperties = standaloneClientProperties;
-    }
-
-    @PostConstruct
-	public void init() {
-		this.messagePropertiesFileName = standaloneClientProperties.getMessages().getMessagePropertiesFileName();
-	}
 	
 	public List<File> readUnsentMessages(File outgoingMessagesDir ){
 		List<File> messagesUnsent = new ArrayList<File>();
@@ -84,7 +62,7 @@ public class DomibusStandaloneConnectorFileSystemReader {
 
 	public DomibusConnectorMessageType readMessageFromFolder(File messageFolder) throws DomibusStandaloneConnectorFileSystemException {
 		DomibusConnectorMessageProperties messageProperties = DomibusConnectorRunnableUtil
-				.loadMessageProperties(messageFolder, standaloneClientProperties.getMessages().getMessagePropertiesFileName());
+				.loadMessageProperties(messageFolder, ConnectorClientProperties.messagePropertiesFileName);
 		
 		String nationalMessageId = extractNationalMessageId(messageProperties);
 
@@ -113,7 +91,7 @@ public class DomibusStandaloneConnectorFileSystemReader {
 			}
 			
 			messageProperties.setMessageSentDatetime(DomibusStandaloneConnectorFileSystemUtil.convertDateToProperty(new Date()));
-			DomibusConnectorRunnableUtil.storeMessagePropertiesToFile(messageProperties, new File(workMessageFolder, messagePropertiesFileName));
+			DomibusConnectorRunnableUtil.storeMessagePropertiesToFile(messageProperties, new File(workMessageFolder, ConnectorClientProperties.messagePropertiesFileName));
 			try {
 				DomibusStandaloneConnectorFileSystemUtil.renameMessageFolder(workMessageFolder, messageFolderPath, DomibusConnectorRunnableConstants.MESSAGE_SENT_FOLDER_POSTFIX);
 			} catch (DomibusStandaloneConnectorFileSystemException e) {
@@ -140,7 +118,7 @@ public class DomibusStandaloneConnectorFileSystemReader {
         DomibusConnectorMessageDocumentType document = new DomibusConnectorMessageDocumentType();
 
 		for (File sub : workMessageFolder.listFiles()) {
-			if (sub.getName().equals(messagePropertiesFileName)) {
+			if (sub.getName().equals(ConnectorClientProperties.messagePropertiesFileName)) {
 				continue;
 			} else {
 
@@ -297,8 +275,8 @@ public class DomibusStandaloneConnectorFileSystemReader {
 		messageDetails.setBackendMessageId(properties.getNationalMessageId());
 
 
-		String gatewayName = standaloneClientProperties.getGateway().getName();
-		String gatewayRole = standaloneClientProperties.getGateway().getRole();
+		String gatewayName = ConnectorClientProperties.gatewayNameValue;
+		String gatewayRole = ConnectorClientProperties.gatewayRoleValue;
 
 		//set from party...
 		String fromPartyId = properties.getFromPartyId();

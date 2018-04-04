@@ -18,7 +18,7 @@
   <modules>
 		<module>domibusConnectorClientRunnable</module>
 		<module>domibusConnectorClientLibrary</module>
-		<module>domibusConnectorClientConfiguration</module>
+		
 		<module>domibusConnectorClientDistribution</module>
         <module>domibusConnectorClient35Library</module>
         <module>domibusConnectorClientWsLink</module>

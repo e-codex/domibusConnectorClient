@@ -14,7 +14,7 @@ import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClient;
 import eu.domibus.connector.client.nbc.exception.DomibusConnectorNationalBackendClientException;
-import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
+import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
 import eu.domibus.connector.client.runnable.exception.DomibusConnectorRunnableException;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
 import eu.domibus.connector.client.service.DomibusConnectorClientService;
@@ -28,9 +28,6 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 public class DomibusStandaloneConnectorFileSystemClient implements InitializingBean, DomibusConnectorNationalBackendClient {
 
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusStandaloneConnectorFileSystemClient.class);
-
-	@Autowired
-	StandaloneClientProperties standaloneClientProperties;
 	
 	@Autowired
 	DomibusStandaloneConnectorFileSystemReader fileSystemReader;
@@ -160,8 +157,8 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 	public void afterPropertiesSet() throws Exception {
 		String path = System.getProperty("user.dir");
 
-		String incomingMessagesDirectory = standaloneClientProperties.getMessages().getIncoming().getDirectory();
-		boolean createIncomingMessageDirectories = standaloneClientProperties.getMessages().getIncoming().isCreateDirectory();
+		String incomingMessagesDirectory = ConnectorClientProperties.incomingMessagesDirectory;
+		boolean createIncomingMessageDirectories = ConnectorClientProperties.createIncomingMessagesDirectory;
 
 		if (!StringUtils.hasText(incomingMessagesDirectory)) {
 			incomingMessagesDirectory = path + File.separator
@@ -182,8 +179,8 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 		}
 
 
-		String outgoingMessagesDirectory = standaloneClientProperties.getMessages().getOutgoing().getDirectory();
-		boolean createOutgoingMessageDirectories = standaloneClientProperties.getMessages().getOutgoing().isCreateDirectory();
+		String outgoingMessagesDirectory = ConnectorClientProperties.outgoingMessagesDirectory;
+		boolean createOutgoingMessageDirectories = ConnectorClientProperties.createOutgoingMessagesDirectory;
 
 		if (!StringUtils.hasText(outgoingMessagesDirectory)) {
 			outgoingMessagesDirectory = path + File.separator

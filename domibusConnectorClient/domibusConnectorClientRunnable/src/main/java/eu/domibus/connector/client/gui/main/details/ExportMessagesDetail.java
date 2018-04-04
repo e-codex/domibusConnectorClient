@@ -29,7 +29,7 @@ import javax.swing.table.DefaultTableModel;
 import org.apache.commons.io.FileUtils;
 
 import eu.domibus.connector.client.gui.main.data.Message;
-import eu.domibus.connector.gui.config.tabs.ConfigTabHelper;
+import eu.domibus.connector.client.gui.utils.ConfigTabHelper;
 
 public class ExportMessagesDetail extends JPanel {
 

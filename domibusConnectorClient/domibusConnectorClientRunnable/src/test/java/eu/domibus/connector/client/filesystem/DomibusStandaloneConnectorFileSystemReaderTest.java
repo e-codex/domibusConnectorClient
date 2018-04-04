@@ -1,14 +1,6 @@
 package eu.domibus.connector.client.filesystem;
 
-import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
-import eu.domibus.connector.domain.transition.DomibusConnectorMessageContentType;
-import eu.domibus.connector.domain.transition.DomibusConnectorMessageDocumentType;
-import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
-import org.apache.cxf.helpers.FileUtils;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.springframework.util.StreamUtils;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,15 +8,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.zip.ZipEntry;
-import java.util.zip.ZipFile;
 import java.util.zip.ZipInputStream;
 
-import static org.assertj.core.api.Assertions.assertThat;
+import org.apache.cxf.helpers.FileUtils;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
+import org.springframework.util.StreamUtils;
+
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageContentType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageDocumentType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 
 public class DomibusStandaloneConnectorFileSystemReaderTest {
 
-    StandaloneClientProperties standaloneClientProperties;
+//    StandaloneClientProperties standaloneClientProperties;
 
     DomibusStandaloneConnectorFileSystemReader domibusStandaloneConnectorFileSystemReader;
 
@@ -32,11 +31,11 @@ public class DomibusStandaloneConnectorFileSystemReaderTest {
 
     @Before
     public void setUp() throws IOException {
-        standaloneClientProperties = new StandaloneClientProperties();
+//        standaloneClientProperties = new StandaloneClientProperties();
 
         domibusStandaloneConnectorFileSystemReader = new DomibusStandaloneConnectorFileSystemReader();
-        domibusStandaloneConnectorFileSystemReader.setStandaloneClientProperties(standaloneClientProperties);
-        domibusStandaloneConnectorFileSystemReader.init();
+//        domibusStandaloneConnectorFileSystemReader.setStandaloneClientProperties(standaloneClientProperties);
+//        domibusStandaloneConnectorFileSystemReader.init();
 
         //extract testdata into testFolder
         InputStream resourceAsStream = getClass().getResourceAsStream("message1.zip");

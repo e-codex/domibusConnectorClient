@@ -11,9 +11,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import eu.domibus.connector.client.gui.main.data.Message;
+import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorMessageProperties;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableUtil;
-import eu.domibus.connector.gui.config.properties.ConnectorProperties;
 
 @Component
 public class MessagesReader {
@@ -43,8 +43,8 @@ public class MessagesReader {
             throw new Exception("The configured directory to parameter '" + msgDirPropertyKey + "' with value '" + msgDirPropertyValue + "' is not a directory!\nPlease start the domibusConnectorConfigurator and configure the property.");
         }
 
-        if (StringUtils.isEmpty(ConnectorProperties.messagePropertiesFileName)) {
-            throw new Exception("The configured property '" + ConnectorProperties.OTHER_MSG_PROPERTY_FILE_NAME_KEY + "' is missing or empty!\nPlease start the domibusConnectorConfigurator and configure the property.");
+        if (StringUtils.isEmpty(ConnectorClientProperties.messagePropertiesFileName)) {
+            throw new Exception("The configured property '" + ConnectorClientProperties.MSG_PROPERTY_FILE_NAME_KEY + "' is missing or empty!\nPlease start the domibusConnectorConfigurator and configure the property.");
         }
 
         List<Message> messages = new ArrayList<Message>();
@@ -56,7 +56,7 @@ public class MessagesReader {
             for (File subFile : copyOf) {
                 if (subFile.exists() && subFile.isDirectory()) {
                     DomibusConnectorMessageProperties messageProperties = DomibusConnectorRunnableUtil.loadMessageProperties(
-                            subFile, ConnectorProperties.messagePropertiesFileName);
+                            subFile, ConnectorClientProperties.messagePropertiesFileName);
                     if (messageProperties != null) {
                         Message message = new Message();
 
@@ -68,7 +68,7 @@ public class MessagesReader {
                                 message.setFormXMLFile(contentXMLFile);
                             } else {
                                 messageProperties.setContentXmlFileName("");
-                                DomibusConnectorRunnableUtil.storeMessagePropertiesToFile(messageProperties, new File(subFile, ConnectorProperties.messagePropertiesFileName));
+                                DomibusConnectorRunnableUtil.storeMessagePropertiesToFile(messageProperties, new File(subFile, ConnectorClientProperties.messagePropertiesFileName));
                             }
                         }
                         if (!StringUtils.isEmpty(messageProperties.getContentPdfFileName())) {
@@ -77,12 +77,12 @@ public class MessagesReader {
                                 message.setFormPDFFile(contentPDFFile);
                             } else {
                                 messageProperties.setContentPdfFileName("");
-                                DomibusConnectorRunnableUtil.storeMessagePropertiesToFile(messageProperties, new File(subFile, ConnectorProperties.messagePropertiesFileName));
+                                DomibusConnectorRunnableUtil.storeMessagePropertiesToFile(messageProperties, new File(subFile, ConnectorClientProperties.messagePropertiesFileName));
                             }
                         }
                         for (File messageFile : subFile.listFiles()) {
                             String name = messageFile.getName();
-                            if (!name.equals(ConnectorProperties.messagePropertiesFileName)
+                            if (!name.equals(ConnectorClientProperties.messagePropertiesFileName)
                                     && !(messageProperties.getContentXmlFileName() != null && name.equals(messageProperties.getContentXmlFileName()))
                                     && !(messageProperties.getContentPdfFileName() != null && name.equals(messageProperties.getContentPdfFileName()))) {
                                 message.getAttachments().add(messageFile);

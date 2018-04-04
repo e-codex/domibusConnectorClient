@@ -9,21 +9,18 @@
     <artifactId>domibusConnectorClient35Library</artifactId>
     <dependencies>
         <dependency>
+            <groupId>eu.domibus.connector</groupId>
+            <artifactId>domibusConnectorAPI</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnectorClientWSLink</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-autoconfigure</artifactId>
         </dependency>
-        <!-- <dependency>
-            <groupId>eu.domibus.connector</groupId>
-            <artifactId>domibusConnectorDomain</artifactId>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>eu.domibus.connector</groupId>
-            <artifactId>domibusConnectorDomain</artifactId>
-            <classifier>tests</classifier>
-            <version>${connector-server.version}</version>
-            <scope>test</scope>
-        </dependency> -->
         <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>            
@@ -38,16 +35,6 @@
             <groupId>org.assertj</groupId>
             <artifactId>assertj-core</artifactId>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>eu.domibus.connector</groupId>
-            <artifactId>domibusConnectorAPI</artifactId>
-            <version>4.0-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>eu.domibus.connector.client</groupId>
-            <artifactId>domibusConnectorClientWSLink</artifactId>
-            <version>4.0-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.mockito</groupId>

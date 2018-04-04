@@ -2,20 +2,16 @@ package eu.domibus.connector.client.gui.main.tab;
 
 import java.util.List;
 
-import eu.domibus.connector.client.gui.main.data.Message;
-import eu.domibus.connector.client.gui.main.reader.MessagesReader;
-import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
-import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
-import eu.domibus.connector.gui.config.properties.ConnectorProperties;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import eu.domibus.connector.client.gui.main.data.Message;
+import eu.domibus.connector.client.gui.main.reader.MessagesReader;
+import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
+import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
+
 @Component
 public class ReceivedMessagesTab extends MessagesTab {
-
-//	@Autowired
-//    StandaloneClientProperties standaloneClientProperties;
     
 	@Autowired
 	MessagesReader messagesReader;
@@ -32,7 +28,7 @@ public class ReceivedMessagesTab extends MessagesTab {
 
 	@Override
 	public List<Message> loadMessages() throws Exception {
-        return messagesReader.readMessagesFromDirectory(standaloneClientProperties.getMessages().getIncoming().getDirectory());
+        return messagesReader.readMessagesFromDirectory(ConnectorClientProperties.incomingMessagesDirectory);
 		//return MessagesReader.readMessagesFromDirectory(ConnectorProperties.incomingMessagesDirectory);
 	}
 

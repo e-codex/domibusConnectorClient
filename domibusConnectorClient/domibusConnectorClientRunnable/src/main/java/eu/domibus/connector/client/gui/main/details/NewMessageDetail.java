@@ -21,10 +21,10 @@ import org.apache.commons.lang.StringUtils;
 import eu.domibus.connector.client.gui.layout.SpringUtilities;
 import eu.domibus.connector.client.gui.main.data.Message;
 import eu.domibus.connector.client.gui.main.tab.MessagesTab;
-import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
+import eu.domibus.connector.client.gui.utils.ConfigTabHelper;
+import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableUtil;
-import eu.domibus.connector.gui.config.tabs.ConfigTabHelper;
 
 
 public class NewMessageDetail extends MessageDetail {
@@ -34,13 +34,10 @@ public class NewMessageDetail extends MessageDetail {
 	 * 
 	 */
 	private static final long serialVersionUID = 4437571495217520119L;
-
-    StandaloneClientProperties standaloneClientProperties;
     
-	public NewMessageDetail(Message newMessage, MessagesTab list, StandaloneClientProperties standaloneClientProperties) {
+	public NewMessageDetail(Message newMessage, MessagesTab list) {
 		super(newMessage, list, 0);
-        this.standaloneClientProperties = standaloneClientProperties;
-		
+     	
 	}
 
 
@@ -82,7 +79,7 @@ public class NewMessageDetail extends MessageDetail {
 
 
 	private void sendMessage(){
-        String outgoingMessagesDirectory = standaloneClientProperties.getMessages().getOutgoing().getDirectory();
+        String outgoingMessagesDirectory = ConnectorClientProperties.outgoingMessagesDirectory;
 		File newMessageDir = new File(outgoingMessagesDirectory + File.separator + message.getMessageProperties().getNationalMessageId() + DomibusConnectorRunnableConstants.MESSAGE_READY_FOLDER_POSTFIX);
 		try {
 			FileUtils.moveDirectory(message.getMessageDir(), newMessageDir);
@@ -247,7 +244,7 @@ public class NewMessageDetail extends MessageDetail {
 			public void actionPerformed(ActionEvent e) {
 				messageDetailFrame.setVisible(false);
 				messageDetailFrame.dispose();
-				new NewMessageDetail(message, parent, standaloneClientProperties);
+				new NewMessageDetail(message, parent);
 			}
 		});
 
@@ -283,7 +280,7 @@ public class NewMessageDetail extends MessageDetail {
 					attachment.delete();
 					messageDetailFrame.setVisible(false);
 					messageDetailFrame.dispose();
-					new NewMessageDetail(message, parent, standaloneClientProperties);
+					new NewMessageDetail(message, parent);
 				}
 			});
 			filesPanel.add(new JLabel(""));

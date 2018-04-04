@@ -9,9 +9,9 @@
   <artifactId>domibusConnectorClientLibrary</artifactId>
     <dependencies>
         <dependency>
-            <groupId>eu.domibus.connector.client</groupId>
+            <groupId>${project.groupId}</groupId>
             <artifactId>domibusConnectorClientWSLink</artifactId>
-            <version>4.0-SNAPSHOT</version>
+            <version>${project.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

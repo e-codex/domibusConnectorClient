@@ -1,4 +1,4 @@
-package eu.domibus.connector.gui.config.tabs;
+package eu.domibus.connector.client.gui.utils;
 
 import java.awt.BorderLayout;
 import java.awt.event.MouseEvent;
@@ -14,8 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.UIManager;
 
-import eu.domibus.connector.gui.config.help.ConfigHelp;
-import eu.domibus.connector.gui.layout.SpringUtilities;
+import eu.domibus.connector.client.gui.layout.SpringUtilities;
 
 public class ConfigTabHelper {
 	

@@ -1,4 +1,4 @@
-package eu.domibus.connector.gui.config;
+package eu.domibus.connector.client.gui.utils;
 
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
@@ -9,8 +9,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.UIManager;
 import javax.swing.plaf.ButtonUI;
-
-import eu.domibus.connector.gui.config.listener.ConfigSaveCloseListener;
 
 public class ConfigButtonBar extends JPanel implements ActionListener  {
 

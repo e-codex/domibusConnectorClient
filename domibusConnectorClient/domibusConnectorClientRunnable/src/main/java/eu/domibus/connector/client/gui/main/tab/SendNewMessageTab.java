@@ -1,30 +1,19 @@
 package eu.domibus.connector.client.gui.main.tab;
 
-import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
-import java.util.Date;
-
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-
-import eu.domibus.connector.client.gui.main.data.Message;
-import eu.domibus.connector.client.gui.main.details.NewMessageDetail;
-import eu.domibus.connector.client.gui.main.details.NewMessageDetailFactory;
-import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
-import eu.domibus.connector.client.runnable.util.DomibusConnectorMessageProperties;
-import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
-import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableUtil;
-import eu.domibus.connector.gui.config.properties.ConnectorProperties;
-import eu.domibus.connector.gui.config.tabs.ConfigTabHelper;
 
 import javax.annotation.PostConstruct;
+import javax.swing.JButton;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import eu.domibus.connector.client.gui.main.details.NewMessageDetailFactory;
 
 @Component
 public class SendNewMessageTab extends JPanel {
@@ -36,9 +25,6 @@ public class SendNewMessageTab extends JPanel {
 	private File messageFolder;
 //	private String nationalMessageId;
 	
-    @Autowired
-    private StandaloneClientProperties standaloneClientProperties;
-    
     @Autowired
     private NewMessageDetailFactory newMessageDetailFactory;
     

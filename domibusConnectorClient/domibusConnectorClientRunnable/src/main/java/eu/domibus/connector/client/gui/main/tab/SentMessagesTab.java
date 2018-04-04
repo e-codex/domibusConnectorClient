@@ -2,14 +2,13 @@ package eu.domibus.connector.client.gui.main.tab;
 
 import java.util.List;
 
-import eu.domibus.connector.client.gui.main.data.Message;
-import eu.domibus.connector.client.gui.main.reader.MessagesReader;
-import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
-import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
-import eu.domibus.connector.gui.config.properties.ConnectorProperties;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import eu.domibus.connector.client.gui.main.data.Message;
+import eu.domibus.connector.client.gui.main.reader.MessagesReader;
+import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
+import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
 
 @Component
 public class SentMessagesTab extends MessagesTab {
@@ -25,9 +24,6 @@ public class SentMessagesTab extends MessagesTab {
 	static final String STATUS_FAILED = "FAILED";
 	
     
-//    @Autowired
-//    StandaloneClientProperties standaloneClientProperties;
-    
 	@Autowired
 	MessagesReader messagesReader;
     
@@ -37,7 +33,7 @@ public class SentMessagesTab extends MessagesTab {
 
 	@Override
 	public List<Message> loadMessages() throws Exception {
-        return messagesReader.readMessagesFromDirectory(standaloneClientProperties.getMessages().getOutgoing().getDirectory());
+        return messagesReader.readMessagesFromDirectory(ConnectorClientProperties.outgoingMessagesDirectory);
 		//return MessagesReader.readMessages(ConnectorProperties.OTHER_OUTGOING_MSG_DIR_KEY, ConnectorProperties.outgoingMessagesDirectory);
 	}
 

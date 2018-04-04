@@ -23,14 +23,12 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
 import org.apache.commons.io.FileUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.domibus.connector.client.gui.main.data.Message;
 import eu.domibus.connector.client.gui.main.details.ExportMessagesDetail;
 import eu.domibus.connector.client.gui.main.details.NewMessageDetail;
 import eu.domibus.connector.client.gui.main.details.StoredMessageDetail;
 import eu.domibus.connector.client.gui.utils.ButtonColumn;
-import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
 import eu.domibus.connector.client.runnable.util.EvidenceType;
 
 public abstract class MessagesTab extends JPanel implements ActionListener {
@@ -52,9 +50,6 @@ public abstract class MessagesTab extends JPanel implements ActionListener {
 	
 	public MessagesTab(){}
         
-    @Autowired
-    StandaloneClientProperties standaloneClientProperties;
-    
     @PostConstruct
     public void init() {
 		JPanel gridPanel = new JPanel();
@@ -208,9 +203,9 @@ public abstract class MessagesTab extends JPanel implements ActionListener {
 		        String status = (String) ((DefaultTableModel)table.getModel()).getValueAt(modelRow, 8);
 		        Message selected = (Message) ((DefaultTableModel)table.getModel()).getValueAt(modelRow, 10);
 		        if(status.equals(SentMessagesTab.STATUS_NEW)){
-		        	new NewMessageDetail(selected, MessagesTab.this, standaloneClientProperties);
+		        	new NewMessageDetail(selected, MessagesTab.this);
 		        }else{
-		        	new StoredMessageDetail(selected, getMessageType(), MessagesTab.this, standaloneClientProperties);
+		        	new StoredMessageDetail(selected, getMessageType(), MessagesTab.this);
 		        }
 		    }
 		};

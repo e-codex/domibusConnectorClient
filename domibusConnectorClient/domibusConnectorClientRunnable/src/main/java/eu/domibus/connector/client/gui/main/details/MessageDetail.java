@@ -23,8 +23,8 @@ import javax.swing.UIManager;
 import eu.domibus.connector.client.gui.layout.SpringUtilities;
 import eu.domibus.connector.client.gui.main.data.Message;
 import eu.domibus.connector.client.gui.main.tab.MessagesTab;
-import eu.domibus.connector.gui.config.properties.ConnectorProperties;
-import eu.domibus.connector.gui.config.tabs.ConfigTabHelper;
+import eu.domibus.connector.client.gui.utils.ConfigTabHelper;
+import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
 
 public abstract class MessageDetail extends JPanel {
 
@@ -46,7 +46,7 @@ public abstract class MessageDetail extends JPanel {
 		this.message=message;
 		this.parent = list;
 		this.messageType = messageType;
-		messagePropertiesFile = new File(message.getMessageDir(), ConnectorProperties.messagePropertiesFileName);
+		messagePropertiesFile = new File(message.getMessageDir(), ConnectorClientProperties.messagePropertiesFileName);
 
 		messageDetailFrame = new JFrame("Message "+message.getMessageProperties().getNationalMessageId());
 		messageDetailFrame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

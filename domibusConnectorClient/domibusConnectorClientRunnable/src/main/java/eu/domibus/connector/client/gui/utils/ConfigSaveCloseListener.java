@@ -1,11 +1,11 @@
-package eu.domibus.connector.gui.config.listener;
+package eu.domibus.connector.client.gui.utils;
 
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 
 import javax.swing.JOptionPane;
 
-import eu.domibus.connector.gui.config.properties.ConnectorProperties;
+import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
 
 public class ConfigSaveCloseListener {
 
@@ -15,14 +15,14 @@ public class ConfigSaveCloseListener {
 	
 	public static void actionPerformed(ActionEvent e, Component parent) {
 		if (e.getActionCommand().equals(SAVE)) {
-			if(ConnectorProperties.storeConnectorProperties()){
+			if(ConnectorClientProperties.storeConnectorProperties()){
 				JOptionPane.showMessageDialog(parent, "The properties are successfully stored and the property file is updated.");
 			}else{
 				JOptionPane.showMessageDialog(parent, "The properties could not be stored!", "Store properties failed!", JOptionPane.ERROR_MESSAGE);
 			}
 			
 		} else if (e.getActionCommand().equals(SAVEEXIT)) {
-			if(ConnectorProperties.storeConnectorProperties()){
+			if(ConnectorClientProperties.storeConnectorProperties()){
 				System.exit(0);
 			}else{
 				JOptionPane.showMessageDialog(parent, "The properties could not be stored!", "Store properties failed!", JOptionPane.ERROR_MESSAGE);

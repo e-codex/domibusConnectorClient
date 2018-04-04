@@ -1,4 +1,4 @@
-package eu.domibus.connector.gui.config.properties;
+package eu.domibus.connector.client.runnable.configuration;
 
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;

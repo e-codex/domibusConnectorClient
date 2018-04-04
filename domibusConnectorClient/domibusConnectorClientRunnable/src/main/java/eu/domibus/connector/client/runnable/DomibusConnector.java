@@ -1,6 +1,8 @@
 package eu.domibus.connector.client.runnable;
 
 import java.awt.Window;
+import java.io.File;
+import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -16,12 +18,12 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.util.StringUtils;
 
+import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
 import eu.domibus.connector.client.runnable.configuration.DomibusConnectorClientConfiguration;
-import eu.domibus.connector.client.runnable.configuration.StandaloneClientProperties;
 
 @SpringBootApplication(scanBasePackages="eu.domibus.connector")
-@EnableConfigurationProperties(StandaloneClientProperties.class)
 @EnableScheduling
 public class DomibusConnector {
 
@@ -35,71 +37,72 @@ public class DomibusConnector {
 		if(ArrayUtils.contains(args, "-gui")){
 			startWithGUI=true;
 		}
-		//    	
-		//        String connectorProperties = System.getProperty("connector.properties");
-		//        if (!StringUtils.hasText(connectorProperties)) {
-		//            connectorProperties = System.getenv("connector.properties");
-		//        }
-		//        if (!StringUtils.hasText(connectorProperties)) {
-		//            connectorProperties = ConnectorProperties.CONNECTOR_PROPERTIES_FILE_PATH;
-		//        }
-		//        if(StringUtils.hasText(connectorProperties)){
-		//        	System.setProperty("connector.properties", connectorProperties);
-		//        }
-		//        try{
-		//        	ConnectorProperties.loadConnectorProperties();
-		//        }catch(Exception e){
-		//        	
-		//        }
-		//        if (!ConnectorProperties.CONNECTOR_PROPERTIES_FILE.exists() && startWithGUI) {
-		//        	
-		//        	try {
-		//				Process process = new ProcessBuilder(
-		//						"java", "-jar","domibusConnectorConfigurator.jar").start();
-		//			} catch (IOException e) {
-		//				e.printStackTrace();
-		//			}
-		//        	
-		//        	System.exit(0);
-		//        }
-		//        
-		//        
-		//        if(!ConnectorProperties.CONNECTOR_PROPERTIES_FILE.exists()){
-		//        	try{
-		//                ConnectorProperties.loadConnectorProperties();
-		//                }catch(Exception e){
-		//                	throw new RuntimeException("Connector Properties could not be loaded!");
-		//                }
-		//		}
-		//
-		//        String loggingProperties = System.getProperty("logging.properties");
-		//        if (!StringUtils.hasText(loggingProperties)) {
-		//            loggingProperties = System.getenv("logging.properties");
-		//        }
-		//
-		//
-		//        if (!StringUtils.hasText(loggingProperties)) {
-		//        	DomibusConnector.class.getResource("log4j.properties");
-		//        	File classpathLog4j = new File(DomibusConnector.class.getClassLoader().getResource("log4j.properties").getFile());
-		//        	if(classpathLog4j.exists())
-		//            System.setProperty("logging.properties", classpathLog4j.getAbsolutePath());
-		//        	else{
-		//        		System.setProperty("logging.properties", ConnectorProperties.LOG4J_CONFIG_FILE_PATH);
-		//        	}
-		//        		
-		//        }
+		    	
+		        String connectorProperties = System.getProperty(ConnectorClientProperties.CONNECTOR_CLIENT_PROPERTIES_NAME);
+		        if (!StringUtils.hasText(connectorProperties)) {
+		            connectorProperties = System.getenv(ConnectorClientProperties.CONNECTOR_CLIENT_PROPERTIES_NAME);
+		        }
+		        if (!StringUtils.hasText(connectorProperties)) {
+		            connectorProperties = ConnectorClientProperties.CONNECTOR_PROPERTIES_FILE_PATH;
+		        }
+		        if(StringUtils.hasText(connectorProperties)){
+		        	System.setProperty(ConnectorClientProperties.CONNECTOR_CLIENT_PROPERTIES_NAME, connectorProperties);
+		        }
+		        try{
+		        	ConnectorClientProperties.loadConnectorProperties();
+		        }catch(Exception e){
+		        	
+		        }
+//		        if (!ConnectorClientProperties.CONNECTOR_PROPERTIES_FILE.exists() && startWithGUI) {
+//		        	
+//		        	try {
+//						Process process = new ProcessBuilder(
+//								"java", "-jar","domibusConnectorConfigurator.jar").start();
+//					} catch (IOException e) {
+//						e.printStackTrace();
+//					}
+//		        	
+//		        	System.exit(0);
+//		        }
+		        
+		        
+		        if(!ConnectorClientProperties.CONNECTOR_PROPERTIES_FILE.exists()){
+		        	try{
+		        		ConnectorClientProperties.loadConnectorProperties();
+		                }catch(Exception e){
+		                	throw new RuntimeException("Connector Client Properties could not be loaded!");
+		                }
+				}
+		
+		        String loggingProperties = System.getProperty("logging.properties");
+		        if (!StringUtils.hasText(loggingProperties)) {
+		            loggingProperties = System.getenv("logging.properties");
+		        }
+		
+		
+		        if (!StringUtils.hasText(loggingProperties)) {
+		        	File classpathLog4j = new File(ConnectorClientProperties.LOG4J_CONFIG_FILE_PATH);
+//		        	DomibusConnector.class.getResource("log4j.properties");
+//		        	File classpathLog4j = new File(DomibusConnector.class.getClassLoader().getResource("log4j.properties").getFile());
+		        	if(classpathLog4j.exists())
+		            System.setProperty("logging.properties", classpathLog4j.getAbsolutePath());
+		        	else{
+		        		System.setProperty("logging.properties", ConnectorClientProperties.LOG4J_CONFIG_FILE_PATH);
+		        	}
+		        		
+		        }
 
 		ConfigurableApplicationContext context = null;
 
 		System.setProperty("crypto.policy", "unlimited");
 
-		//        System.setProperty("http.proxySet", "true");
-		//        System.setProperty("http.proxyHost", "172.30.9.12");
-		//        System.setProperty("http.proxyPort", "8080");
-		//        
-		//        System.setProperty("https.proxySet", "true");
-		//        System.setProperty("https.proxyHost", "172.30.9.12");
-		//        System.setProperty("https.proxyPort", "8080");
+		        System.setProperty("http.proxySet", Boolean.toString(ConnectorClientProperties.proxyEnabled));
+		        System.setProperty("http.proxyHost", ConnectorClientProperties.proxyHost);
+		        System.setProperty("http.proxyPort", ConnectorClientProperties.proxyPort);
+		        
+		        System.setProperty("https.proxySet", Boolean.toString(ConnectorClientProperties.proxyEnabled));
+		        System.setProperty("https.proxyHost", ConnectorClientProperties.proxyHost);
+		        System.setProperty("https.proxyPort", ConnectorClientProperties.proxyPort);
 
 		try {
 			UIManager.setLookAndFeel(
