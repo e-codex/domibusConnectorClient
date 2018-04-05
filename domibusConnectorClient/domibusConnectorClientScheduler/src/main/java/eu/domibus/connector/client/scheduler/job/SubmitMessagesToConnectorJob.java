@@ -34,8 +34,8 @@ public class SubmitMessagesToConnectorJob implements Job {
 	@Autowired
 	private DomibusConnectorNationalBackendClient nationalBackendClient;
 	
-	@Value("${connector.client.submit.messages.period.ms}")
-    private long repeatInterval;
+	@Value("${connector.client.timer.check.outgoing.messages.ms}")
+    private Long repeatInterval;
 	
 
     @Override

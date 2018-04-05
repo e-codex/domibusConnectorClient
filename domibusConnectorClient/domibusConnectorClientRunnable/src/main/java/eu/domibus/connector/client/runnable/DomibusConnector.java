@@ -2,7 +2,6 @@ package eu.domibus.connector.client.runnable;
 
 import java.awt.Window;
 import java.io.File;
-import java.io.IOException;
 
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -13,10 +12,7 @@ import org.apache.commons.lang.ArrayUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.util.StringUtils;
 
@@ -96,14 +92,15 @@ public class DomibusConnector {
 
 		System.setProperty("crypto.policy", "unlimited");
 
+		if(ConnectorClientProperties.proxyEnabled) {
 		        System.setProperty("http.proxySet", Boolean.toString(ConnectorClientProperties.proxyEnabled));
-		        System.setProperty("http.proxyHost", ConnectorClientProperties.proxyHost);
-		        System.setProperty("http.proxyPort", ConnectorClientProperties.proxyPort);
+		        System.setProperty("http.proxyHost", ConnectorClientProperties.proxyHost!=null?ConnectorClientProperties.proxyHost:"");
+		        System.setProperty("http.proxyPort", ConnectorClientProperties.proxyPort!=null?ConnectorClientProperties.proxyPort:"");
 		        
 		        System.setProperty("https.proxySet", Boolean.toString(ConnectorClientProperties.proxyEnabled));
 		        System.setProperty("https.proxyHost", ConnectorClientProperties.proxyHost);
 		        System.setProperty("https.proxyPort", ConnectorClientProperties.proxyPort);
-
+		}
 		try {
 			UIManager.setLookAndFeel(
 					UIManager.getSystemLookAndFeelClassName());
@@ -137,12 +134,6 @@ public class DomibusConnector {
 		context = springApp.run(args);
 
 		context.registerShutdownHook();
-	}
-
-
-	@Bean
-	public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
-		return new PropertySourcesPlaceholderConfigurer();
 	}
 
 }

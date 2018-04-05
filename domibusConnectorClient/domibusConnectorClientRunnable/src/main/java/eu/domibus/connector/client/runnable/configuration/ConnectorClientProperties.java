@@ -10,10 +10,6 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Set;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-
-@ConfigurationProperties
 public class ConnectorClientProperties {
 
 	public static final String CONNECTOR_CLIENT_PROPERTIES_NAME = "connector-client.properties";
@@ -114,7 +110,7 @@ public class ConnectorClientProperties {
 	public static boolean useContentMapper;
 	public static String contentMapperImplementaitonClassName;
 	
-	private final static Properties properties = new Properties();
+	public final static Properties properties = new Properties();
 	
     public static void loadConnectorProperties() throws Exception{
     	String connectorProperties = System.getProperty(CONNECTOR_CLIENT_PROPERTIES_NAME);

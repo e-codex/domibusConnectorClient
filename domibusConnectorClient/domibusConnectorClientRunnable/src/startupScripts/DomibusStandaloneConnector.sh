@@ -15,7 +15,7 @@ echo"     SYNOPSIS
      OPTIONS
      -j=[path], --javaPath=[path]    			Set the path to the installed java. Replaces JAVA_HOME
      											environment variable. So if JAVA_HOME is set, this does not need to be set.
-     -c=[file], --connectorProperties=[file]    Set connector properties file (default=conf/connector.properties)
+     -c=[file], --connectorClientProperties=[file]    Set connector properties file (default=conf/connector-client.properties)
      -l=[file], --loggingProperties=[file]   	Set log4j.properties file (default=conf/log4j.properties)
      -h, --help                    				Print this help
      
@@ -33,7 +33,7 @@ case $i in
     JAVA_PATH=$JAVA_PATH/bin/java
     shift # past argument=value
     ;;
-    -c=*|--connectorProperties=*)
+    -c=*|--connectorClientProperties=*)
     CONNECTOR_PROPERTIES="${i#*=}"
     shift # past argument=value
     ;;
@@ -83,7 +83,7 @@ fi
 if [ -z "$CONNECTOR_PROPERTIES" ]
 then
   # Use default properties 
-  CONNECTOR_PROPERTIES=`/usr/bin/pwd`'/conf/connector.properties'
+  CONNECTOR_PROPERTIES=`/usr/bin/pwd`'/conf/connector-client.properties'
 fi
 
 
@@ -102,9 +102,7 @@ echo "CONNECTOR_PROPERTIES PATH     = $CONNECTOR_PROPERTIES"
 echo "LOGGING_PROPERTIES PATH    = $LOGGING_PROPERTIES"
 echo "CLASSPATH = $CLASSPATH"
 
-gateway.routing.option=Webservice
-
-COMMAND_LINE="$JAVA_PATH -cp $CLASSPATH -Dconnector.properties=$CONNECTOR_PROPERTIES -Dlogging.properties=$LOGGING_PROPERTIES eu.domibus.connector.runnable.DomibusConnector"
+COMMAND_LINE="$JAVA_PATH -cp $CLASSPATH -Dconnector-client.properties=$CONNECTOR_PROPERTIES -Dlogging.properties=$LOGGING_PROPERTIES eu.domibus.connector.client.runnable.DomibusConnector"
 echo "executing $COMMAND_LINE"
 
 #Launch connector

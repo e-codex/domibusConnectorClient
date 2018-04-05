@@ -16,7 +16,7 @@ echo %CLASSPATH%
 
 :loop
 IF NOT "%1"=="" (
-    IF "%1"=="-connector.properties" (
+    IF "%1"=="-connector-client.properties" (
         SET CONNECTOR_PROPERTIES=%2
         SHIFT
     )
@@ -28,12 +28,12 @@ IF NOT "%1"=="" (
     GOTO :loop
 )
 
-rem set "CONNECTOR_PROPERTIES=%connector.properties%"
+rem set "CONNECTOR_PROPERTIES=%connector-client.properties%"
 if exist "%CONNECTOR_PROPERTIES%" goto okConnProps
-set "CONNECTOR_PROPERTIES=conf\connector.properties
+set "CONNECTOR_PROPERTIES=conf\connector-client.properties
 :okConnProps
-set "connector.properties=%CONNECTOR_PROPERTIES%"
-rem echo connector.properties set to "%CONNECTOR_PROPERTIES%"
+set "connector-client.properties=%CONNECTOR_PROPERTIES%"
+rem echo connector-client.properties set to "%CONNECTOR_PROPERTIES%"
 
 rem set "LOGGING_PROPERTIES=%logging.properties%"
 if exist "%LOGGING_PROPERTIES%" goto okLogProps
@@ -42,10 +42,8 @@ set "LOGGING_PROPERTIES=conf\log4j.properties
 set "logging.properties=%LOGGING_PROPERTIES%"
 rem echo LOGGING_PROPERTIES set to "%LOGGING_PROPERTIES%"
 
-set gateway.routing.option=Webservice
-
 title "DomibusStandaloneConnector"
 
-java -cp %CLASSPATH% eu.domibus.connector.runnable.DomibusConnector
+java -cp %CLASSPATH% eu.domibus.connector.client.runnable.DomibusConnector
 
 :end
