@@ -41,30 +41,23 @@
 
     <distributionManagement>
         <repository>
-                    <id>nexus-releases</id>
-                    <url>https://secure.e-codex.eu/nexus/content/repositories/releases/</url>
-                </repository>
-                <snapshotRepository>
-                    <id>nexus-snapshots</id>
-                    <url>https://secure.e-codex.eu/nexus/content/repositories/snapshots/</url>
-                </snapshotRepository>
+            <id>${releases-repo.id}</id>
+            <url>${releases-repo.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>${snapshots-repo.id}</id>
+            <url>${snapshots-repo.url}</url>
+        </snapshotRepository>
     </distributionManagement>
+
+    <scm>
+        <developerConnection>scm:git:https://secure.e-codex.eu/gitblit/r/Me-CODEX/domibusConnectorClient.git</developerConnection>
+    </scm>
+    <ciManagement>
+        <system>Jenkins</system>
+        <url>https://secure.e-codex.eu/jenkins/view/domibusConnector/job/WebConnectorSuiteFolder/job/ConnectorClient/</url>
+    </ciManagement>
   
-  <!-- <profiles>        
-        <profile>
-            <id>deploy-ecodex</id>
-            <distributionManagement>
-                <repository>
-                    <id>nexus-releases</id>
-                    <url>https://secure.e-codex.eu/nexus/content/repositories/releases/</url>
-                </repository>
-                <snapshotRepository>
-                    <id>nexus-snapshots</id>
-                    <url>https://secure.e-codex.eu/nexus/content/repositories/snapshots/</url>
-                </snapshotRepository>
-            </distributionManagement>
-        </profile>
-        </profiles> -->
   <build>
       
       <pluginManagement>
