@@ -26,11 +26,10 @@
                 <version>2.4</version>
                 <configuration>
                     <descriptors>
-                        <!-- <descriptor>src/main/assembly/assemblyFW.xml</descriptor> -->
-                        <!-- <descriptor>src/main/assembly/assemblyESAC.xml</descriptor> -->
+                        <descriptor>src/main/assembly/assemblyClientLibrary.xml</descriptor>
+                        <descriptor>src/main/assembly/assemblyClient35Library.xml</descriptor>
                         <!-- <descriptor>src/main/assembly/assemblyDocu.xml</descriptor> -->
                         <descriptor>src/main/assembly/assemblyStandaloneClient.xml</descriptor>
-                        <!-- <descriptor>src/main/assembly/assemblyWebAppWAROnly.xml</descriptor> -->
                     </descriptors>
                 </configuration>
                 <executions>

@@ -62,7 +62,7 @@ public class DomibusConnector {
 //		        }
 		        
 		        
-		        if(!ConnectorClientProperties.CONNECTOR_PROPERTIES_FILE.exists()){
+		        if(ConnectorClientProperties.CONNECTOR_PROPERTIES_FILE.exists()){
 		        	try{
 		        		ConnectorClientProperties.loadConnectorProperties();
 		                }catch(Exception e){

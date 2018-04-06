@@ -90,13 +90,13 @@ public class ConfigTab extends JPanel {
 		springPanel.add(header);
 		springPanel.add(new JLabel(""));
 		
-		final JFormattedTextField clientNameValue = ConfigTabHelper.addTextFieldRow(null, springPanel, ConnectorClientProperties.CONNECTOR_CLIENT_NAME_LABEL, ConnectorClientProperties.connectorClientNameValue, 40);
-		clientNameValue.addPropertyChangeListener(new PropertyChangeListener() {
-			@Override
-			public void propertyChange(PropertyChangeEvent evt) {
-				ConnectorClientProperties.connectorClientNameValue = clientNameValue.getText();
-			}
-		});
+//		final JFormattedTextField clientNameValue = ConfigTabHelper.addTextFieldRow(null, springPanel, ConnectorClientProperties.CONNECTOR_CLIENT_NAME_LABEL, ConnectorClientProperties.connectorClientNameValue, 40);
+//		clientNameValue.addPropertyChangeListener(new PropertyChangeListener() {
+//			@Override
+//			public void propertyChange(PropertyChangeEvent evt) {
+//				ConnectorClientProperties.connectorClientNameValue = clientNameValue.getText();
+//			}
+//		});
 		
 		final JFormattedTextField connectorBackendUrlValue = ConfigTabHelper.addTextFieldRow(null, springPanel, ConnectorClientProperties.CONNECTOR_BACKEND_SERVCE_ADDRESS_LABEL, ConnectorClientProperties.connectorBackendServiceAddressValue, 40);
 		connectorBackendUrlValue.addPropertyChangeListener(new PropertyChangeListener() {
@@ -109,7 +109,7 @@ public class ConfigTab extends JPanel {
 	
 		
         SpringUtilities.makeCompactGrid(springPanel,
-                3, 2, //rows, cols
+                2, 2, //rows, cols
                 6, 6,        //initX, initY
                 6, 6);       //xPad, yPad
         
@@ -266,6 +266,15 @@ public class ConfigTab extends JPanel {
 		keystorePanel.add(new JLabel(""));
 		keystorePanel.add(new JLabel(""));
 
+		final JFormattedTextField keystoreTypeValue = ConfigTabHelper.addTextFieldRow(null, keystorePanel, ConnectorClientProperties.KEYSTORE_TYPE_LABEL, ConnectorClientProperties.keystoreTypeValue, 40);
+		keystoreTypeValue.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				ConnectorClientProperties.keystoreTypeValue = keystoreTypeValue.getText();
+			}
+		});
+		keystorePanel.add(new JLabel(""));
+
 		final JFileChooser fc = new JFileChooser();
 		fc.setCurrentDirectory(new File(System.getProperty("user.dir")));
 		final JTextField log = new JTextField(40);
@@ -294,17 +303,27 @@ public class ConfigTab extends JPanel {
 		});
 		keystorePanel.add(new JLabel(""));
 		
-		final JFormattedTextField keystoreTypeValue = ConfigTabHelper.addTextFieldRow(null, keystorePanel, ConnectorClientProperties.KEYSTORE_TYPE_LABEL, ConnectorClientProperties.keystoreTypeValue, 40);
-		keystoreTypeValue.addPropertyChangeListener(new PropertyChangeListener() {
+		final JFormattedTextField keyAliasValue = ConfigTabHelper.addTextFieldRow(null, keystorePanel, ConnectorClientProperties.KEY_ALIAS_LABEL, ConnectorClientProperties.keyAlias, 40);
+		keyAliasValue.addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				ConnectorClientProperties.keystoreTypeValue = keystoreTypeValue.getText();
+				ConnectorClientProperties.keyAlias = keyAliasValue.getText();
 			}
 		});
 		keystorePanel.add(new JLabel(""));
 		
+		final JFormattedTextField keyPasswordValue = ConfigTabHelper.addTextFieldRow(null, keystorePanel, ConnectorClientProperties.KEY_PW_LABEL, ConnectorClientProperties.keyPassword, 40);
+		keyPasswordValue.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				ConnectorClientProperties.keyPassword = keyPasswordValue.getText();
+			}
+		});
+		keystorePanel.add(new JLabel(""));
+		
+		
         SpringUtilities.makeCompactGrid(keystorePanel,
-                4, 3, //rows, cols
+                6, 3, //rows, cols
                 6, 6,        //initX, initY
                 6, 6);       //xPad, yPad
         

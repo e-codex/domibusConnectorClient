@@ -1,0 +1,58 @@
+<assembly>
+	<id>${project.version}-3_5-Library</id>
+	<formats>
+		<format>zip</format>
+		<format>dir</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		
+		<!-- ==================== Copying JAR files ================= -->
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClient35Library/target/
+			</directory>
+			<outputDirectory>${connector.build.dir}libraries
+			</outputDirectory>
+			<includes>
+				<include>*.jar</include>
+			</includes>
+			<excludes>
+				<exclude>*-sources.jar</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientWSLink/target/
+			</directory>
+			<outputDirectory>${connector.build.dir}libraries
+			</outputDirectory>
+			<includes>
+				<include>*.jar</include>
+			</includes>
+			<excludes>
+				<exclude>*-sources.jar</exclude>
+			</excludes>
+		</fileSet>
+		
+		<!-- ==================== Copying dependency libraries ================= -->
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientRunnable/target/lib/
+			</directory>
+			<outputDirectory>${connector.build.dir}libraries
+			</outputDirectory>
+			<includes>
+				<include>domibusConnectorAPI*.jar</include>
+			</includes>
+		</fileSet>
+		
+		<!-- ==================== Copying conf ================= -->
+		<fileSet>
+			<directory>${project.basedir}/src/main/resources/
+			</directory>
+			<outputDirectory>${connector.build.dir}
+			</outputDirectory>
+		</fileSet>
+
+		
+	</fileSets>
+
+</assembly>

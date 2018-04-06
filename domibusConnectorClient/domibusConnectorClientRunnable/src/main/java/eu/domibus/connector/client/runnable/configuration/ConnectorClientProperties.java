@@ -22,8 +22,8 @@ public class ConnectorClientProperties {
 	public static String LOG4J_CONFIG_FILE_PATH = CONNECTOR_PROPERTIES_DIR + File.separator + "log4j.properties";
 	
 	
-	public static final String CONNECTOR_CLIENT_NAME_KEY = Messages.getString("connector.client.name.key");
-	public static final String CONNECTOR_CLIENT_NAME_LABEL = Messages.getString("connector.client.label");
+//	public static final String CONNECTOR_CLIENT_NAME_KEY = Messages.getString("connector.client.name.key");
+//	public static final String CONNECTOR_CLIENT_NAME_LABEL = Messages.getString("connector.client.label");
 	
 	public static final String CONNECTOR_BACKEND_SERVCE_ADDRESS_KEY = Messages.getString("connector.backend.service.address.key");
 	public static final String CONNECTOR_BACKEND_SERVCE_ADDRESS_LABEL = Messages.getString("connector.backend.service.address.label");
@@ -79,7 +79,7 @@ public class ConnectorClientProperties {
 	public static final String MSG_PROPERTY_FILE_NAME_LABEL = Messages.getString("msg.property.file.name.label");
 	
 	
-	public static String connectorClientNameValue;
+//	public static String connectorClientNameValue;
 	
 	public static String connectorBackendServiceAddressValue;
 	

@@ -1,5 +1,5 @@
 <assembly>
-	<id>Standalone</id>
+	<id>${project.version}-Standalone</id>
 	<formats>
 		<format>zip</format>
 		<format>dir</format>
