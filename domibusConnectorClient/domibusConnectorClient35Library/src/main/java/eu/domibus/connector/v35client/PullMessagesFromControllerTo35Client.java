@@ -7,7 +7,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import eu.domibus.connector.client.connection.exception.DomibusConnectorBackendWebServiceClientException;
@@ -60,7 +59,6 @@ public class PullMessagesFromControllerTo35Client {
     }
     
     
-    @Scheduled(fixedDelay = 9000)
     public void pullMessagesFromController() {
         List<DomibusConnectorMessageType> fetchMessages = null;
 		try {
