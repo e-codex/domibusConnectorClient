@@ -41,15 +41,30 @@
 
     <distributionManagement>
         <repository>
-            <id>${releases-repo.id}</id>
-            <url>${releases-repo.url}</url>
-        </repository>
-        <snapshotRepository>
-            <id>${snapshots-repo.id}</id>
-            <url>${snapshots-repo.url}</url>
-        </snapshotRepository>
+                    <id>nexus-releases</id>
+                    <url>https://secure.e-codex.eu/nexus/content/repositories/releases/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>nexus-snapshots</id>
+                    <url>https://secure.e-codex.eu/nexus/content/repositories/snapshots/</url>
+                </snapshotRepository>
     </distributionManagement>
   
+  <!-- <profiles>        
+        <profile>
+            <id>deploy-ecodex</id>
+            <distributionManagement>
+                <repository>
+                    <id>nexus-releases</id>
+                    <url>https://secure.e-codex.eu/nexus/content/repositories/releases/</url>
+                </repository>
+                <snapshotRepository>
+                    <id>nexus-snapshots</id>
+                    <url>https://secure.e-codex.eu/nexus/content/repositories/snapshots/</url>
+                </snapshotRepository>
+            </distributionManagement>
+        </profile>
+        </profiles> -->
   <build>
       
       <pluginManagement>
