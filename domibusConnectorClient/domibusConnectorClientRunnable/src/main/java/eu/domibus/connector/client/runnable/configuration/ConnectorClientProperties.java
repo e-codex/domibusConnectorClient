@@ -93,7 +93,7 @@ public class ConnectorClientProperties {
 	public static String keyPassword;
 	
 	public static long checkIncomingPeriodValue;
-	public static long checkOutgiongPeriodValue;
+	public static long checkOutgoingPeriodValue;
 	
 	public static boolean proxyEnabled;
 	public static String proxyHost;
@@ -166,7 +166,7 @@ public class ConnectorClientProperties {
         keyPassword = properties.getProperty(KEY_PW_KEY);
         
         checkIncomingPeriodValue = Long.parseLong(properties.getProperty(CHECK_INCOMING_MESSAGES_PERIOD_KEY));
-        checkOutgiongPeriodValue = Long.parseLong(properties.getProperty(CHECK_OUTGOING_MESSAGES_PERIOD_KEY));
+        checkOutgoingPeriodValue = Long.parseLong(properties.getProperty(CHECK_OUTGOING_MESSAGES_PERIOD_KEY));
         
         proxyEnabled = Boolean.parseBoolean(properties.getProperty(PROXY_ACTIVE_KEY));
         proxyHost = properties.getProperty(PROXY_HOST_KEY);
@@ -201,7 +201,7 @@ public class ConnectorClientProperties {
 		properties.put(KEY_PW_KEY, keyPassword!=null?keyPassword:"");
 		
 		properties.put(CHECK_INCOMING_MESSAGES_PERIOD_KEY, Long.toString(checkIncomingPeriodValue));
-		properties.put(CHECK_OUTGOING_MESSAGES_PERIOD_KEY, Long.toString(checkOutgiongPeriodValue));
+		properties.put(CHECK_OUTGOING_MESSAGES_PERIOD_KEY, Long.toString(checkOutgoingPeriodValue));
 		
 		properties.put(PROXY_ACTIVE_KEY, Boolean.toString(proxyEnabled));
 		properties.put(PROXY_HOST_KEY, proxyHost!=null?proxyHost:"");

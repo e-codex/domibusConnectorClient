@@ -125,11 +125,11 @@ public class ConfigTab extends JPanel {
 		springPanel.add(header);
 		springPanel.add(new JLabel(""));
 		
-		final JFormattedTextField checkOutgoingPeriodValue = ConfigTabHelper.addTextFieldRow(null, springPanel, ConnectorClientProperties.CHECK_OUTGOING_MESSAGES_PERIOD_LABEL, Long.toString(ConnectorClientProperties.checkOutgiongPeriodValue), 10);
+		final JFormattedTextField checkOutgoingPeriodValue = ConfigTabHelper.addTextFieldRow(null, springPanel, ConnectorClientProperties.CHECK_OUTGOING_MESSAGES_PERIOD_LABEL, Long.toString(ConnectorClientProperties.checkOutgoingPeriodValue), 10);
 		checkOutgoingPeriodValue.addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {
-				ConnectorClientProperties.checkOutgiongPeriodValue = Long.parseLong(checkOutgoingPeriodValue.getText());
+				ConnectorClientProperties.checkOutgoingPeriodValue = Long.parseLong(checkOutgoingPeriodValue.getText());
 			}
 		});
 		

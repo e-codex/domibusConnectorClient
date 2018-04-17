@@ -66,7 +66,7 @@ public class DomibusConnector {
 		        	try{
 		        		ConnectorClientProperties.loadConnectorProperties();
 		                }catch(Exception e){
-		                	throw new RuntimeException("Connector Client Properties could not be loaded!");
+		                	throw new RuntimeException("Connector Client Properties could not be loaded!", e);
 		                }
 				}
 		
