@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClient;
-import eu.domibus.connector.client.nbc.exception.DomibusConnectorNationalBackendClientException;
+import eu.domibus.connector.client.exception.DomibusConnectorNationalBackendClientException;
 import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
 import eu.domibus.connector.client.runnable.exception.DomibusConnectorRunnableException;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;

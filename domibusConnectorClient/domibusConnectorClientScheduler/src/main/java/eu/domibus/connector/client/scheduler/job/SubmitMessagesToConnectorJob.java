@@ -17,7 +17,7 @@ import org.springframework.util.CollectionUtils;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClient;
-import eu.domibus.connector.client.nbc.exception.DomibusConnectorNationalBackendClientException;
+import eu.domibus.connector.client.exception.DomibusConnectorNationalBackendClientException;
 import eu.domibus.connector.client.scheduler.configuration.DomibusConnectorClientSchedulerConfiguration;
 import eu.domibus.connector.client.service.DomibusConnectorClientService;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;

@@ -1,6 +1,5 @@
 package eu.domibus.connector.client.mapping;
 
-import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.client.mapping.exception.DomibusConnectorContentMapperException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 

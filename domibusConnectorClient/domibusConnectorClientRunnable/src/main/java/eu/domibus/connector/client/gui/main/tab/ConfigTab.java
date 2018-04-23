@@ -98,7 +98,7 @@ public class ConfigTab extends JPanel {
 //			}
 //		});
 		
-		final JFormattedTextField connectorBackendUrlValue = ConfigTabHelper.addTextFieldRow(null, springPanel, ConnectorClientProperties.CONNECTOR_BACKEND_SERVCE_ADDRESS_LABEL, ConnectorClientProperties.connectorBackendServiceAddressValue, 40);
+		final JFormattedTextField connectorBackendUrlValue = ConfigTabHelper.addTextFieldRow(null, springPanel, ConnectorClientProperties.CONNECTOR_BACKEND_SERVICE_ADDRESS_LABEL, ConnectorClientProperties.connectorBackendServiceAddressValue, 40);
 		connectorBackendUrlValue.addPropertyChangeListener(new PropertyChangeListener() {
 			@Override
 			public void propertyChange(PropertyChangeEvent evt) {

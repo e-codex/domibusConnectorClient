@@ -1,43 +1,46 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <groupId>eu.domibus.connector-client</groupId>
-  <artifactId>domibusConnectorClient</artifactId>
-  <version>4.0.0-beta2-SNAPSHOT</version>
-  <name>domibusConnectorClient</name>
-  <description>Project for developing the client for the domibusConnectorWebApp.</description>
-  <packaging>pom</packaging>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>eu.domibus.connector-client</groupId>
+    <artifactId>domibusConnectorClient</artifactId>
+    <version>4.0.0-beta2-SNAPSHOT</version>
+    <name>domibusConnectorClient</name>
+    <description>Project for developing the client for the domibusConnectorWebApp.</description>
+    <packaging>pom</packaging>
 
-  <properties>
-    <maven.compiler.source>1.8</maven.compiler.source>
-    <maven.compiler.target>1.8</maven.compiler.target>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <connector-server.version>4.0.0-beta1</connector-server.version>
-    <org.apache.cxf.version>3.2.1</org.apache.cxf.version>
-  </properties>
-  
-  <modules>
-		<module>domibusConnectorClientRunnable</module>
-		<module>domibusConnectorClientLibrary</module>
-		
-		<module>domibusConnectorClientDistribution</module>
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <connector-server.version>4.0.0-beta1</connector-server.version>
+        <org.apache.cxf.version>3.2.1</org.apache.cxf.version>
+    </properties>
+
+    <modules>
+        <module>domibusConnectorClientRunnable</module>
+        <module>domibusConnectorClientLibrary</module>
+
+        <module>domibusConnectorClientDistribution</module>
         <module>domibusConnectorClient35Library</module>
         <module>domibusConnectorClientWsLink</module>
         <module>domibusConnectorClientScheduler</module>
-  </modules>
-  
-  
-  <dependencyManagement>
-      <dependencies>
-        <dependency>
-            <!-- import dependencies via dependency Management from webConnector 4.0 -->
-            <groupId>eu.domibus.connector</groupId>
-            <artifactId>domibusConnector</artifactId>
-            <version>4.0.0-beta1</version>
-            <scope>import</scope>
-            <type>pom</type>
-        </dependency>
-      </dependencies>            
-  </dependencyManagement>
+        <module>domibusConnectorClientTestModules</module>
+        <module>domibusConnectorClientWebLib</module>
+    </modules>
+
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <!-- import dependencies via dependency Management from webConnector 4.0 -->
+                <groupId>eu.domibus.connector</groupId>
+                <artifactId>domibusConnector</artifactId>
+                <version>4.0.0-beta1</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <distributionManagement>
         <repository>
@@ -51,54 +54,56 @@
     </distributionManagement>
 
     <scm>
-        <developerConnection>scm:git:https://secure.e-codex.eu/gitblit/r/Me-CODEX/domibusConnectorClient.git</developerConnection>
+        <developerConnection>scm:git:https://secure.e-codex.eu/gitblit/r/Me-CODEX/domibusConnectorClient.git
+        </developerConnection>
     </scm>
     <ciManagement>
         <system>Jenkins</system>
-        <url>https://secure.e-codex.eu/jenkins/view/domibusConnector/job/WebConnectorSuiteFolder/job/ConnectorClient/</url>
+        <url>https://secure.e-codex.eu/jenkins/view/domibusConnector/job/WebConnectorSuiteFolder/job/ConnectorClient/
+        </url>
     </ciManagement>
-  
-  <build>
-      
-      <pluginManagement>
-          <plugins>
-              <plugin>
-                  <groupId>org.apache.cxf</groupId>
-                  <artifactId>cxf-codegen-plugin</artifactId>
-                  <version>${org.apache.cxf.version}</version>
-              </plugin>
-              <plugin>
-                  <groupId>org.apache.maven.plugins</groupId>
-                  <artifactId>maven-site-plugin</artifactId>
-                  <version>3.3</version>
-              </plugin>
-          </plugins>
-      </pluginManagement>
-      
-      <plugins>
-          <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-compiler-plugin</artifactId>
-              <version>2.3.2</version>
-              <configuration>
-                  <encoding>${project.build.sourceEncoding}</encoding>
-              </configuration>
-          </plugin>
-          <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-resources-plugin</artifactId>
-              <version>2.4.3</version>
-              <configuration>
-                  <encoding>${project.build.sourceEncoding}</encoding>
-              </configuration>
-          </plugin>
-          
-          <plugin>
-              <groupId>org.apache.maven.plugins</groupId>
-              <artifactId>maven-site-plugin</artifactId>
-          </plugin>
-          
-      </plugins>
-  </build>
-  
+
+    <build>
+
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.apache.cxf</groupId>
+                    <artifactId>cxf-codegen-plugin</artifactId>
+                    <version>${org.apache.cxf.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>3.3</version>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>2.3.2</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>2.4.3</version>
+                <configuration>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-site-plugin</artifactId>
+            </plugin>
+
+        </plugins>
+    </build>
+
 </project>
