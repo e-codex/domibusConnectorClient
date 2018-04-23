@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClient;
+import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClientDelivery;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -12,7 +14,7 @@ import org.springframework.util.StringUtils;
 
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.exception.ImplementationMissingException;
-import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClient;
+
 import eu.domibus.connector.client.exception.DomibusConnectorNationalBackendClientException;
 import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
 import eu.domibus.connector.client.runnable.exception.DomibusConnectorRunnableException;
@@ -25,7 +27,7 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 @Component
-public class DomibusStandaloneConnectorFileSystemClient implements InitializingBean, DomibusConnectorNationalBackendClient {
+public class DomibusStandaloneConnectorFileSystemClient implements InitializingBean, DomibusConnectorNationalBackendClient, DomibusConnectorNationalBackendClientDelivery {
 
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusStandaloneConnectorFileSystemClient.class);
 	
@@ -41,26 +43,26 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 	private File incomingMessagesDir;
 
 	private File outgoingMessagesDir;
-	
+
 	@Override
-	public void processMessagesFromConnector(List<DomibusConnectorMessageType> messages)
+	public void processMessageFromConnector(DomibusConnectorMessageType message)
 			throws DomibusConnectorNationalBackendClientException, ImplementationMissingException {
-		if(!CollectionUtils.isEmpty(messages)) {
-			for(DomibusConnectorMessageType message:messages) {
-				try {
-					if(checkIfConfirmationMessage(message)) {
-						LOGGER.debug("#processMessagesFromConnector: message [{}] is a confirmation message!", message);
-						fileSystemWriter.writeConfirmationToFileSystem(message, incomingMessagesDir, outgoingMessagesDir);
-					}else {
-						LOGGER.debug("#processMessageFromConnector: message [{}] is a incoming business message", message);
-						fileSystemWriter.writeMessageToFileSystem(message, incomingMessagesDir);
-						confirmIncomingMessage(message);
-					}
-				} catch (DomibusStandaloneConnectorFileSystemException e) {
-					LOGGER.error("Exception processing message from connector... ", e);
-				}
+
+
+		try {
+			if (checkIfConfirmationMessage(message)) {
+				LOGGER.debug("#processMessagesFromConnector: message [{}] is a confirmation message!", message);
+				fileSystemWriter.writeConfirmationToFileSystem(message, incomingMessagesDir, outgoingMessagesDir);
+			} else {
+				LOGGER.debug("#processMessageFromConnector: message [{}] is a incoming business message", message);
+				fileSystemWriter.writeMessageToFileSystem(message, incomingMessagesDir);
+				confirmIncomingMessage(message);
 			}
+		} catch (DomibusStandaloneConnectorFileSystemException e) {
+			LOGGER.error("Exception processing message from connector... ", e);
 		}
+
+
 	}
 
 	@Override

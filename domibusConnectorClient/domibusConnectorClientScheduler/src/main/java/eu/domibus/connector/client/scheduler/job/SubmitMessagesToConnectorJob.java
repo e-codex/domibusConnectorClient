@@ -2,6 +2,7 @@ package eu.domibus.connector.client.scheduler.job;
 
 import java.util.List;
 
+import eu.domibus.connector.client.transport.TransportMessagesFromNationalToConnectorService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -29,34 +30,21 @@ public class SubmitMessagesToConnectorJob implements Job {
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(SubmitMessagesToConnectorJob.class);
 
 	@Autowired
-	private DomibusConnectorClientService clientService;
-	
-	@Autowired
-	private DomibusConnectorNationalBackendClient nationalBackendClient;
-	
+	TransportMessagesFromNationalToConnectorService transportMessagesFromNationalToConnectorService;
+
 	@Value("${connector.client.timer.check.outgoing.messages.ms}")
     private Long repeatInterval;
-	
 
-    @Override
+	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-    	List<DomibusConnectorMessageType> messages = null;
 		try {
-			messages = nationalBackendClient.checkForMessagesOnNationalBackend();
-		} catch (DomibusConnectorNationalBackendClientException | ImplementationMissingException e1) {
-			throw new JobExecutionException(e1);
+			transportMessagesFromNationalToConnectorService.submitMessageFromNationalToConnector();
+		} catch (DomibusConnectorNationalBackendClientException | ImplementationMissingException e) {
+			LOGGER.error("Exception occured while loading transporting messages from national system to connector. Throwing Exception again:", e);
+			throw new JobExecutionException(e);
 		}
-    	if(!CollectionUtils.isEmpty(messages)) {
-    		LOGGER.info("{} new messages from national backend to submit to connector...", messages.size());
-    		for(DomibusConnectorMessageType message: messages) {
-    			try {
-					clientService.submitMessageToConnector(message);
-				} catch (DomibusConnectorClientException e) {
-					LOGGER.error("Exception submitting message to connector: ", e);
-				}
-    		}
-    	}
 	}
+
 	
 	@Bean(name = "submitMessagesToConnectorJob")
 	public JobDetailFactoryBean submitMessagesToConnectorJob() {

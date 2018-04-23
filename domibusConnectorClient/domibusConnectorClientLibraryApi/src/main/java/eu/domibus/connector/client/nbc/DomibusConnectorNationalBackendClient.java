@@ -6,11 +6,9 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 import java.util.List;
 
-public interface DomibusConnectorNationalBackendClient extends DomibusConnectorNationalBackendPushClient {
+public interface DomibusConnectorNationalBackendClient {
 
-//	public void processMessagesFromConnector(List<DomibusConnectorMessageType> messages)throws DomibusConnectorNationalBackendClientException,
-//    ImplementationMissingException;
-	
+
 	public List<DomibusConnectorMessageType> checkForMessagesOnNationalBackend() throws DomibusConnectorNationalBackendClientException,
     ImplementationMissingException;
 	

@@ -10,11 +10,11 @@ import java.util.List;
 
 @Component
 @ConditionalOnMissingBean(DomibusConnectorNationalBackendClient.class)
-public class DomibusConnectorNationalBackendClientDefaultImpl implements DomibusConnectorNationalBackendClient {
+public class DomibusConnectorNationalBackendClientDefaultImpl implements DomibusConnectorNationalBackendClient, DomibusConnectorNationalBackendClientDelivery {
 
 
 	@Override
-	public void processMessagesFromConnector(List<DomibusConnectorMessageType> messages)
+	public void processMessageFromConnector(DomibusConnectorMessageType message)
 			throws DomibusConnectorNationalBackendClientException, ImplementationMissingException {
 		throw new ImplementationMissingException("DomibusConnectorNationalBackendClient", "processMessagesFromConnector");
 	}

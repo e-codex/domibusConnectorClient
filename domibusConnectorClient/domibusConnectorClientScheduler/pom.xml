@@ -27,5 +27,11 @@
 			<groupId>org.springframework</groupId>
 			<artifactId>spring-tx</artifactId>
 		</dependency>
-    </dependencies>
+      <dependency>
+          <groupId>eu.domibus.connector-client</groupId>
+          <artifactId>domibusConnectorClientLibraryApi</artifactId>
+          <version>${project.version}</version>
+      </dependency>
+
+  </dependencies>
 </project>

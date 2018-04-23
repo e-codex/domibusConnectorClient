@@ -9,12 +9,12 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 @Component
-@ConditionalOnMissingBean(DomibusConnectorNationalBackendPushClient.class)
-public class DomibusConnectorNationalBackendClientDefaultImpl implements DomibusConnectorNationalBackendPushClient {
+@ConditionalOnMissingBean(DomibusConnectorNationalBackendClientDelivery.class)
+public class DomibusConnectorNationalBackendClientDefaultImpl implements DomibusConnectorNationalBackendClientDelivery {
 
 
 	@Override
-	public void processMessagesFromConnector(List<DomibusConnectorMessageType> messages)
+	public void processMessageFromConnector(DomibusConnectorMessageType message)
 			throws DomibusConnectorNationalBackendClientException, ImplementationMissingException {
 		throw new ImplementationMissingException("DomibusConnectorNationalBackendClient", "processMessagesFromConnector");
 	}

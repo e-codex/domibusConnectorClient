@@ -11,7 +11,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
  * 
  */
 @SpringBootApplication(scanBasePackages="eu.domibus.connector")
-//@PropertySource("file:${connector-client.properties}")
+@PropertySource("file:${connector-client.properties}")
 public class DomibusConnectorClientConfiguration {
    
     //TODO: set correct scan folder
