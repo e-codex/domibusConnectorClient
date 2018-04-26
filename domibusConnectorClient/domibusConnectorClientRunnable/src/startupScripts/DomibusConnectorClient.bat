@@ -42,8 +42,8 @@ set "LOGGING_PROPERTIES=conf\log4j.properties
 set "logging.properties=%LOGGING_PROPERTIES%"
 rem echo LOGGING_PROPERTIES set to "%LOGGING_PROPERTIES%"
 
-title "DomibusStandaloneConnector"
+title "DomibusConnectorClient"
 
-java -cp %CLASSPATH% eu.domibus.connector.client.runnable.DomibusConnector -gui
+java -cp %CLASSPATH% eu.domibus.connector.client.runnable.DomibusConnector
 
 :end

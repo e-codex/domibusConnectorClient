@@ -6,7 +6,7 @@ if [ "$1" == "--help" ]
 then
 # usage:
 echo"     SYNOPSIS
-     DomibusStandaloneConnector.sh [-h] [-j=[path]] [-c=[file]] [-l=[file]]
+     DomibusConnectorClient.sh [-h] [-j=[path]] [-c=[file]] [-l=[file]]
      
  
      DESCRIPTION
@@ -20,7 +20,7 @@ echo"     SYNOPSIS
      -h, --help                    				      Print this help
      
      EXAMPLES
-     DomibusStandaloneConnector.sh -j=/usr/bin/java8"
+     DomibusConnectorClient.sh -j=/usr/bin/java8"
 	exit 0
 fi
 
