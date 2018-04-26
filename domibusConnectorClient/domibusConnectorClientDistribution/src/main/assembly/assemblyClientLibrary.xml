@@ -1,5 +1,5 @@
 <assembly>
-	<id>${project.version}-Library</id>
+	<id>${project.version}-Libraries</id>
 	<formats>
 		<format>zip</format>
 		<format>dir</format>
@@ -11,7 +11,19 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibrary/target/
 			</directory>
-			<outputDirectory>${connector.build.dir}libraries
+			<outputDirectory>/libraries
+			</outputDirectory>
+			<includes>
+				<include>*.jar</include>
+			</includes>
+			<excludes>
+				<exclude>*-sources.jar</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientWebLib/target/
+			</directory>
+			<outputDirectory>/libraries
 			</outputDirectory>
 			<includes>
 				<include>*.jar</include>
@@ -23,7 +35,7 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientScheduler/target/
 			</directory>
-			<outputDirectory>${connector.build.dir}libraries
+			<outputDirectory>/libraries
 			</outputDirectory>
 			<includes>
 				<include>*.jar</include>
@@ -35,7 +47,19 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientWSLink/target/
 			</directory>
-			<outputDirectory>${connector.build.dir}libraries
+			<outputDirectory>/libraries
+			</outputDirectory>
+			<includes>
+				<include>*.jar</include>
+			</includes>
+			<excludes>
+				<exclude>*-sources.jar</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClient35Library/target/
+			</directory>
+			<outputDirectory>/libraries
 			</outputDirectory>
 			<includes>
 				<include>*.jar</include>
@@ -49,7 +73,7 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientRunnable/target/lib/
 			</directory>
-			<outputDirectory>${connector.build.dir}libraries
+			<outputDirectory>/libraries
 			</outputDirectory>
 			<includes>
 				<include>domibusConnectorAPI*.jar</include>
@@ -60,13 +84,21 @@
 		
 		<!-- ==================== Copying conf ================= -->
 		<fileSet>
-			<directory>${project.basedir}/src/main/resources/
+			<directory>${project.basedir}/src/main/resources/conf/
 			</directory>
-			<outputDirectory>${connector.build.dir}
+			<outputDirectory>/conf
 			</outputDirectory>
 		</fileSet>
 
 		
 	</fileSets>
+	<files>
+		<file>
+			<source>${project.basedir}/src/main/resources/documentation/domibusConnectorClient_Guide.docx
+			</source>
+			<outputDirectory>/documentation
+			</outputDirectory>
+		</file>
+	</files>
 
 </assembly>
