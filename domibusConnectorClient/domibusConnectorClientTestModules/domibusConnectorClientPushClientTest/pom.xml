@@ -32,12 +32,6 @@
             <groupId>${project.groupId}</groupId>
             <artifactId>domibusConnectorClientWebLib</artifactId>
             <version>${project.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>eu.domibus.connector-client</groupId>
-                    <artifactId>domibusConnectorClientLibraryApi</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>${project.groupId}</groupId>
