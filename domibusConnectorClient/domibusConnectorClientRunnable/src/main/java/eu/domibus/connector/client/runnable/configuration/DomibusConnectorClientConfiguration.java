@@ -8,7 +8,7 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 
 /**
  *
- * @author {@literal Stephan Spindler <stephan.spindler@extern.brz.gv.at> }
+ * 
  */
 @SpringBootApplication(scanBasePackages="eu.domibus.connector")
 @PropertySource("file:${connector-client.properties}")

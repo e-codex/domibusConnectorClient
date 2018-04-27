@@ -4,7 +4,7 @@
     <parent>
         <groupId>eu.domibus.connector-client</groupId>
         <artifactId>domibusConnectorClient</artifactId>
-        <version>4.0.0-beta1</version>
+        <version>4.0.0-beta2-SNAPSHOT</version>
     </parent>
     <artifactId>domibusConnectorClientWSLink</artifactId>
     <packaging>jar</packaging>
@@ -64,6 +64,11 @@
             <groupId>org.apache.cxf</groupId>
             <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+            <version>4.3.13.RELEASE</version>
         </dependency>
     </dependencies>
 </project>

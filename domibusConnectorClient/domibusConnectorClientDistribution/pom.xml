@@ -3,21 +3,11 @@
   <parent>
     <groupId>eu.domibus.connector-client</groupId>
     <artifactId>domibusConnectorClient</artifactId>
-    <version>4.0.0-beta1</version>
+    <version>4.0.0-beta2-SNAPSHOT</version>
   </parent>
   <artifactId>domibusConnectorClientDistribution</artifactId>
   
-  <properties>
-        <connector.build.dir>domibusConnectorClient/</connector.build.dir>
-        <documentation.output.dir>${connector.build.dir}documentation/</documentation.output.dir>
-        <db.scripts.output.dir>${documentation.output.dir}database-scripts</db.scripts.output.dir>
-        <modules.output.dir>${connector.build.dir}modules</modules.output.dir>
-        <sources.output.dir>${connector.build.dir}sources</sources.output.dir>
-        <lib.output.dir>${connector.build.dir}lib</lib.output.dir>
-        <release.notes.output.dir>${documentation.output.dir}release-notes</release.notes.output.dir>
-        <properties.output.dir>${documentation.output.dir}properties</properties.output.dir>
-    </properties>
-
+ 
     <build>
         <finalName>domibusConnectorClient</finalName>
         <plugins>
@@ -27,8 +17,6 @@
                 <configuration>
                     <descriptors>
                         <descriptor>src/main/assembly/assemblyClientLibrary.xml</descriptor>
-                        <descriptor>src/main/assembly/assemblyClient35Library.xml</descriptor>
-                        <!-- <descriptor>src/main/assembly/assemblyDocu.xml</descriptor> -->
                         <descriptor>src/main/assembly/assemblyStandaloneClient.xml</descriptor>
                     </descriptors>
                 </configuration>
@@ -44,14 +32,5 @@
             </plugin>
         </plugins>
     </build>
-	
-    <dependencies>
-        <dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>domibusConnectorClientRunnable</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-     
-    </dependencies>
     <packaging>pom</packaging>
 </project>

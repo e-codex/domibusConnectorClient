@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>eu.domibus.connector-client</groupId>
 		<artifactId>domibusConnectorClient</artifactId>
-		<version>4.0.0-beta1</version>
+		<version>4.0.0-beta2-SNAPSHOT</version>
 	</parent>
 	<artifactId>domibusConnectorClientRunnable</artifactId>
 	<dependencies>
@@ -52,7 +52,12 @@
 			<artifactId>log4j</artifactId>
 			<version>1.2.17</version>
 		</dependency>
-	</dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+        </dependency>
+    </dependencies>
 	<build>
 		<finalName>${project.artifactId}</finalName>
 		<plugins>

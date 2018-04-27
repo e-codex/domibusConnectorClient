@@ -57,10 +57,9 @@ public class DomibusConnectorBackendWebServiceClientImpl implements DomibusConne
 			DomibusConnectorMessagesType requestMessages = backendWebServiceClient.requestMessages(new EmptyRequestType());
 			List<DomibusConnectorMessageType> messages = requestMessages.getMessages();
 			LOGGER.debug("successfully fetched [{}] messages from connector", messages.size());
-
 			return messages;
 		}catch(Exception e) {
-			throw new DomibusConnectorBackendWebServiceClientException("Exception calling the backendWebService: ",e);
+			throw new DomibusConnectorBackendWebServiceClientException("Exception calling the backendWebService: ", e);
 		}
 	}
 

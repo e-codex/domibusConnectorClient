@@ -2,6 +2,8 @@ package eu.domibus.connector.client.scheduler.job;
 
 import java.util.List;
 
+import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClientDelivery;
+import eu.domibus.connector.client.transport.TransportMessagesFromConnectorToNationalService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -17,7 +19,7 @@ import org.springframework.util.CollectionUtils;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClient;
-import eu.domibus.connector.client.nbc.exception.DomibusConnectorNationalBackendClientException;
+import eu.domibus.connector.client.exception.DomibusConnectorNationalBackendClientException;
 import eu.domibus.connector.client.scheduler.configuration.DomibusConnectorClientSchedulerConfiguration;
 import eu.domibus.connector.client.service.DomibusConnectorClientService;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
@@ -28,10 +30,7 @@ public class GetMessagesFromConnectorJob implements Job {
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(GetMessagesFromConnectorJob.class);
 
 	@Autowired
-	private DomibusConnectorClientService clientService;
-
-	@Autowired
-	private DomibusConnectorNationalBackendClient nationalBackendClient;
+	private TransportMessagesFromConnectorToNationalService transportMessagesFromConnectorToNationalService;
 
 	@Value("${connector.client.timer.check.incoming.messages.ms}")
 	private Long repeatInterval;
@@ -39,22 +38,11 @@ public class GetMessagesFromConnectorJob implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
-		List<DomibusConnectorMessageType> messages = null;
-
-		try {
-			messages = clientService.requestMessagesFromConnector();
-		} catch (DomibusConnectorClientException e2) {
-			throw new JobExecutionException(e2);
-		}
-
-		if(!CollectionUtils.isEmpty(messages)) {
-			LOGGER.info("{} new messages from connector to transport to national backend...", messages.size());
-			try {
-				nationalBackendClient.processMessagesFromConnector(messages);
-			} catch (DomibusConnectorNationalBackendClientException | ImplementationMissingException e) {
-				throw new JobExecutionException(e);
-			}
-		}
+        try {
+            transportMessagesFromConnectorToNationalService.transportMessageToNational();
+        } catch (DomibusConnectorClientException e) {
+            throw new JobExecutionException(e);
+        }
 	}
 
 	@Bean(name = "getMessagesFromConnectorJob")
