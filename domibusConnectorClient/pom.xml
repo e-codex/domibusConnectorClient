@@ -34,7 +34,7 @@
                 <!-- import dependencies via dependency Management from webConnector 4.0 -->
                 <groupId>eu.domibus.connector</groupId>
                 <artifactId>domibusConnector</artifactId>
-                <version>4.0.0-beta1</version>
+                <version>${connector-server.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
             </dependency>
