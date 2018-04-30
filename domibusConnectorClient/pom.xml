@@ -25,6 +25,7 @@
         <module>domibusConnectorClientScheduler</module>
         <module>domibusConnectorClientTestModules</module>
         <module>domibusConnectorClientWebLib</module>
+        <module>domibusConnectorClientWebUi</module>
     </modules>
 
 
@@ -37,6 +38,11 @@
                 <version>${connector-server.version}</version>
                 <scope>import</scope>
                 <type>pom</type>
+            </dependency>
+            <dependency>
+                <groupId>eu.domibus.connector</groupId>
+                <artifactId>domibusConnectorAPIlib</artifactId>
+                <version>${connector-server.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>

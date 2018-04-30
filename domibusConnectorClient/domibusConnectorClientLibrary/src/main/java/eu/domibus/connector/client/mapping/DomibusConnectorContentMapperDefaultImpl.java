@@ -6,8 +6,7 @@ import org.springframework.stereotype.Component;
 import eu.domibus.connector.client.mapping.exception.DomibusConnectorContentMapperException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
-//@Component
-//@ConditionalOnMissingBean(DomibusConnectorContentMapper.class)
+
 public class DomibusConnectorContentMapperDefaultImpl implements DomibusConnectorContentMapper {
 
     @Override
