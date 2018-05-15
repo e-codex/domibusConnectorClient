@@ -13,7 +13,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
-@Service
+//@Service //client lib should not create spring services!
 public class TransportMessagesFromNationalToConnectorService {
 
     private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(TransportMessagesFromNationalToConnectorService.class);
