@@ -67,12 +67,12 @@
 		</fileSet>
 
 	</fileSets>
-	<!-- <files>
+	<files>
 		<file>
-			<source>${project.basedir}/src/main/resources/documentation/domibusConnectorClient_Guide.docx
+			<source>${project.basedir}/src/main/resources/documentation/domibusConnectorClient_Guide.pdf
 			</source>
 			<outputDirectory>/documentation
 			</outputDirectory>
 		</file>
-	</files> -->
+	</files>
 </assembly>
