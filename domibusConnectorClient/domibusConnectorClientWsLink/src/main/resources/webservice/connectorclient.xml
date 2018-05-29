@@ -32,10 +32,12 @@ http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd "
             <props>
                 <prop key="org.apache.ws.security.crypto.provider">org.apache.wss4j.common.crypto.Merlin</prop>
                 <prop key="org.apache.ws.security.crypto.merlin.keystore.type">${connector.client.keystore.type}</prop>
-                <prop key="org.apache.ws.security.crypto.merlin.keystore.password">
-                    ${connector.client.keystore.password}
-                </prop>
+                <prop key="org.apache.ws.security.crypto.merlin.keystore.password">${connector.client.keystore.password}</prop>
                 <prop key="org.apache.ws.security.crypto.merlin.keystore.file">${connector.client.keystore.file}</prop>
+
+                <prop key="org.apache.wss4j.crypto.merlin.keystore.private.password">${connector.client.key.password}</prop>
+                <prop key="org.apache.wss4j.crypto.merlin.keystore.alias">${connector.client.key.alias}</prop>
+
                 <!-- connectorclient.jks -->
             </props>
         </property>
