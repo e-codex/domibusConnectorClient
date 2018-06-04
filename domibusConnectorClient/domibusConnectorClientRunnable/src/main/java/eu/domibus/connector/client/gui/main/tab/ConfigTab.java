@@ -106,6 +106,8 @@ public class ConfigTab extends JPanel {
 			}
 		});
 		
+		
+		
 	
 		
         SpringUtilities.makeCompactGrid(springPanel,
@@ -321,9 +323,18 @@ public class ConfigTab extends JPanel {
 		});
 		keystorePanel.add(new JLabel(""));
 		
+		final JFormattedTextField connectorBackendCertAliasValue = ConfigTabHelper.addTextFieldRow(null, keystorePanel, ConnectorClientProperties.CONNECTOR_BACKEND_CERT_ALIAS_LABEL, ConnectorClientProperties.connectorBackendCertAliasValue, 40);
+		connectorBackendCertAliasValue.addPropertyChangeListener(new PropertyChangeListener() {
+			@Override
+			public void propertyChange(PropertyChangeEvent evt) {
+				ConnectorClientProperties.connectorBackendCertAliasValue = connectorBackendCertAliasValue.getText();
+			}
+		});
+		keystorePanel.add(new JLabel(""));
+		
 		
         SpringUtilities.makeCompactGrid(keystorePanel,
-                6, 3, //rows, cols
+                7, 3, //rows, cols
                 6, 6,        //initX, initY
                 6, 6);       //xPad, yPad
         

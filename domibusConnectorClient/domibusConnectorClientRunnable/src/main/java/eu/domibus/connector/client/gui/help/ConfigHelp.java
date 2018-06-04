@@ -1,4 +1,4 @@
-package eu.domibus.connector.client.gui.utils;
+package eu.domibus.connector.client.gui.help;
 
 import java.awt.BorderLayout;
 import java.awt.Container;
