@@ -9,12 +9,9 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.core.LoggerContext;
-import org.apache.logging.log4j.core.config.Configuration;
 import org.apache.logging.log4j.core.config.Configurator;
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -99,25 +96,18 @@ public class DomibusConnector {
 
 
         if (!StringUtils.hasText(loggingProperties)) {
-            File classpathLog4j = new File(ConnectorClientProperties.LOG4J_CONFIG_FILE_PATH);
-////		        	DomibusConnector.class.getResource("log4j.properties");
-////		        	File classpathLog4j = new File(DomibusConnector.class.getClassLoader().getResource("log4j.properties").getFile());
-            if (classpathLog4j.exists()) {
-                System.setProperty("log4j.configurationFile", classpathLog4j.getAbsolutePath());
-            Configurator.initialize("Properties_Config", classpathLog4j.getAbsolutePath());
-            LOGGER.debug("Logging there!");
-            }else {
-                System.setProperty("log4j.configurationFile", ConnectorClientProperties.LOG4J_CONFIG_FILE_PATH);
-                Configurator.initialize("Properties_Config", ConnectorClientProperties.LOG4J_CONFIG_FILE_PATH);
-                LOGGER.debug("Logging there!");
-            }
-
+        	loggingProperties = ConnectorClientProperties.LOG4J_CONFIG_FILE_PATH;
+        	
+        }
+        File log4jProperties = new File(loggingProperties);
+        
+        if(!log4jProperties.exists()) {
+            loggingProperties= ConnectorClientProperties.LOG4J_CONFIG_FILE_PATH;
         }
         
-//        final LoggerContext ctx = (LoggerContext) LogManager.getContext(false);
-//        final Configuration config = ctx.getConfiguration();
-//        ctx.updateLoggers();
-
+        System.setProperty("log4j.configurationFile", loggingProperties);
+        Configurator.initialize("Properties_Config", loggingProperties);
+        LOGGER.debug("Logging set with properties at {}",loggingProperties);
         
         ConfigurableApplicationContext context = null;
 
