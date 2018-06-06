@@ -33,6 +33,10 @@ public class ConnectorClientProperties {
     //defines the address of the connector web service
     public static final String CONNECTOR_BACKEND_SERVICE_ADDRESS_KEY = Messages.getString("connector.backend.service.address.key");
     public static final String CONNECTOR_BACKEND_SERVICE_ADDRESS_LABEL = Messages.getString("connector.backend.service.address.label");
+    
+  //defines the alias of the certificate of the connector backend webservice
+    public static final String CONNECTOR_BACKEND_CERT_ALIAS_KEY = Messages.getString("connector.backend.cert.alias.key");
+    public static final String CONNECTOR_BACKEND_CERT_ALIAS_LABEL = Messages.getString("connector.backend.cert.alias.label");
 
 
     public static final String GATEWAY_NAME_KEY = Messages.getString("gateway.name.key");
@@ -89,6 +93,7 @@ public class ConnectorClientProperties {
 //	public static String connectorClientNameValue;
 
     public static String connectorBackendServiceAddressValue;
+    public static String connectorBackendCertAliasValue;
 
     public static String gatewayNameValue;
     public static String gatewayRoleValue;
@@ -169,6 +174,7 @@ public class ConnectorClientProperties {
 //		connectorClientNameValue = properties.getProperty(CONNECTOR_CLIENT_NAME_KEY);
 
         connectorBackendServiceAddressValue = properties.getProperty(CONNECTOR_BACKEND_SERVICE_ADDRESS_KEY);
+        connectorBackendCertAliasValue = properties.getProperty(CONNECTOR_BACKEND_CERT_ALIAS_KEY);
 
         gatewayNameValue = properties.getProperty(GATEWAY_NAME_KEY);
         gatewayRoleValue = properties.getProperty(GATEWAY_ROLE_KEY);
@@ -204,6 +210,7 @@ public class ConnectorClientProperties {
 //		properties.put(CONNECTOR_CLIENT_NAME_KEY, connectorClientNameValue!=null?connectorClientNameValue:"");
 
         properties.put(CONNECTOR_BACKEND_SERVICE_ADDRESS_KEY, connectorBackendServiceAddressValue != null ? connectorBackendServiceAddressValue : "");
+        properties.put(CONNECTOR_BACKEND_CERT_ALIAS_KEY, connectorBackendCertAliasValue != null ? connectorBackendCertAliasValue : "");
 
         properties.put(GATEWAY_NAME_KEY, gatewayNameValue != null ? gatewayNameValue : "");
         properties.put(GATEWAY_ROLE_KEY, gatewayRoleValue != null ? gatewayRoleValue : "");
