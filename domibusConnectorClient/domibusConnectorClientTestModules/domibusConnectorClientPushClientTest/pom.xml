@@ -7,12 +7,12 @@
     <parent>
         <groupId>eu.domibus.connector-client</groupId>
         <artifactId>domibusConnectorClientTestModules</artifactId>
-        <version>4.0.0-RELEASE</version>
+        <version>4.0.1</version>
     </parent>
 
     <groupId>eu.domibus.connector-client</groupId>
     <artifactId>domibusConnectorClientPushClientTest</artifactId>
-    <version>4.0.0-RELEASE</version>
+    <version>4.0.1</version>
 
     <dependencies>
         <dependency>
