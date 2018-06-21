@@ -14,6 +14,5 @@ import org.springframework.context.annotation.ImportResource;
 @ImportResource("classpath:/webservice/connectorclient.xml")
 public class DomibusConnectorClientWebServiceLinkConfiguration {
 
-
        
 }

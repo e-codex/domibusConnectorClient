@@ -1,4 +1,4 @@
-package eu.domibus.connector.client.storage.file;
+package eu.domibus.connector.client.storage.impl.fs;
 
 
 import eu.domibus.connector.client.storage.MessageStorageService;

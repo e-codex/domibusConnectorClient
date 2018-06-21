@@ -1,9 +1,13 @@
-package eu.domibus.connector.client.webui.dto;
+package eu.domibus.connector.client.admin.rest.dto;
 
-public class ConfigProperty {
+public class ConfigPropertyDTO {
 
     private String name;
     private String value;
+
+    public ConfigPropertyDTO() {}
+
+    public ConfigPropertyDTO(String name, String value) {}
 
     public String getName() {
         return name;

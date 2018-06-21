@@ -22,42 +22,33 @@ import org.springframework.core.io.Resource;
 @Order(Ordered.HIGHEST_PRECEDENCE)
 public class FileBackedUpdateAblePropertySourceConfigurer  implements PropertySourceLocator {
 
+    public static final String PROPERTIES_FILE_NAME_PROPERTY_NAME = "connector.client.properties-file";
+
+    public static final String PROPERTY_SOURCE_NAME = "filePropertySource";
+
     private static final Logger LOGGER = LoggerFactory.getLogger(FileBackedUpdateAblePropertySourceConfigurer.class);
 
-//    @Autowired
-//    private ConfigurableEnvironment env;
+    @Autowired
+    private ConfigurableEnvironment env;
 
-//    @Value("connector.client.properties-file")
-//    FileSystemResource fileSystemResource;
+    @Bean
+    @Lazy(false)
+    public FileBackedPropertySource fileBackedPropertySource() {
+        FileSystemResource fileSystemResource = env.getProperty(PROPERTIES_FILE_NAME_PROPERTY_NAME, FileSystemResource.class);
 
-//    @Bean
-//    @Lazy(false)
-//    public FileBackedPropertySource fileBackedPropertySource() {
-//        FileSystemResource fileSystemResource = env.getProperty("connector.client.properties-file", FileSystemResource.class);
-//
-//
-////        FileSystemResource fileResource = new FileSystemResource();
-//        FileBackedPropertySource fileBackedPropertySource =
-//                new FileBackedPropertySource("myPropSource", fileSystemResource);
-//
-//
-//        MutablePropertySources sources = env.getPropertySources();
-//        sources.addFirst(fileBackedPropertySource);
-//
-//        return fileBackedPropertySource;
-//
-//    }
+        FileBackedPropertySource fileBackedPropertySource =
+                new FileBackedPropertySource(PROPERTY_SOURCE_NAME, fileSystemResource);
+
+        MutablePropertySources sources = env.getPropertySources();
+        sources.addFirst(fileBackedPropertySource);
+
+        return fileBackedPropertySource;
+    }
 
 
     @Override
     public PropertySource<?> locate(Environment environment) {
-        FileSystemResource fileSystemResource = environment.getProperty("connector.client.properties-file", FileSystemResource.class);
-
-//        FileSystemResource fileResource = new FileSystemResource();
-        FileBackedPropertySource fileBackedPropertySource =
-                new FileBackedPropertySource("myPropSource", fileSystemResource);
-//        MutablePropertySources sources = environment.getPropertySources();
-//        sources.addFirst(fileBackedPropertySource);
+        FileBackedPropertySource fileBackedPropertySource = fileBackedPropertySource();
 
         LOGGER.info("Added file backed property source");
         return fileBackedPropertySource;
