@@ -9,6 +9,7 @@ import javax.xml.bind.JAXB;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 
 import eu.domibus.connector.client.connection.exception.DomibusConnectorBackendWebServiceClientException;
 import eu.domibus.connector.client.connection.ws.DomibusConnectorBackendWebServiceClient;
@@ -55,9 +56,12 @@ public class DomibusConnectorBackendWebServiceClientImpl implements DomibusConne
 		LOGGER.debug("fetchMessages from connector");
 		try {
 			DomibusConnectorMessagesType requestMessages = backendWebServiceClient.requestMessages(new EmptyRequestType());
+			if(requestMessages!=null && !CollectionUtils.isEmpty(requestMessages.getMessages())) {
 			List<DomibusConnectorMessageType> messages = requestMessages.getMessages();
 			LOGGER.debug("successfully fetched [{}] messages from connector", messages.size());
 			return messages;
+			}
+			return null;
 		}catch(Exception e) {
 			throw new DomibusConnectorBackendWebServiceClientException("Exception calling the backendWebService: ", e);
 		}
