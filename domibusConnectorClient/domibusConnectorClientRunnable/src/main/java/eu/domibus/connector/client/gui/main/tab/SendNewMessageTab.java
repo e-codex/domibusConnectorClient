@@ -11,11 +11,13 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import eu.domibus.connector.client.gui.main.details.NewMessageDetailFactory;
 
 @Component
+@Profile("swing-gui")
 public class SendNewMessageTab extends JPanel {
 
 	/**
