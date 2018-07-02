@@ -5,6 +5,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import eu.domibus.connector.client.gui.main.tab.ConfigTab;
@@ -13,6 +14,7 @@ import eu.domibus.connector.client.gui.main.tab.SendNewMessageTab;
 import eu.domibus.connector.client.gui.main.tab.SentMessagesTab;
 
 @Component
+@Profile("swing-gui")
 public class DomibusConnectorMainTab extends JTabbedPane {
 
 	/**

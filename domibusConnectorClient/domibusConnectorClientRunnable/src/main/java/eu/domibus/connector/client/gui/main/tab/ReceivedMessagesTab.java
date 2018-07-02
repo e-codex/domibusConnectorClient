@@ -3,6 +3,7 @@ package eu.domibus.connector.client.gui.main.tab;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import eu.domibus.connector.client.gui.main.data.Message;
@@ -11,6 +12,7 @@ import eu.domibus.connector.client.runnable.configuration.ConnectorClientPropert
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
 
 @Component
+@Profile("swing-gui")
 public class ReceivedMessagesTab extends MessagesTab {
     
 	@Autowired
