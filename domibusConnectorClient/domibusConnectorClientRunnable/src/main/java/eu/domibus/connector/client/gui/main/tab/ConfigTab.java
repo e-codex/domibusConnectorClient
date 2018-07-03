@@ -20,6 +20,7 @@ import javax.swing.SpringLayout;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 import eu.domibus.connector.client.gui.layout.SpringUtilities;
@@ -28,6 +29,7 @@ import eu.domibus.connector.client.gui.utils.ConfigTabHelper;
 import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
 
 @Component
+@Profile("swing-gui")
 public class ConfigTab extends JPanel {
 	
 	/**

@@ -7,8 +7,9 @@ import eu.domibus.connector.common.db.model.DomibusConnectorMessage;
 
 /**
  * This is a container object that represents all data of a message.
- *
+ * 
  * @author riederb
+ * 
  */
 @Deprecated
 public class Message {
@@ -23,9 +24,11 @@ public class Message {
      * This constructor is for messages which contain content and original
      * documents. {@link MessageDetails} and {@link MessageContent} are
      * mandatory as a minimum for a message.
-     *
-     * @param messageDetails the message details concerning some information on the message
-     * @param messageContent the structured content of the message
+     * 
+     * @param messageDetails
+     *            the message details concerning some information on the message
+     * @param messageContent
+     *            the structured content of the message
      */
     public Message(MessageDetails messageDetails, MessageContent messageContent) {
         super();
@@ -37,9 +40,9 @@ public class Message {
      * This constructor is for evidence messages which are returned by the
      * partner gateway. {@link MessageDetails} and {@link MessageConfirmation}
      * are mandatory as a minimum for an evidence message.
-     *
-     * @param messageDetails messageDetails
-     * @param messageConfirmation messageConfirmation
+     * 
+     * @param messageDetails
+     * @param messageConfirmation
      */
     public Message(MessageDetails messageDetails, MessageConfirmation messageConfirmation) {
         super();
