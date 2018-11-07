@@ -7,7 +7,10 @@ public class ConfigPropertyDTO {
 
     public ConfigPropertyDTO() {}
 
-    public ConfigPropertyDTO(String name, String value) {}
+    public ConfigPropertyDTO(String name, String value) {
+        this.name = name;
+        this.value = value;
+    }
 
     public String getName() {
         return name;

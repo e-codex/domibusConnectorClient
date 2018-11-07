@@ -30,7 +30,7 @@ public class ConfigurationPropertiesController {
     @Lazy
     public org.springframework.cloud.context.scope.refresh.RefreshScope refreshScope;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/")
+    @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity getConfigs() {
         Map<String, String> properties = fileBackedPropertySource.getProperties();
         List<ConfigPropertyDTO> collect = properties.entrySet()
@@ -40,7 +40,7 @@ public class ConfigurationPropertiesController {
         return ResponseEntity.ok(collect);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/u/{propertyId}")
+    @RequestMapping(method = RequestMethod.GET, value = "/p/{propertyId}")
     public ResponseEntity readProperty(@PathVariable String propertyId) {
         LOGGER.debug("fetch property with ID: [{}]", propertyId);
         String value = fileBackedPropertySource.getProperty(propertyId);
@@ -64,6 +64,7 @@ public class ConfigurationPropertiesController {
 
     @RequestMapping(method = RequestMethod.POST, value = "/refresh")
     public ResponseEntity refresh() {
+        LOGGER.debug("refresh called");
         this.refreshScope.refreshAll();
         return ResponseEntity.ok().build();
     }

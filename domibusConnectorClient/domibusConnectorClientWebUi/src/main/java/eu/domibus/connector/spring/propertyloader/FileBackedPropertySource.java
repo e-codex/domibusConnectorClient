@@ -62,7 +62,13 @@ public class FileBackedPropertySource extends EnumerablePropertySource implement
     }
 
     public Map<String, String> getProperties() {
-        return (Map<String, String>) properties.entrySet();
+        //return (Map<String, String>) properties.entrySet();
+        Map<String , String> map = new HashMap<>();
+        properties.entrySet().forEach((Map.Entry<Object, Object> entry)  -> {
+            LOGGER.debug("converting {} {}={}", entry, entry.getKey().toString(), entry.getValue().toString());
+            map.put(entry.getKey().toString(), entry.getValue().toString());
+        });
+        return map;
     }
 
     @Override

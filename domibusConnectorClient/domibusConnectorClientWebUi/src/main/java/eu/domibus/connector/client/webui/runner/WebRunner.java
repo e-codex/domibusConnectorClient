@@ -12,7 +12,6 @@ public class WebRunner {
     public static void main(String[] args) {
         SpringApplicationBuilder builder = new SpringApplicationBuilder();
         builder.sources(WebRunner.class);
-
         builder.run(args);
     }
 

@@ -32,14 +32,14 @@ public class RefreshableController {
     }
 
 
-    @RequestMapping(method = RequestMethod.POST)
-    public String setValue(@RequestParam("value") String value) {
-        fileBackedPropertySource.updateProperty("myvalue", value);
-        //TODO: propage environment change!
-
-        refreshScope.refreshAll();
-
-        return value;
-    }
+//    @RequestMapping(method = RequestMethod.POST)
+//    public String setValue(@RequestParam("value") String value) {
+//        fileBackedPropertySource.updateProperty("myvalue", value);
+//        //TODO: propage environment change!
+//
+//        refreshScope.refreshAll();
+//
+//        return value;
+//    }
 
 }
