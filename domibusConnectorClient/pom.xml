@@ -12,7 +12,7 @@
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <connector-server.version>4.0.0-RELEASE</connector-server.version>
+        <connector-server.version>4.1.0-SNAPSHOT</connector-server.version>
         <org.apache.cxf.version>3.2.1</org.apache.cxf.version>
     </properties>
 
@@ -32,7 +32,7 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <!-- import dependencies via dependency Management from webConnector 4.0 -->
+                <!-- import dependencies via dependency Management from webConnector 4.x -->
                 <groupId>eu.domibus.connector</groupId>
                 <artifactId>domibusConnector</artifactId>
                 <version>${connector-server.version}</version>
@@ -43,6 +43,16 @@
                 <groupId>eu.domibus.connector</groupId>
                 <artifactId>domibusConnectorAPIlib</artifactId>
                 <version>${connector-server.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>eu.domibus.connector-client</groupId>
+                <artifactId>domibusConnectorClientLibrary</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>eu.domibus.connector-client</groupId>
+                <artifactId>domibusConnectorClientWsLink</artifactId>
+                <version>${project.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
