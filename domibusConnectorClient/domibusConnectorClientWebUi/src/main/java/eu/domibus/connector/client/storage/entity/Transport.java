@@ -17,7 +17,7 @@ public class Transport {
     @Column(name = "TRANSPORT_ID")
     private String transportId;
 
-    @OneToOne(optional = false)
+    @OneToOne(optional = false, cascade = CascadeType.ALL)
     private MessageDetails messageDetails;
 
     @Column(name = "TRANSPORT_DIRECTION")

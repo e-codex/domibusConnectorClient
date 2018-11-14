@@ -15,9 +15,13 @@ import java.util.UUID;
 public class LargeFileStorageServiceImpl implements LargeFileStorageService {
 
     @Autowired
-    LargeFileStorageServiceProperties largeFileStorageServiceProperties;
+    private LargeFileStorageServiceProperties largeFileStorageServiceProperties;
 
-    Path storageFolder;
+    private Path storageFolder;
+
+    public void setLargeFileStorageServiceProperties(LargeFileStorageServiceProperties largeFileStorageServiceProperties) {
+        this.largeFileStorageServiceProperties = largeFileStorageServiceProperties;
+    }
 
     @PostConstruct
     public void init() {
@@ -80,7 +84,9 @@ public class LargeFileStorageServiceImpl implements LargeFileStorageService {
         //TODO: file locking!
         String ref = reference.getStorageIdReference();
         Path file = storageFolder.resolve(ref);
-        try (FileOutputStream fileOutputStream = new FileOutputStream(file.toFile())) {
+        try {
+            //TODO: wrap outputstream! release lock on close!
+            FileOutputStream fileOutputStream = new FileOutputStream(file.toFile());
             return fileOutputStream;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(String.format("File [%s] does not exist!", file));
@@ -94,7 +100,9 @@ public class LargeFileStorageServiceImpl implements LargeFileStorageService {
         //TODO: file locking!
         String ref = reference.getStorageIdReference();
         Path file = storageFolder.resolve(ref);
-        try (FileInputStream inputStream = new FileInputStream(file.toFile())) {
+        try {
+            //TODO: wrap input stream! relase lock on close();
+            FileInputStream inputStream = new FileInputStream(file.toFile());
             return inputStream;
         } catch (FileNotFoundException e) {
             throw new RuntimeException(String.format("File [%s] does not exist!", file));

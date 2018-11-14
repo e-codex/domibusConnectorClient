@@ -7,12 +7,13 @@
        xmlns:cxf="http://cxf.apache.org/core"
 
        xsi:schemaLocation="
-http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
-http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd
-http://docs.oasis-open.org/ws-sx/ws-securitypolicy/200802 http://docs.oasis-open.org/ws-sx/ws-securitypolicy/v1.3/cd/ws-securitypolicy.xsd
-http://www.w3.org/ns/ws-policy https://www.w3.org/2007/02/ws-policy.xsd
-http://cxf.apache.org/policy http://cxf.apache.org/schemas/policy.xsd
-http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd "
+        http://cxf.apache.org/policy http://cxf.apache.org/schemas/policy.xsd
+    	http://cxf.apache.org/bindings/soap http://cxf.apache.org/schemas/configuration/soap.xsd
+        http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd
+        http://cxf.apache.org/transports/http/configuration http://cxf.apache.org/schemas/configuration/http-conf.xsd
+        http://activemq.apache.org/schema/core http://activemq.apache.org/schema/core/activemq-core.xsd
+		http://cxf.apache.org/jaxws http://cxf.apache.org/schemas/jaxws.xsd"
 >
     <!--
         configure PushWebService
@@ -24,10 +25,11 @@ http://cxf.apache.org/core http://cxf.apache.org/schemas/core.xsd "
                     address="connectorClientBackendDelivery"
 
                     wsdlLocation="/wsdl/DomibusConnectorBackendDeliveryWebService.wsdl"
-                    serviceName="s:DomibusConnectorBackendDeliveryWebServiceService"
+                    serviceName="s:DomibusConnectorBackendDeliveryWSService"
+                    endpointName="s:DomibusConnectorBackendDeliveryWebService"
 
                     xmlns:e="http://service.jaxws.cxf.apache.org/endpoint"
-                    xmlns:s="http://connector.domibus.eu/ws/backend/webservice"
+                    xmlns:s="http://connector.domibus.eu/ws/backend/delivery/webservice/"
     >
 
         <jaxws:properties>

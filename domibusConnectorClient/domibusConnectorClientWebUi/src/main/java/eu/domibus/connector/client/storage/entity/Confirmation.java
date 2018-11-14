@@ -9,21 +9,25 @@ public class Confirmation {
     @Id
     private Long id;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     private Transport transport;
 
-    private byte[] confirmationXml;
+    @Column(name = "CONFIRMATION_XML")
+    @Lob
+    private String confirmationXml;
 
+    @Column(name = "CONFIRMATION_TYPE")
     private ConfirmationType confirmationType;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name="BUSINESS_MESSAGE_MESSAGE_ID", referencedColumnName = "ID")
     private BusinessMessage businessMessage;
 
-    public byte[] getConfirmationXml() {
+    public String getConfirmationXml() {
         return confirmationXml;
     }
 
-    public void setConfirmationXml(byte[] confirmationXml) {
+    public void setConfirmationXml(String confirmationXml) {
         this.confirmationXml = confirmationXml;
     }
 

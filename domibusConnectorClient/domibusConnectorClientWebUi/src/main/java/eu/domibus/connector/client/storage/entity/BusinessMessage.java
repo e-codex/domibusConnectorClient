@@ -26,8 +26,18 @@ public class BusinessMessage {
     private List<Attachment> attachments = new ArrayList<>();
 
     //confirmations
-    @OneToMany(cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "businessMessage")
     private List<Confirmation> confirmations = new ArrayList<>();
+
+    @PrePersist
+    public void prePersiste() {
+        confirmations.stream().forEach( c -> c.setBusinessMessage(this));
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        confirmations.stream().forEach( c -> c.setBusinessMessage(this));
+    }
 
     public byte[] getBusinessXml() {
         return businessXml;

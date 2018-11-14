@@ -122,7 +122,7 @@ public class DeliverToApplicationService implements DomibusConnectorNationalBack
     private Confirmation mapConfirmation(DomibusConnectorMessageConfirmationType messageConfirmationType, Transport transport) {
         Confirmation c = new Confirmation();
         c.setConfirmationType(Confirmation.ConfirmationType.fromValue(messageConfirmationType.getConfirmationType().value()));
-        c.setConfirmationXml(DomibusConnectorHelper.convertXmlSourceToByteArray(messageConfirmationType.getConfirmation()));
+        c.setConfirmationXml(DomibusConnectorHelper.convertXmlSourceToString(messageConfirmationType.getConfirmation()));
         c.setTransport(transport);
         return c;
     }

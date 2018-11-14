@@ -2,15 +2,15 @@ package eu.domibus.connector.client.rest.dto;
 
 public class ConfirmationDTO {
 
-    byte[] confirmationXml;
+    String confirmationXml;
 
     ConfirmationType confirmationType;
 
-    public byte[] getConfirmationXml() {
+    public String getConfirmationXml() {
         return confirmationXml;
     }
 
-    public void setConfirmationXml(byte[] confirmationXml) {
+    public void setConfirmationXml(String confirmationXml) {
         this.confirmationXml = confirmationXml;
     }
 
