@@ -7,7 +7,8 @@ import javax.persistence.*;
 public class MessageDetails {
 
     @Id
-    @GeneratedValue
+    @TableGenerator(name = "seqStoreMessageDetails", table = "HIBERNATE_SEQ_TABLE", pkColumnName = "SEQ_NAME", pkColumnValue = "MESSAGE_DETAILS.ID", valueColumnName = "SEQ_VALUE", initialValue = 1000, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "seqStoreMessageDetails")
     @Column(name = "ID")
     private Long id;
 
@@ -32,8 +33,13 @@ public class MessageDetails {
     @Column(name = "SERVICE_NAME")
     private String serviceName;
 
+    @Column(name = "ACTION_NAME")
     private String actionName;
+
+    @Column(name = "FROM_PARTY_ID")
     private String fromPartyId;
+
+    @Column(name = "TO_PARTY_ID")
     private String toPartyId;
 
     public Long getId() {

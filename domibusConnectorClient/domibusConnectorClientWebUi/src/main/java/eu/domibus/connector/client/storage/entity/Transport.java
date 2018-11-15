@@ -10,7 +10,8 @@ import java.time.LocalDateTime;
 public class Transport {
 
     @Id
-    @GeneratedValue
+    @TableGenerator(name = "seqStoreTransportLog", table = "HIBERNATE_SEQ_TABLE", pkColumnName = "SEQ_NAME", pkColumnValue = "TRANSPORT_LOG.ID", valueColumnName = "SEQ_VALUE", initialValue = 1000, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "seqStoreTransportLog")
     @Column(name = "ID")
     private Long id;
 

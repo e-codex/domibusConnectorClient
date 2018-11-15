@@ -1,6 +1,7 @@
 package eu.domibus.connector.client.nbc;
 
-import eu.domibus.connector.client.events.ConfirmationReceived;
+import eu.domibus.connector.client.events.BusinessMessageReceivedEvent;
+import eu.domibus.connector.client.events.ConfirmationReceivedEvent;
 import eu.domibus.connector.client.exception.DomibusConnectorNationalBackendClientException;
 import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.client.storage.dao.BusinessMessageRepo;
@@ -14,12 +15,14 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StreamUtils;
 
 import javax.xml.transform.*;
 import java.io.*;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,14 +48,25 @@ public class DeliverToApplicationService implements DomibusConnectorNationalBack
 
     @Override
     public void processMessageFromConnector(DomibusConnectorMessageType message) throws DomibusConnectorNationalBackendClientException, ImplementationMissingException {
+        String appId = idGenerator.generateNationalId();
+        message.getMessageDetails().setBackendMessageId(appId);
+
+
+        Transport transport = new Transport();
+        transport.setReceived(LocalDateTime.now());
+        transport.setMessageDetails(mapMessageDetails(message.getMessageDetails()));
+        transport.setTransportDirection(Transport.TransportDirection.INCOMING);
+        transport.setTransportId(appId);
+
+
         if (TransitionHelper.isConfirmationMessage(message)) {
-            processConfirmationMessage(message);
+            processConfirmationMessage(message, transport);
         } else {
-            processBusinessMessage(message);
+            processBusinessMessage(message, transport);
         }
     }
 
-    private void processConfirmationMessage(DomibusConnectorMessageType message) {
+    private void processConfirmationMessage(DomibusConnectorMessageType message, Transport transport) {
         if (message.getMessageDetails() == null) {
             throw new IllegalArgumentException("MessageDetails are not allowed to be null!");
         }
@@ -61,40 +75,42 @@ public class DeliverToApplicationService implements DomibusConnectorNationalBack
             throw new IllegalArgumentException("No refToMessageId provided cannot assign the received confirmation to a business message!");
         }
 
-        String appId = idGenerator.generateNationalId();
-        message.getMessageDetails().setBackendMessageId(appId);
-
-        Transport transport = new Transport();
-        transport.setMessageDetails(mapMessageDetails(message.getMessageDetails()));
+//        String appId = idGenerator.generateNationalId();
+//        message.getMessageDetails().setBackendMessageId(appId);
+//
+//        Transport transport = new Transport();
+//        transport.setMessageDetails(mapMessageDetails(message.getMessageDetails()));
 
         for (DomibusConnectorMessageConfirmationType confirmation : message.getMessageConfirmations()) {
-            ConfirmationReceived confirmationRcvEvent = new ConfirmationReceived();
+            ConfirmationReceivedEvent confirmationRcvEvent = new ConfirmationReceivedEvent();
             confirmationRcvEvent.setConfirmationType(confirmation);
             confirmationRcvEvent.setNationalMessageId(nationalMessageId);
             applicationEventPublisher.publishEvent(message);
 //            messageStorageService.addConfirmation(nationalMessageId, confirmation);
             messageStorageService.addConfirmation(nationalMessageId, mapConfirmation(confirmation, transport));
+
+            applicationEventPublisher.publishEvent(confirmationRcvEvent);
         }
+
     }
 
     @Transactional
-    void processBusinessMessage(DomibusConnectorMessageType message) {
-        String appId = idGenerator.generateNationalId();
-        message.getMessageDetails().setBackendMessageId(appId);
+    void processBusinessMessage(DomibusConnectorMessageType message, Transport transport) {
 
-        Transport transport = new Transport();
-        transport.setMessageDetails(mapMessageDetails(message.getMessageDetails()));
 
         BusinessMessage businessMessage = mapBusinessMessage(message, transport);
         businessMessageRepo.save(businessMessage);
-//        messageStorageService.saveMessage(message);
-        //inform ui!
 
-//        applicationEventPublisher.publishEvent(event);
+
+        //inform ui!
+        BusinessMessageReceivedEvent rcvEvent = new BusinessMessageReceivedEvent();
+        rcvEvent.setMessage(businessMessage);
+        applicationEventPublisher.publishEvent(rcvEvent);
     }
 
     private BusinessMessage mapBusinessMessage(DomibusConnectorMessageType message, Transport transport) {
         BusinessMessage businessMessage = new BusinessMessage();
+        businessMessage.setTransport(transport);
 
         DomibusConnectorMessageContentType messageContent = message.getMessageContent();
         if (messageContent == null) {
@@ -107,12 +123,22 @@ public class DeliverToApplicationService implements DomibusConnectorNationalBack
         DomibusConnectorMessageDocumentType document = messageContent.getDocument();
         if (document != null) {
             Attachment businessAttachment = mapDocument(document);
+            businessMessage.setBusinessAttachment(businessAttachment);
+            DetachedSignature detachedSignature = mapDetachedSignatureToStorage(document.getDetachedSignature());
         }
 
         businessMessage.setAttachments(mapAttachments(message.getMessageAttachments()));
         businessMessage.setConfirmations(mapConfirmations(message.getMessageConfirmations(), transport));
 
         return businessMessage;
+    }
+
+    private DetachedSignature mapDetachedSignatureToStorage(DomibusConnectorDetachedSignatureType detachedSignature) {
+        DetachedSignature sig = new DetachedSignature();
+        sig.setSignatureName(detachedSignature.getDetachedSignatureName());
+        sig.setDetachedSignature(detachedSignature.getDetachedSignature());
+        sig.setSignatureMimeType(DetachedSignature.SignatureType.fromValue(detachedSignature.getMimeType().value()));
+        return sig;
     }
 
     private List<Confirmation> mapConfirmations(List<DomibusConnectorMessageConfirmationType> messageConfirmations, Transport transport) {
@@ -141,7 +167,7 @@ public class DeliverToApplicationService implements DomibusConnectorNationalBack
         attachment.setDescription(domibusConnectorMessageAttachmentType.getDescription());
 
         LargeFileStorageService.LargeFileReference largeFileReference = largeFileStorageService.createLargeFileReference();
-        attachment.setDataReference(largeFileReference.getStorageIdReference());
+        attachment.setDataReference(largeFileReference.getStorageIdReference().getStorageIdReference());
         try (InputStream inputStream = domibusConnectorMessageAttachmentType.getAttachment().getInputStream();
              OutputStream outputStream = largeFileStorageService.getOutputStream(largeFileReference)
         ) {
@@ -157,8 +183,9 @@ public class DeliverToApplicationService implements DomibusConnectorNationalBack
     private Attachment mapDocument(DomibusConnectorMessageDocumentType document) {
         Attachment businessAttachment = new Attachment();
         businessAttachment.setDocumentName(document.getDocumentName());
+        businessAttachment.setMimeType(MediaType.APPLICATION_PDF_VALUE);
         LargeFileStorageService.LargeFileReference largeFileReference = largeFileStorageService.createLargeFileReference();
-        businessAttachment.setDataReference(largeFileReference.getStorageIdReference());
+        businessAttachment.setDataReference(largeFileReference.getStorageIdReference().getStorageIdReference());
         try (InputStream inputStream = document.getDocument().getInputStream();
              OutputStream outputStream = largeFileStorageService.getOutputStream(largeFileReference)
         ) {

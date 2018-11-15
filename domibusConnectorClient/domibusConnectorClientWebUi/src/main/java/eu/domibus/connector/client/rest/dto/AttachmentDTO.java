@@ -4,7 +4,7 @@ import java.net.URL;
 
 public class AttachmentDTO {
 
-    URL url; //uri to the data
+    String url; //uri to the data
 
     String documentName;
 
@@ -16,11 +16,11 @@ public class AttachmentDTO {
 
     DetachedSignatureDTO detachedSignatureDTO;
 
-    public URL getUrl() {
+    public String getUrl() {
         return url;
     }
 
-    public void setUrl(URL url) {
+    public void setUrl(String url) {
         this.url = url;
     }
 

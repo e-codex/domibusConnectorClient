@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface LargeFileStorageService {
 
 
-    public Optional<LargeFileReference> getLargeFileReference(String key);
+    public Optional<LargeFileReference> getLargeFileReference(LargeFileReferenceId key);
 
 
     /**
@@ -32,17 +32,54 @@ public interface LargeFileStorageService {
     public static class LargeFileReference {
 
         @Nullable
-        private String storageIdReference = "";
+        private LargeFileReferenceId storageIdReference;
 
         @Nullable
+        public LargeFileReferenceId getStorageIdReference() {
+            return storageIdReference;
+        }
+
+        private String contentType;
+
+        private long contentLength;
+
+        public void setStorageIdReference(@Nullable LargeFileReferenceId storageIdReference) {
+            this.storageIdReference = storageIdReference;
+        }
+
+        public String getContentType() {
+            return contentType;
+        }
+
+        public void setContentType(String contentType) {
+            this.contentType = contentType;
+        }
+
+        public long getContentLength() {
+            return contentLength;
+        }
+
+        public void setContentLength(long contentLength) {
+            this.contentLength = contentLength;
+        }
+    }
+
+    public static class LargeFileReferenceId {
+        private String storageIdReference = "";
+
+        public LargeFileReferenceId() {}
+
+        public LargeFileReferenceId(String id) {
+            this.storageIdReference = id;
+        }
+
         public String getStorageIdReference() {
             return storageIdReference;
         }
 
-        public void setStorageIdReference(@Nullable String storageIdReference) {
+        public void setStorageIdReference(String storageIdReference) {
             this.storageIdReference = storageIdReference;
         }
-
     }
 
 }

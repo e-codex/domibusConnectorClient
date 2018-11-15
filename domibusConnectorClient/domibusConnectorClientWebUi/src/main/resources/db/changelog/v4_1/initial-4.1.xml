@@ -26,9 +26,6 @@
             <column name="CHECKSUM" type="java.sql.Types.VARCHAR(1024)" />
             <column name="DATA_REFERENCE" type="java.sql.Types.VARCHAR(2048)" />
             <column name="DESCRIPTION" type="CLOB" />
-            <column name="DETACHED_SIGNATURE" type="BLOB" />
-            <column name="SIGNATURE_MIME_TYPE" type="java.sql.Types.VARCHAR(128)" />
-            <column name="SIGNATURE_NAME" type="java.sql.Types.VARCHAR(255)" />
             <column name="DOCUMENT_NAME" type="java.sql.Types.VARCHAR(255)" />
             <column name="IDENTIFIER" type="java.sql.Types.VARCHAR(255)" />
             <column name="KEY" type="java.sql.Types.VARCHAR(255)" />
@@ -37,44 +34,80 @@
         <addPrimaryKey tableName="ATTACHMENT" columnNames="ID" constraintName="pkAttachmentTable" />
     </changeSet>
 
+    <changeSet author="domibusConnector" id="create-detached-signature-table">
+        <createTable tableName="DETACHED_SIGNATURE">
+            <column name="ID" type="BIGINT">
+                <constraints nullable="false"/>
+            </column>
+            <column name="DETACHED_SIGNATURE" type="BLOB" />
+            <column name="SIGNATURE_MIME_TYPE" type="java.sql.Types.VARCHAR(128)" />
+            <column name="SIGNATURE_NAME" type="java.sql.Types.VARCHAR(255)" />
+            <column name="ATTACHMENT_ID" type="BIGINT" />
+        </createTable>
+        <addPrimaryKey tableName="DETACHED_SIGNATURE" columnNames="ID" constraintName="pkDetachedSignature" />
+    </changeSet>
+
+    <changeSet author="domibusConnector" id="create-foreign-key-detachedSignature2Attachment">
+        <addForeignKeyConstraint baseTableName="DETACHED_SIGNATURE"
+                                 baseColumnNames="ATTACHMENT_ID"
+                                 referencedTableName="ATTACHMENT"
+                                 referencedColumnNames="ID"
+                                 constraintName="FK_detachedSignature2Attachment" />
+    </changeSet>
+
+
+
     <changeSet author="domibusConnector" id="create-business-message-table">
         <createTable tableName="BUSINESS_MESSAGE">
-            <column name="MESSAGE_ID" type="BIGINT">
+            <column name="ID" type="BIGINT">
                 <constraints nullable="false" />
             </column>
-            <addColumn name="BUSINESS_XML" type="BLOB" />
-            <addColumn name="BUSINESS_ATTACHMENT_ID" type="BIGINT" />
-            <addColumn name="TRANSPORT_ID" type="BIGINT" />
+            <column name="BUSINESS_XML" type="BLOB" />
+            <column name="BUSINESS_ATTACHMENT_ID" type="BIGINT" />
+            <column name="TRANSPORT_ID" type="BIGINT" />
         </createTable>
-        <addPrimaryKey tableName="BUSINESS_MESSAGE" columnNames="MESSAGE_ID" constraintName="pkBusinessMessageTable" />
+        <addPrimaryKey tableName="BUSINESS_MESSAGE" columnNames="ID" constraintName="pkBusinessMessageTable" />
     </changeSet>
 
     <changeSet author="domibusConnector" id="create-attachment-ref-business-message">
-        <createTable name="BUSINESS_MESSAGE_ATTACHMENTS">
-            <column name="BUSINESS_MESSAGE_MESSAGE_ID" type="BIGINT"></column>
-            <column name="ATTACHMENTS_ID" type="BIGINT"></column>
+        <createTable tableName="BUSINESS_MESSAGE_ATTACHMENTS">
+            <column name="BUSINESS_MESSAGE_ID" type="BIGINT">
+                <constraints nullable="false" />
+            </column>
+            <column name="ATTACHMENT_ID" type="BIGINT">
+                <constraints nullable="false" />
+            </column>
         </createTable>
         <addPrimaryKey tableName="BUSINESS_MESSAGE_ATTACHMENTS"
                        constraintName="pkBusinessMessageAttachmentsTable"
-                       columnNames="BUSINESS_MESSAGE_MESSAGE_ID,ATTACHMENTS_ID" />
+                       columnNames="BUSINESS_MESSAGE_ID,ATTACHMENT_ID" />
     </changeSet>
 
     <changeSet author="domibusConnector" id="create-confirmations-ref-business-message">
-        <createTable name="BUSINESS_MESSAGE_CONFIRMATIONS">
-            <column name="BUSINESS_MESSAGE_MESSAGE_ID" type="BIGINT"></column>
-            <column name="CONFIRMATIONS_ID" type="BIGINT"></column>
+        <createTable tableName="BUSINESS_MESSAGE_CONFIRMATIONS">
+            <column name="BUSINESS_MESSAGE_ID" type="BIGINT">
+                <constraints nullable="false" />
+            </column>
+            <column name="CONFIRMATION_ID" type="BIGINT">
+                <constraints nullable="false" />
+            </column>
         </createTable>
         <addPrimaryKey tableName="BUSINESS_MESSAGE_CONFIRMATIONS"
                        constraintName="pkBUSINESS_MESSAGE_CONFIRMATIONS"
-                       columnNames="BUSINESS_MESSAGE_MESSAGE_ID,CONFIRMATIONS_ID" />
+                       columnNames="BUSINESS_MESSAGE_ID,CONFIRMATION_ID" />
     </changeSet>
 
     <changeSet author="domibusConnector" id="create-confirmation-table">
-        <createTable name="CONFIRMATION">
-            <column name="ID" type="BIGINT"></column>
-            <column name="CONFIRMATIONS_TYPE" type="java.sql.Types.VARCHAR(255)"></column>
+        <createTable tableName="CONFIRMATION">
+            <column name="ID" type="BIGINT">
+                <constraints nullable="false" />
+            </column>
+            <column name="CONFIRMATION_TYPE" type="java.sql.Types.VARCHAR(255)"></column>
             <column name="CONFIRMATION_XML" type="CLOB" />
-            <column name="BUSINESS_MESSAGE_MESSAGE_ID" type="BIGINT" />
+            <column name="BUSINESS_MESSAGE_ID" type="BIGINT" >
+                <constraints nullable="false" />
+            </column>
+
             <column name="TRANSPORT_ID" type="BIGINT" />
         </createTable>
         <addPrimaryKey tableName="CONFIRMATION"
@@ -83,8 +116,8 @@
     </changeSet>
 
     <changeSet author="domibusConnector" id="create-table-message-details">
-        <createTable name="MESSAGE_DETAILS">
-            <column name="ID" type="BIGINT" />
+        <createTable tableName="MESSAGE_DETAILS">
+            <column name="ID" type="BIGINT" ><constraints nullable="false" /></column>
             <column name="CONVERSATION_ID" type="java.sql.Types.VARCHAR(512)"></column>
             <column name="EBMS_MESSAGE_ID" type="java.sql.Types.VARCHAR(512)"></column>
             <column name="FINAL_RECIPIENT" type="java.sql.Types.VARCHAR(512)"></column>
@@ -92,18 +125,21 @@
             <column name="NATIONAL_MESSAGE_ID" type="java.sql.Types.VARCHAR(512)"></column>
             <column name="ORIGINAl_SENDER" type="java.sql.Types.VARCHAR(512)"></column>
             <column name="REF_TO_MESSAGE_ID" type="java.sql.Types.VARCHAR(512)"></column>
-            <column name="SERVICE_NAME" type="java.sql.Types.VARCHAR(512)"></column>
             <column name="TO_PARTY_ID" type="java.sql.Types.VARCHAR(512)"></column>
+            <column name="ACTION_NAME" type="java.sql.Types.VARCHAR(512)"></column>
+            <column name="SERVICE_NAME" type="java.sql.Types.VARCHAR(512)"></column>
         </createTable>
-        <addPrimaryKey tableName="MESSAGE_DETAILS" columnNames="ID" constraintName="pkMessageDetailsTable"
+        <addPrimaryKey tableName="MESSAGE_DETAILS" columnNames="ID" constraintName="pkMessageDetailsTable" />
     </changeSet>
 
     <changeSet author="domibusConnector" id="create-transport-log-table">
-        <createTable name="TRANSPORT_LOG">
-            <column name="ID" type="BIGINT"></column>
+        <createTable tableName="TRANSPORT_LOG">
+            <column name="ID" type="BIGINT"><constraints nullable="false" /></column>
+            <column name="TRANSPORT_ID" type="java.sql.Types.VARCHAR(512)" ></column>
             <column name="CREATED" type="TIMESTAMP"></column>
+            <column name="SENT" type="TIMESTAMP"></column>
             <column name="RECEIVED" type="TIMESTAMP"></column>
-            <column name="TRANSPORT_DIRECTION" type="java.sql.Types.VARCHAR(512" ></column>
+            <column name="TRANSPORT_DIRECTION" type="java.sql.Types.VARCHAR(512)" ></column>
             <column name="LAST_UPDATE" type="TIMESTAMP" />
             <column name="MESSAGE_DETAILS_ID" type="BIGINT" />
         </createTable>
@@ -120,25 +156,25 @@
 
     <changeSet author="domibusConnector" id="create-fks-for-confirmation-table">
         <addForeignKeyConstraint baseTableName="CONFIRMATION"
-                                 baseColumnNames="BUSINESS_MESSAGE_MESSAGE_ID"
+                                 baseColumnNames="BUSINESS_MESSAGE_ID"
                                  referencedTableName="BUSINESS_MESSAGE"
-                                 referencedColumnNames="MESSAGE_ID"
+                                 referencedColumnNames="ID"
                                  constraintName="FK_confirmation2businessMsg" />
         <addForeignKeyConstraint baseTableName="CONFIRMATION"
                                  baseColumnNames="TRANSPORT_ID"
-                                 referencedTableName="TRANSPORT"
+                                 referencedTableName="TRANSPORT_LOG"
                                  referencedColumnNames="ID"
                                  constraintName="FK_confirmation2Transport" />
     </changeSet>
 
     <changeSet author="domibusConnector" id="create-fks-for-business-attachments-n2m-table">
         <addForeignKeyConstraint baseTableName="BUSINESS_MESSAGE_ATTACHMENTS"
-                                 baseColumnNames="BUSINESS_MESSAGE_MESSAGE_ID"
+                                 baseColumnNames="BUSINESS_MESSAGE_ID"
                                  referencedTableName="BUSINESS_MESSAGE"
-                                 referencedColumnNames="MESSAGE_ID"
+                                 referencedColumnNames="ID"
                                  constraintName="FK_businessAttachmentNtoM2businessMsg" />
         <addForeignKeyConstraint baseTableName="BUSINESS_MESSAGE_ATTACHMENTS"
-                                 baseColumnNames="ATTACHMENTS_ID"
+                                 baseColumnNames="ATTACHMENT_ID"
                                  referencedTableName="ATTACHMENT"
                                  referencedColumnNames="ID"
                                  constraintName="FK_businessAttachmentNtoM2attachment" />
@@ -152,7 +188,7 @@
                                  constraintName="FK_businessMsg2Attachment" />
         <addForeignKeyConstraint baseTableName="BUSINESS_MESSAGE"
                                  baseColumnNames="TRANSPORT_ID"
-                                 referencedTableName="TRANSPORT"
+                                 referencedTableName="TRANSPORT_LOG"
                                  referencedColumnNames="ID"
                                  constraintName="FK_businessMsg2Transport" />
     </changeSet>

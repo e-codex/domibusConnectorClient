@@ -2,33 +2,53 @@ package eu.domibus.connector.client.storage.entity;
 
 import eu.domibus.connector.client.rest.dto.DetachedSignatureDTO;
 
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.net.URL;
 
 @Entity
+@Table(name = "ATTACHMENT")
 public class Attachment {
 
-    @GeneratedValue
+    @TableGenerator(name = "seqStoreAttachment", table = "HIBERNATE_SEQ_TABLE", pkColumnName = "SEQ_NAME", pkColumnValue = "ATTACHMENT.ID", valueColumnName = "SEQ_VALUE", initialValue = 1000, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "seqStoreAttachment")
     @Id
+    @Column(name = "ID")
     private Long id;
 
+    @Column(name = "DATA_REFERENCE")
     String dataReference; //uri to the data
 
+    @Column(name = "DOCUMENT_NAME")
     String documentName;
 
+    @Column(name = "MIME_TYPE")
     String mimeType;
 
+    @Column(name = "CHECKSUM")
     String checksum;
 
+    @Column(name = "KEY")
     String key;
 
+    @Column(name = "DESCRIPTION")
     String description;
 
-    @Embedded
-    DetachedSignature detachedSignature;
+    @OneToOne(optional = true, orphanRemoval = true, cascade = CascadeType.ALL, mappedBy = "attachment")
+    private DetachedSignature detachedSignature;
+
+    @PreUpdate
+    public void preUpdate() {
+        if (this.detachedSignature != null) {
+            this.detachedSignature.setAttachment(this);
+        }
+    }
+
+    @PrePersist
+    public void prePersist() {
+        if (this.detachedSignature != null) {
+            this.detachedSignature.setAttachment(this);
+        }
+    }
 
     private String identifier;
 

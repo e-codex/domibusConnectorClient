@@ -1,16 +1,31 @@
 package eu.domibus.connector.client.storage.entity;
 
-import javax.persistence.Embeddable;
-import javax.persistence.Entity;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 
-@Embeddable
+import javax.persistence.*;
+
+@Entity
+@Table(name = "DETACHED_SIGNATURE")
 public class DetachedSignature {
 
+    @TableGenerator(name = "seqStoreDetachedSignature", table = "HIBERNATE_SEQ_TABLE", pkColumnName = "SEQ_NAME", pkColumnValue = "DETACHED_SIGNATURE.ID", valueColumnName = "SEQ_VALUE", initialValue = 1000, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "seqStoreDetachedSignature")
+    @Id
+    Long id;
+
+    @Lob
+    @Column(name = "DETACHED_SIGNATURE")
     private byte[] detachedSignature;
 
+    @Column(name = "SIGNATURE_NAME")
     private String signatureName;
 
+    @Column(name = "SIGNATURE_MIME_TYPE")
     private SignatureType signatureMimeType;
+
+    @OneToOne(optional = false)
+    @JoinColumn(referencedColumnName = "ID", name = "ATTACHMENT_ID")
+    private Attachment attachment;
 
     public byte[] getDetachedSignature() {
         return detachedSignature;
@@ -34,6 +49,22 @@ public class DetachedSignature {
 
     public void setSignatureMimeType(SignatureType getSignatureMimeType) {
         this.signatureMimeType = getSignatureMimeType;
+    }
+
+    public Attachment getAttachment() {
+        return attachment;
+    }
+
+    public void setAttachment(Attachment attachment) {
+        this.attachment = attachment;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public static enum SignatureType {

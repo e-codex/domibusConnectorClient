@@ -5,10 +5,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "BUSINESS_MESSAGE")
 public class BusinessMessage {
 
     @Id
-    @GeneratedValue
+    @TableGenerator(name = "seqStoreBusinessMessage", table = "HIBERNATE_SEQ_TABLE", pkColumnName = "SEQ_NAME", pkColumnValue = "BUSINESS_MESSAGE.ID", valueColumnName = "SEQ_VALUE", initialValue = 1000, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "seqStoreBusinessMessage")
+    @Column(name = "ID")
     private Long messageId;
 
     @OneToOne(cascade = CascadeType.ALL, optional = true)
@@ -19,14 +22,23 @@ public class BusinessMessage {
 
     //business document
     @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "BUSINESS_ATTACHMENT_ID", referencedColumnName = "ID")
     private Attachment businessAttachment;
 
     //extra attachments
     @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "BUSINESS_MESSAGE_ATTACHMENTS",
+            joinColumns = @JoinColumn(name = "BUSINESS_MESSAGE_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "ATTACHMENT_ID", referencedColumnName = "ID")
+    )
     private List<Attachment> attachments = new ArrayList<>();
 
     //confirmations
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "businessMessage")
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = "BUSINESS_MESSAGE_CONFIRMATIONS",
+            joinColumns = @JoinColumn(name = "BUSINESS_MESSAGE_ID", referencedColumnName = "ID"),
+            inverseJoinColumns = @JoinColumn(name = "CONFIRMATION_ID", referencedColumnName = "ID")
+    )
     private List<Confirmation> confirmations = new ArrayList<>();
 
     @PrePersist

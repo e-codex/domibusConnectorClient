@@ -9,7 +9,7 @@ public class NationalMessageIdGeneratorImpl implements NationalMessageIdGenerato
 
     @Override
     public String generateNationalId() {
-        return "WebUIApp" + UUID.randomUUID().toString();
+        return UUID.randomUUID().toString() + "@WebUIApp";
     }
 
 }

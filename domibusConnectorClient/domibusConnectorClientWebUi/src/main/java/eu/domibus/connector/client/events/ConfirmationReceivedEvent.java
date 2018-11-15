@@ -2,7 +2,7 @@ package eu.domibus.connector.client.events;
 
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
 
-public class ConfirmationReceived {
+public class ConfirmationReceivedEvent {
 
     private DomibusConnectorMessageConfirmationType confirmationType;
 

@@ -3,9 +3,11 @@ package eu.domibus.connector.client.storage.entity;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "CONFIRMATION")
 public class Confirmation {
 
-    @GeneratedValue
+    @TableGenerator(name = "seqStoreConfirmation", table = "HIBERNATE_SEQ_TABLE", pkColumnName = "SEQ_NAME", pkColumnValue = "CONFIRMATION.ID", valueColumnName = "SEQ_VALUE", initialValue = 1000, allocationSize = 1)
+    @GeneratedValue(strategy = GenerationType.TABLE, generator = "seqStoreConfirmation")
     @Id
     private Long id;
 
@@ -20,7 +22,7 @@ public class Confirmation {
     private ConfirmationType confirmationType;
 
     @ManyToOne(optional = false)
-    @JoinColumn(name="BUSINESS_MESSAGE_MESSAGE_ID", referencedColumnName = "ID")
+    @JoinColumn(name="BUSINESS_MESSAGE_ID", referencedColumnName = "ID")
     private BusinessMessage businessMessage;
 
     public String getConfirmationXml() {

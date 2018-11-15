@@ -1,18 +1,35 @@
 package eu.domibus.connector.client.storage.service.impl;
 
 import eu.domibus.connector.client.storage.service.LargeFileStorageService;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.h2.store.fs.FileChannelOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.FileSystemUtils;
+import sun.java2d.cmm.Profile;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
+import java.nio.channels.Channels;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
+import java.nio.channels.OverlappingFileLockException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
+import java.util.Properties;
 import java.util.UUID;
 
 @Service
 public class LargeFileStorageServiceImpl implements LargeFileStorageService {
+
+    private static final Logger LOGGER = LogManager.getLogger(LargeFileStorageServiceImpl.class);
+
+    private static final String CONTENT_LENGTH_PROPERTY_NAME = "content-length";
+    private static final String CONTENT_TYPE_PROPERTY_NAME = "content-type";
+    private static final String LARGE_FILE_NAME = "file";
+    private static final String PROPERTIES_FILE_NAME = "file.properties";
 
     @Autowired
     private LargeFileStorageServiceProperties largeFileStorageServiceProperties;
@@ -47,59 +64,144 @@ public class LargeFileStorageServiceImpl implements LargeFileStorageService {
     }
 
     @Override
-    public Optional<LargeFileReference> getLargeFileReference(String key) {
-        return Optional.empty();
+    public Optional<LargeFileReference> getLargeFileReference(LargeFileStorageService.LargeFileReferenceId key) {
+        if (key == null) {
+            throw new IllegalArgumentException("key is not allowed to be null!");
+        }
+        String ref = key.getStorageIdReference();
+        LOGGER.debug("Looking up large file with reference [{}] in [{}]", ref, storageFolder);
+        Path folder = storageFolder.resolve(ref);
+
+        if (!Files.exists(folder)) {
+            LOGGER.info("No file found with reference [{}]", ref);
+            return Optional.empty();
+        }
+
+        LargeFileReference lfr = new LargeFileReference();
+        lfr.setStorageIdReference(key);
+        loadProperties(folder, lfr);
+
+        return Optional.of(lfr);
+    }
+
+    private void loadProperties(Path folder, LargeFileReference lfr) {
+        Path propertiesFile = folder.resolve(PROPERTIES_FILE_NAME);
+        try (InputStream is = new FileInputStream(propertiesFile.toFile())){
+
+            Properties p = new Properties();
+            p.load(is);
+
+            lfr.setContentLength(Long.parseLong(p.getProperty(CONTENT_LENGTH_PROPERTY_NAME)));
+            lfr.setContentType(p.getProperty(CONTENT_TYPE_PROPERTY_NAME));
+
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(String.format("Failed to find file [%s]", propertiesFile), e);
+        } catch (IOException e) {
+            throw new RuntimeException(String.format("Failed to read properties from file [%s]", propertiesFile), e);
+        }
     }
 
     @Override
     public LargeFileReference createLargeFileReference() {
         String ref = UUID.randomUUID().toString();
 
-        Path newFile = storageFolder.resolve(ref);
+        Path newFolder = storageFolder.resolve(ref);
+        Path newFile = newFolder.resolve(LARGE_FILE_NAME);
+        Path propertyFile = newFolder.resolve(PROPERTIES_FILE_NAME);
+        try {
+            Files.createDirectory(newFolder);
+        } catch (IOException e) {
+            throw new RuntimeException(String.format("Failed to create new folder [%s]", newFolder), e);
+        }
         try {
             Files.createFile(newFile);
         } catch (IOException e) {
-            throw new RuntimeException(String.format("Failed to create new file [%s]",newFile));
+            throw new RuntimeException(String.format("Failed to create new empty data file [%s]", newFile), e);
+        }
+        try {
+            Files.createFile(propertyFile);
+        } catch (IOException e) {
+            throw new RuntimeException(String.format("Failed to create new empty property file [%s]", propertyFile), e);
         }
 
         LargeFileReference largeFileReference = new LargeFileReference();
-        largeFileReference.setStorageIdReference(ref);
+        largeFileReference.setStorageIdReference(new LargeFileReferenceId(ref));
 
         return largeFileReference;
     }
 
     @Override
     public void deleteLargeFileReference(LargeFileReference reference) {
-        String ref = reference.getStorageIdReference();
+        checkReference(reference);
+        String ref = reference.getStorageIdReference().getStorageIdReference();
         Path file = storageFolder.resolve(ref);
         try {
-            Files.deleteIfExists(file);
+            FileSystemUtils.deleteRecursively(file);
         } catch (IOException e) {
-            throw new RuntimeException(String.format("Failed to delete file [%s]", e));
+            throw new RuntimeException(String.format("Failed to delete folder [%s]", e));
         }
     }
 
+    private void checkReference(LargeFileReference reference) {
+        if (reference.getStorageIdReference() == null || reference.getStorageIdReference().getStorageIdReference() == null) {
+            throw new IllegalArgumentException("reference or reference.getStorageIdReference is not allowed to be null!");
+        }
+        Path fileFolder = storageFolder.resolve(reference.getStorageIdReference().getStorageIdReference());
+        if (!Files.exists(fileFolder)) {
+            throw new IllegalStateException(String.format("Folder [%s] is missing looks like the data repo is corrupted!", fileFolder));
+        }
+
+    }
+
+
+
     @Override
-    public OutputStream getOutputStream(LargeFileReference reference) {
+    public OutputStream getOutputStream(final LargeFileReference reference) {
+        checkReference(reference);
         //TODO: file locking!
-        String ref = reference.getStorageIdReference();
-        Path file = storageFolder.resolve(ref);
+        String ref = reference.getStorageIdReference().getStorageIdReference();
+        Path folder = storageFolder.resolve(ref);
+
+        Path file = folder.resolve(LARGE_FILE_NAME);
         try {
-            //TODO: wrap outputstream! release lock on close!
-            FileOutputStream fileOutputStream = new FileOutputStream(file.toFile());
-            return fileOutputStream;
+            OutputStream fileOutputStream = new FileOutputStream(file.toFile());
+            CountingCallbackOutputStream countingStream = new CountingCallbackOutputStream(fileOutputStream, bytesWritten -> {
+                reference.setContentLength(bytesWritten);
+                writeLargeFileReferenceToPropertiesFile(folder, reference);
+            });
+            return countingStream;
         } catch (FileNotFoundException e) {
-            throw new RuntimeException(String.format("File [%s] does not exist!", file));
+            throw new RuntimeException(String.format("File [%s] does not exist!", file), e);
         } catch (IOException e) {
-            throw new RuntimeException(String.format("IOException while opening output stream on file [%s]", file));
+            throw new RuntimeException(String.format("IOException while opening output stream on file [%s]", file), e);
+        }
+    }
+
+
+
+    private void writeLargeFileReferenceToPropertiesFile(Path folder, LargeFileReference reference) {
+        Properties p = new Properties();
+
+        p.put(CONTENT_LENGTH_PROPERTY_NAME, Long.toString(reference.getContentLength()));
+        if (reference.getContentType() != null) {
+            p.put(CONTENT_TYPE_PROPERTY_NAME, reference.getContentType());
+        }
+
+        Path propertiesFile = folder.resolve(PROPERTIES_FILE_NAME);
+        try (OutputStream outputStream = new FileOutputStream(propertiesFile.toFile())){
+            p.store(outputStream, "Properties for stored file");
+        } catch (IOException e) {
+            throw new RuntimeException(String.format("Error while writing propertiesFile [%s]", propertiesFile));
         }
     }
 
     @Override
     public InputStream getInputStream(LargeFileReference reference) {
+        checkReference(reference);
         //TODO: file locking!
-        String ref = reference.getStorageIdReference();
-        Path file = storageFolder.resolve(ref);
+        String ref = reference.getStorageIdReference().getStorageIdReference();
+        Path folder = storageFolder.resolve(ref);
+        Path file = folder.resolve(LARGE_FILE_NAME);
         try {
             //TODO: wrap input stream! relase lock on close();
             FileInputStream inputStream = new FileInputStream(file.toFile());
@@ -109,5 +211,83 @@ public class LargeFileStorageServiceImpl implements LargeFileStorageService {
         } catch (IOException e) {
             throw new RuntimeException(String.format("IOException while opening input stream on file [%s]", file));
         }
+    }
+
+
+    private interface BytesWrittenCallback {
+        public void bytesWrittenOnClose(long bytesWritten);
+    }
+
+
+//    private interface CloseCallback {
+//        void outputStreamClosed(LargeFileReference reference);
+//    }
+//
+//    private class CloseCallbackOutputStream extends FilterOutputStream {
+//        private final CloseCallback callback;
+//        private LargeFileReference reference;
+//
+//        public CloseCallbackOutputStream(OutputStream out, LargeFileReference reference, CloseCallback callback) {
+//            super(out);
+//            this.reference = reference;
+//            this.callback = callback;
+//        }
+//
+//        public void close() throws IOException {
+//            super.close();
+//            this.callback.outputStreamClosed(this.reference);
+//        }
+//    }
+
+
+    private class CountingCallbackOutputStream extends FilterOutputStream {
+        private final BytesWrittenCallback callback;
+        private long bytesWritten = 0;
+        /**
+         * Creates an output stream filter built on top of the specified
+         * underlying output stream.
+         *
+         * @param out the underlying output stream to be assigned to
+         *            the field <tt>this.out</tt> for later use, or
+         *            <code>null</code> if this instance is to be
+         *            created without an underlying stream.
+         */
+        public CountingCallbackOutputStream(OutputStream out, BytesWrittenCallback callback) {
+            super(out);
+            this.callback = callback;
+        }
+
+        @Override
+        public void write(final int b) throws IOException {
+            out.write(b);
+            count(1);
+        }
+        @Override
+        public void write(final byte[] b) throws IOException {
+            write(b, 0, b.length);
+        }
+        @Override
+        public void write(final byte[] b, final int off, final int len) throws IOException {
+            out.write(b, off, len);
+            count(len);
+        }
+
+        protected void count(final long written) {
+            if (written != -1) {
+                bytesWritten += written;
+            }
+        }
+
+        public long getBytesWritten() {
+            return bytesWritten;
+        }
+
+        @Override
+        public void close() throws IOException {
+            super.flush();
+            super.close();
+            this.callback.bytesWrittenOnClose(this.bytesWritten);
+        }
+
     }
 }

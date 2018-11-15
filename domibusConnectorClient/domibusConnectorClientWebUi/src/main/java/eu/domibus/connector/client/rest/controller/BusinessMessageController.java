@@ -1,5 +1,6 @@
 package eu.domibus.connector.client.rest.controller;
 
+import eu.domibus.connector.client.events.TriggerConfirmationEvent;
 import eu.domibus.connector.client.rest.dto.AttachmentDTO;
 import eu.domibus.connector.client.rest.dto.BusinessMessageDTO;
 import eu.domibus.connector.client.rest.dto.ConfirmationDTO;
@@ -18,9 +19,9 @@ import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import javax.xml.transform.*;
 import javax.xml.transform.stream.StreamResult;
@@ -30,6 +31,7 @@ import java.io.OutputStreamWriter;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
@@ -42,6 +44,9 @@ public class BusinessMessageController {
     @Autowired
     private MessageStorageService messageStorageService;
 
+    @Autowired
+    private ApplicationEventPublisher applicationEventPublisher;
+
     @GetMapping("/")
     public List<BusinessMessageDTO> getAllMessages() {
         List<BusinessMessage> domibusConnectorMessageTypes = messageStorageService.loadMessages();
@@ -49,6 +54,27 @@ public class BusinessMessageController {
                 .map(this::mapBusinessMessage)
                 .collect(Collectors.toList());
     }
+
+    @RequestMapping("/{id}")
+    public BusinessMessageDTO getMessage(@PathVariable("id") String id) {
+        Optional<BusinessMessage> businessMessage = messageStorageService.loadMessage(id);
+        BusinessMessage msg = businessMessage.orElseThrow(RuntimeException::new);
+        BusinessMessageDTO businessMessageDTO = this.mapBusinessMessage(msg);
+        return businessMessageDTO;
+    }
+
+    @RequestMapping(value = "/trigger/{id}/{confirmation-type}/", method = RequestMethod.POST)
+    public ResponseEntity triggerConfirmation(@PathVariable("confirmation-type") String confirmationType, @PathVariable("id") String messageId) {
+        Confirmation.ConfirmationType type = Confirmation.ConfirmationType.fromValue(confirmationType);
+
+        TriggerConfirmationEvent triggerConfirmationEvent = new TriggerConfirmationEvent();
+        triggerConfirmationEvent.setNationalMessageId(messageId);
+        triggerConfirmationEvent.setConfirmationType(type);
+        applicationEventPublisher.publishEvent(triggerConfirmationEvent);
+
+        return ResponseEntity.ok("OK");
+    }
+
 
     private BusinessMessageDTO mapBusinessMessage(BusinessMessage message) {
 //        try {
@@ -81,6 +107,8 @@ public class BusinessMessageController {
 
     private AttachmentDTO mapAttachment(Attachment attachment) {
         AttachmentDTO dto = new AttachmentDTO();
+        BeanUtils.copyProperties(attachment, dto);
+        dto.setUrl(LargeFileController.PUBLISH_URL + "/" + attachment.getDataReference());
         return dto;
     }
 
