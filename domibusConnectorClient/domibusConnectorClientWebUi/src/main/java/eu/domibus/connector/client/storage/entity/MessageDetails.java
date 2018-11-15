@@ -13,7 +13,7 @@ public class MessageDetails {
     private Long id;
 
     @Column(name = "NATIONAL_MESSAGE_ID")
-    private String nationalMessageId;
+    private String backendMessageId;
 
     @Column(name = "EBMS_MESSAGE_ID")
     private String ebmsMessageId;
@@ -50,12 +50,12 @@ public class MessageDetails {
         this.id = id;
     }
 
-    public String getNationalMessageId() {
-        return nationalMessageId;
+    public String getBackendMessageId() {
+        return backendMessageId;
     }
 
-    public void setNationalMessageId(String nationalMessageId) {
-        this.nationalMessageId = nationalMessageId;
+    public void setBackendMessageId(String backendMessageId) {
+        this.backendMessageId = backendMessageId;
     }
 
     public String getEbmsMessageId() {

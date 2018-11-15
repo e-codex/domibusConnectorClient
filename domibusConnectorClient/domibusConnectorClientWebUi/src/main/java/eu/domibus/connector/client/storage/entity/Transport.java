@@ -41,6 +41,9 @@ public class Transport {
     @Column(name = "LAST_UPDATE")
     private LocalDateTime updated;
 
+    @Column(name = "REMOTE_TRANSPORT_ID")
+    private String remoteTransportId;
+
     @PrePersist
     public void prePersist() {
         if (created == null) {
@@ -94,6 +97,14 @@ public class Transport {
 
     public void setCreated(LocalDateTime created) {
         this.created = created;
+    }
+
+    public void setRemoteTransportId(String remoteTransportId) {
+        this.remoteTransportId = remoteTransportId;
+    }
+
+    public String getRemoteTransportId() {
+        return remoteTransportId;
     }
 
     public static enum TransportState {

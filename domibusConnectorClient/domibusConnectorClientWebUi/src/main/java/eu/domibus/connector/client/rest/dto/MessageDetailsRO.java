@@ -1,6 +1,6 @@
 package eu.domibus.connector.client.rest.dto;
 
-public class MessageDetailsDTO {
+public class MessageDetailsRO {
 
     private String backendMessageId;
     private String ebmsMessageId;

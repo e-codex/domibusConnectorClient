@@ -1,6 +1,7 @@
 package eu.domibus.connector.client.storage.entity;
 
 import javax.persistence.*;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,16 +15,30 @@ public class BusinessMessage {
     @Column(name = "ID")
     private Long messageId;
 
+    @Column(name = "APPLICATION_MESSAGE_ID")
+    private String applicationMessageId;
+
     @OneToOne(cascade = CascadeType.ALL, optional = true)
     private Transport transport;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "MESSAGE_DETAILS_ID")
+    private MessageDetails messageDetails;
+
     //business xml
-    private byte[] businessXml;
+    @Column(name = "BUSINESS_XML")
+    private String businessXml;
 
     //business document
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "BUSINESS_ATTACHMENT_ID", referencedColumnName = "ID")
     private Attachment businessAttachment;
+
+    @Column(name = "DRAFT")
+    private boolean draft;
+
+    @Column(name = "CREATED")
+    private LocalDate created;
 
     //extra attachments
     @OneToMany(cascade = CascadeType.ALL)
@@ -51,11 +66,19 @@ public class BusinessMessage {
         confirmations.stream().forEach( c -> c.setBusinessMessage(this));
     }
 
-    public byte[] getBusinessXml() {
+    public MessageDetails getMessageDetails() {
+        return messageDetails;
+    }
+
+    public void setMessageDetails(MessageDetails messageDetails) {
+        this.messageDetails = messageDetails;
+    }
+
+    public String getBusinessXml() {
         return businessXml;
     }
 
-    public void setBusinessXml(byte[] businessXml) {
+    public void setBusinessXml(String businessXml) {
         this.businessXml = businessXml;
     }
 
@@ -97,5 +120,29 @@ public class BusinessMessage {
 
     public void setTransport(Transport transport) {
         this.transport = transport;
+    }
+
+    public boolean isDraft() {
+        return draft;
+    }
+
+    public void setDraft(boolean draft) {
+        this.draft = draft;
+    }
+
+    public String getApplicationMessageId() {
+        return applicationMessageId;
+    }
+
+    public void setApplicationMessageId(String applicationMessageId) {
+        this.applicationMessageId = applicationMessageId;
+    }
+
+    public LocalDate getCreated() {
+        return created;
+    }
+
+    public void setCreated(LocalDate created) {
+        this.created = created;
     }
 }

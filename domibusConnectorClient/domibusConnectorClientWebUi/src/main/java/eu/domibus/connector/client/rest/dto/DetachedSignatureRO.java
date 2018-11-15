@@ -4,7 +4,7 @@ import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureM
 
 import javax.xml.bind.annotation.XmlEnumValue;
 
-public class DetachedSignatureDTO {
+public class DetachedSignatureRO {
 
     private byte[] detachedSignature;
 

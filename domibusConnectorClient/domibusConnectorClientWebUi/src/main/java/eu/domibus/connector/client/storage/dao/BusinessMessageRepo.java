@@ -10,7 +10,7 @@ import java.util.Optional;
 @Repository
 public interface BusinessMessageRepo extends JpaRepository<BusinessMessage, Long> {
 
-    @Query("select m from BusinessMessage m where m.transport.messageDetails.nationalMessageId = ?1")
-    Optional<BusinessMessage> findByNationalMessageId(String nationalMessageId);
+    @Query("select m from BusinessMessage m where m.applicationMessageId = ?1")
+    Optional<BusinessMessage> findByApplicationMessageId(String nationalMessageId);
 
 }

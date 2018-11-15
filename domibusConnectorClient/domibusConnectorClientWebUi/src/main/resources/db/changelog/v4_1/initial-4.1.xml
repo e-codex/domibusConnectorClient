@@ -62,7 +62,11 @@
             <column name="ID" type="BIGINT">
                 <constraints nullable="false" />
             </column>
-            <column name="BUSINESS_XML" type="BLOB" />
+            <column name="APPLICATION_MESSAGE_ID" type="java.sql.Types.VARCHAR(512)"></column>
+            <column name="DRAFT" type="BOOLEAN"></column>
+            <column name="CREATED" type="TIMESTAMP"></column>
+            <column name="MESSAGE_DETAILS_ID" type="BIGINT"></column>
+            <column name="BUSINESS_XML" type="CLOB" />
             <column name="BUSINESS_ATTACHMENT_ID" type="BIGINT" />
             <column name="TRANSPORT_ID" type="BIGINT" />
         </createTable>
@@ -142,8 +146,18 @@
             <column name="TRANSPORT_DIRECTION" type="java.sql.Types.VARCHAR(512)" ></column>
             <column name="LAST_UPDATE" type="TIMESTAMP" />
             <column name="MESSAGE_DETAILS_ID" type="BIGINT" />
+            <column name="REMOTE_TRANSPORT_ID" type="java.sql.Types.VARCHAR(512)"></column>
         </createTable>
         <addPrimaryKey tableName="TRANSPORT_LOG" columnNames="ID" constraintName="pkTransportLogTable" />
+    </changeSet>
+
+
+    <changeSet author="domibusConnector" id="create-foreign-key-businessMessage2MessageDetails">
+        <addForeignKeyConstraint baseTableName="BUSINESS_MESSAGE"
+                             baseColumnNames="MESSAGE_DETAILS_ID"
+                             constraintName="fkDraftMessageDetailsToBusinessMessage"
+                             referencedTableName="MESSAGE_DETAILS"
+                             referencedColumnNames="ID" />
     </changeSet>
 
     <changeSet author="domibusConnector" id="create-foreign-key-transportLog2messageDetails">
@@ -193,6 +207,13 @@
                                  constraintName="FK_businessMsg2Transport" />
     </changeSet>
 
+
+
+    <!--<changeSet id="add-remote-transport-id-to-transport" author="domibusConnector">-->
+        <!--<addColumn tableName="TRANSPORT_LOG">-->
+            <!---->
+        <!--</addColumn>-->
+    <!--</changeSet>-->
 
 
 

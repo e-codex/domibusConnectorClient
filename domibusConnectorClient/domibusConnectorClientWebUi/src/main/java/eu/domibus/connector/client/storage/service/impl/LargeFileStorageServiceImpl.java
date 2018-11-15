@@ -69,6 +69,9 @@ public class LargeFileStorageServiceImpl implements LargeFileStorageService {
             throw new IllegalArgumentException("key is not allowed to be null!");
         }
         String ref = key.getStorageIdReference();
+        if (ref == null) {
+            return Optional.empty();
+        }
         LOGGER.debug("Looking up large file with reference [{}] in [{}]", ref, storageFolder);
         Path folder = storageFolder.resolve(ref);
 
@@ -101,8 +104,11 @@ public class LargeFileStorageServiceImpl implements LargeFileStorageService {
         }
     }
 
-    @Override
-    public LargeFileReference createLargeFileReference() {
+    public LargeFileReference createLargeFileReference(LargeFileReference largeFileReference) {
+        if (largeFileReference.getStorageIdReference() != null) {
+            throw new IllegalArgumentException("Storage Reference of largeFileReference must be null!");
+        }
+
         String ref = UUID.randomUUID().toString();
 
         Path newFolder = storageFolder.resolve(ref);
@@ -124,10 +130,15 @@ public class LargeFileStorageServiceImpl implements LargeFileStorageService {
             throw new RuntimeException(String.format("Failed to create new empty property file [%s]", propertyFile), e);
         }
 
-        LargeFileReference largeFileReference = new LargeFileReference();
+//        LargeFileReference largeFileReference = new LargeFileReference();
         largeFileReference.setStorageIdReference(new LargeFileReferenceId(ref));
 
         return largeFileReference;
+    }
+
+    @Override
+    public LargeFileReference createLargeFileReference() {
+        return this.createLargeFileReference(new LargeFileReference());
     }
 
     @Override

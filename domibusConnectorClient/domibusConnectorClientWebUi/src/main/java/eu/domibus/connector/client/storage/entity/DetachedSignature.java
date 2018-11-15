@@ -87,6 +87,9 @@ public class DetachedSignature {
             throw new IllegalArgumentException(v);
         }
 
+        public String getValue() {
+            return value;
+        }
     }
 
 }

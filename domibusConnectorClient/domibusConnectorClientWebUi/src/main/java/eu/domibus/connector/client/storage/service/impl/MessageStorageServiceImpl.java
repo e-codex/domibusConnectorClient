@@ -34,7 +34,7 @@ public class MessageStorageServiceImpl implements MessageStorageService {
     @Override
     @Transactional(readOnly = true)
     public Optional<BusinessMessage> loadMessage(String nationalMessageId) {
-        return businessMessageRepo.findByNationalMessageId(nationalMessageId);
+        return businessMessageRepo.findByApplicationMessageId(nationalMessageId);
     }
 
     @Override
@@ -45,11 +45,10 @@ public class MessageStorageServiceImpl implements MessageStorageService {
 
     @Override
     public void addConfirmation(String nationalMessageId, Confirmation confirmation) {
-        Optional<BusinessMessage> byNationalMessageId = businessMessageRepo.findByNationalMessageId(nationalMessageId);
+        Optional<BusinessMessage> byNationalMessageId = businessMessageRepo.findByApplicationMessageId(nationalMessageId);
         if (byNationalMessageId.isPresent()) {
             confirmation.setBusinessMessage(byNationalMessageId.get());
             confirmationRepo.save(confirmation);
         }
-
     }
 }

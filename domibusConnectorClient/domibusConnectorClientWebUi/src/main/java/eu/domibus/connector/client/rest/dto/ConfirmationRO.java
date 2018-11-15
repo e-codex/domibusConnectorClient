@@ -1,6 +1,6 @@
 package eu.domibus.connector.client.rest.dto;
 
-public class ConfirmationDTO {
+public class ConfirmationRO {
 
     String confirmationXml;
 

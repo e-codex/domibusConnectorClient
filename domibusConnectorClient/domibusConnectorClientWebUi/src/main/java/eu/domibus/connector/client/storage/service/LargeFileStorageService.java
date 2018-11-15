@@ -10,29 +10,34 @@ import java.util.Optional;
 public interface LargeFileStorageService {
 
 
-    public Optional<LargeFileReference> getLargeFileReference(LargeFileReferenceId key);
+    Optional<LargeFileReference> getLargeFileReference(LargeFileReferenceId key);
 
 
     /**
      * create a new LargeFileReference, ready to write to
      * @return LargeFileReference
      */
-    public LargeFileReference createLargeFileReference();
+    LargeFileReference createLargeFileReference();
+
+    LargeFileReference createLargeFileReference(LargeFileReference largeFileReference);
+
+    default void deleteLargeFileReference(LargeFileReferenceId refId) {
+        Optional<LargeFileReference> largeFileReference = this.getLargeFileReference(refId);
+        this.deleteLargeFileReference(largeFileReference.get());
+    }
+
+    void deleteLargeFileReference(LargeFileReference reference);
+
+    OutputStream getOutputStream(LargeFileReference reference);
+
+    InputStream getInputStream(LargeFileReference reference);
 
 
-    public void deleteLargeFileReference(LargeFileReference reference);
-
-    //TODO: read only exception, locked exception, ioException?
-    //
-    public OutputStream getOutputStream(LargeFileReference reference);
-
-    public InputStream getInputStream(LargeFileReference reference);
-
-
-    public static class LargeFileReference {
+    static class LargeFileReference {
 
         @Nullable
         private LargeFileReferenceId storageIdReference;
+        private String name;
 
         @Nullable
         public LargeFileReferenceId getStorageIdReference() {
@@ -62,9 +67,17 @@ public interface LargeFileStorageService {
         public void setContentLength(long contentLength) {
             this.contentLength = contentLength;
         }
+
+        public String getName() {
+            return name;
+        }
+
+        public void setName(String name) {
+            this.name = name;
+        }
     }
 
-    public static class LargeFileReferenceId {
+    static class LargeFileReferenceId {
         private String storageIdReference = "";
 
         public LargeFileReferenceId() {}

@@ -1,8 +1,6 @@
 package eu.domibus.connector.client.rest.dto;
 
-import java.net.URL;
-
-public class AttachmentDTO {
+public class AttachmentRO {
 
     String url; //uri to the data
 
@@ -14,7 +12,7 @@ public class AttachmentDTO {
 
     String key;
 
-    DetachedSignatureDTO detachedSignatureDTO;
+    DetachedSignatureRO detachedSignatureRO;
 
     public String getUrl() {
         return url;
@@ -48,12 +46,12 @@ public class AttachmentDTO {
         this.checksum = checksum;
     }
 
-    public DetachedSignatureDTO getDetachedSignatureDTO() {
-        return detachedSignatureDTO;
+    public DetachedSignatureRO getDetachedSignatureRO() {
+        return detachedSignatureRO;
     }
 
-    public void setDetachedSignatureDTO(DetachedSignatureDTO detachedSignatureDTO) {
-        this.detachedSignatureDTO = detachedSignatureDTO;
+    public void setDetachedSignatureRO(DetachedSignatureRO detachedSignatureRO) {
+        this.detachedSignatureRO = detachedSignatureRO;
     }
 
     public String getKey() {

@@ -1,9 +1,6 @@
 package eu.domibus.connector.client.storage.entity;
 
-import eu.domibus.connector.client.rest.dto.DetachedSignatureDTO;
-
 import javax.persistence.*;
-import java.net.URL;
 
 @Entity
 @Table(name = "ATTACHMENT")

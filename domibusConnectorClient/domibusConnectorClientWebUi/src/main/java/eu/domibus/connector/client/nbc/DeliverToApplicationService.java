@@ -24,6 +24,7 @@ import javax.xml.transform.*;
 import java.io.*;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,7 +48,7 @@ public class DeliverToApplicationService implements DomibusConnectorNationalBack
     private BusinessMessageRepo businessMessageRepo;
 
     @Override
-    public void processMessageFromConnector(DomibusConnectorMessageType message) throws DomibusConnectorNationalBackendClientException, ImplementationMissingException {
+    public DomibusConnectorMessageResponseType processMessageFromConnector(DomibusConnectorMessageType message) throws DomibusConnectorNationalBackendClientException, ImplementationMissingException {
         String appId = idGenerator.generateNationalId();
         message.getMessageDetails().setBackendMessageId(appId);
 
@@ -64,6 +65,10 @@ public class DeliverToApplicationService implements DomibusConnectorNationalBack
         } else {
             processBusinessMessage(message, transport);
         }
+        DomibusConnectorMessageResponseType responseType = new DomibusConnectorMessageResponseType();
+        responseType.setAssignedMessageId(appId);
+        responseType.setResult(true);
+        return  responseType;
     }
 
     private void processConfirmationMessage(DomibusConnectorMessageType message, Transport transport) {
@@ -99,6 +104,7 @@ public class DeliverToApplicationService implements DomibusConnectorNationalBack
 
 
         BusinessMessage businessMessage = mapBusinessMessage(message, transport);
+        businessMessage.setApplicationMessageId(UUID.randomUUID().toString() + "@appReceived");
         businessMessageRepo.save(businessMessage);
 
 
@@ -118,7 +124,7 @@ public class DeliverToApplicationService implements DomibusConnectorNationalBack
         }
         Source xmlContent = messageContent.getXmlContent();
         if (xmlContent != null) {
-            businessMessage.setBusinessXml(DomibusConnectorHelper.convertXmlSourceToByteArray(xmlContent));
+            businessMessage.setBusinessXml(DomibusConnectorHelper.convertXmlSourceToString(xmlContent));
         }
         DomibusConnectorMessageDocumentType document = messageContent.getDocument();
         if (document != null) {
@@ -134,11 +140,14 @@ public class DeliverToApplicationService implements DomibusConnectorNationalBack
     }
 
     private DetachedSignature mapDetachedSignatureToStorage(DomibusConnectorDetachedSignatureType detachedSignature) {
-        DetachedSignature sig = new DetachedSignature();
-        sig.setSignatureName(detachedSignature.getDetachedSignatureName());
-        sig.setDetachedSignature(detachedSignature.getDetachedSignature());
-        sig.setSignatureMimeType(DetachedSignature.SignatureType.fromValue(detachedSignature.getMimeType().value()));
-        return sig;
+        if (detachedSignature != null) {
+            DetachedSignature sig = new DetachedSignature();
+            sig.setSignatureName(detachedSignature.getDetachedSignatureName());
+            sig.setDetachedSignature(detachedSignature.getDetachedSignature());
+            sig.setSignatureMimeType(DetachedSignature.SignatureType.fromValue(detachedSignature.getMimeType().value()));
+            return sig;
+        }
+        return null;
     }
 
     private List<Confirmation> mapConfirmations(List<DomibusConnectorMessageConfirmationType> messageConfirmations, Transport transport) {
@@ -217,7 +226,7 @@ public class DeliverToApplicationService implements DomibusConnectorNationalBack
         } else {
             throw new IllegalArgumentException("Service is not allowed to be null!");
         }
-        details.setNationalMessageId(messageDetails.getBackendMessageId());
+        details.setBackendMessageId(messageDetails.getBackendMessageId());
         details.setConversationId(messageDetails.getConversationId());
         details.setEbmsMessageId(messageDetails.getEbmsMessageId());
         details.setFinalRecipient(messageDetails.getFinalRecipient());
