@@ -83,15 +83,16 @@ public class SentToConnectorService {
         transport.setTransportId(idGenerator.generateNationalId());
         transport.setTransportDirection(Transport.TransportDirection.OUTGOING);
 
-//        MessageDetails transportMessageDetails = new MessageDetails();
-//        BeanUtils.copyProperties(businessMessage.getMessageDetails(), transportMessageDetails);
-//        transportMessageDetails.setId(null);
-//
-//        transportMessageDetails.setBackendMessageId(idGenerator.generateNationalId());
-
         transportMessageDetails = businessMessage.getMessageDetails();
         transport.setMessageDetails(transportMessageDetails);
         transport.setCreated(LocalDateTime.now());
+
+        if (transportMessageDetails.getBackendMessageId() == null && sendMessageEvent.isIdUpdate()) {
+            transportMessageDetails.setBackendMessageId(transport.getTransportId());
+        }
+//        if (transportMessageDetails.getConversationId() == null) {
+//            transportMessageDetails.setConversationId(transport.getTransportId());
+//        }
 
         transportRepo.save(transport);
         businessMessage.setTransport(transport);

@@ -9,6 +9,7 @@ import eu.domibus.connector.client.rest.dto.MessageDetailsRO;
 import eu.domibus.connector.client.storage.entity.*;
 import eu.domibus.connector.client.storage.service.MessageStorageService;
 import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiParam;
 import org.apache.cxf.Bus;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
@@ -64,7 +65,7 @@ public class BusinessMessageController {
     public ResponseEntity<BusinessMessageRO> createMessage(@RequestBody BusinessMessageRO restBusinessMessage) {
         BusinessMessage businessMessage = mapRestBusinessMessageToBusinessMessage(restBusinessMessage);
         businessMessage.setDraft(true);
-        businessMessage.setApplicationMessageId(UUID.randomUUID().toString() + "@appGenerated" );
+        businessMessage.setApplicationMessageId(messageStorageService.generateApplicationMessageId());
         //no confirmations on create!
         businessMessage.setConfirmations(new ArrayList<>());
         //also no transport!
@@ -73,6 +74,17 @@ public class BusinessMessageController {
         messageStorageService.saveMessage(businessMessage);
 
         return new ResponseEntity<>(mapBusinessMessage(businessMessage), HttpStatus.OK);
+    }
+
+    @ApiOperation(value = "Copy an existing Business message")
+    @PostMapping(value = "/copy/{id}")
+    public ResponseEntity<String> copyMessage(
+            @PathVariable("id")
+            @ApiParam(value = "The application message id")
+                    String msgId) {
+        BusinessMessage orig = messageStorageService.copyMessage(msgId);
+
+        return new ResponseEntity<>(orig.getApplicationMessageId(), HttpStatus.OK);
     }
 
     private BusinessMessage mapRestBusinessMessageToBusinessMessage(BusinessMessageRO restBusinessMessage) {

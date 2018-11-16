@@ -209,11 +209,11 @@
 
 
 
-    <!--<changeSet id="add-remote-transport-id-to-transport" author="domibusConnector">-->
-        <!--<addColumn tableName="TRANSPORT_LOG">-->
-            <!---->
-        <!--</addColumn>-->
-    <!--</changeSet>-->
+    <changeSet id="make-application-message-id-unique" author="domibusConnector">
+        <addUniqueConstraint tableName="BUSINESS_MESSAGE"
+                             columnNames="APPLICATION_MESSAGE_ID"
+                             constraintName="UNQ_BUSINESS_MSG_TBL_APP_MSG_ID" />
+    </changeSet>
 
 
 
