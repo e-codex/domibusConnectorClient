@@ -15,6 +15,13 @@ import eu.domibus.connector.client.mapping.DomibusConnectorContentMapperDefaultI
 @Configuration
 public class ConnectorClientConfiguration {
 
+
+    /**
+     * if not available create a default ContentMapper Bean.
+     * This implementation does a identity mapping so the business
+     * xml is not changed
+     * @return - a 1:1 mapping implementation
+     */
     @Bean
     @ConditionalOnMissingBean(DomibusConnectorContentMapper.class)
     public DomibusConnectorContentMapper contentMapper() {

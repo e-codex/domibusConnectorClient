@@ -33,7 +33,7 @@ public class TransportMessagesFromConnectorToNationalService {
         messages = clientService.requestMessagesFromConnector();
 
         if (!CollectionUtils.isEmpty(messages)) {
-            LOGGER.info("{} new messages from connector to transport to national backend...", messages.size());
+            LOGGER.debug("{} new messages from connector to transport to national backend...", messages.size());
             messages.stream().forEach( message -> {
                 try {
                     nationalBackendClientDelivery.processMessageFromConnector(message);

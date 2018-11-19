@@ -25,7 +25,8 @@
         <module>domibusConnectorClientScheduler</module>
         <module>domibusConnectorClientTestModules</module>
         <module>domibusConnectorClientWebLib</module>
-        <module>domibusConnectorClientWebUi</module>
+        <module>domibusConnectorClientWebRest</module>
+        <module>domibusConnectorClientApi</module>
     </modules>
 
 

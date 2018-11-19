@@ -31,7 +31,7 @@ public class TransportMessagesFromNationalToConnectorService {
         messages = nationalBackendClient.checkForMessagesOnNationalBackend();
 
         if (!CollectionUtils.isEmpty(messages)) {
-            LOGGER.info("{} new messages from national backend to submit to connector...", messages.size());
+            LOGGER.debug("{} new messages from national backend to submit to connector...", messages.size());
             for (DomibusConnectorMessageType message : messages) {
                 try {
                     clientService.submitMessageToConnector(message);
