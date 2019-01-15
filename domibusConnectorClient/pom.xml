@@ -27,6 +27,7 @@
         <module>domibusConnectorClientWebLib</module>
         <module>domibusConnectorClientWebRest</module>
         <module>domibusConnectorClientApi</module>
+        <module>domibusConnectorClientWebRestAngularUI</module>
     </modules>
 
 
