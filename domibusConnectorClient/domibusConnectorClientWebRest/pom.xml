@@ -72,7 +72,7 @@
         </dependency>
         <dependency>
             <groupId>eu.domibus.connector</groupId>
-            <artifactId>DomibusConnectorTestData</artifactId>
+            <artifactId>domibusConnectorTestData</artifactId>
             <version>${connector-server.version}</version>
         </dependency>
         <dependency>
