@@ -3,18 +3,12 @@ package eu.domibus.connector.client.storage.service.impl;
 import eu.domibus.connector.client.storage.service.LargeFileStorageService;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import org.h2.store.fs.FileChannelOutputStream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileSystemUtils;
-import sun.java2d.cmm.Profile;
 
 import javax.annotation.PostConstruct;
 import java.io.*;
-import java.nio.channels.Channels;
-import java.nio.channels.FileChannel;
-import java.nio.channels.FileLock;
-import java.nio.channels.OverlappingFileLockException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Optional;
