@@ -1,0 +1,14 @@
+
+# Set the default behavior, in case people don't have core.autocrlf set.
+* text=auto
+
+# Explicitly declare text files you want to always be normalized and converted
+# to native line endings on checkout.
+# *.c text
+# *.h text
+
+
+# make sure unix scripts are lineending with lf \n
+*.sh text eol=lf
+# make sure windows .bat script have linending crlf \r\n
+*.bat text eol=crlf

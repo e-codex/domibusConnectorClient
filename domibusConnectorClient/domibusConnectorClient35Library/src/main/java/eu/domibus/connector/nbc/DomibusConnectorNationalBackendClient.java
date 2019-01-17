@@ -23,9 +23,10 @@ public interface DomibusConnectorNationalBackendClient {
      * content is already transformed into a national format, if there is a
      * content mapper configured and implemented.
      * 
-     * @param message A {@link Message} object with all data concerning the message.
-     * @throws DomibusConnectorNationalBackendClientException On any error
-     * @throws ImplementationMissingException if there is no impl
+     * @param message
+     *            A {@link Message} object with all data concerning the message.
+     * @throws DomibusConnectorNationalBackendClientException
+     * @throws ImplementationMissingException
      */
     public void deliverMessage(Message message) throws DomibusConnectorNationalBackendClientException,
             ImplementationMissingException;
@@ -41,8 +42,8 @@ public interface DomibusConnectorNationalBackendClient {
      *            Additionally it contains a {@link MessageConfirmation} with
      *            the evidence last sent by the partner gateway or the
      *            connector.
-     * @throws DomibusConnectorNationalBackendClientException if any error occurs
-     * @throws ImplementationMissingException if impl is missing
+     * @throws DomibusConnectorNationalBackendClientException
+     * @throws ImplementationMissingException
      */
     public void deliverLastEvidenceForMessage(Message confirmationMessage)
             throws DomibusConnectorNationalBackendClientException, ImplementationMissingException;
@@ -53,8 +54,8 @@ public interface DomibusConnectorNationalBackendClient {
      * 
      * @return an Array of messageId's that are queued in the national backend
      *         system and have to be handled by the connector.
-     * @throws DomibusConnectorNationalBackendClientException  if any error occurs
-     * @throws ImplementationMissingException if impl is missing
+     * @throws DomibusConnectorNationalBackendClientException
+     * @throws ImplementationMissingException
      */
     public String[] requestMessagesUnsent() throws DomibusConnectorNationalBackendClientException,
             ImplementationMissingException;
@@ -67,8 +68,8 @@ public interface DomibusConnectorNationalBackendClient {
      *            A {@link Message} object with all data concerning the message.
      *            This object contains {@link MessageDetails} which holds the
      *            messageId of the message that is requested.
-     * @throws DomibusConnectorNationalBackendClientException if any error occurs
-     * @throws ImplementationMissingException if impl is missing
+     * @throws DomibusConnectorNationalBackendClientException
+     * @throws ImplementationMissingException
      */
     public void requestMessage(Message message) throws DomibusConnectorNationalBackendClientException,
             ImplementationMissingException;
@@ -83,8 +84,8 @@ public interface DomibusConnectorNationalBackendClient {
      * 
      * @return an Array of {@link Message} Objects which contain informations on
      *         what message is in which confirmation state.
-     * @throws DomibusConnectorNationalBackendClientException if any error occurs
-     * @throws ImplementationMissingException if impl is missing
+     * @throws DomibusConnectorNationalBackendClientException
+     * @throws ImplementationMissingException
      */
     public Message[] requestConfirmations() throws DomibusConnectorNationalBackendClientException,
             ImplementationMissingException;
@@ -92,7 +93,7 @@ public interface DomibusConnectorNationalBackendClient {
     /**
      * This method calls the getMessageStatus method on the gateway backend
      * service directly. It returns, if provided, the message status on the
-     * gateway. To implement this method MessageStatusService must be
+     * gateway. To implement this method {@link MessageStatusService} must be
      * injected. This method is not triggered by a timer configured job!
      * 
      * @param message
@@ -102,8 +103,8 @@ public interface DomibusConnectorNationalBackendClient {
      *            requested.
      * @return A simple String represantation of the message status provided by
      *         the gateway.
-     * @throws DomibusConnectorNationalBackendClientException if any error occurs
-     * @throws ImplementationMissingException if impl is missing
+     * @throws DomibusConnectorNationalBackendClientException
+     * @throws ImplementationMissingException
      */
     public String requestMessageStatusFromGateway(Message message)
             throws DomibusConnectorNationalBackendClientException, ImplementationMissingException;
@@ -112,7 +113,7 @@ public interface DomibusConnectorNationalBackendClient {
      * This method collects all persisted errors from the connector database. It
      * also calls a backend webservice method to the gateway to request message
      * errors from the gateway, if provided. To implement this method
-     * MessageStatusService must be injected. This method is not
+     * {@link MessageStatusService} must be injected. This method is not
      * triggered by a timer configured job!
      * 
      * @param message
@@ -122,8 +123,8 @@ public interface DomibusConnectorNationalBackendClient {
      *            requested.
      * @return A List of {@link MessageError} objects containing all
      *         informations on persisted errors to the given message.
-     * @throws DomibusConnectorNationalBackendClientException if any error occurs
-     * @throws ImplementationMissingException if impl is missing
+     * @throws DomibusConnectorNationalBackendClientException
+     * @throws ImplementationMissingException
      */
     public List<MessageError> requestMessageErrors(Message message)
             throws DomibusConnectorNationalBackendClientException, ImplementationMissingException;

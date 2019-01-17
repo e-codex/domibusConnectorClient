@@ -36,7 +36,7 @@
     <dependencyManagement>
         <dependencies>
             <dependency>
-                <!-- import dependencies via dependency Management from webConnector 4.x -->
+                <!-- import dependencies via dependency Management from webConnector 4.0 -->
                 <groupId>eu.domibus.connector</groupId>
                 <artifactId>domibusConnector</artifactId>
                 <version>${connector-server.version}</version>
@@ -63,7 +63,6 @@
                 <artifactId>swagger-annotations</artifactId>
                 <version>${swagger.version}</version>
             </dependency>
-
         </dependencies>
     </dependencyManagement>
 

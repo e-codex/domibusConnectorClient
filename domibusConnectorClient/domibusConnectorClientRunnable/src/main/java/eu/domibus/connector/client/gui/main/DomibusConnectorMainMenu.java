@@ -16,9 +16,11 @@ import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.client.transport.TransportMessagesFromConnectorToNationalService;
 import eu.domibus.connector.client.transport.TransportMessagesFromNationalToConnectorService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
 @Component
+@Profile("swing-gui")
 public class DomibusConnectorMainMenu extends JMenuBar implements ActionListener {
 
 	/**
