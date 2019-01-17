@@ -183,6 +183,18 @@
                 <configuration>
                     <mainClass>eu.domibus.connector.client.RestConnectorClientApplication</mainClass>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>standalone-jar</id>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>standalone</classifier>
+                            <layout>ZIP</layout>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
