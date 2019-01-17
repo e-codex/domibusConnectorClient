@@ -9,8 +9,9 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.slf4j.LoggerFactory;
+import org.apache.logging.log4j.core.config.Configurator;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
@@ -95,17 +96,19 @@ public class DomibusConnector {
 
 
         if (!StringUtils.hasText(loggingProperties)) {
-            File classpathLog4j = new File(ConnectorClientProperties.LOG4J_CONFIG_FILE_PATH);
-//		        	DomibusConnector.class.getResource("log4j.properties");
-//		        	File classpathLog4j = new File(DomibusConnector.class.getClassLoader().getResource("log4j.properties").getFile());
-            if (classpathLog4j.exists())
-                System.setProperty("logging.properties", classpathLog4j.getAbsolutePath());
-            else {
-                System.setProperty("logging.properties", ConnectorClientProperties.LOG4J_CONFIG_FILE_PATH);
-            }
-
+        	loggingProperties = ConnectorClientProperties.LOG4J_CONFIG_FILE_PATH;
+        	
         }
-
+        File log4jProperties = new File(loggingProperties);
+        
+        if(!log4jProperties.exists()) {
+            loggingProperties= ConnectorClientProperties.LOG4J_CONFIG_FILE_PATH;
+        }
+        
+        System.setProperty("log4j.configurationFile", loggingProperties);
+        Configurator.initialize("Properties_Config", loggingProperties);
+        LOGGER.debug("Logging set with properties at {}",loggingProperties);
+        
         ConfigurableApplicationContext context = null;
 
         System.setProperty("crypto.policy", "unlimited");

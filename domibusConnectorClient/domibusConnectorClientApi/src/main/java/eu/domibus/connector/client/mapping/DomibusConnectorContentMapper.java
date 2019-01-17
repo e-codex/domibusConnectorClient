@@ -18,10 +18,7 @@ public interface DomibusConnectorContentMapper {
      * overridden when ContentMapper is used by configuration. The national xml
      * content will be written into the messageContent object.
      * 
-     * @param message
-     *            - a {@link DomibusConnectorMessageType} object containing the message, part of the message is the MessageContent
-     *            which contains the businessXml
-     *
+     * @param message - a {@link DomibusConnectorMessageType} object containing the eCodex xml Content.
      * @throws DomibusConnectorContentMapperException
      */
     public void mapInternationalToNational(DomibusConnectorMessageType message) throws DomibusConnectorContentMapperException;
@@ -31,9 +28,7 @@ public interface DomibusConnectorContentMapper {
      * overridden when ContentMapper is used by configuration. The eCodex xml
      * content will be written into the messageContent object.
      * 
-     * @param message
-     *            - a {@link DomibusConnectorMessageType} object containing the national xml
-     *            Content.
+     * @param message - a {@link DomibusConnectorMessageType} object containing the national xml Content.
      * @throws DomibusConnectorContentMapperException
      */
     public void mapNationalToInternational(DomibusConnectorMessageType message) throws DomibusConnectorContentMapperException;

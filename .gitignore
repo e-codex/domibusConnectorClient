@@ -136,3 +136,5 @@ local.properties
 /domibusConnectorClient/domibusConnectorClientWsLink/src/main/java/eu/domibus/connector/domain/transition/
 /domibusConnectorClient/domibusConnectorClientWsLink/src/main/java/eu/domibus/connector/ws/backend/delivery/webservice/
 /domibusConnectorClient/domibusConnectorClientWsLink/src/main/java/eu/domibus/connector/ws/backend/webservice/
+.classpath
+.project

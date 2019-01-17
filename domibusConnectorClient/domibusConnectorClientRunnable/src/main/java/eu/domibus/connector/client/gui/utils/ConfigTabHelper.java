@@ -14,6 +14,7 @@ import javax.swing.JTextField;
 import javax.swing.SpringLayout;
 import javax.swing.UIManager;
 
+import eu.domibus.connector.client.gui.help.ConfigHelp;
 import eu.domibus.connector.client.gui.layout.SpringUtilities;
 
 public class ConfigTabHelper {
