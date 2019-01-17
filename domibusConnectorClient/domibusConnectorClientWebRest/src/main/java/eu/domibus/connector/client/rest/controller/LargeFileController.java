@@ -1,6 +1,7 @@
 package eu.domibus.connector.client.rest.controller;
 
-import eu.domibus.connector.client.rest.dto.FileReferenceRO;
+
+import eu.domibus.connector.client.rest.restobject.FileReferenceRO;
 import eu.domibus.connector.client.storage.service.LargeFileStorageService;
 import io.swagger.annotations.*;
 import org.apache.logging.log4j.LogManager;

@@ -1,4 +1,4 @@
-package eu.domibus.connector.client.rest.dto;
+package eu.domibus.connector.client.rest.restobject;
 
 public class FileReferenceRO {
 

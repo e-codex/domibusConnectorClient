@@ -71,6 +71,11 @@
             <artifactId>domibusConnectorAPIlib</artifactId>
         </dependency>
         <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnectorClientWebRestDto</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
             <groupId>eu.domibus.connector</groupId>
             <artifactId>domibusConnectorTestData</artifactId>
             <version>${connector-server.version}</version>

@@ -2,32 +2,28 @@ package eu.domibus.connector.client.rest.controller;
 
 import eu.domibus.connector.client.events.TriggerConfirmationEvent;
 import eu.domibus.connector.client.events.TriggerMessageSendEvent;
-import eu.domibus.connector.client.rest.dto.AttachmentRO;
-import eu.domibus.connector.client.rest.dto.BusinessMessageRO;
-import eu.domibus.connector.client.rest.dto.ConfirmationRO;
-import eu.domibus.connector.client.rest.dto.MessageDetailsRO;
+
+import eu.domibus.connector.client.rest.restobject.AttachmentRO;
+import eu.domibus.connector.client.rest.restobject.BusinessMessageRO;
+import eu.domibus.connector.client.rest.restobject.ConfirmationRO;
+import eu.domibus.connector.client.rest.restobject.MessageDetailsRO;
 import eu.domibus.connector.client.storage.entity.*;
 import eu.domibus.connector.client.storage.service.MessageStorageService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
-import org.apache.cxf.Bus;
 import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.xml.ws.Response;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 @RestController
