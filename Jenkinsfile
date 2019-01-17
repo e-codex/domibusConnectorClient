@@ -41,8 +41,9 @@
 						println "${scmInfo.GIT_COMMIT}"
 
 						sh "rm -Rf pipeline_sources"
-						dir('pipeline_sources') { // switch to subdir
-							git([url: "https://secure.e-codex.eu/gitblit/r/~spindlers/connector-jenkins-jobs.git", credentialsId: 'IT-NRW GIT Repo'])
+						dir('pipeline_sources') { // switch to subdir 
+						
+							git([url: "https://secure.e-codex.eu/gitblit/r/~spindlers/connector-jenkins-jobs.git", credentialsId: 'secure_ecodex_eu_git_repo'])
 						}
 					
 						MAVEN_PROJECT_DIR = pwd() + "/domibusConnectorClient"
