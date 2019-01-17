@@ -20,11 +20,11 @@ public interface DomibusConnectorContentMapper {
      * overridden when ContentMapper is used by configuration. The national xml
      * content will be written into the messageContent object.
      * 
-     * @param messageContent
+     * @param message
      *            - a {@link MessageContent} object containing the eCodex xml
      *            Content.
-     * @throws DomibusConnectorContentMapperException
-     * @throws ImplementationMissingException
+     * @throws DomibusConnectorContentMapperException - mapping error
+     * @throws ImplementationMissingException - not implemented
      */
     public void mapInternationalToNational(Message message) throws DomibusConnectorContentMapperException,
             ImplementationMissingException;
@@ -34,11 +34,11 @@ public interface DomibusConnectorContentMapper {
      * overridden when ContentMapper is used by configuration. The eCodex xml
      * content will be written into the messageContent object.
      * 
-     * @param messageContent
+     * @param message
      *            - a {@link MessageContent} object containing the national xml
      *            Content.
-     * @throws DomibusConnectorContentMapperException
-     * @throws ImplementationMissingException
+     * @throws DomibusConnectorContentMapperException - mapping error
+     * @throws ImplementationMissingException - not implemented
      */
     public void mapNationalToInternational(Message message) throws DomibusConnectorContentMapperException,
             ImplementationMissingException;

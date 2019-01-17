@@ -41,8 +41,8 @@ public class Message {
      * partner gateway. {@link MessageDetails} and {@link MessageConfirmation}
      * are mandatory as a minimum for an evidence message.
      * 
-     * @param messageDetails
-     * @param messageConfirmation
+     * @param messageDetails messageDetails
+     * @param messageConfirmation messageConfirmation
      */
     public Message(MessageDetails messageDetails, MessageConfirmation messageConfirmation) {
         super();
