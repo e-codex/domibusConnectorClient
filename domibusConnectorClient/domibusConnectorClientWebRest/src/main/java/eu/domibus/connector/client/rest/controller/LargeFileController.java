@@ -2,10 +2,12 @@ package eu.domibus.connector.client.rest.controller;
 
 
 import eu.domibus.connector.client.rest.restobject.FileReferenceRO;
+import eu.domibus.connector.client.rest.restobject.LargeFileReferenceRO;
 import eu.domibus.connector.client.storage.service.LargeFileStorageService;
 import io.swagger.annotations.*;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.InputStreamResource;
 import org.springframework.http.HttpHeaders;
@@ -80,23 +82,27 @@ public class LargeFileController {
     @PostMapping(value = "/create")
     @ApiOperation(value = "Make a POST request to upload the file",
             produces = "application/json", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public ResponseEntity<LargeFileStorageService.LargeFileReference> uploadFileToReference(
+    public ResponseEntity<LargeFileReferenceRO> uploadFileToReference(
 
             @ApiParam(name = "file", value = "Select the file to Upload", required = true)
-            @RequestPart("file") MultipartFile file) {
+            @RequestParam("file") MultipartFile multipartFile) {
 
-        String contentType = file.getContentType();
+        String contentType = multipartFile.getContentType();
 
         LargeFileStorageService.LargeFileReference largeFileReference = largeFileStorageService.createLargeFileReference();
         largeFileReference.setContentType(contentType);
 
-        try (InputStream inputStream = file.getInputStream();
+        LargeFileReferenceRO largeFileReferenceRO = new LargeFileReferenceRO();
+        BeanUtils.copyProperties(largeFileReference, largeFileReferenceRO);
+
+
+        try (InputStream inputStream = multipartFile.getInputStream();
              OutputStream out = largeFileStorageService.getOutputStream(largeFileReference)) {
             StreamUtils.copy(inputStream, out);
-            return new ResponseEntity<>(largeFileReference, HttpStatus.OK);
+            return new ResponseEntity<>(largeFileReferenceRO, HttpStatus.OK);
         } catch (IOException e) {
             LOGGER.error("IOException occured while uplaoding file", e);
-            return new ResponseEntity<>(new LargeFileStorageService.LargeFileReference(), HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(new LargeFileReferenceRO(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

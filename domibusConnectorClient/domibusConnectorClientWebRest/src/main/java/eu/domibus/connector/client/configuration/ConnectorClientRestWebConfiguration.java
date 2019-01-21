@@ -4,9 +4,11 @@ package eu.domibus.connector.client.configuration;
 import eu.domibus.connector.client.storage.dao.RepoPackage;
 import eu.domibus.connector.client.storage.entity.EntityClassesPackage;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.ws.config.annotation.EnableWs;
 
 @Configuration
@@ -46,6 +48,14 @@ public class ConnectorClientRestWebConfiguration {
 //        bean.setServlet(wsdispatcherServlet(ctx));
 //        bean.addUrlMappings("/ws/*");
 //        return bean;
+//    }
+//
+//    @Bean
+//    public CommonsMultipartResolver multipartResolver(){
+//        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
+//        commonsMultipartResolver.setDefaultEncoding("utf-8");
+//        commonsMultipartResolver.setMaxUploadSize(-1);
+//        return commonsMultipartResolver;
 //    }
 
 }

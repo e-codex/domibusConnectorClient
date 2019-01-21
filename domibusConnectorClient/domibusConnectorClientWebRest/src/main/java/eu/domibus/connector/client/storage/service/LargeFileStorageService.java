@@ -37,6 +37,7 @@ public interface LargeFileStorageService {
 
         @Nullable
         private LargeFileReferenceId storageIdReference;
+
         private String name;
 
         @Nullable
