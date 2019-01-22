@@ -37,6 +37,7 @@ public class LargeFileStorageServiceImpl implements LargeFileStorageService {
     @PostConstruct
     public void init() {
         storageFolder = largeFileStorageServiceProperties.getStoragePath();
+        LOGGER.debug("init file storage with path [{}]", storageFolder);
         if (storageFolder == null) {
             throw new IllegalArgumentException("storageFolder cannot be null!");
         }
@@ -124,7 +125,6 @@ public class LargeFileStorageServiceImpl implements LargeFileStorageService {
             throw new RuntimeException(String.format("Failed to create new empty property file [%s]", propertyFile), e);
         }
 
-//        LargeFileReference largeFileReference = new LargeFileReference();
         largeFileReference.setStorageIdReference(new LargeFileReferenceId(ref));
 
         return largeFileReference;

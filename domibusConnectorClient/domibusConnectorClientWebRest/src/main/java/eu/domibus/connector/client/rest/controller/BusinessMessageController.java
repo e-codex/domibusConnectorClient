@@ -89,6 +89,9 @@ public class BusinessMessageController {
 //        BeanUtils.copyProperties(restBusinessMessage, businessMessage);
 
         MessageDetailsRO messageDetailsDTO = restBusinessMessage.getMessageDetailsDTO();
+        if (messageDetailsDTO == null) {
+            throw new IllegalArgumentException("message details of rest business messag must not be null!");
+        }
         MessageDetails msgDetails = mapRestMessageDetailsToMsgDetails(messageDetailsDTO);
         businessMessage.setMessageDetails(msgDetails);
 
@@ -120,6 +123,9 @@ public class BusinessMessageController {
         }
         Attachment attachment = new Attachment();
         BeanUtils.copyProperties(attachmentRO, attachment);
+
+        attachment.setDataReference(attachmentRO.getStorageReference()); //TODO: check input values!
+
 
         if (attachmentRO.getDetachedSignatureRO() != null) {
             DetachedSignature detachedSignature = new DetachedSignature();
@@ -207,6 +213,7 @@ public class BusinessMessageController {
         AttachmentRO dto = new AttachmentRO();
         BeanUtils.copyProperties(attachment, dto);
         dto.setUrl(LargeFileController.PUBLISH_URL + "/" + attachment.getDataReference());
+        dto.setStorageReference(attachment.getDataReference());
         return dto;
     }
 

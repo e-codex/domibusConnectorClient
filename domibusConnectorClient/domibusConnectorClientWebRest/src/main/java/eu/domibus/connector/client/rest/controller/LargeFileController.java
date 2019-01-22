@@ -92,9 +92,12 @@ public class LargeFileController {
         LargeFileStorageService.LargeFileReference largeFileReference = largeFileStorageService.createLargeFileReference();
         largeFileReference.setContentType(contentType);
 
+
+        LOGGER.trace("Mapping Large file reference [{}]", largeFileReference);
+
         LargeFileReferenceRO largeFileReferenceRO = new LargeFileReferenceRO();
         BeanUtils.copyProperties(largeFileReference, largeFileReferenceRO);
-
+        largeFileReferenceRO.setStorageIdReference(largeFileReference.getStorageIdReference().getStorageIdReference());
 
         try (InputStream inputStream = multipartFile.getInputStream();
              OutputStream out = largeFileStorageService.getOutputStream(largeFileReference)) {

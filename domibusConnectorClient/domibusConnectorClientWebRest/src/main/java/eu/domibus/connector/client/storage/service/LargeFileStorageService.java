@@ -1,5 +1,7 @@
 package eu.domibus.connector.client.storage.service;
 
+import org.springframework.core.style.ToStringCreator;
+
 import javax.activation.DataSource;
 import javax.annotation.Nullable;
 import java.io.IOException;
@@ -76,6 +78,15 @@ public interface LargeFileStorageService {
         public void setName(String name) {
             this.name = name;
         }
+
+        public String toString() {
+            return new ToStringCreator(this)
+                    .append("name", name)
+                    .append("storageIdReference", storageIdReference)
+                    .append("contentType", contentType)
+                    .append("contentLength", contentLength)
+                    .toString();
+        }
     }
 
     static class LargeFileReferenceId {
@@ -93,6 +104,12 @@ public interface LargeFileStorageService {
 
         public void setStorageIdReference(String storageIdReference) {
             this.storageIdReference = storageIdReference;
+        }
+
+        public String toString() {
+            return new ToStringCreator(this)
+                    .append("storageIdReference", storageIdReference)
+                    .toString();
         }
     }
 

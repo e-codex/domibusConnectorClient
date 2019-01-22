@@ -8,11 +8,11 @@ public class LargeFileReferenceRO {
 
 
     //can be null...
-    private LargeFileReferenceId storageIdReference;
+    private String storageIdReference;
 
     private String name;
 
-    public LargeFileReferenceId getStorageIdReference() {
+    public String getStorageIdReference() {
         return storageIdReference;
     }
 
@@ -20,7 +20,7 @@ public class LargeFileReferenceRO {
 
     private long contentLength;
 
-    public void setStorageIdReference(LargeFileReferenceId storageIdReference) {
+    public void setStorageIdReference(String storageIdReference) {
         this.storageIdReference = storageIdReference;
     }
 
@@ -46,25 +46,6 @@ public class LargeFileReferenceRO {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-
-    static class LargeFileReferenceId {
-        private String storageIdReference = "";
-
-        public LargeFileReferenceId() {}
-
-        public LargeFileReferenceId(String id) {
-            this.storageIdReference = id;
-        }
-
-        public String getStorageIdReference() {
-            return storageIdReference;
-        }
-
-        public void setStorageIdReference(String storageIdReference) {
-            this.storageIdReference = storageIdReference;
-        }
     }
 
 }

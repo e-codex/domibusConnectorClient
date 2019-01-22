@@ -4,6 +4,8 @@ public class AttachmentRO {
 
     String url; //uri to the data
 
+    String storageReference;
+
     String documentName;
 
     String mimeType;
@@ -60,5 +62,13 @@ public class AttachmentRO {
 
     public void setKey(String key) {
         this.key = key;
+    }
+
+    public String getStorageReference() {
+        return storageReference;
+    }
+
+    public void setStorageReference(String storageReference) {
+        this.storageReference = storageReference;
     }
 }
