@@ -8,7 +8,7 @@ COPY maven/ /app/
 
 RUN mkdir /app/logs
 RUN mkdir /app/data
-RUN chmod 777 /app/start.sh
+#RUN chmod 777 /app/start.sh
 
 WORKDIR /app
 CMD /app/start.sh
