@@ -268,7 +268,7 @@
                         <configuration>
                             <images>
                                 <image>
-                                    <name>connector-rest-client</name>
+                                    <name>ecodex/domibusconnectorclient</name>
                                     <build>
                                         <tags>
                                             <tag>${project.version}</tag>
