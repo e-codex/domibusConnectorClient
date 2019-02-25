@@ -1,5 +1,7 @@
 package eu.domibus.connector.client.storage.entity;
 
+import org.springframework.lang.Nullable;
+
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -27,10 +29,11 @@ public class BusinessMessage {
 
     //business xml
     @Column(name = "BUSINESS_XML")
+    @Nullable
     private String businessXml;
 
     //business document
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, optional = true)
     @JoinColumn(name = "BUSINESS_ATTACHMENT_ID", referencedColumnName = "ID")
     private Attachment businessAttachment;
 
@@ -78,6 +81,7 @@ public class BusinessMessage {
         return businessXml;
     }
 
+    @Nullable
     public void setBusinessXml(String businessXml) {
         this.businessXml = businessXml;
     }
