@@ -6,6 +6,7 @@ import java.util.List;
 
 import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClient;
 import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClientDelivery;
+import eu.domibus.connector.domain.transition.*;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,11 +21,6 @@ import eu.domibus.connector.client.runnable.configuration.ConnectorClientPropert
 import eu.domibus.connector.client.runnable.exception.DomibusConnectorRunnableException;
 import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
 import eu.domibus.connector.client.service.DomibusConnectorClientService;
-import eu.domibus.connector.domain.transition.DomibusConnectorActionType;
-import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
-import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
-import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType;
-import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 @Component
 public class DomibusStandaloneConnectorFileSystemClient implements InitializingBean, DomibusConnectorNationalBackendClient, DomibusConnectorNationalBackendClientDelivery {
@@ -45,9 +41,11 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 	private File outgoingMessagesDir;
 
 	@Override
-	public void processMessageFromConnector(DomibusConnectorMessageType message)
+	public DomibusConnectorMessageResponseType processMessageFromConnector(DomibusConnectorMessageType message)
 			throws DomibusConnectorNationalBackendClientException, ImplementationMissingException {
 
+		DomibusConnectorMessageResponseType responseType = new DomibusConnectorMessageResponseType();
+		responseType.setResult(true);
 
 		try {
 			if (checkIfConfirmationMessage(message)) {
@@ -60,9 +58,10 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 			}
 		} catch (DomibusStandaloneConnectorFileSystemException e) {
 			LOGGER.error("Exception processing message from connector... ", e);
+			responseType.setResult(false);
 		}
 
-
+		return responseType;
 	}
 
 	@Override

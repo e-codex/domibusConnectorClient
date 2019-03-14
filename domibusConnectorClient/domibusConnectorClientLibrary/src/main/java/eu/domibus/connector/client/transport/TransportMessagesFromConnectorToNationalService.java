@@ -10,12 +10,13 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
-@Service
+//@Service //client lib should not create spring services!
 public class TransportMessagesFromConnectorToNationalService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransportMessagesFromConnectorToNationalService.class);
@@ -32,7 +33,7 @@ public class TransportMessagesFromConnectorToNationalService {
         messages = clientService.requestMessagesFromConnector();
 
         if (!CollectionUtils.isEmpty(messages)) {
-            LOGGER.info("{} new messages from connector to transport to national backend...", messages.size());
+            LOGGER.debug("{} new messages from connector to transport to national backend...", messages.size());
             messages.stream().forEach( message -> {
                 try {
                     nationalBackendClientDelivery.processMessageFromConnector(message);

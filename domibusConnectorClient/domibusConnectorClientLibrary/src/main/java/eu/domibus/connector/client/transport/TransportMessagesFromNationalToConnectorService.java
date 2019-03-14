@@ -13,7 +13,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
-@Service
+//@Service //client lib should not create spring services!
 public class TransportMessagesFromNationalToConnectorService {
 
     private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(TransportMessagesFromNationalToConnectorService.class);
@@ -31,7 +31,7 @@ public class TransportMessagesFromNationalToConnectorService {
         messages = nationalBackendClient.checkForMessagesOnNationalBackend();
 
         if (!CollectionUtils.isEmpty(messages)) {
-            LOGGER.info("{} new messages from national backend to submit to connector...", messages.size());
+            LOGGER.debug("{} new messages from national backend to submit to connector...", messages.size());
             for (DomibusConnectorMessageType message : messages) {
                 try {
                     clientService.submitMessageToConnector(message);

@@ -2,6 +2,7 @@ package eu.domibus.connector.client.nbc;
 
 import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.client.exception.DomibusConnectorNationalBackendClientException;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageResponseType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Component;
@@ -14,7 +15,7 @@ public class DomibusConnectorNationalBackendClientDefaultImpl implements Domibus
 
 
 	@Override
-	public void processMessageFromConnector(DomibusConnectorMessageType message)
+	public DomibusConnectorMessageResponseType processMessageFromConnector(DomibusConnectorMessageType message)
 			throws DomibusConnectorNationalBackendClientException, ImplementationMissingException {
 		throw new ImplementationMissingException("DomibusConnectorNationalBackendClient", "processMessagesFromConnector");
 	}
