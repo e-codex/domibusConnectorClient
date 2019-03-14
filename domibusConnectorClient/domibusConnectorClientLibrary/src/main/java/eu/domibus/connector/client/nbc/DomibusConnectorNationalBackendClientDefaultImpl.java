@@ -7,8 +7,6 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 @ConditionalOnMissingBean(DomibusConnectorNationalBackendClientDelivery.class)
 public class DomibusConnectorNationalBackendClientDefaultImpl implements DomibusConnectorNationalBackendClientDelivery {
