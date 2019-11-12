@@ -1,9 +1,5 @@
 package eu.domibus.connector.client.rest.restobject;
 
-import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureMimeType;
-
-import javax.xml.bind.annotation.XmlEnumValue;
-
 public class DetachedSignatureRO {
 
     private byte[] detachedSignature;
