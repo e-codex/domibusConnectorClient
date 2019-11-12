@@ -5,13 +5,15 @@ import eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWebServ
 import javax.annotation.Resource;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
+import org.springframework.context.annotation.Profile;
 
 /**
  *
  * @author {@literal Stephan Spindler <stephan.spindler@extern.brz.gv.at> }
  */
 @Configuration
-//@ImportResource("classpath:/webservice/connectorclient.xml")
+//@Profile("wslink")
+@ImportResource("classpath:/webservice/connectorclient.xml")
 public class DomibusConnectorClientWebServiceLinkConfiguration {
 
        
