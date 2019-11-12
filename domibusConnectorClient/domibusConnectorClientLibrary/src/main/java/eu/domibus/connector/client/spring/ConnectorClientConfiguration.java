@@ -1,6 +1,8 @@
 
 package eu.domibus.connector.client.spring;
 
+import eu.domibus.connector.client.controller.DomibusConnectorClientSubmissionController;
+import eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWebService;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,5 +29,5 @@ public class ConnectorClientConfiguration {
     public DomibusConnectorContentMapper contentMapper() {
     	return new DomibusConnectorContentMapperDefaultImpl();
     }
-    
+
 }

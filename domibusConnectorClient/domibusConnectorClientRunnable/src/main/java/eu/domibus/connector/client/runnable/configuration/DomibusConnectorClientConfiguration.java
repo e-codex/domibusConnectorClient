@@ -1,6 +1,7 @@
 
 package eu.domibus.connector.client.runnable.configuration;
 
+import eu.domibus.connector.client.controller.DomibusConnectorClientSubmissionController;
 import eu.domibus.connector.client.transport.TransportMessagesFromConnectorToNationalService;
 import eu.domibus.connector.client.transport.TransportMessagesFromNationalToConnectorService;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -21,6 +22,11 @@ public class DomibusConnectorClientConfiguration {
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
     	PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer = new PropertySourcesPlaceholderConfigurer();
 		return propertySourcesPlaceholderConfigurer;
+    }
+
+    @Bean
+    DomibusConnectorClientSubmissionController domibusConnectorClientSubmissionController() {
+        return new DomibusConnectorClientSubmissionController();
     }
 
     @Bean

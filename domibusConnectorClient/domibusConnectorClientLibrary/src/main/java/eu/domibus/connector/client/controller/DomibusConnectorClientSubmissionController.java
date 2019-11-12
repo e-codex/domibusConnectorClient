@@ -11,7 +11,7 @@ import eu.domibus.connector.client.mapping.DomibusConnectorContentMapper;
 import eu.domibus.connector.client.mapping.exception.DomibusConnectorContentMapperException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
-@Component
+
 public class DomibusConnectorClientSubmissionController {
 
     @Autowired
