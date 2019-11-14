@@ -9,6 +9,7 @@ import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
@@ -24,7 +25,7 @@ import eu.domibus.connector.client.service.DomibusConnectorClientService;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 @Configuration("submitMessagesToConnectorJobConfiguration")
-//@ConditionalOnProperty(name = "connector.use.evidences.timeout", havingValue="true")
+@ConditionalOnProperty(value = "connector.client.timer.check.outgoing.messages.enabled", havingValue = "true")
 public class SubmitMessagesToConnectorJob implements Job {
 	
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(SubmitMessagesToConnectorJob.class);

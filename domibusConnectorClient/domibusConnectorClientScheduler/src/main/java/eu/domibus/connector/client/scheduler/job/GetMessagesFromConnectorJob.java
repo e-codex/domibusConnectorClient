@@ -10,6 +10,7 @@ import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
@@ -25,6 +26,7 @@ import eu.domibus.connector.client.service.DomibusConnectorClientService;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 @Configuration("getMessagesFromConnectorJobConfiguration")
+@ConditionalOnProperty(value = "connector.client.timer.check.incoming.messages.enabled", havingValue = "true")
 public class GetMessagesFromConnectorJob implements Job {
 
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(GetMessagesFromConnectorJob.class);
