@@ -15,7 +15,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.util.StringUtils;
@@ -29,16 +28,11 @@ public class DomibusConnector {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DomibusConnector.class);
 
-    /**
-     * @param args
-     */
-    @SuppressWarnings("resource")
     public static void main(String[] args) {
-        ApplicationContext ctx = createApplicationContext(args);
+    	runSpringApplication(args);
     }
-
-
-    public static ApplicationContext createApplicationContext(String[] args) {
+   
+    public static ConfigurableApplicationContext runSpringApplication(String[] args) {
         String connectorProperties = null;
         boolean startWithGUI = false;
         boolean webEnabled = false;
