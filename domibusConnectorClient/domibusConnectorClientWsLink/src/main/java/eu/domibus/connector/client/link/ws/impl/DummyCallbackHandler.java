@@ -1,4 +1,4 @@
-package eu.domibus.connector.client.connection.ws.callback;
+package eu.domibus.connector.client.link.ws.impl;
 
 import java.io.IOException;
 

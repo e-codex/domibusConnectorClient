@@ -1,4 +1,4 @@
-package eu.domibus.connector.client.connection.exception;
+package eu.domibus.connector.client.link.exception;
 
 public class DomibusConnectorBackendWebServiceClientException extends Exception {
 

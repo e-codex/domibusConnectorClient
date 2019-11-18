@@ -17,6 +17,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 
 import javax.xml.ws.soap.SOAPBinding;
@@ -25,6 +26,7 @@ import java.util.Properties;
 
 
 @Configuration
+@Conditional(PushWebserviceEnabledCondition.class)
 public class PushWebServiceEndpointConfiguration {
 
     private static final Logger LOGGER = LogManager.getLogger(PushWebServiceEndpointConfiguration.class);
@@ -55,7 +57,7 @@ public class PushWebServiceEndpointConfiguration {
         jaxWsProxyFactoryBean.setAddress(connectorLinkWsProperties.getConnectorAddress());
         jaxWsProxyFactoryBean.setServiceName(DomibusConnectorBackendWSService.SERVICE);
         jaxWsProxyFactoryBean.setEndpointName(DomibusConnectorBackendWSService.DomibusConnectorBackendWebService);
-        jaxWsProxyFactoryBean.setWsdlURL(DomibusConnectorBackendWSService.WSDL_LOCATION.toString());
+//        jaxWsProxyFactoryBean.setWsdlURL(DomibusConnectorBackendWSService.WSDL_LOCATION.toString());
         jaxWsProxyFactoryBean.setBindingId(SOAPBinding.SOAP12HTTP_MTOM_BINDING);
 
         jaxWsProxyFactoryBean.getFeatures().add(policyLoader().loadPolicyFeature());
@@ -69,7 +71,10 @@ public class PushWebServiceEndpointConfiguration {
         jaxWsProxyFactoryBean.getProperties().put("security.signature.properties", connectorWsLinkEncryptionProperties());
         jaxWsProxyFactoryBean.getProperties().put("security.callback-handler", new DefaultWsCallbackHandler());
 
-        return jaxWsProxyFactoryBean.create(DomibusConnectorBackendWebService.class);
+        DomibusConnectorBackendWebService domibusConnectorBackendWebService = jaxWsProxyFactoryBean.create(DomibusConnectorBackendWebService.class);
+        LOGGER.debug("Registered WS Client for [{}]", DomibusConnectorBackendWebService.class);
+
+        return domibusConnectorBackendWebService;
     }
 
 

@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Profile;
  */
 @Configuration
 //@Profile("wslink")
-@ImportResource("classpath:/webservice/connectorclient.xml")
+//@ImportResource("classpath:/webservice/connectorclient.xml")
 public class DomibusConnectorClientWebServiceLinkConfiguration {
 
        

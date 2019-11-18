@@ -4,12 +4,15 @@ import java.util.List;
 
 import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClientDelivery;
 import eu.domibus.connector.client.transport.TransportMessagesFromConnectorToNationalService;
+import eu.domibus.connector.lib.spring.DomibusConnectorDuration;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
@@ -24,17 +27,16 @@ import eu.domibus.connector.client.scheduler.configuration.DomibusConnectorClien
 import eu.domibus.connector.client.service.DomibusConnectorClientService;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
+@EnableConfigurationProperties
 @Configuration("getMessagesFromConnectorJobConfiguration")
-public class GetMessagesFromConnectorJob implements Job {
+public class GetMessagesFromConnectorJobConfiguration implements Job {
 
-	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(GetMessagesFromConnectorJob.class);
 
 	@Autowired
 	private TransportMessagesFromConnectorToNationalService transportMessagesFromConnectorToNationalService;
 
-	@Value("${connector.client.timer.check.incoming.messages.ms}")
-	private Long repeatInterval;
-
+	@Autowired
+	GetMessagesFromConnectorJobConfigurationProperties properties;
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
@@ -52,7 +54,11 @@ public class GetMessagesFromConnectorJob implements Job {
 
 	@Bean(name = "getMessagesFromConnectorTrigger")
 	public SimpleTriggerFactoryBean getMessagesFromConnectorTrigger(@Qualifier("getMessagesFromConnectorJob") JobDetailFactoryBean jdfb ) {
-		return DomibusConnectorClientSchedulerConfiguration.createTrigger(jdfb.getObject(), repeatInterval, repeatInterval/2);
+		if (!properties.isEnabled())
+			return null;
+		return DomibusConnectorClientSchedulerConfiguration.createTrigger(jdfb.getObject(),
+				properties.getRepeatInterval().getMilliseconds(),
+				properties.getRepeatInterval().getMilliseconds()/2);
 	}
 
 }

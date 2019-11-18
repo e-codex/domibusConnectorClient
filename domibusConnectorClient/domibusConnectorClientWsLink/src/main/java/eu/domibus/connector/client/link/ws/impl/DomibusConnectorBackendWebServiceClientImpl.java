@@ -1,18 +1,17 @@
-package eu.domibus.connector.client.connection.ws.impl;
+package eu.domibus.connector.client.link.ws.impl;
 
-import java.io.ByteArrayOutputStream;
 import java.util.List;
 
 import javax.annotation.Resource;
-import javax.xml.bind.JAXB;
 
+import eu.domibus.connector.client.link.ws.DomibusConnectorBackendWebServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import eu.domibus.connector.client.connection.exception.DomibusConnectorBackendWebServiceClientException;
-import eu.domibus.connector.client.connection.ws.DomibusConnectorBackendWebServiceClient;
+import eu.domibus.connector.client.link.exception.DomibusConnectorBackendWebServiceClientException;
+
 import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;

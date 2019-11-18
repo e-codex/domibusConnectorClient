@@ -1,12 +1,10 @@
 package eu.domibus.connector.client.controller;
 
-import javax.annotation.Resource;
-
+import eu.domibus.connector.client.link.ws.DomibusConnectorBackendWebServiceClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import eu.domibus.connector.client.connection.exception.DomibusConnectorBackendWebServiceClientException;
-import eu.domibus.connector.client.connection.ws.DomibusConnectorBackendWebServiceClient;
+import eu.domibus.connector.client.link.exception.DomibusConnectorBackendWebServiceClientException;
+
 import eu.domibus.connector.client.mapping.DomibusConnectorContentMapper;
 import eu.domibus.connector.client.mapping.exception.DomibusConnectorContentMapperException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;

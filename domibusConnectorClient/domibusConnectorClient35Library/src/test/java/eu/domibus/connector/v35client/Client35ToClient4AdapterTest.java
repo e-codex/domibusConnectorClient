@@ -3,13 +3,13 @@ package eu.domibus.connector.v35client;
 
 import static org.mockito.Matchers.any;
 
+import eu.domibus.connector.client.link.ws.DomibusConnectorBackendWebServiceClient;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import eu.domibus.connector.client.connection.exception.DomibusConnectorBackendWebServiceClientException;
-import eu.domibus.connector.client.connection.ws.DomibusConnectorBackendWebServiceClient;
+import eu.domibus.connector.client.link.exception.DomibusConnectorBackendWebServiceClientException;
 import eu.domibus.connector.common.exception.ImplementationMissingException;
 import eu.domibus.connector.common.message.Message;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;

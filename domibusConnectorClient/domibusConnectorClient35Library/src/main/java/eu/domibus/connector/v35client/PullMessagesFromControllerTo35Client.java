@@ -1,16 +1,8 @@
 
 package eu.domibus.connector.v35client;
 
-import java.util.List;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Profile;
-import org.springframework.stereotype.Service;
-
-import eu.domibus.connector.client.connection.exception.DomibusConnectorBackendWebServiceClientException;
-import eu.domibus.connector.client.connection.ws.DomibusConnectorBackendWebServiceClient;
+import eu.domibus.connector.client.link.exception.DomibusConnectorBackendWebServiceClientException;
+import eu.domibus.connector.client.link.ws.DomibusConnectorBackendWebServiceClient;
 import eu.domibus.connector.common.exception.ImplementationMissingException;
 import eu.domibus.connector.common.message.Message;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
@@ -18,6 +10,13 @@ import eu.domibus.connector.mapping.DomibusConnectorContentMapper;
 import eu.domibus.connector.mapping.exception.DomibusConnectorContentMapperException;
 import eu.domibus.connector.nbc.DomibusConnectorNationalBackendClient;
 import eu.domibus.connector.nbc.exception.DomibusConnectorNationalBackendClientException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 /**
  *
