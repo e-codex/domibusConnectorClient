@@ -5,6 +5,8 @@ import java.util.List;
 import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClientDelivery;
 import eu.domibus.connector.client.transport.TransportMessagesFromConnectorToNationalService;
 import eu.domibus.connector.lib.spring.DomibusConnectorDuration;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -29,10 +31,11 @@ import eu.domibus.connector.client.service.DomibusConnectorClientService;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 @EnableConfigurationProperties
-@ConditionalOnProperty(value = GetMessagesFromConnectorJobConfigurationProperties.PREFIX + "enabled", havingValue = "true")
+@ConditionalOnProperty(value = GetMessagesFromConnectorJobConfigurationProperties.PREFIX + ".enabled", havingValue = "true")
 @Configuration("getMessagesFromConnectorJobConfiguration")
 public class GetMessagesFromConnectorJobConfiguration implements Job {
 
+	private static final Logger LOGGER = LogManager.getLogger(GetMessagesFromConnectorJobConfiguration.class);
 
 	@Autowired
 	private TransportMessagesFromConnectorToNationalService transportMessagesFromConnectorToNationalService;
@@ -42,6 +45,7 @@ public class GetMessagesFromConnectorJobConfiguration implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
+		LOGGER.debug("Running GetMessagesFromConnectorJob");
         try {
             transportMessagesFromConnectorToNationalService.transportMessageToNational();
         } catch (DomibusConnectorClientException e) {

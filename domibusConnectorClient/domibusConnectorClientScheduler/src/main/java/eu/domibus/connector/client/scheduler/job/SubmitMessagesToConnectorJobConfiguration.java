@@ -21,7 +21,7 @@ import eu.domibus.connector.client.scheduler.configuration.DomibusConnectorClien
 
 @EnableConfigurationProperties
 @Configuration("submitMessagesToConnectorJobConfiguration")
-@ConditionalOnProperty(value = SubmitMessagesToConnectorJobConfigurationProperties.PREFIX + "enabled", havingValue = "true")
+@ConditionalOnProperty(value = SubmitMessagesToConnectorJobConfigurationProperties.PREFIX + ".enabled", havingValue = "true")
 public class SubmitMessagesToConnectorJobConfiguration implements Job {
 	
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(SubmitMessagesToConnectorJobConfiguration.class);
@@ -37,6 +37,7 @@ public class SubmitMessagesToConnectorJobConfiguration implements Job {
 
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
+		LOGGER.debug("Running SubmitMessagesToConnectorJob");
 		try {
 			transportMessagesFromNationalToConnectorService.submitMessageFromNationalToConnector();
 		} catch (DomibusConnectorNationalBackendClientException | ImplementationMissingException e) {
@@ -52,6 +53,7 @@ public class SubmitMessagesToConnectorJobConfiguration implements Job {
 
 	@Bean(name = "submitMessagesToConnectorTrigger")
 	public SimpleTriggerFactoryBean submitMessagesToConnectorTrigger(@Qualifier("submitMessagesToConnectorJob") JobDetailFactoryBean jdfb ) {
+		LOGGER.debug("create SimpleTriggerFactoryBean: submitMessagesToConnectorTrigger");
 		return DomibusConnectorClientSchedulerConfiguration.createTrigger(jdfb.getObject(),
 				properties.getRepeatInterval().getMilliseconds(), 0L);
 	}
