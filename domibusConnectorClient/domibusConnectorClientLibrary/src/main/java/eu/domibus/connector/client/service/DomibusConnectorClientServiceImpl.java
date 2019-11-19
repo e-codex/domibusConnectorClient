@@ -11,7 +11,6 @@ import eu.domibus.connector.client.controller.DomibusConnectorClientSubmissionCo
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
-@Component
 public class DomibusConnectorClientServiceImpl implements DomibusConnectorClientService {
 
 	@Resource

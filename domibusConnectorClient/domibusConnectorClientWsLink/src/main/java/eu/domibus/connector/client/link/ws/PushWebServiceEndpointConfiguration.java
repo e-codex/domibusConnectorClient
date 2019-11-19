@@ -26,7 +26,6 @@ import java.util.Properties;
 
 
 @Configuration
-@Conditional(PushWebserviceEnabledCondition.class)
 public class PushWebServiceEndpointConfiguration {
 
     private static final Logger LOGGER = LogManager.getLogger(PushWebServiceEndpointConfiguration.class);
@@ -79,6 +78,7 @@ public class PushWebServiceEndpointConfiguration {
 
 
     @Bean
+    @Conditional(PushWebserviceEnabledCondition.class)
     public EndpointImpl domibusConnectorDeliveryServiceEndpoint() {
         EndpointImpl endpoint = new EndpointImpl(cxfBus, backendDeliveryWebService);
         endpoint.setAddress(connectorLinkWsProperties.getPublishAddress());

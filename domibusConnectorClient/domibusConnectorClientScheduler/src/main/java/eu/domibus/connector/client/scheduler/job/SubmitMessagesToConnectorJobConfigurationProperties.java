@@ -5,10 +5,10 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 @Component
-@ConfigurationProperties(prefix = GetMessagesFromConnectorJobConfigurationProperties.PREFIX)
-public class GetMessagesFromConnectorJobConfigurationProperties {
+@ConfigurationProperties(prefix = SubmitMessagesToConnectorJobConfigurationProperties.PREFIX)
+public class SubmitMessagesToConnectorJobConfigurationProperties {
 
-    public static final String PREFIX = "connector-client.timer.check.incoming-messages";
+    public static final String PREFIX = "connector-client.timer.check.outgoing-messages";
 
     private DomibusConnectorDuration repeatInterval;
 
@@ -29,4 +29,5 @@ public class GetMessagesFromConnectorJobConfigurationProperties {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
 }
