@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.annotation.Resource;
 
+import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageResponseType;
 import org.springframework.stereotype.Component;
 
 import eu.domibus.connector.client.controller.DomibusConnectorClientDeliveryController;
@@ -27,10 +29,9 @@ public class DomibusConnectorClientServiceImpl implements DomibusConnectorClient
 	}
 
 	@Override
-	public void submitMessageToConnector(DomibusConnectorMessageType message)
+	public DomibusConnectorMessageResponseType submitMessageToConnector(DomibusConnectorMessageType message)
 			throws DomibusConnectorClientException {
-		submissionController.submitMessageToConnector(message);
-
+		return submissionController.submitMessageToConnector(message);
 	}
 
 }

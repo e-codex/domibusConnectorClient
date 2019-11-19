@@ -75,14 +75,16 @@ public class DomibusStandaloneConnectorFileSystemReader {
 	}
 
 	public File setMessageSent(File messageFolder) throws DomibusStandaloneConnectorFileSystemException {
-		String newMessageFolderPath = getMessageFolderPath(messageFolder);
-		messageFolder = DomibusStandaloneConnectorFileSystemUtil.renameMessageFolder(messageFolder, newMessageFolderPath, DomibusConnectorRunnableConstants.MESSAGE_SENT_FOLDER_POSTFIX);
+		String messageFolderString = messageFolder.getPath().replaceAll(DomibusConnectorRunnableConstants.MESSAGE_SENDING_FOLDER_POSTFIX, "");
+		LOGGER.debug("setting message [{}] as sent with new Path [{}]", messageFolder);
+		messageFolder = DomibusStandaloneConnectorFileSystemUtil.renameMessageFolder(messageFolder, messageFolderString, DomibusConnectorRunnableConstants.MESSAGE_SENT_FOLDER_POSTFIX);
 		return messageFolder;
 	}
 
 	public File setMessageFailed(File messageFolder) throws DomibusStandaloneConnectorFileSystemException {
-		String newMessageFolderPath = getMessageFolderPath(messageFolder);
-		messageFolder = DomibusStandaloneConnectorFileSystemUtil.renameMessageFolder(messageFolder, newMessageFolderPath, DomibusConnectorRunnableConstants.MESSAGE_SENT_FOLDER_POSTFIX);
+		String messageFolderString = messageFolder.getPath().replaceAll(DomibusConnectorRunnableConstants.MESSAGE_SENDING_FOLDER_POSTFIX, "");
+		LOGGER.debug("setting message [{}] as failed with new Path [{}]", messageFolder);
+		messageFolder = DomibusStandaloneConnectorFileSystemUtil.renameMessageFolder(messageFolder, messageFolderString, DomibusConnectorRunnableConstants.MESSAGE_SENT_FOLDER_POSTFIX);
 		return messageFolder;
 	}
 

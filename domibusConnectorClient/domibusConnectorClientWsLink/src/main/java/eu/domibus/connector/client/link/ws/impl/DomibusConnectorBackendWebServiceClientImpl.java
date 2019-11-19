@@ -5,6 +5,7 @@ import java.util.List;
 import javax.annotation.Resource;
 
 import eu.domibus.connector.client.link.ws.DomibusConnectorBackendWebServiceClient;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageResponseType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -27,10 +28,17 @@ public class DomibusConnectorBackendWebServiceClientImpl implements DomibusConne
 	DomibusConnectorBackendWebService backendWebServiceClient;
 
 	@Override
-	public void submitMessage(DomibusConnectorMessageType messageDTO) throws DomibusConnectorBackendWebServiceClientException {
+	public DomibusConnectorMessageResponseType submitMessage(DomibusConnectorMessageType messageDTO) throws DomibusConnectorBackendWebServiceClientException {
 		LOGGER.debug("#submitMessage: submitting message [{}] to backendWebService", messageDTO);
 		try {
 			DomibsConnectorAcknowledgementType submitMessageAck = backendWebServiceClient.submitMessage(messageDTO);
+
+			DomibusConnectorMessageResponseType responseType = new DomibusConnectorMessageResponseType();
+			responseType.setResultMessage(submitMessageAck.getResultMessage());
+			responseType.setResult(submitMessageAck.isResult());
+			responseType.setAssignedMessageId(submitMessageAck.getMessageId());
+			responseType.setResultMessage(submitMessageAck.getResultMessage());
+			responseType.setResponseForMessageId(messageDTO.getMessageDetails().getBackendMessageId());
 
 			if(submitMessageAck!=null) {
 				if(!submitMessageAck.isResult()) {
@@ -45,6 +53,7 @@ public class DomibusConnectorBackendWebServiceClientImpl implements DomibusConne
 						+ "Check domibusConnector for further details on the message submission status!"
 						);
 			}
+			return responseType;
 		}catch(Exception e) {
 			throw new DomibusConnectorBackendWebServiceClientException("Exception calling the backendWebService: ",e);
 		}

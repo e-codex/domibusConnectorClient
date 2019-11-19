@@ -5,6 +5,7 @@ import eu.domibus.connector.client.exception.DomibusConnectorNationalBackendClie
 import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClient;
 import eu.domibus.connector.client.service.DomibusConnectorClientService;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageResponseType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,10 +35,16 @@ public class TransportMessagesFromNationalToConnectorService {
             LOGGER.debug("{} new messages from national backend to submit to connector...", messages.size());
             for (DomibusConnectorMessageType message : messages) {
                 try {
-                    clientService.submitMessageToConnector(message);
+                    DomibusConnectorMessageResponseType domibusConnectorMessageResponseType = clientService.submitMessageToConnector(message);
+                    nationalBackendClient.setMessageResponse(domibusConnectorMessageResponseType, message);
                 } catch (DomibusConnectorClientException e) {
+                    DomibusConnectorMessageResponseType responseType = new DomibusConnectorMessageResponseType();
+                    responseType.setResult(false);
+                    responseType.setResultMessage(e.getMessage());
+                    nationalBackendClient.setMessageResponse(responseType, message);
                     LOGGER.error("Exception submitting message to connector: ", e);
                 }
+
             }
         }
     }
