@@ -5,7 +5,7 @@
     <parent>
         <artifactId>domibusConnectorClient</artifactId>
         <groupId>eu.domibus.connector-client</groupId>
-        <version>4.1.0-alpha1-RELEASE</version>
+        <version>4.1.0-alpha3</version>
     </parent>
     <packaging>pom</packaging>
     <dependencies>
