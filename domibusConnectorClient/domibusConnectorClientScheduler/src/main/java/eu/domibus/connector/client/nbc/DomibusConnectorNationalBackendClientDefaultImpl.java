@@ -26,4 +26,11 @@ public class DomibusConnectorNationalBackendClientDefaultImpl implements Domibus
 		throw new ImplementationMissingException("DomibusConnectorNationalBackendClient", "checkForMessagesOnNationalBackend");
 	}
 
+	@Override
+	public void setMessageResponse(DomibusConnectorMessageResponseType responseType, DomibusConnectorMessageType messageType) throws DomibusConnectorNationalBackendClientException, ImplementationMissingException {
+		throw new ImplementationMissingException("DomibusConnectorNationalBackendClient", "sendMessageResponse");
+	}
+
+
+
 }

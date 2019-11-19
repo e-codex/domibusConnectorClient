@@ -19,7 +19,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.validation.annotation.Validated;
 
+import javax.validation.Valid;
 import javax.xml.ws.soap.SOAPBinding;
 import java.util.HashMap;
 import java.util.Properties;
@@ -35,6 +37,7 @@ public class PushWebServiceEndpointConfiguration {
     private Bus cxfBus;
 
     @Autowired
+    @Valid
     ConnectorLinkWSProperties connectorLinkWsProperties;
 
     @Autowired
@@ -56,7 +59,7 @@ public class PushWebServiceEndpointConfiguration {
         jaxWsProxyFactoryBean.setAddress(connectorLinkWsProperties.getConnectorAddress());
         jaxWsProxyFactoryBean.setServiceName(DomibusConnectorBackendWSService.SERVICE);
         jaxWsProxyFactoryBean.setEndpointName(DomibusConnectorBackendWSService.DomibusConnectorBackendWebService);
-//        jaxWsProxyFactoryBean.setWsdlURL(DomibusConnectorBackendWSService.WSDL_LOCATION.toString());
+        jaxWsProxyFactoryBean.setWsdlURL(DomibusConnectorBackendWSService.WSDL_LOCATION.toString());
         jaxWsProxyFactoryBean.setBindingId(SOAPBinding.SOAP12HTTP_MTOM_BINDING);
 
         jaxWsProxyFactoryBean.getFeatures().add(policyLoader().loadPolicyFeature());

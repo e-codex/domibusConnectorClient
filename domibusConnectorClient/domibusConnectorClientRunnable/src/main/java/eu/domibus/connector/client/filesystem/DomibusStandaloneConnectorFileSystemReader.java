@@ -45,7 +45,7 @@ public class DomibusStandaloneConnectorFileSystemReader {
 
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusStandaloneConnectorFileSystemReader.class);
 	
-	public List<File> readUnsentMessages(File outgoingMessagesDir ){
+	public List<File> readUnsentMessages(File outgoingMessagesDir){
 		List<File> messagesUnsent = new ArrayList<File>();
 
 		if (outgoingMessagesDir.listFiles().length > 0) {
@@ -58,6 +58,43 @@ public class DomibusStandaloneConnectorFileSystemReader {
 		}
 		
 		return messagesUnsent;
+	}
+
+	public List<File> readMessagesWithPostfix(File outgoingMessagesDir, String endsWith) {
+		List<File> messagesUnsent = new ArrayList<File>();
+
+		if (outgoingMessagesDir.listFiles().length > 0) {
+			for (File sub : outgoingMessagesDir.listFiles()) {
+				if (sub.isDirectory()
+						&& sub.getName().endsWith(endsWith)) {
+					messagesUnsent.add(sub);
+				}
+			}
+		}
+		return messagesUnsent;
+	}
+
+	public File setMessageSent(File messageFolder) throws DomibusStandaloneConnectorFileSystemException {
+		String newMessageFolderPath = getMessageFolderPath(messageFolder);
+		messageFolder = DomibusStandaloneConnectorFileSystemUtil.renameMessageFolder(messageFolder, newMessageFolderPath, DomibusConnectorRunnableConstants.MESSAGE_SENT_FOLDER_POSTFIX);
+		return messageFolder;
+	}
+
+	public File setMessageFailed(File messageFolder) throws DomibusStandaloneConnectorFileSystemException {
+		String newMessageFolderPath = getMessageFolderPath(messageFolder);
+		messageFolder = DomibusStandaloneConnectorFileSystemUtil.renameMessageFolder(messageFolder, newMessageFolderPath, DomibusConnectorRunnableConstants.MESSAGE_SENT_FOLDER_POSTFIX);
+		return messageFolder;
+	}
+
+	private String getMessageFolderPath(File messageFolder) {
+		DomibusConnectorMessageProperties messageProperties = DomibusConnectorRunnableUtil
+				.loadMessageProperties(messageFolder, ConnectorClientProperties.messagePropertiesFileName);
+
+		String nationalMessageId = extractNationalMessageId(messageProperties);
+
+		String newMessageFolderPath = messageFolder.getAbsolutePath().substring(0,
+				messageFolder.getAbsolutePath().lastIndexOf(File.separator)+1);
+		return newMessageFolderPath;
 	}
 
 	public DomibusConnectorMessageType readMessageFromFolder(File messageFolder) throws DomibusStandaloneConnectorFileSystemException {
@@ -93,7 +130,7 @@ public class DomibusStandaloneConnectorFileSystemReader {
 			messageProperties.setMessageSentDatetime(DomibusStandaloneConnectorFileSystemUtil.convertDateToProperty(new Date()));
 			DomibusConnectorRunnableUtil.storeMessagePropertiesToFile(messageProperties, new File(workMessageFolder, ConnectorClientProperties.messagePropertiesFileName));
 			try {
-				DomibusStandaloneConnectorFileSystemUtil.renameMessageFolder(workMessageFolder, messageFolderPath, DomibusConnectorRunnableConstants.MESSAGE_SENT_FOLDER_POSTFIX);
+				DomibusStandaloneConnectorFileSystemUtil.renameMessageFolder(workMessageFolder, messageFolderPath, DomibusConnectorRunnableConstants.MESSAGE_SENDING_FOLDER_POSTFIX);
 			} catch (DomibusStandaloneConnectorFileSystemException e) {
 				LOGGER.error("",e);
 			}

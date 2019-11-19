@@ -98,8 +98,17 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 		}
 	}
 
+	@Override
+	public void setMessageResponse(DomibusConnectorMessageResponseType responseType, DomibusConnectorMessageType msg) throws DomibusConnectorNationalBackendClientException, ImplementationMissingException {
+		//List<File> files = fileSystemReader.readMessagesWithPostfix(outgoingMessagesDir, DomibusConnectorRunnableConstants.MESSAGE_SENDING_FOLDER_POSTFIX);
+		String msgFolderName = msg.getMessageDetails().getBackendMessageId() + "_" + msg.getMessageDetails().getFromParty() + "_" + DomibusConnectorRunnableConstants.MESSAGE_SENDING_FOLDER_POSTFIX;
+		try {
+			fileSystemReader.setMessageSent(new File(outgoingMessagesDir + File.separator + msgFolderName));
+		} catch (DomibusStandaloneConnectorFileSystemException e) {
+			LOGGER.error("Cannot set message as sent", e);
+		}
+	}
 
-	
 
 	private void confirmIncomingMessage(DomibusConnectorMessageType message) throws DomibusStandaloneConnectorFileSystemException {
 		DomibusConnectorMessageType deliveryMessage = createConfirmationMessage(DomibusConnectorConfirmationType.DELIVERY, message);

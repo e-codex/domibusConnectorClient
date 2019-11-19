@@ -14,6 +14,7 @@ public class DomibusConnectorRunnableConstants {
     public static final String MESSAGE_READY_FOLDER_POSTFIX = "_message";
     public static final String MESSAGE_PROCESSING_FOLDER_POSTFIX = "_processing";
     public static final String MESSAGE_READ_FOLDER_POSTFIX = "_read";
+    public static final String MESSAGE_SENDING_FOLDER_POSTFIX = "_sending";
     public static final String MESSAGE_SENT_FOLDER_POSTFIX = "_sent";
     public static final String MESSAGE_FAILED_FOLDER_POSTFIX = "_failed";
 
@@ -23,4 +24,5 @@ public class DomibusConnectorRunnableConstants {
 
     public static final int MESSAGE_TYPE_OUTGOING = 1;
     public static final int MESSAGE_TYPE_INCOMING = 2;
+
 }
