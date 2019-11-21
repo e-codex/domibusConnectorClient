@@ -1,4 +1,4 @@
-package eu.domibus.connector.client.link.ws;
+package eu.domibus.connector.client.link.ws.configuration;
 
 import eu.domibus.connector.lib.spring.configuration.CxfTrustKeyStoreConfigurationProperties;
 import eu.domibus.connector.lib.spring.configuration.StoreConfigurationProperties;
@@ -10,46 +10,47 @@ import eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWSServi
 import eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWebService;
 import eu.domibus.connector.ws.gateway.delivery.webservice.DomibusConnectorGatewayDeliveryWebService;
 import org.apache.cxf.Bus;
+import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.ws.policy.WSPolicyFeature;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
 import javax.xml.ws.soap.SOAPBinding;
 import java.util.HashMap;
 import java.util.Properties;
 
 
 @Configuration
-public class PushWebServiceEndpointConfiguration {
+@ConditionalOnBean(SpringBus.class)
+@EnableConfigurationProperties(value=ConnectorLinkWSProperties.class)
+@ConditionalOnProperty(prefix = ConnectorLinkWSProperties.PREFIX, name = "pushEnabled", matchIfMissing = false)
+public class WsLinkAutoConfiguration {
 
-    private static final Logger LOGGER = LogManager.getLogger(PushWebServiceEndpointConfiguration.class);
-
+    private static final Logger LOGGER = LogManager.getLogger(WsLinkAutoConfiguration.class);
 
     @Autowired
     private Bus cxfBus;
 
     @Autowired
-    @Valid
     ConnectorLinkWSProperties connectorLinkWsProperties;
 
     @Autowired
     private DomibusConnectorBackendDeliveryWebService backendDeliveryWebService;
-
 
     @Bean
     public WsPolicyLoader policyLoader() {
         WsPolicyLoader wsPolicyLoader = new WsPolicyLoader(connectorLinkWsProperties.getWsPolicy());
         return wsPolicyLoader;
     }
-
 
     @Bean
     public DomibusConnectorBackendWebService connectorWsClient() {

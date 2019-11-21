@@ -1,4 +1,4 @@
-package eu.domibus.connector.client.link.ws;
+package eu.domibus.connector.client.link.ws.configuration;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,6 +18,7 @@ public class PushWebserviceEnabledCondition implements Condition {
         Environment env = context.getEnvironment();
         String p = env.getProperty("PUSH_ENABLED_PROPERTY");
         boolean condition = p != null && "true".equalsIgnoreCase(p);
+
         LOGGER.debug("PushWebserviceEnabledCondition condition evaluates to: [{}]", condition);
         return condition;
     }

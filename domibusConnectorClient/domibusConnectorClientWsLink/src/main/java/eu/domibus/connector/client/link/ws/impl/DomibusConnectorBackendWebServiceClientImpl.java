@@ -8,6 +8,7 @@ import eu.domibus.connector.client.link.ws.DomibusConnectorBackendWebServiceClie
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageResponseType;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -19,12 +20,13 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 import eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWebService;
 import eu.domibus.connector.ws.backend.webservice.EmptyRequestType;
 
-@Service
+//@Service
 public class DomibusConnectorBackendWebServiceClientImpl implements DomibusConnectorBackendWebServiceClient {
 
 	private final static Logger LOGGER = LoggerFactory.getLogger(DomibusConnectorBackendWebServiceClientImpl.class);
 
-	@Resource(name="connectorWsClient")
+//	@Resource(name="connectorWsClient")
+	@Autowired
 	DomibusConnectorBackendWebService backendWebServiceClient;
 
 	@Override

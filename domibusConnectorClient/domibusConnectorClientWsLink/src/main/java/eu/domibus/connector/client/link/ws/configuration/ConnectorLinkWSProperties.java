@@ -1,8 +1,7 @@
-package eu.domibus.connector.client.link.ws;
+package eu.domibus.connector.client.link.ws.configuration;
 
 
 import eu.domibus.connector.lib.spring.configuration.CxfTrustKeyStoreConfigurationProperties;
-import eu.domibus.connector.lib.spring.configuration.KeyAndKeyStoreAndTrustStoreConfigurationProperties;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -16,8 +15,8 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Properties;
 
-@Component
-@ConfigurationProperties(prefix = ConnectorLinkWSProperties.PREFIX)
+//@Component
+//@ConfigurationProperties(prefix = ConnectorLinkWSProperties.PREFIX)
 @Validated
 @Valid
 public class ConnectorLinkWSProperties {
@@ -25,6 +24,8 @@ public class ConnectorLinkWSProperties {
     private static final Logger LOGGER = LogManager.getLogger(ConnectorLinkWSProperties.class);
 
     public static final String PREFIX = "connector-client.connector-link";
+
+    private String pushEnabled;
 
     @NotNull
     private String connectorAddress;
@@ -43,6 +44,14 @@ public class ConnectorLinkWSProperties {
 //    @NestedConfigurationProperty
 //    private KeyAndKeyStoreAndTrustStoreConfigurationProperties tls;
 
+
+    public String getPushEnabled() {
+        return pushEnabled;
+    }
+
+    public void setPushEnabled(String pushEnabled) {
+        this.pushEnabled = pushEnabled;
+    }
 
     public String getConnectorAddress() {
         return connectorAddress;
