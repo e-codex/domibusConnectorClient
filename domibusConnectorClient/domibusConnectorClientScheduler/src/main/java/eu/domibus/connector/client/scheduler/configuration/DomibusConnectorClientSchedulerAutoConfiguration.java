@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Properties;
 
+import eu.domibus.connector.client.scheduler.job.SchedulerJobPackage;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.quartz.JobDetail;
 import org.quartz.SimpleTrigger;
 import org.quartz.Trigger;
@@ -12,7 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
@@ -20,7 +25,11 @@ import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 import org.springframework.util.CollectionUtils;
 
 @Configuration
-public class DomibusConnectorClientSchedulerConfiguration {
+@PropertySource("classpath:connector-client-quartz.properties") //load default quartz properties
+@ComponentScan(basePackageClasses = SchedulerJobPackage.class) //load all spring beans from this package - the jobs
+public class DomibusConnectorClientSchedulerAutoConfiguration {
+
+	private static final Logger LOGGER = LogManager.getLogger(DomibusConnectorClientSchedulerAutoConfiguration.class);
 
 	@Autowired(required=false)
 	List<Trigger> listOfTrigger;
@@ -39,7 +48,8 @@ public class DomibusConnectorClientSchedulerConfiguration {
 		factory.setAutoStartup(true);
 //		factory.setDataSource(dataSource);
 		factory.setJobFactory(jobFactory);
-		factory.setQuartzProperties(quartzProperties());
+//		factory.setQuartzProperties(quartzProperties());
+
 
 		// Here we will set all the trigger beans we have defined.
 		if (!CollectionUtils.isEmpty(listOfTrigger)) {

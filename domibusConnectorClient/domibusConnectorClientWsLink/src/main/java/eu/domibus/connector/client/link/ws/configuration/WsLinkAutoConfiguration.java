@@ -1,5 +1,7 @@
 package eu.domibus.connector.client.link.ws.configuration;
 
+import eu.domibus.connector.client.link.ws.impl.DomibusConnectorClientDeliveryWsImpl;
+import eu.domibus.connector.client.link.ws.impl.DomibusConnectorClientServiceWsImpl;
 import eu.domibus.connector.lib.spring.configuration.CxfTrustKeyStoreConfigurationProperties;
 import eu.domibus.connector.lib.spring.configuration.StoreConfigurationProperties;
 import eu.domibus.connector.link.common.DefaultWsCallbackHandler;
@@ -13,26 +15,34 @@ import org.apache.cxf.Bus;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.apache.cxf.spring.boot.autoconfigure.CxfAutoConfiguration;
 import org.apache.cxf.ws.policy.WSPolicyFeature;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ImportResource;
 
 import javax.xml.ws.soap.SOAPBinding;
 import java.util.HashMap;
 import java.util.Properties;
 
+import static eu.domibus.connector.client.link.ws.configuration.ConnectorLinkWSProperties.PUSH_ENABLED_PROPERTY_NAME;
+
 
 @Configuration
-@ConditionalOnBean(SpringBus.class)
+@ConditionalOnClass(SpringBus.class)
 @EnableConfigurationProperties(value=ConnectorLinkWSProperties.class)
-@ConditionalOnProperty(prefix = ConnectorLinkWSProperties.PREFIX, name = "pushEnabled", matchIfMissing = false)
+@AutoConfigureAfter(CxfAutoConfiguration.class)
+@ConditionalOnProperty(prefix = ConnectorLinkWSProperties.PREFIX, name = "enabled", matchIfMissing = true)
 public class WsLinkAutoConfiguration {
 
     private static final Logger LOGGER = LogManager.getLogger(WsLinkAutoConfiguration.class);
@@ -43,13 +53,23 @@ public class WsLinkAutoConfiguration {
     @Autowired
     ConnectorLinkWSProperties connectorLinkWsProperties;
 
-    @Autowired
-    private DomibusConnectorBackendDeliveryWebService backendDeliveryWebService;
+    @Configuration
+    @ConditionalOnMissingBean({SpringBus.class})
+    @ImportResource({"classpath:META-INF/cxf/cxf.xml"})
+    protected static class SpringBusConfiguration {
+        protected SpringBusConfiguration() {
+        }
+    }
 
     @Bean
     public WsPolicyLoader policyLoader() {
         WsPolicyLoader wsPolicyLoader = new WsPolicyLoader(connectorLinkWsProperties.getWsPolicy());
         return wsPolicyLoader;
+    }
+
+    @Bean
+    public DomibusConnectorClientServiceWsImpl domibusConnectorClientServiceWsImpl() {
+        return new DomibusConnectorClientServiceWsImpl();
     }
 
     @Bean
@@ -82,9 +102,9 @@ public class WsLinkAutoConfiguration {
 
 
     @Bean
-    @Conditional(PushWebserviceEnabledCondition.class)
+    @ConditionalOnProperty(prefix = ConnectorLinkWSProperties.PREFIX, value = PUSH_ENABLED_PROPERTY_NAME, matchIfMissing = false)
     public EndpointImpl domibusConnectorDeliveryServiceEndpoint() {
-        EndpointImpl endpoint = new EndpointImpl(cxfBus, backendDeliveryWebService);
+        EndpointImpl endpoint = new EndpointImpl(cxfBus, domibusConnectorClientDeliveryWsImpl());
         endpoint.setAddress(connectorLinkWsProperties.getPublishAddress());
         endpoint.setWsdlLocation(DomibusConnectorBackendDeliveryWSService.WSDL_LOCATION.toString());
         endpoint.setServiceName(DomibusConnectorBackendDeliveryWSService.SERVICE);
@@ -125,6 +145,12 @@ public class WsLinkAutoConfiguration {
         props.put("org.apache.wss4j.crypto.merlin.truststore.password", cxf.getTrustStore().getPassword());
 
         return props;
+    }
+
+    @Bean
+    @ConditionalOnProperty(prefix = ConnectorLinkWSProperties.PREFIX, value = PUSH_ENABLED_PROPERTY_NAME, matchIfMissing = false)
+    public DomibusConnectorClientDeliveryWsImpl domibusConnectorClientDeliveryWsImpl() {
+        return new DomibusConnectorClientDeliveryWsImpl();
     }
 
 

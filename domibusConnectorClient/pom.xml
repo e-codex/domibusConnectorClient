@@ -25,13 +25,13 @@
         <module>domibusConnectorClient35Library</module>
         <module>domibusConnectorClientWsLink</module>
         <module>domibusConnectorClientScheduler</module>
-        <module>domibusConnectorClientTestModules</module>
-        <module>domibusConnectorClientWebLib</module>
+<!--        <module>domibusConnectorClientTestModules</module>-->
+<!--        <module>domibusConnectorClientWebLib</module>-->
         <module>domibusConnectorClientWebRest</module>
         <module>domibusConnectorClientApi</module>
-        <module>domibusConnectorClientWebRestAngularUI</module>
+<!--        <module>domibusConnectorClientWebRestAngularUI</module>-->
         <module>domibusConnectorClientWebRestDto</module>
-        <module>domibusConnectorClientAutoconfiguration</module>
+<!--        <module>domibusConnectorClientAutoconfiguration</module>-->
     </modules>
 
 
@@ -103,8 +103,8 @@
             <url>${releases-repo.url}</url>
         </repository>
         <snapshotRepository>
-            <id>${snapshots-repo.id}</id>
-            <url>${snapshots-repo.url}</url>
+            <id>${ecodex-snapshots-repo.id}</id>
+            <url>${ecodex-snapshots-repo.url}</url>
         </snapshotRepository>
     </distributionManagement>
 

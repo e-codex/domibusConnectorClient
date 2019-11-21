@@ -1,13 +1,10 @@
 package eu.domibus.connector.client.scheduler.job;
 
-import eu.domibus.connector.client.transport.TransportMessagesFromNationalToConnectorService;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnExpression;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -17,7 +14,7 @@ import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
 import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.client.exception.DomibusConnectorNationalBackendClientException;
-import eu.domibus.connector.client.scheduler.configuration.DomibusConnectorClientSchedulerConfiguration;
+import eu.domibus.connector.client.scheduler.configuration.DomibusConnectorClientSchedulerAutoConfiguration;
 
 @EnableConfigurationProperties
 @Configuration("submitMessagesToConnectorJobConfiguration")
@@ -27,7 +24,7 @@ public class SubmitMessagesToConnectorJobConfiguration implements Job {
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(SubmitMessagesToConnectorJobConfiguration.class);
 
 	@Autowired
-	TransportMessagesFromNationalToConnectorService transportMessagesFromNationalToConnectorService;
+    TransportMessagesFromNationalToConnectorJob transportMessagesFromNationalToConnectorService;
 
 //	@Value("${connector.client.timer.check.outgoing.messages.ms}")
 //    private Long repeatInterval;
@@ -48,13 +45,13 @@ public class SubmitMessagesToConnectorJobConfiguration implements Job {
 
 	@Bean(name = "submitMessagesToConnectorJob")
 	public JobDetailFactoryBean submitMessagesToConnectorJob() {
-		return DomibusConnectorClientSchedulerConfiguration.createJobDetail(this.getClass());
+		return DomibusConnectorClientSchedulerAutoConfiguration.createJobDetail(this.getClass());
 	}
 
 	@Bean(name = "submitMessagesToConnectorTrigger")
 	public SimpleTriggerFactoryBean submitMessagesToConnectorTrigger(@Qualifier("submitMessagesToConnectorJob") JobDetailFactoryBean jdfb ) {
 		LOGGER.debug("create SimpleTriggerFactoryBean: submitMessagesToConnectorTrigger");
-		return DomibusConnectorClientSchedulerConfiguration.createTrigger(jdfb.getObject(),
+		return DomibusConnectorClientSchedulerAutoConfiguration.createTrigger(jdfb.getObject(),
 				properties.getRepeatInterval().getMilliseconds(), 0L);
 	}
 

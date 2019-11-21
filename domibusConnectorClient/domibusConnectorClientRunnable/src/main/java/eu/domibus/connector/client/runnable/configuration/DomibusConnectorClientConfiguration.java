@@ -1,11 +1,8 @@
 
 package eu.domibus.connector.client.runnable.configuration;
 
-import eu.domibus.connector.client.controller.DomibusConnectorClientSubmissionController;
-import eu.domibus.connector.client.service.DomibusConnectorClientService;
-import eu.domibus.connector.client.service.DomibusConnectorClientServiceImpl;
-import eu.domibus.connector.client.transport.TransportMessagesFromConnectorToNationalService;
-import eu.domibus.connector.client.transport.TransportMessagesFromNationalToConnectorService;
+import eu.domibus.connector.client.scheduler.job.TransportMessagesFromConnectorToNationalJob;
+import eu.domibus.connector.client.scheduler.job.TransportMessagesFromNationalToConnectorJob;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
@@ -21,10 +18,10 @@ import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 @ImportResource("classpath:META-INF/cxf/cxf.xml")
 public class DomibusConnectorClientConfiguration {
 
-    @Bean
-    DomibusConnectorClientService domibusConnectorClientServiceImpl() {
-        return new DomibusConnectorClientServiceImpl();
-    }
+//    @Bean
+//    DomibusConnectorClientService domibusConnectorClientServiceImpl() {
+//        return new DomibusConnectorClientServiceImpl();
+//    }
     
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
@@ -32,19 +29,19 @@ public class DomibusConnectorClientConfiguration {
 		return propertySourcesPlaceholderConfigurer;
     }
 
+//    @Bean
+//    DomibusConnectorClientSubmissionController domibusConnectorClientSubmissionController() {
+//        return new DomibusConnectorClientSubmissionController();
+//    }
+
     @Bean
-    DomibusConnectorClientSubmissionController domibusConnectorClientSubmissionController() {
-        return new DomibusConnectorClientSubmissionController();
+    TransportMessagesFromConnectorToNationalJob transportMessagesFromConnectorToNationalService() {
+        return new TransportMessagesFromConnectorToNationalJob();
     }
 
     @Bean
-    TransportMessagesFromConnectorToNationalService transportMessagesFromConnectorToNationalService() {
-        return new TransportMessagesFromConnectorToNationalService();
-    }
-
-    @Bean
-    TransportMessagesFromNationalToConnectorService transportMessagesFromNationalToConnectorService() {
-        return new TransportMessagesFromNationalToConnectorService();
+    TransportMessagesFromNationalToConnectorJob transportMessagesFromNationalToConnectorService() {
+        return new TransportMessagesFromNationalToConnectorJob();
     }
     
 }

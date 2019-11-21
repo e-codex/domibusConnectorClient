@@ -15,17 +15,21 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.Properties;
 
-//@Component
-//@ConfigurationProperties(prefix = ConnectorLinkWSProperties.PREFIX)
+
+@ConfigurationProperties(prefix = ConnectorLinkWSProperties.PREFIX)
 @Validated
 @Valid
 public class ConnectorLinkWSProperties {
 
     private static final Logger LOGGER = LogManager.getLogger(ConnectorLinkWSProperties.class);
 
-    public static final String PREFIX = "connector-client.connector-link";
+    public static final String PREFIX = "connector-client.connector-link.ws";
+    public static final String ENABLED_PROPERTY_NAME = "enabled";
+    public static final String PUSH_ENABLED_PROPERTY_NAME = "pushEnabled";
 
     private String pushEnabled;
+
+    private String enabled;
 
     @NotNull
     private String connectorAddress;
@@ -39,11 +43,20 @@ public class ConnectorLinkWSProperties {
     private Resource wsPolicy = new ClassPathResource("wsdl/backend.policy.xml");
 
     @NestedConfigurationProperty
+    @NotNull
     private CxfTrustKeyStoreConfigurationProperties cxf;
 
 //    @NestedConfigurationProperty
 //    private KeyAndKeyStoreAndTrustStoreConfigurationProperties tls;
 
+
+    public String getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(String enabled) {
+        this.enabled = enabled;
+    }
 
     public String getPushEnabled() {
         return pushEnabled;
