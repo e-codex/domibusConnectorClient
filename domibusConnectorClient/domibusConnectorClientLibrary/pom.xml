@@ -3,7 +3,7 @@
   <parent>
     <groupId>eu.domibus.connector-client</groupId>
     <artifactId>domibusConnectorClient</artifactId>
-    <version>4.1.0-alpha7</version>
+    <version>4.1.0-alpha8</version>
   </parent>
   <description>WebConnector 4.x Client Library</description>
   <artifactId>domibusConnectorClientLibrary</artifactId>
