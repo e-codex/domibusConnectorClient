@@ -4,6 +4,7 @@ import eu.domibus.connector.client.events.BusinessMessageReceivedEvent;
 import eu.domibus.connector.client.events.ConfirmationReceivedEvent;
 import eu.domibus.connector.client.exception.DomibusConnectorNationalBackendClientException;
 import eu.domibus.connector.client.exception.ImplementationMissingException;
+import eu.domibus.connector.client.process.ProcessMessageFromConnectorToNational;
 import eu.domibus.connector.client.storage.dao.BusinessMessageRepo;
 import eu.domibus.connector.client.storage.entity.*;
 import eu.domibus.connector.client.storage.service.LargeFileStorageService;
@@ -28,7 +29,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class DeliverToApplicationService implements DomibusConnectorNationalBackendClientDelivery {
+public class DeliverToApplicationService implements ProcessMessageFromConnectorToNational {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeliverToApplicationService.class);
 
@@ -48,7 +49,7 @@ public class DeliverToApplicationService implements DomibusConnectorNationalBack
     private BusinessMessageRepo businessMessageRepo;
 
     @Override
-    public DomibusConnectorMessageResponseType processMessageFromConnector(DomibusConnectorMessageType message) throws DomibusConnectorNationalBackendClientException, ImplementationMissingException {
+    public DomibusConnectorMessageResponseType processMessageFromConnectorToNational(DomibusConnectorMessageType message) {
         String appId = idGenerator.generateNationalId();
         message.getMessageDetails().setBackendMessageId(appId);
 
@@ -70,6 +71,13 @@ public class DeliverToApplicationService implements DomibusConnectorNationalBack
         responseType.setResult(true);
         return  responseType;
     }
+
+    @Override
+    public void processResponseFromConnectorToNational(DomibusConnectorMessageResponseType messageResponseType) {
+        //not implemented yet, but there is also not link impl which uses that!
+    }
+
+
 
     private void processConfirmationMessage(DomibusConnectorMessageType message, Transport transport) {
         if (message.getMessageDetails() == null) {

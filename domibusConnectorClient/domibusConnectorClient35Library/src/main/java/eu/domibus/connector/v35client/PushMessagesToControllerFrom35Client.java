@@ -1,12 +1,12 @@
 
 package eu.domibus.connector.v35client;
 
+import eu.domibus.connector.client.link.ws.DomibusConnectorBackendWebServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import eu.domibus.connector.client.connection.ws.DomibusConnectorBackendWebServiceClient;
 import eu.domibus.connector.common.exception.ImplementationMissingException;
 import eu.domibus.connector.common.message.Message;
 import eu.domibus.connector.common.message.MessageContent;

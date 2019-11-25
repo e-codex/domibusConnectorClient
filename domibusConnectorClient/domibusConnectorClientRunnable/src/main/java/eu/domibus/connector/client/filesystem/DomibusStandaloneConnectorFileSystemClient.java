@@ -1,11 +1,13 @@
 package eu.domibus.connector.client.filesystem;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-
+import eu.domibus.connector.client.exception.DomibusConnectorClientException;
+import eu.domibus.connector.client.exception.DomibusConnectorNationalBackendClientException;
 import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClient;
-import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClientDelivery;
+import eu.domibus.connector.client.process.ProcessMessageFromConnectorToNational;
+import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
+import eu.domibus.connector.client.runnable.exception.DomibusConnectorRunnableException;
+import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
+import eu.domibus.connector.client.service.DomibusConnectorClientService;
 import eu.domibus.connector.domain.transition.*;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,17 +15,13 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
-import eu.domibus.connector.client.exception.DomibusConnectorClientException;
-import eu.domibus.connector.client.exception.ImplementationMissingException;
-
-import eu.domibus.connector.client.exception.DomibusConnectorNationalBackendClientException;
-import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
-import eu.domibus.connector.client.runnable.exception.DomibusConnectorRunnableException;
-import eu.domibus.connector.client.runnable.util.DomibusConnectorRunnableConstants;
-import eu.domibus.connector.client.service.DomibusConnectorClientService;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Component
-public class DomibusStandaloneConnectorFileSystemClient implements InitializingBean, DomibusConnectorNationalBackendClient, DomibusConnectorNationalBackendClientDelivery {
+public class DomibusStandaloneConnectorFileSystemClient implements InitializingBean, DomibusConnectorNationalBackendClient {
 
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusStandaloneConnectorFileSystemClient.class);
 	
@@ -41,9 +39,7 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 	private File outgoingMessagesDir;
 
 	@Override
-	public DomibusConnectorMessageResponseType processMessageFromConnector(DomibusConnectorMessageType message)
-			throws DomibusConnectorNationalBackendClientException, ImplementationMissingException {
-
+	public Optional<DomibusConnectorMessageResponseType> pushMessageToNationalBackend(DomibusConnectorMessageType message) throws DomibusConnectorNationalBackendClientException {
 		DomibusConnectorMessageResponseType responseType = new DomibusConnectorMessageResponseType();
 		responseType.setResult(true);
 
@@ -60,13 +56,14 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 			LOGGER.error("Exception processing message from connector... ", e);
 			responseType.setResult(false);
 		}
-
-		return responseType;
+		return Optional.of(responseType);
 	}
+
+
 
 	@Override
 	public List<DomibusConnectorMessageType> checkForMessagesOnNationalBackend()
-			throws DomibusConnectorNationalBackendClientException, ImplementationMissingException {
+			throws DomibusConnectorNationalBackendClientException {
 		LOGGER.debug("Start searching dir {} for folder with ending {}", outgoingMessagesDir.getAbsolutePath(),
 				DomibusConnectorRunnableConstants.MESSAGE_READY_FOLDER_POSTFIX);
 		List<File> messagesUnsent = fileSystemReader.readUnsentMessages(outgoingMessagesDir);
@@ -99,14 +96,35 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 	}
 
 
-	
+	@Override
+	public void setMessageResponse(DomibusConnectorMessageResponseType responseType) throws DomibusConnectorNationalBackendClientException {
+		//List<File> files = fileSystemReader.readMessagesWithPostfix(outgoingMessagesDir, DomibusConnectorRunnableConstants.MESSAGE_SENDING_FOLDER_POSTFIX);
+		String responseForMessageId = responseType.getResponseForMessageId();
+		String msgFolderName = outgoingMessagesDir + File.separator + responseForMessageId + DomibusConnectorRunnableConstants.MESSAGE_SENDING_FOLDER_POSTFIX;
+		File msgFolderFile = new File(msgFolderName);
+				; // + "_" + msg.getMessageDetails().getFromParty().getPartyId()
+		if (responseType.isResult()) {
+			try {
+				fileSystemReader.setMessageSent(msgFolderFile);
+			} catch (DomibusStandaloneConnectorFileSystemException e) {
+				LOGGER.error("Cannot set message as sent", e);
+			}
+		} else {
+			try {
+				fileSystemReader.setMessageFailed(msgFolderFile);
+			} catch (DomibusStandaloneConnectorFileSystemException e) {
+				LOGGER.error("Cannot set message as failed", e);
+			}
+		}
+	}
+
 
 	private void confirmIncomingMessage(DomibusConnectorMessageType message) throws DomibusStandaloneConnectorFileSystemException {
 		DomibusConnectorMessageType deliveryMessage = createConfirmationMessage(DomibusConnectorConfirmationType.DELIVERY, message);
 		
 //		fileSystemWriter.createConfirmationMessage(deliveryMessage, outgoingMessagesDir);
 		try {
-			clientService.submitMessageToConnector(deliveryMessage);
+			clientService.pushMessageToConnector(deliveryMessage);
 		} catch (DomibusConnectorClientException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -116,7 +134,7 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 		
 //		fileSystemWriter.createConfirmationMessage(retrievalMessage, outgoingMessagesDir);
 		try {
-			clientService.submitMessageToConnector(retrievalMessage);
+			clientService.pushMessageToConnector(retrievalMessage);
 		} catch (DomibusConnectorClientException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -202,7 +220,6 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 		}
 
 	}
-
 
 
 }

@@ -1,9 +1,6 @@
 
 package eu.domibus.connector.client.connection.ws.linktest.client;
 
-import eu.domibus.connector.client.connection.ws.spring.DomibusConnectorClientWebServiceLinkConfiguration;
-import java.util.Arrays;
-import java.util.List;
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -11,7 +8,9 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Import;
+
+import java.util.Arrays;
+import java.util.List;
 
 /**
  *
@@ -19,7 +18,7 @@ import org.springframework.context.annotation.Import;
  */
 @SpringBootApplication(scanBasePackages = "eu.domibus.connector.client.connection")
 @Configuration
-@Import(DomibusConnectorClientWebServiceLinkConfiguration.class)
+//@Import(DomibusConnectorClientWebServiceLinkConfiguration.class)
 public class BackendClient {
 
     

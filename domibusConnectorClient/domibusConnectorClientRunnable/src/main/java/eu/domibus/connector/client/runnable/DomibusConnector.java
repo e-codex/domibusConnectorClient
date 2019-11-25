@@ -22,7 +22,7 @@ import org.springframework.util.StringUtils;
 import eu.domibus.connector.client.runnable.configuration.ConnectorClientProperties;
 import eu.domibus.connector.client.runnable.configuration.DomibusConnectorClientConfiguration;
 
-@SpringBootApplication(scanBasePackages = "eu.domibus.connector")
+@SpringBootApplication(scanBasePackages = "eu.domibus.connector.client")
 @EnableScheduling
 public class DomibusConnector {
 

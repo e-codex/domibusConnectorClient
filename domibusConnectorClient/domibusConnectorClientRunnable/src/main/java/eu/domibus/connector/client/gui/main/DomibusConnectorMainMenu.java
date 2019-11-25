@@ -13,8 +13,8 @@ import javax.swing.JOptionPane;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.exception.DomibusConnectorNationalBackendClientException;
 import eu.domibus.connector.client.exception.ImplementationMissingException;
-import eu.domibus.connector.client.transport.TransportMessagesFromConnectorToNationalService;
-import eu.domibus.connector.client.transport.TransportMessagesFromNationalToConnectorService;
+import eu.domibus.connector.client.scheduler.job.TransportMessagesFromConnectorToNationalJob;
+import eu.domibus.connector.client.scheduler.job.TransportMessagesFromNationalToConnectorJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
@@ -29,10 +29,10 @@ public class DomibusConnectorMainMenu extends JMenuBar implements ActionListener
 	private static final long serialVersionUID = -3537576845229906480L;
 
 	@Autowired
-    TransportMessagesFromNationalToConnectorService transportMessagesFromNationalToConnectorService;
+	TransportMessagesFromNationalToConnectorJob transportMessagesFromNationalToConnectorService;
 
     @Autowired
-    TransportMessagesFromConnectorToNationalService transportMessagesFromConnectorToNationalService;
+	TransportMessagesFromConnectorToNationalJob transportMessagesFromConnectorToNationalService;
 
     
     @PostConstruct

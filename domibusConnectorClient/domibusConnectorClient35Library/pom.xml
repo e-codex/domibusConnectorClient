@@ -4,7 +4,7 @@
     <parent>
         <groupId>eu.domibus.connector-client</groupId>
         <artifactId>domibusConnectorClient</artifactId>
-        <version>4.1.0-alpha1-RELEASE</version>
+        <version>4.1.0-alpha8-SNAPSHOT</version>
     </parent>
     <artifactId>domibusConnectorClient35Library</artifactId>
     <dependencies>
