@@ -26,10 +26,10 @@
         <module>domibusConnectorClientScheduler</module>
         <module>domibusConnectorClientTestModules</module>
         <module>domibusConnectorClientWebLib</module>
-        <module>domibusConnectorClientWebRest</module>
+<!--        <module>domibusConnectorClientWebRest</module>-->
         <module>domibusConnectorClientApi</module>
-        <module>domibusConnectorClientWebRestAngularUI</module>
-        <module>domibusConnectorClientWebRestDto</module>
+<!--        <module>domibusConnectorClientWebRestAngularUI</module>-->
+<!--        <module>domibusConnectorClientWebRestDto</module>-->
     </modules>
 
 

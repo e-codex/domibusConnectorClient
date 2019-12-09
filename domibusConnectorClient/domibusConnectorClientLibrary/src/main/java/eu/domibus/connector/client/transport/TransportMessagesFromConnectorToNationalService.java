@@ -16,7 +16,7 @@ import org.springframework.util.CollectionUtils;
 
 import java.util.List;
 
-//@Service //client lib should not create spring services!
+@Service //client lib should not create spring services!
 public class TransportMessagesFromConnectorToNationalService {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TransportMessagesFromConnectorToNationalService.class);
