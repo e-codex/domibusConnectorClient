@@ -4,7 +4,7 @@
     <parent>
         <groupId>eu.domibus.connector-client</groupId>
         <artifactId>domibusConnectorClient</artifactId>
-        <version>4.1.0-alpha8-SNAPSHOT</version>
+        <version>4.1.0-alpha9-SNAPSHOT</version>
     </parent>
     <artifactId>domibusConnectorClientWSLink</artifactId>
     <packaging>jar</packaging>
