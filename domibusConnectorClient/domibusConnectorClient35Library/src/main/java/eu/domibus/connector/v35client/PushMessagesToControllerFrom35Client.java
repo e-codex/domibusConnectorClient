@@ -1,12 +1,12 @@
 
 package eu.domibus.connector.v35client;
 
-import eu.domibus.connector.client.link.ws.DomibusConnectorBackendWebServiceClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import eu.domibus.connector.client.link.ws.DomibusConnectorClientWSLink;
 import eu.domibus.connector.common.exception.ImplementationMissingException;
 import eu.domibus.connector.common.message.Message;
 import eu.domibus.connector.common.message.MessageContent;
@@ -32,7 +32,7 @@ public class PushMessagesToControllerFrom35Client {
     
     private DomibusConnectorNationalBackendClient nationalBackendClient;
         
-    private DomibusConnectorBackendWebServiceClient backendClient;
+    private DomibusConnectorClientWSLink backendClient;
         
     private Map35MessageTov4Message map35MessageTov4Message;
     
@@ -46,9 +46,9 @@ public class PushMessagesToControllerFrom35Client {
     }
     
     @Autowired
-    public void setBackendClient(DomibusConnectorBackendWebServiceClient backendClient) {
-    	this.backendClient = backendClient;
-    }
+    public void setBackendClient(DomibusConnectorClientWSLink backendClient) {
+		this.backendClient = backendClient;
+	}
     
     @Autowired
     public void setMap35MessageTov4Message(Map35MessageTov4Message map35MessageTov4Message) {
@@ -90,7 +90,7 @@ public class PushMessagesToControllerFrom35Client {
             DomibusConnectorMessageType domibusMessage = map35MessageTov4Message.map35MessageTov4Message(nationalMessage);
             
             LOGGER.info("#transportOneMessageToController: passing message to SubmitMessageToConnector service");
-            backendClient.submitMessage(domibusMessage);            
+            backendClient.submitMessageToConnector(domibusMessage);            
         } catch (Exception e) {            
             String error = String.format("#transportOneMessageToController: sending national message with id [%s] to domibusConnector failed!", id);            
             LOGGER.error(error, e);

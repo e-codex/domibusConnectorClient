@@ -1,22 +1,24 @@
 
 package eu.domibus.connector.v35client;
 
-import eu.domibus.connector.client.link.exception.DomibusConnectorBackendWebServiceClientException;
-import eu.domibus.connector.client.link.ws.DomibusConnectorBackendWebServiceClient;
-import eu.domibus.connector.common.exception.ImplementationMissingException;
-import eu.domibus.connector.common.message.Message;
-import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
-import eu.domibus.connector.mapping.DomibusConnectorContentMapper;
-import eu.domibus.connector.mapping.exception.DomibusConnectorContentMapperException;
-import eu.domibus.connector.nbc.DomibusConnectorNationalBackendClient;
-import eu.domibus.connector.nbc.exception.DomibusConnectorNationalBackendClientException;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import eu.domibus.connector.client.exception.DomibusConnectorClientException;
+import eu.domibus.connector.client.link.ws.DomibusConnectorClientWSLink;
+import eu.domibus.connector.common.exception.ImplementationMissingException;
+import eu.domibus.connector.common.message.Message;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
+import eu.domibus.connector.mapping.DomibusConnectorContentMapper;
+import eu.domibus.connector.mapping.exception.DomibusConnectorContentMapperException;
+import eu.domibus.connector.nbc.DomibusConnectorNationalBackendClient;
+import eu.domibus.connector.nbc.exception.DomibusConnectorNationalBackendClientException;
 
 /**
  *
@@ -30,7 +32,7 @@ public class PullMessagesFromControllerTo35Client {
         
     private DomibusConnectorNationalBackendClient nationalBackendClient;
         
-    private DomibusConnectorBackendWebServiceClient backendClient;
+    private DomibusConnectorClientWSLink backendClient;
         
     private MapV4TransitionMessageTo35Message mapTo35Message;
     
@@ -42,12 +44,15 @@ public class PullMessagesFromControllerTo35Client {
         this.nationalBackendClient = nationalBackendClient;
     }
     
+   
     @Autowired
-    public void setBackendClient(DomibusConnectorBackendWebServiceClient backendClient) {
-    	this.backendClient = backendClient;
-    }
+    public void setBackendClient(DomibusConnectorClientWSLink backendClient) {
+		this.backendClient = backendClient;
+	}
 
-    @Autowired
+
+
+	@Autowired
     public void setMapTo35Message(MapV4TransitionMessageTo35Message mapTo35Message) {
         this.mapTo35Message = mapTo35Message;
     }
@@ -61,8 +66,9 @@ public class PullMessagesFromControllerTo35Client {
     public void pullMessagesFromController() {
         List<DomibusConnectorMessageType> fetchMessages = null;
 		try {
-			fetchMessages = backendClient.requestMessages();
-		} catch (DomibusConnectorBackendWebServiceClientException e) {
+			DomibusConnectorMessagesType messages = backendClient.requestMessagesFromConnector();
+			fetchMessages = messages.getMessages();
+		} catch (DomibusConnectorClientException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}

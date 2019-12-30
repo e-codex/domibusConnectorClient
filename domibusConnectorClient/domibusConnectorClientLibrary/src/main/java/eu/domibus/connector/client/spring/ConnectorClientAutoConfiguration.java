@@ -3,10 +3,10 @@ package eu.domibus.connector.client.spring;
 
 import eu.domibus.connector.client.mapping.DomibusConnectorContentMapper;
 import eu.domibus.connector.client.mapping.DomibusConnectorContentMapperDefaultImpl;
-import eu.domibus.connector.client.process.ProcessMessageFromConnectorToNational;
-import eu.domibus.connector.client.process.ProcessMessageFromNationalToConnector;
-import eu.domibus.connector.client.process.impl.ProcessMessageFromConnectorToNationalImpl;
-import eu.domibus.connector.client.process.impl.ProcessMessageFromNationalToConnectorImpl;
+import eu.domibus.connector.client.process.ProcessMessageFromConnectorToClient;
+import eu.domibus.connector.client.process.ProcessMessageFromClientToConnector;
+import eu.domibus.connector.client.process.impl.ProcessMessageFromConnectorToClientImpl;
+import eu.domibus.connector.client.process.impl.ProcessMessageFromClientToConnectorImpl;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -37,9 +37,9 @@ public class ConnectorClientAutoConfiguration {
      * the content mapper @see DomibusConnectorContentMapper
      */
     @Bean
-    @ConditionalOnMissingBean(ProcessMessageFromConnectorToNational.class)
-    public ProcessMessageFromConnectorToNationalImpl processMessageFromConnectorToNationalImpl() {
-        return new ProcessMessageFromConnectorToNationalImpl();
+    @ConditionalOnMissingBean(ProcessMessageFromConnectorToClient.class)
+    public ProcessMessageFromConnectorToClientImpl processMessageFromConnectorToNationalImpl() {
+        return new ProcessMessageFromConnectorToClientImpl();
     }
 
     /**
@@ -48,9 +48,9 @@ public class ConnectorClientAutoConfiguration {
      * the content mapper @see DomibusConnectorContentMapper
      */
     @Bean
-    @ConditionalOnMissingBean(ProcessMessageFromNationalToConnector.class)
-    public ProcessMessageFromNationalToConnectorImpl processMessageFromNationalToConnectorImpl() {
-        return new ProcessMessageFromNationalToConnectorImpl();
+    @ConditionalOnMissingBean(ProcessMessageFromClientToConnector.class)
+    public ProcessMessageFromClientToConnectorImpl processMessageFromNationalToConnectorImpl() {
+        return new ProcessMessageFromClientToConnectorImpl();
     }
 
 }

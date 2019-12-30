@@ -1,6 +1,6 @@
 package eu.domibus.connector.client.link.ws.impl;
 
-import eu.domibus.connector.client.process.ProcessMessageFromConnectorToNational;
+import eu.domibus.connector.client.process.ProcessMessageFromConnectorToClient;
 import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageResponseType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
@@ -15,7 +15,7 @@ public class DomibusConnectorClientDeliveryWsImpl implements DomibusConnectorBac
     private static final Logger LOGGER = LoggerFactory.getLogger(DomibusConnectorClientDeliveryWsImpl.class);
 
     @Autowired
-    private ProcessMessageFromConnectorToNational processMessageFromConnectorToNational;
+    private ProcessMessageFromConnectorToClient processMessageFromConnectorToNational;
 
     @Override
     public DomibsConnectorAcknowledgementType deliverMessage(DomibusConnectorMessageType msg) {

@@ -4,7 +4,7 @@ import eu.domibus.connector.client.events.BusinessMessageReceivedEvent;
 import eu.domibus.connector.client.events.ConfirmationReceivedEvent;
 import eu.domibus.connector.client.exception.DomibusConnectorNationalBackendClientException;
 import eu.domibus.connector.client.exception.ImplementationMissingException;
-import eu.domibus.connector.client.process.ProcessMessageFromConnectorToNational;
+import eu.domibus.connector.client.process.ProcessMessageFromConnectorToClient;
 import eu.domibus.connector.client.storage.dao.BusinessMessageRepo;
 import eu.domibus.connector.client.storage.entity.*;
 import eu.domibus.connector.client.storage.service.LargeFileStorageService;
@@ -29,7 +29,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
-public class DeliverToApplicationService implements ProcessMessageFromConnectorToNational {
+public class DeliverToApplicationService implements ProcessMessageFromConnectorToClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(DeliverToApplicationService.class);
 

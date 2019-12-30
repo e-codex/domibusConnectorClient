@@ -1,16 +1,12 @@
 package eu.domibus.connector.client.link.ws.configuration;
 
-import eu.domibus.connector.client.link.ws.impl.DomibusConnectorClientDeliveryWsImpl;
-import eu.domibus.connector.client.link.ws.impl.DomibusConnectorClientServiceWsImpl;
-import eu.domibus.connector.lib.spring.configuration.CxfTrustKeyStoreConfigurationProperties;
-import eu.domibus.connector.lib.spring.configuration.StoreConfigurationProperties;
-import eu.domibus.connector.link.common.DefaultWsCallbackHandler;
-import eu.domibus.connector.link.common.WsPolicyLoader;
-import eu.domibus.connector.ws.backend.delivery.webservice.DomibusConnectorBackendDeliveryWSService;
-import eu.domibus.connector.ws.backend.delivery.webservice.DomibusConnectorBackendDeliveryWebService;
-import eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWSService;
-import eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWebService;
-import eu.domibus.connector.ws.gateway.delivery.webservice.DomibusConnectorGatewayDeliveryWebService;
+import static eu.domibus.connector.client.link.ws.configuration.ConnectorLinkWSProperties.PUSH_ENABLED_PROPERTY_NAME;
+
+import java.util.HashMap;
+import java.util.Properties;
+
+import javax.xml.ws.soap.SOAPBinding;
+
 import org.apache.cxf.Bus;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.jaxws.EndpointImpl;
@@ -21,21 +17,24 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
-import javax.xml.ws.soap.SOAPBinding;
-import java.util.HashMap;
-import java.util.Properties;
-
-import static eu.domibus.connector.client.link.ws.configuration.ConnectorLinkWSProperties.PUSH_ENABLED_PROPERTY_NAME;
+import eu.domibus.connector.client.link.ws.impl.DomibusConnectorClientDeliveryWsImpl;
+import eu.domibus.connector.client.link.ws.impl.DomibusConnectorClientWSLinkImpl;
+import eu.domibus.connector.lib.spring.configuration.CxfTrustKeyStoreConfigurationProperties;
+import eu.domibus.connector.lib.spring.configuration.StoreConfigurationProperties;
+import eu.domibus.connector.link.common.DefaultWsCallbackHandler;
+import eu.domibus.connector.link.common.WsPolicyLoader;
+import eu.domibus.connector.ws.backend.delivery.webservice.DomibusConnectorBackendDeliveryWSService;
+import eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWSService;
+import eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWebService;
+import eu.domibus.connector.ws.gateway.delivery.webservice.DomibusConnectorGatewayDeliveryWebService;
 
 
 @Configuration
@@ -68,8 +67,8 @@ public class WsLinkAutoConfiguration {
     }
 
     @Bean
-    public DomibusConnectorClientServiceWsImpl domibusConnectorClientServiceWsImpl() {
-        return new DomibusConnectorClientServiceWsImpl();
+    public DomibusConnectorClientWSLinkImpl domibusConnectorClientServiceWsImpl() {
+        return new DomibusConnectorClientWSLinkImpl();
     }
 
     @Bean

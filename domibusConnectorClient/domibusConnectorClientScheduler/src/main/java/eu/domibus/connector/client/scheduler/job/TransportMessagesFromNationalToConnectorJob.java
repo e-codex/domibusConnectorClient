@@ -3,7 +3,7 @@ package eu.domibus.connector.client.scheduler.job;
 import eu.domibus.connector.client.exception.DomibusConnectorNationalBackendClientException;
 import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClient;
-import eu.domibus.connector.client.process.ProcessMessageFromNationalToConnector;
+import eu.domibus.connector.client.process.ProcessMessageFromClientToConnector;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageResponseType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class TransportMessagesFromNationalToConnectorJob {
     private DomibusConnectorNationalBackendClient nationalBackendClientService;
 
     @Autowired
-    private ProcessMessageFromNationalToConnector processMessageFromNationalToConnector;
+    private ProcessMessageFromClientToConnector processMessageFromNationalToConnector;
 
     public void submitMessageFromNationalToConnector() throws DomibusConnectorNationalBackendClientException, ImplementationMissingException {
         List<DomibusConnectorMessageType> messages = null;
@@ -36,7 +36,7 @@ public class TransportMessagesFromNationalToConnectorJob {
         if (!CollectionUtils.isEmpty(messages)) {
             LOGGER.debug("{} new messages from national backend to submit to connector...", messages.size());
             for (DomibusConnectorMessageType message : messages) {
-                DomibusConnectorMessageResponseType domibusConnectorMessageResponseType = processMessageFromNationalToConnector.processMessageFromNationalToConnector(message);
+                DomibusConnectorMessageResponseType domibusConnectorMessageResponseType = processMessageFromNationalToConnector.processMessageFromClientToConnector(message);
                 try {
                     nationalBackendClientService.setMessageResponse(domibusConnectorMessageResponseType);
                 } catch (DomibusConnectorNationalBackendClientException e) {

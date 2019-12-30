@@ -4,7 +4,7 @@ import eu.domibus.connector.client.exception.DomibusConnectorNationalBackendClie
 import eu.domibus.connector.client.mapping.DomibusConnectorContentMapper;
 import eu.domibus.connector.client.mapping.exception.DomibusConnectorContentMapperException;
 import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClient;
-import eu.domibus.connector.client.process.ProcessMessageFromConnectorToNational;
+import eu.domibus.connector.client.process.ProcessMessageFromConnectorToClient;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageResponseType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import org.apache.logging.log4j.LogManager;
@@ -12,9 +12,9 @@ import org.apache.logging.log4j.Logger;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 
-public class ProcessMessageFromConnectorToNationalImpl implements ProcessMessageFromConnectorToNational {
+public class ProcessMessageFromConnectorToClientImpl implements ProcessMessageFromConnectorToClient {
 
-    private static final Logger LOGGER = LogManager.getLogger(ProcessMessageFromConnectorToNationalImpl.class);
+    private static final Logger LOGGER = LogManager.getLogger(ProcessMessageFromConnectorToClientImpl.class);
 
     @Autowired
     DomibusConnectorContentMapper contentMapper;

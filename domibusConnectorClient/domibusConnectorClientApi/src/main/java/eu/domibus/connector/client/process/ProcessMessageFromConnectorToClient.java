@@ -7,7 +7,7 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
  * This interface is called by the multiple Link implementations
  * to start the message transport
  */
-public interface ProcessMessageFromConnectorToNational {
+public interface ProcessMessageFromConnectorToClient {
 
     /**
      *

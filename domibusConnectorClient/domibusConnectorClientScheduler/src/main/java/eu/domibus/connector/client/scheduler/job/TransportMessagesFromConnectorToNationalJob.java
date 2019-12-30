@@ -3,7 +3,7 @@ package eu.domibus.connector.client.scheduler.job;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientMethodNotSupportedException;
 import eu.domibus.connector.client.nbc.DomibusConnectorNationalBackendClient;
-import eu.domibus.connector.client.process.ProcessMessageFromConnectorToNational;
+import eu.domibus.connector.client.process.ProcessMessageFromConnectorToClient;
 import eu.domibus.connector.client.service.DomibusConnectorClientService;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageResponseType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
@@ -27,7 +27,7 @@ public class TransportMessagesFromConnectorToNationalJob {
     private DomibusConnectorClientService connectorClientService;
 
     @Autowired
-    ProcessMessageFromConnectorToNational connectorToNational;
+    ProcessMessageFromConnectorToClient connectorToNational;
 
     public void transportMessageToNational() throws DomibusConnectorClientException {
         List<DomibusConnectorMessageType> messages = null;

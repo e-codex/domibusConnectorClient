@@ -1,15 +1,15 @@
 
 package eu.domibus.connector.v35client;
 
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 
-import eu.domibus.connector.client.link.ws.DomibusConnectorBackendWebServiceClient;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import eu.domibus.connector.client.link.exception.DomibusConnectorBackendWebServiceClientException;
+import eu.domibus.connector.client.exception.DomibusConnectorClientException;
+import eu.domibus.connector.client.link.ws.DomibusConnectorClientWSLink;
 import eu.domibus.connector.common.exception.ImplementationMissingException;
 import eu.domibus.connector.common.message.Message;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
@@ -27,7 +27,7 @@ public class Client35ToClient4AdapterTest {
 
     PushMessagesToControllerFrom35Client translateService;
     DomibusConnectorNationalBackendClient nationalBackendClient;    
-    DomibusConnectorBackendWebServiceClient submitMessageToConnectorService;
+    DomibusConnectorClientWSLink submitMessageToConnectorService;
     Map35MessageTov4Message map35MessageTov4Message;
     DomibusConnectorContentMapper domibusConnectorContentMapper;
     
@@ -36,7 +36,7 @@ public class Client35ToClient4AdapterTest {
         translateService = new PushMessagesToControllerFrom35Client();
         
         nationalBackendClient = Mockito.mock(DomibusConnectorNationalBackendClient.class);        
-        submitMessageToConnectorService = Mockito.mock(DomibusConnectorBackendWebServiceClient.class);        
+        submitMessageToConnectorService = Mockito.mock(DomibusConnectorClientWSLink.class);        
         map35MessageTov4Message = Mockito.spy(new Map35MessageTov4Message());        
         domibusConnectorContentMapper = Mockito.spy(new SimpleContentMapper());
 
@@ -60,8 +60,8 @@ public class Client35ToClient4AdapterTest {
         
         //3 messages should be handed over to submitMessageService
         try {
-			Mockito.verify(submitMessageToConnectorService, Mockito.times(3)).submitMessage(Mockito.any(DomibusConnectorMessageType.class));
-		} catch (DomibusConnectorBackendWebServiceClientException e) {
+			Mockito.verify(submitMessageToConnectorService, Mockito.times(3)).submitMessageToConnector(Mockito.any(DomibusConnectorMessageType.class));
+		} catch (DomibusConnectorClientException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}       
@@ -78,8 +78,8 @@ public class Client35ToClient4AdapterTest {
         
         //1 Message should be handed over to submitMessageService
         try {
-			Mockito.verify(submitMessageToConnectorService, Mockito.times(1)).submitMessage(Mockito.any(DomibusConnectorMessageType.class));
-		} catch (DomibusConnectorBackendWebServiceClientException e) {
+			Mockito.verify(submitMessageToConnectorService, Mockito.times(1)).submitMessageToConnector(Mockito.any(DomibusConnectorMessageType.class));
+		} catch (DomibusConnectorClientException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}  
@@ -102,8 +102,8 @@ public class Client35ToClient4AdapterTest {
         
         //1 Message should be handed over to submitMessageService
         try {
-			Mockito.verify(submitMessageToConnectorService, Mockito.times(0)).submitMessage(Mockito.any(DomibusConnectorMessageType.class));
-		} catch (DomibusConnectorBackendWebServiceClientException e) {
+			Mockito.verify(submitMessageToConnectorService, Mockito.times(0)).submitMessageToConnector(Mockito.any(DomibusConnectorMessageType.class));
+		} catch (DomibusConnectorClientException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}        

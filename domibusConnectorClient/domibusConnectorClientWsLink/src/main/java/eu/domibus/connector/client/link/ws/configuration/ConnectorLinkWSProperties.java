@@ -1,19 +1,20 @@
 package eu.domibus.connector.client.link.ws.configuration;
 
 
-import eu.domibus.connector.lib.spring.configuration.CxfTrustKeyStoreConfigurationProperties;
+import java.util.Properties;
+
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.core.io.Resource;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import java.util.Properties;
+import eu.domibus.connector.lib.spring.configuration.CxfTrustKeyStoreConfigurationProperties;
 
 
 @ConfigurationProperties(prefix = ConnectorLinkWSProperties.PREFIX)
