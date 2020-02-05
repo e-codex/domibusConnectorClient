@@ -1,0 +1,30 @@
+package eu.domibus.connector.client;
+
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
+
+/**
+ * This interface must be implemented if the domibusConnectorClientScheduler is used and/or the client is set up in push/pull mode!
+ * 
+ * @author Bernhard Rieder
+ *
+ */
+public interface DomibusConnectorClientBackend {
+
+	/**
+	 * This method asks the backend of the client if new messages are to submit to the connector.
+	 * Must be implemented if domibusConnectorClientScheduler is used, or if the client implementation is not self aware to 
+	 * recognize new messages at its backend.
+	 *  
+	 * @return messages object holding a Collection of messages.
+	 */
+	public DomibusConnectorMessagesType checkClientForNewMessagesToSubmit();
+	
+	/**
+	 * This method triggers the client's backend to store/put/forward messages received.
+	 * Must be implemented if domibusConnectorClientScheduler is used, or if the client is set up in push/pull mode.
+	 * 
+	 * @param message - The message object received from the connector.
+	 */
+	public void deliverNewMessageToClientBackend(DomibusConnectorMessageType message);
+}

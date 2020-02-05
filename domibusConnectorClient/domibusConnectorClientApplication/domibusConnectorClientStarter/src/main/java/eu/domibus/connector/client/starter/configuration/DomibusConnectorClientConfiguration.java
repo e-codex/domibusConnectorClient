@@ -1,5 +1,5 @@
 
-package eu.domibus.connector.client.runnable.configuration;
+package eu.domibus.connector.client.starter.configuration;
 
 import eu.domibus.connector.client.scheduler.job.GetMessagesFromConnectorJob;
 import eu.domibus.connector.client.scheduler.job.SubmitMessagesToConnectorJob;
