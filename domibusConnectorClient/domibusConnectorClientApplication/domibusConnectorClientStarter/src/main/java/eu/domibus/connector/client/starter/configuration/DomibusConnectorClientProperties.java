@@ -7,11 +7,15 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.Properties;
 import java.util.Set;
 
+import org.apache.cxf.common.util.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import eu.domibus.connector.client.starter.exception.DomibusConnectorClientStarterException;
 
 public class DomibusConnectorClientProperties {
 
@@ -31,7 +35,7 @@ public class DomibusConnectorClientProperties {
 //	public static final String CONNECTOR_CLIENT_NAME_LABEL = Messages.getString("connector.client.label");
 
     //defines the address of the connector web service
-    public static final String CONNECTOR_BACKEND_SERVICE_ADDRESS_KEY = "connector.backend.service.address";
+    public static final String CONNECTOR_BACKEND_SERVICE_ADDRESS_KEY = "connector-client.connector-link.ws.connectorAddress";
     
   //defines the alias of the certificate of the connector backend webservice
     public static final String CONNECTOR_BACKEND_CERT_ALIAS_KEY = "connector.backend.cert.alias";
@@ -141,10 +145,26 @@ public class DomibusConnectorClientProperties {
         LOGGER.trace("Loaded Properties are [{}]", properties);
 
 
+        validateProperties();
         setPropertyValues();
 
     }
 
+    private static void validateProperties() {
+    	Set<String> invalid = new HashSet<String>();
+    	
+    	if(StringUtils.isEmpty(properties.getProperty(CONNECTOR_BACKEND_SERVICE_ADDRESS_KEY)))invalid.add(CONNECTOR_BACKEND_SERVICE_ADDRESS_KEY);
+    	if(StringUtils.isEmpty(properties.getProperty(CONNECTOR_BACKEND_CERT_ALIAS_KEY)))invalid.add(CONNECTOR_BACKEND_CERT_ALIAS_KEY);
+    	if(StringUtils.isEmpty(properties.getProperty(GATEWAY_NAME_KEY)))invalid.add(GATEWAY_NAME_KEY);
+    	if(StringUtils.isEmpty(properties.getProperty(GATEWAY_ROLE_KEY)))invalid.add(GATEWAY_ROLE_KEY);
+    	if(StringUtils.isEmpty(properties.getProperty(KEYSTORE_TYPE_KEY)))invalid.add(KEYSTORE_TYPE_KEY);
+    	if(StringUtils.isEmpty(properties.getProperty(KEYSTORE_PATH_KEY)))invalid.add(KEYSTORE_PATH_KEY);
+    	if(StringUtils.isEmpty(properties.getProperty(KEYSTORE_PW_KEY)))invalid.add(KEYSTORE_PW_KEY);
+    	if(StringUtils.isEmpty(properties.getProperty(KEY_ALIAS_KEY)))invalid.add(KEY_ALIAS_KEY);
+    	if(StringUtils.isEmpty(properties.getProperty(KEY_PW_KEY)))invalid.add(KEY_PW_KEY);
+    	if(StringUtils.isEmpty(properties.getProperty(CHECK_INCOMING_MESSAGES_PERIOD_KEY)))invalid.add(CHECK_INCOMING_MESSAGES_PERIOD_KEY);
+    	if(StringUtils.isEmpty(properties.getProperty(CHECK_OUTGOING_MESSAGES_PERIOD_KEY)))invalid.add(CHECK_OUTGOING_MESSAGES_PERIOD_KEY);
+    }
 
     private static void setPropertyValues() {
 

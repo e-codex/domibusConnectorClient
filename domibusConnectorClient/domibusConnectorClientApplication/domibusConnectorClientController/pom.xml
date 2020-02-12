@@ -6,4 +6,32 @@
     <version>4.2.0-SNAPSHOT</version>
   </parent>
   <artifactId>domibusConnectorClientController</artifactId>
+  
+  <dependencies>
+  
+  <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnectorClientApi</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnectorClientScheduler</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnectorClientLibrary</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+  	<dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-context</artifactId>
+        </dependency>
+  	<dependency>
+    <groupId>com.h2database</groupId>
+    <artifactId>h2</artifactId>
+    <scope>runtime</scope>
+</dependency>
+  </dependencies>
 </project>

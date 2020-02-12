@@ -9,6 +9,8 @@ import javax.mail.util.ByteArrayDataSource;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
+import org.springframework.stereotype.Component;
+
 import eu.domibus.connector.client.DomibusConnectorClientMessageBuilder;
 import eu.domibus.connector.domain.transition.DomibusConnectorActionType;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
@@ -23,6 +25,7 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorPartyType;
 import eu.domibus.connector.domain.transition.DomibusConnectorServiceType;
 
+@Component
 public class DomibusConnectorClientMessageBuilderImpl implements DomibusConnectorClientMessageBuilder {
 
 	

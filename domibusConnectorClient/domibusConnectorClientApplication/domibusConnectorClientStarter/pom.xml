@@ -7,14 +7,10 @@
   </parent>
   <artifactId>domibusConnectorClientStarter</artifactId>
   <dependencies>
-  	<dependency>
+  	
+         <dependency>
             <groupId>${project.groupId}</groupId>
-            <artifactId>domibusConnectorClientScheduler</artifactId>
-            <version>${project.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>${project.groupId}</groupId>
-            <artifactId>domibusConnectorClientLibrary</artifactId>
+            <artifactId>domibusConnectorClientController</artifactId>
             <version>${project.version}</version>
         </dependency>
         

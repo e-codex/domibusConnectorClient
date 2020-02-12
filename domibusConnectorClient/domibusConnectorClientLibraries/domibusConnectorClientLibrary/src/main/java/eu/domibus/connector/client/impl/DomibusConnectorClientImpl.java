@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 
 import eu.domibus.connector.client.DomibusConnectorClient;
@@ -17,6 +18,7 @@ import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 
+@Component
 public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 	
 	private static final Logger LOGGER = LogManager.getLogger(DomibusConnectorClientImpl.class);
