@@ -84,8 +84,8 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 					e.printStackTrace();
 				}
             });
-        }else {
-        	throw new DomibusConnectorClientException("The received DomibusConnectorMessagesType from the connector is either null, or its containing collection is null or empty!");
+//        }else {
+//        	throw new DomibusConnectorClientException("The received DomibusConnectorMessagesType from the connector is either null, or its containing collection is null or empty!");
         }
 		
 		return messages;

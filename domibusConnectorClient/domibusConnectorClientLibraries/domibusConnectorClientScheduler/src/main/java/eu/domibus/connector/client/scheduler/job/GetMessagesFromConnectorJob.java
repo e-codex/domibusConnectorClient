@@ -35,12 +35,14 @@ public class GetMessagesFromConnectorJob {
         messages = connectorClient.requestNewMessagesFromConnector();
 
         if (messages!=null && !CollectionUtils.isEmpty(messages.getMessages())) {
-            LOGGER.debug("{} new messages from connector to transport to national backend...", messages.getMessages().size());
+            LOGGER.debug("{} new messages from connector to store...", messages.getMessages().size());
             messages.getMessages().stream().forEach( message -> {
 
                 clientBackend.deliverNewMessageToClientBackend(message);
                 
             });
+        }else {
+        	LOGGER.debug("No new messages from connector to store received.");
         }
         LOGGER.info("GetMessagesFromConnectorJob finished after [{}]", Duration.between(startTime, LocalDateTime.now()));
     }
