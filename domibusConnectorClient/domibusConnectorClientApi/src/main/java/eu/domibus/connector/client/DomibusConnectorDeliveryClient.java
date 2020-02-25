@@ -1,5 +1,6 @@
 package eu.domibus.connector.client;
 
+import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageContentType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType;
@@ -21,8 +22,9 @@ public interface DomibusConnectorDeliveryClient {
 	 * The message contains a {@link DomibusConnectorMessageDetailsType} and a {@link DomibusConnectorMessageContentType} at least.
 	 * 
 	 * @param message - The business message delivered by the domibusConnector.
+	 * @throws DomibusConnectorClientException 
 	 */
-	public void receiveDeliveredMessageFromConnector(DomibusConnectorMessageType message);
+	public void receiveDeliveredMessageFromConnector(DomibusConnectorMessageType message) throws DomibusConnectorClientException;
 	
 	/**
 	 * This method must be implemented if the client is set up in push/push mode.
@@ -32,6 +34,6 @@ public interface DomibusConnectorDeliveryClient {
 	 * 
 	 * @param message - The confirmation message delivered by the domibusConnector.
 	 */
-	public void receiveDeliveredConfirmationMessageFromConnector(DomibusConnectorMessageType message);
+	public void receiveDeliveredConfirmationMessageFromConnector(DomibusConnectorMessageType message) throws DomibusConnectorClientException;
 	
 }

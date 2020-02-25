@@ -11,11 +11,13 @@ import org.springframework.util.CollectionUtils;
 
 import eu.domibus.connector.client.DomibusConnectorClient;
 import eu.domibus.connector.client.DomibusConnectorClientBackend;
+import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
+import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 
 
-@Component
+//@Component
 public class GetMessagesFromConnectorJob {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GetMessagesFromConnectorJob.class);
@@ -38,7 +40,19 @@ public class GetMessagesFromConnectorJob {
             LOGGER.debug("{} new messages from connector to store...", messages.getMessages().size());
             messages.getMessages().stream().forEach( message -> {
 
-                clientBackend.deliverNewMessageToClientBackend(message);
+                try {
+					clientBackend.deliverNewMessageToClientBackend(message);
+				} catch (DomibusConnectorClientBackendException e1) {
+//						throw new DomibusConnectorClientException(e1);
+					
+				}
+                
+                try {
+					connectorClient.triggerConfirmationForMessage(message, DomibusConnectorConfirmationType.DELIVERY);
+				} catch (DomibusConnectorClientException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
                 
             });
         }else {

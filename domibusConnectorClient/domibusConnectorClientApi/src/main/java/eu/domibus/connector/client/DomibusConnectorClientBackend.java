@@ -1,5 +1,6 @@
 package eu.domibus.connector.client;
 
+import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 
@@ -25,6 +26,16 @@ public interface DomibusConnectorClientBackend {
 	 * Must be implemented if domibusConnectorClientScheduler is used, or if the client is set up in push/pull mode.
 	 * 
 	 * @param message - The message object received from the connector.
+	 * @throws DomibusConnectorClientBackendException 
 	 */
-	public void deliverNewMessageToClientBackend(DomibusConnectorMessageType message);
+	public void deliverNewMessageToClientBackend(DomibusConnectorMessageType message) throws DomibusConnectorClientBackendException;
+	
+	/**
+	 * This method triggers the client's backend to store/put/forward confirmation received.
+	 * Must be implemented if domibusConnectorClientScheduler is used, or if the client is set up in push/pull mode.
+	 * 
+	 * @param message - The message object containing the confirmation received from the connector.
+	 * @throws DomibusConnectorClientBackendException 
+	 */
+	public void deliverNewConfirmationToClientBackend(DomibusConnectorMessageType message) throws DomibusConnectorClientBackendException;
 }

@@ -1,0 +1,457 @@
+package eu.domibus.connector.client.filesystem;
+
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.activation.DataHandler;
+import javax.activation.DataSource;
+import javax.activation.MimetypesFileTypeMap;
+import javax.validation.constraints.NotNull;
+import javax.xml.transform.Source;
+import javax.xml.transform.stream.StreamSource;
+
+import org.apache.commons.lang.ArrayUtils;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StreamUtils;
+import org.springframework.util.StringUtils;
+
+import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSMessageProperties;
+import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSStorageConfiguration;
+import eu.domibus.connector.client.filesystem.message.FSMessageDetails;
+import eu.domibus.connector.domain.transition.DomibusConnectorActionType;
+import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
+import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureMimeType;
+import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageAttachmentType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageContentType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageDocumentType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
+import eu.domibus.connector.domain.transition.DomibusConnectorPartyType;
+import eu.domibus.connector.domain.transition.DomibusConnectorServiceType;
+
+@Component
+@ConfigurationProperties(prefix = DomibusConnectorClientFSStorageConfiguration.PREFIX)
+@PropertySource("classpath:/connector-client-fs-storage-default.properties")
+public class DomibusConnectorClientFileSystemReader {
+	
+	@NotNull
+	private DomibusConnectorClientFSMessageProperties messageProperties;
+	
+	@NotNull
+	private String messagePropertiesFileName;
+	
+	@NotNull
+	private String messageReadyPostfix;
+	
+	@NotNull
+	private String messageSendingPostfix;
+	
+	@NotNull
+	private String messageSentPostfix;
+	
+	@NotNull
+	private String messageFailedPostfix;
+	
+	@NotNull
+	private String messageProcessingPostfix;
+	
+	@NotNull
+	private String xmlFileExtension;
+	
+	@NotNull
+	private String pkcs7FileExtension;
+	
+	@NotNull
+	private String attachmentIdPrefix;
+	
+	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusConnectorClientFileSystemReader.class);
+	
+	public List<File> readUnsentMessages(File outgoingMessagesDir){
+		List<File> messagesUnsent = new ArrayList<File>();
+
+		if (outgoingMessagesDir.listFiles().length > 0) {
+			for (File sub : outgoingMessagesDir.listFiles()) {
+				if (sub.isDirectory()
+						&& sub.getName().endsWith(messageReadyPostfix)) {
+					messagesUnsent.add(sub);
+				}
+			}
+		}
+		
+		return messagesUnsent;
+	}
+
+	public List<File> readMessagesFromDirWithPostfix(File messagesDir, String endsWith) {
+		List<File> messages = new ArrayList<File>();
+
+		if (messagesDir.listFiles().length > 0) {
+			for (File sub : messagesDir.listFiles()) {
+				if (sub.isDirectory()
+						&& sub.getName().endsWith(endsWith)) {
+					messages.add(sub);
+				}
+			}
+		}
+		return messages;
+	}
+	
+	public List<File> readAllMessagesFromDir(File messagesDir) {
+		List<File> messages = new ArrayList<File>();
+
+		if (messagesDir.listFiles().length > 0) {
+			for (File sub : messagesDir.listFiles()) {
+				if (sub.isDirectory()) {
+					messages.add(sub);
+				}
+			}
+		}
+		return messages;
+	}
+
+	public File setMessageSent(File messageFolder) throws DomibusConnectorClientFileSystemException {
+		String messageFolderString = messageFolder.getPath().replaceAll(messageSendingPostfix, "");
+		LOGGER.debug("setting message [{}] as sent with new Path [{}]", messageFolder);
+		messageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(messageFolder, messageFolderString, messageSentPostfix);
+		return messageFolder;
+	}
+
+	public File setMessageFailed(File messageFolder) throws DomibusConnectorClientFileSystemException {
+		String messageFolderString = messageFolder.getPath().replaceAll(messageSendingPostfix, "");
+		LOGGER.debug("setting message [{}] as failed with new Path [{}]", messageFolder);
+		messageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(messageFolder, messageFolderString, messageFailedPostfix);
+		return messageFolder;
+	}
+
+	public DomibusConnectorMessageType readMessageFromFolder(File messageFolder) throws DomibusConnectorClientFileSystemException {
+		FSMessageDetails messageDetails = loadMessageProperties(messageFolder, this.messageProperties.getFileName());
+		
+		String backendMessageId = extractBackendMessageId(messageDetails);
+
+		String newMessageFolderPath = messageFolder.getAbsolutePath().substring(0,
+				messageFolder.getAbsolutePath().lastIndexOf(File.separator)+1);
+				
+
+		messageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(messageFolder, newMessageFolderPath, backendMessageId);
+		
+		
+		if (messageFolder.exists() && messageFolder.isDirectory() && messageFolder.listFiles().length > 0) {
+			String messageFolderPath = messageFolder.getAbsolutePath();
+			LOGGER.info("Start reading message from folder {}", messageFolderPath);
+
+			File workMessageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(messageFolder, messageFolderPath, messageProcessingPostfix);
+			
+			DomibusConnectorMessageType message = new DomibusConnectorMessageType();
+			
+			try {
+				message = processMessageFolderFiles(workMessageFolder, messageDetails);
+			} catch (Exception e) {
+			    LOGGER.error("#readMessageFromFolder: an error occured, renaming folder to failed", e);
+				File failedMessageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(workMessageFolder, messageFolderPath, messageFailedPostfix);
+				
+				throw new DomibusConnectorClientFileSystemException("Could not process message folder "+failedMessageFolder.getAbsolutePath());
+			}
+			
+			messageDetails.getMessageDetails().put(messageProperties.getMessageSentDatetime(),DomibusConnectorClientFileSystemUtil.convertDateToProperty(new Date()));
+			messageDetails.storePropertiesToFile(new File(workMessageFolder, messagePropertiesFileName));
+			try {
+				DomibusConnectorClientFileSystemUtil.renameMessageFolder(workMessageFolder, messageFolderPath, messageSendingPostfix);
+			} catch (DomibusConnectorClientFileSystemException e) {
+				LOGGER.error("",e);
+			}
+
+
+			return message;
+		}
+		return null;
+	}
+	
+	private FSMessageDetails loadMessageProperties(File message, String messagePropertiesFileName) {
+        String pathname = message.getAbsolutePath() + File.separator + messagePropertiesFileName;
+        LOGGER.debug("#loadMessageProperties: Loading message properties from file {}", pathname);
+        File messagePropertiesFile = new File(pathname);
+        if (!messagePropertiesFile.exists()) {
+            LOGGER.error("#loadMessageProperties: Message properties file '" + messagePropertiesFile.getAbsolutePath()
+                    + "' does not exist. Message cannot be processed!");
+            return null;
+        }
+        FSMessageDetails details = new FSMessageDetails();
+        details.loadPropertiesFromFile(messagePropertiesFile);
+
+        return details;
+    }
+
+	private DomibusConnectorMessageType processMessageFolderFiles(File workMessageFolder, FSMessageDetails messageDetails)
+			throws DomibusConnectorClientFileSystemException {
+
+		DomibusConnectorMessageType message = new DomibusConnectorMessageType();
+
+		DomibusConnectorMessageDetailsType msgDetails = convertMessagePropertiesToMessageDetails(messageDetails);
+		message.setMessageDetails(msgDetails);
+
+		int attachmentCount = 1;
+
+		DomibusConnectorMessageContentType messageContent = new DomibusConnectorMessageContentType();
+        DomibusConnectorMessageDocumentType document = new DomibusConnectorMessageDocumentType();
+
+		for (File sub : workMessageFolder.listFiles()) {
+			if (sub.getName().equals(messageDetails.getMessageDetails().getProperty(messageProperties.getFileName()))) {
+				continue;
+			} else {
+
+				if (isFile(sub.getName(),messageDetails.getMessageDetails().getProperty(messageProperties.getContentXmlFileName()))) {
+					LOGGER.debug("Found content xml file with name {}", sub.getName());
+					try {
+						messageContent.setXmlContent(fileToSource(sub));
+					} catch (IOException e) {
+						throw new DomibusConnectorClientFileSystemException(
+								"Exception creating Source object out of file " + sub.getName());
+					}
+					continue;
+				} else if (isFile(sub.getName(),messageDetails.getMessageDetails().getProperty(messageProperties.getContentPdfFileName()))) {
+					LOGGER.debug("Found content pdf file with name {}", sub.getName());
+					try {
+						document.setDocument(convertToDataHandler(sub));
+						document.setDocumentName(sub.getName());
+					} catch (IOException e) {
+						throw new DomibusConnectorClientFileSystemException(
+								"Exception creating DataHandler object out of file " + sub.getName());
+					}
+					continue;
+				} else if (isFile(sub.getName(),messageDetails.getMessageDetails().getProperty(messageProperties.getDetachedSignatureFileName()))) {
+					LOGGER.debug("Found detached signature file with name {}", sub.getName());
+					try {
+						DomibusConnectorDetachedSignatureType det = new DomibusConnectorDetachedSignatureType();
+						det.setDetachedSignature(fileToByteArray(sub));
+						det.setDetachedSignatureName(sub.getName());
+						if (sub.getName().endsWith(xmlFileExtension)) {
+							det.setMimeType(DomibusConnectorDetachedSignatureMimeType.XML);
+						} else if (sub.getName()
+								.endsWith(pkcs7FileExtension)) {
+							det.setMimeType(DomibusConnectorDetachedSignatureMimeType.PKCS_7);
+						} else {
+							det.setMimeType(DomibusConnectorDetachedSignatureMimeType.BINARY);
+						}
+						document.setDetachedSignature(det );
+					} catch (IOException e) {
+						throw new DomibusConnectorClientFileSystemException(
+								"Exception loading detached signature into byte array from file " + sub.getName());
+					}
+					continue;
+				} else if (isConfirmation(sub.getName())) {
+					DomibusConnectorMessageConfirmationType confirmation = new DomibusConnectorMessageConfirmationType();
+					try {
+						confirmation.setConfirmation(fileToSource(sub));
+					} catch (IOException e) {
+						throw new DomibusConnectorClientFileSystemException(
+								"Exception creating Source object out of file " + sub.getName());
+					}
+					if(sub.getName().indexOf(".xml")>0) {
+						String name = sub.getName().substring(0, sub.getName().indexOf(".xml"));
+						DomibusConnectorConfirmationType valueOf = DomibusConnectorConfirmationType.valueOf(name);
+						if(valueOf!=null) {
+							confirmation.setConfirmationType(valueOf);
+						}
+					}
+					message.getMessageConfirmations().add(confirmation);
+				} else {
+					LOGGER.debug("Processing attachment File {}", sub.getName());
+
+					byte[] attachmentData = null;
+					try {
+						attachmentData = fileToByteArray(sub);
+					} catch (IOException e) {
+						throw new DomibusConnectorClientFileSystemException(
+								"Exception loading attachment into byte array from file " + sub.getName());
+					}
+					String attachmentId = attachmentIdPrefix + attachmentCount;
+
+					if(!ArrayUtils.isEmpty(attachmentData)){
+					    try {
+                            DomibusConnectorMessageAttachmentType attachment = new DomibusConnectorMessageAttachmentType();
+
+                            attachment.setAttachment(this.convertToDataHandler(sub));
+                            attachment.setIdentifier(attachmentId);
+                            attachment.setName(sub.getName());
+                            attachmentCount++;
+                            attachment.setMimeType(new MimetypesFileTypeMap().getContentType(sub.getName()));
+
+                            LOGGER.debug("Add attachment {}", attachment.toString());
+                            message.getMessageAttachments().add(attachment);
+                        } catch (IOException ioe) {
+					        String error = String.format("Error while loading attachment from file [%s]", sub);
+					        LOGGER.error(error);
+					        throw new RuntimeException(error);
+                        }
+					}
+				}
+
+
+
+			}
+		}
+
+		if (document.getDocument() != null) {
+		    messageContent.setDocument(document);
+        }
+
+		if(messageContent.getXmlContent()!=null)
+			message.setMessageContent(messageContent);
+		
+
+		return message;
+	}
+	
+	private boolean isFile(String filename, String messageProperty) {
+		if(messageProperty!=null) {
+			if(messageProperty.equals(filename))
+				return true;
+		}
+		return false;
+	}
+	
+	private boolean isConfirmation(String filename) {
+		if(filename!=null) {
+			if(filename.indexOf(".xml")>0) {
+				String name = filename.substring(0, filename.indexOf(".xml"));
+                List<String> CONFIRMATION_NAMES = Arrays.asList(DomibusConnectorConfirmationType.values()).stream()
+                        .map(e -> e.name())
+                        .collect(Collectors.toList());
+                if (CONFIRMATION_NAMES.contains(name)) {
+                    return true;
+                }
+//                DomibusConnectorConfirmationType valueOf = DomibusConnectorConfirmationType.fromValue(name);
+//				if(valueOf!=null) {
+//					return true;
+//				}
+			}
+		}
+		return false;
+	}
+	
+	private String extractBackendMessageId(FSMessageDetails messageProperties) {
+		String backendMessageId = null;
+		if (messageProperties != null) {
+			backendMessageId = messageProperties.getMessageDetails().getProperty(this.messageProperties.getBackendMessageId());
+			LOGGER.debug("Found backendMessageId in Properties: {}", backendMessageId);
+		}
+		if (!StringUtils.hasText(backendMessageId)) {
+			backendMessageId = DomibusConnectorClientFileSystemUtil.generateBackendMessageId();
+			messageProperties.getMessageDetails().put(this.messageProperties.getBackendMessageId(), backendMessageId);
+			LOGGER.debug("No backendMessageId resolved. Generated " + backendMessageId);
+		}
+		return backendMessageId;
+	}
+
+	private DomibusConnectorMessageDetailsType convertMessagePropertiesToMessageDetails(FSMessageDetails properties) {
+
+		DomibusConnectorMessageDetailsType messageDetails = new DomibusConnectorMessageDetailsType();
+
+		messageDetails.setFinalRecipient(properties.getMessageDetails().getProperty(messageProperties.getFinalRecipient()));
+		messageDetails.setOriginalSender(properties.getMessageDetails().getProperty(messageProperties.getOriginalSender()));
+		messageDetails.setBackendMessageId(properties.getMessageDetails().getProperty(messageProperties.getNationalMessageId()));
+
+
+		String fromPartyId = properties.getMessageDetails().getProperty(messageProperties.getFromPartyId());
+		String fromPartyRole = properties.getMessageDetails().getProperty(messageProperties.getFromPartyRole());
+
+		
+		DomibusConnectorPartyType fromParty = new DomibusConnectorPartyType();
+		fromParty.setPartyId(fromPartyId);
+		fromParty.setRole(fromPartyRole);
+		messageDetails.setFromParty(fromParty);
+
+
+
+		String toPartyId = properties.getMessageDetails().getProperty(messageProperties.getToPartyId());
+		String toPartyRole = properties.getMessageDetails().getProperty(messageProperties.getToPartyRole());
+		DomibusConnectorPartyType toParty = new DomibusConnectorPartyType();
+		toParty.setPartyId(toPartyId);
+		toParty.setRole(toPartyRole);
+		messageDetails.setToParty(toParty);
+
+		String action = properties.getMessageDetails().getProperty(messageProperties.getAction());
+		DomibusConnectorActionType domibusConnectorAction = new DomibusConnectorActionType();
+		domibusConnectorAction.setAction(action);
+		messageDetails.setAction(domibusConnectorAction);
+
+		String service = properties.getMessageDetails().getProperty(messageProperties.getService());
+		DomibusConnectorServiceType domibusConnectorService = new DomibusConnectorServiceType();
+		domibusConnectorService.setService(service);
+		messageDetails.setService(domibusConnectorService);
+
+		String conversationId = properties.getMessageDetails().getProperty(messageProperties.getConversationId());
+		if(StringUtils.hasText(conversationId)){
+			messageDetails.setConversationId(conversationId);
+		}
+
+		return messageDetails;
+	}
+	
+	private byte[] fileToByteArray(File file) throws IOException {
+		try (FileInputStream fileInputStream = new FileInputStream(file)) {
+            byte[] data = StreamUtils.copyToByteArray(fileInputStream);
+            return data;
+        } catch (IOException ioe) {
+		    throw new RuntimeException("IOExceptio occured while reading from file " + file, ioe);
+        }
+	}
+
+	private Source fileToSource(File file) throws IOException {
+		byte[] bytes = fileToByteArray(file);
+		return new StreamSource(new ByteArrayInputStream(bytes));
+	}
+
+	private DataHandler convertToDataHandler(File file) throws IOException {
+		LOGGER.debug("#convertToDataHandler: converting file [{}] to DataHandler", file);
+		byte[] bytes = fileToByteArray(file);
+		DataSource dataSource = new MyByteArrayDataSource(bytes);
+		DataHandler dh = new DataHandler(dataSource);
+		return dh;
+	}
+    
+    
+    private static class MyByteArrayDataSource implements DataSource {
+
+        private byte[] buffer;
+        
+        public MyByteArrayDataSource(byte[] buffer) {
+            this.buffer = buffer;
+        }
+
+        
+        @Override
+        public InputStream getInputStream() throws IOException {
+            return new ByteArrayInputStream(buffer);
+        }
+
+        @Override
+        public OutputStream getOutputStream() throws IOException {
+            throw new UnsupportedOperationException("Read Only Data Source!");
+        }
+
+        @Override
+        public String getContentType() {
+            return "application/octet-stream";
+        }
+
+        @Override
+        public String getName() {
+            return "";
+        }
+        
+    }
+
+}

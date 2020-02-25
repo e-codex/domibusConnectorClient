@@ -3,6 +3,7 @@ package eu.domibus.connector.client.connection.ws.linktest.client;
 
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.WebApplicationType;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
@@ -34,7 +35,7 @@ public class BackendClient {
                 .sources(BackendClient.class)
                 .properties(properties)
                 .profiles(profiles)
-                .web(web)
+                .web(WebApplicationType.SERVLET)
                 .build();
 
         ConfigurableApplicationContext appContext = springApp.run();
