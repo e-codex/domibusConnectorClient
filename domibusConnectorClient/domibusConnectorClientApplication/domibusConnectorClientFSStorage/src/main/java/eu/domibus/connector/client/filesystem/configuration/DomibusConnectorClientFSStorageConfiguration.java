@@ -5,6 +5,7 @@ import javax.validation.constraints.NotNull;
 
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -26,12 +27,15 @@ public class DomibusConnectorClientFSStorageConfiguration {
 	public static final String PREFIX = "connector-client.storage.filesystem";
     public static final String ENABLED_PROPERTY_NAME = "enabled";
     
+    @NestedConfigurationProperty
     @CheckFolderWriteable
     private DirectoryConfigurationProperties incoming;
     
+    @NestedConfigurationProperty
     @CheckFolderWriteable
     private DirectoryConfigurationProperties outgoing;
     
+    @NestedConfigurationProperty
     @NotNull
     private DomibusConnectorClientFSMessageProperties messageProperties;
 
@@ -48,6 +52,30 @@ public class DomibusConnectorClientFSStorageConfiguration {
 		fsStorage.setOutgoingMessagesDir(outgoing.getPath().toFile());
 		
 		return fsStorage;
+	}
+
+	public DirectoryConfigurationProperties getIncoming() {
+		return incoming;
+	}
+
+	public void setIncoming(DirectoryConfigurationProperties incoming) {
+		this.incoming = incoming;
+	}
+
+	public DirectoryConfigurationProperties getOutgoing() {
+		return outgoing;
+	}
+
+	public void setOutgoing(DirectoryConfigurationProperties outgoing) {
+		this.outgoing = outgoing;
+	}
+
+	public DomibusConnectorClientFSMessageProperties getMessageProperties() {
+		return messageProperties;
+	}
+
+	public void setMessageProperties(DomibusConnectorClientFSMessageProperties messageProperties) {
+		this.messageProperties = messageProperties;
 	}
 
 }

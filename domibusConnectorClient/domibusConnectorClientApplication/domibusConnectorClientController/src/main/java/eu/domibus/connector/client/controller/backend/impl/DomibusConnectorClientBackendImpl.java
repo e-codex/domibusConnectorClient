@@ -2,6 +2,7 @@ package eu.domibus.connector.client.controller.backend.impl;
 
 import javax.validation.constraints.NotNull;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import eu.domibus.connector.client.DomibusConnectorClientBackend;
@@ -14,6 +15,9 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 @Component
 public class DomibusConnectorClientBackendImpl implements DomibusConnectorClientBackend{
 	
+	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusConnectorClientBackendImpl.class);
+	
+	@Autowired
 	@NotNull
 	private DomibusConnectorClientStorage storage;
 	
@@ -23,8 +27,8 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 
 	@Override
 	public DomibusConnectorMessagesType checkClientForNewMessagesToSubmit() {
-		// TODO Auto-generated method stub
-		return null;
+		LOGGER.debug("#checkClientForNewMessagesToSubmit: called");
+		return storage.checkStorageForNewMessages();
 	}
 
 	@Override

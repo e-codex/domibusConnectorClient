@@ -3,6 +3,8 @@ package eu.domibus.connector.client.filesystem;
 import java.io.File;
 import java.util.List;
 
+import javax.validation.constraints.NotNull;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
@@ -62,7 +64,7 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 	@Override
 	public DomibusConnectorMessagesType checkStorageForNewMessages()
 			{
-		LOGGER.debug("#checkStorageForNewMessages: Start searching dir {} for folder with ending {}", outgoingMessagesDir.getAbsolutePath());
+		LOGGER.debug("#checkStorageForNewMessages: Start searching dir {} for unsent messages.", outgoingMessagesDir.getAbsolutePath());
 		List<File> messagesUnsent = fileSystemReader.readUnsentMessages(outgoingMessagesDir);
 
 		if (!messagesUnsent.isEmpty()) {

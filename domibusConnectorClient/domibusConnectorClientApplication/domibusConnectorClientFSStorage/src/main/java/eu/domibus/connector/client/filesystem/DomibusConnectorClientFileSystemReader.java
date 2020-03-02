@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.MimetypesFileTypeMap;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
@@ -25,6 +26,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSMessageProperties;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSStorageConfiguration;
@@ -45,13 +47,12 @@ import eu.domibus.connector.domain.transition.DomibusConnectorServiceType;
 @Component
 @ConfigurationProperties(prefix = DomibusConnectorClientFSStorageConfiguration.PREFIX)
 @PropertySource("classpath:/connector-client-fs-storage-default.properties")
+@Validated
+@Valid
 public class DomibusConnectorClientFileSystemReader {
 	
 	@NotNull
 	private DomibusConnectorClientFSMessageProperties messageProperties;
-	
-	@NotNull
-	private String messagePropertiesFileName;
 	
 	@NotNull
 	private String messageReadyPostfix;
@@ -80,6 +81,7 @@ public class DomibusConnectorClientFileSystemReader {
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusConnectorClientFileSystemReader.class);
 	
 	public List<File> readUnsentMessages(File outgoingMessagesDir){
+		LOGGER.debug("#readUnsentMessages: Searching for folders with ending {}", messageReadyPostfix);
 		List<File> messagesUnsent = new ArrayList<File>();
 
 		if (outgoingMessagesDir.listFiles().length > 0) {
@@ -165,7 +167,7 @@ public class DomibusConnectorClientFileSystemReader {
 			}
 			
 			messageDetails.getMessageDetails().put(messageProperties.getMessageSentDatetime(),DomibusConnectorClientFileSystemUtil.convertDateToProperty(new Date()));
-			messageDetails.storePropertiesToFile(new File(workMessageFolder, messagePropertiesFileName));
+			messageDetails.storePropertiesToFile(new File(workMessageFolder, messageProperties.getFileName()));
 			try {
 				DomibusConnectorClientFileSystemUtil.renameMessageFolder(workMessageFolder, messageFolderPath, messageSendingPostfix);
 			} catch (DomibusConnectorClientFileSystemException e) {
@@ -453,5 +455,78 @@ public class DomibusConnectorClientFileSystemReader {
         }
         
     }
+
+
+	public DomibusConnectorClientFSMessageProperties getMessageProperties() {
+		return messageProperties;
+	}
+
+	public void setMessageProperties(DomibusConnectorClientFSMessageProperties messageProperties) {
+		this.messageProperties = messageProperties;
+	}
+
+	public String getMessageReadyPostfix() {
+		return messageReadyPostfix;
+	}
+
+	public void setMessageReadyPostfix(String messageReadyPostfix) {
+		this.messageReadyPostfix = messageReadyPostfix;
+	}
+
+	public String getMessageSendingPostfix() {
+		return messageSendingPostfix;
+	}
+
+	public void setMessageSendingPostfix(String messageSendingPostfix) {
+		this.messageSendingPostfix = messageSendingPostfix;
+	}
+
+	public String getMessageSentPostfix() {
+		return messageSentPostfix;
+	}
+
+	public void setMessageSentPostfix(String messageSentPostfix) {
+		this.messageSentPostfix = messageSentPostfix;
+	}
+
+	public String getMessageFailedPostfix() {
+		return messageFailedPostfix;
+	}
+
+	public void setMessageFailedPostfix(String messageFailedPostfix) {
+		this.messageFailedPostfix = messageFailedPostfix;
+	}
+
+	public String getMessageProcessingPostfix() {
+		return messageProcessingPostfix;
+	}
+
+	public void setMessageProcessingPostfix(String messageProcessingPostfix) {
+		this.messageProcessingPostfix = messageProcessingPostfix;
+	}
+
+	public String getXmlFileExtension() {
+		return xmlFileExtension;
+	}
+
+	public void setXmlFileExtension(String xmlFileExtension) {
+		this.xmlFileExtension = xmlFileExtension;
+	}
+
+	public String getPkcs7FileExtension() {
+		return pkcs7FileExtension;
+	}
+
+	public void setPkcs7FileExtension(String pkcs7FileExtension) {
+		this.pkcs7FileExtension = pkcs7FileExtension;
+	}
+
+	public String getAttachmentIdPrefix() {
+		return attachmentIdPrefix;
+	}
+
+	public void setAttachmentIdPrefix(String attachmentIdPrefix) {
+		this.attachmentIdPrefix = attachmentIdPrefix;
+	}
 
 }

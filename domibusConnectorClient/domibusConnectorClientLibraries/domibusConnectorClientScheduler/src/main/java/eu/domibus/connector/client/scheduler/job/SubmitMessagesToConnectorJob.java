@@ -14,7 +14,7 @@ import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 
-@Component
+//@Component
 public class SubmitMessagesToConnectorJob {
 
     private static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(SubmitMessagesToConnectorJob.class);
@@ -43,6 +43,8 @@ public class SubmitMessagesToConnectorJob {
 					e.printStackTrace();
 				}
             }
+        }else {
+        	LOGGER.debug("No new messages at the client backend to submit.");
         }
         LOGGER.info("SubmitMessagesToConnectorJob finished after [{}]", Duration.between(startTime, LocalDateTime.now()));
     }
