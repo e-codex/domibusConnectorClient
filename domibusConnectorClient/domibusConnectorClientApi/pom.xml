@@ -18,6 +18,12 @@
         <dependency>
             <groupId>eu.domibus.connector</groupId>
             <artifactId>domibusConnectorAPI</artifactId>
+            <exclusions>
+            	<exclusion>
+            		<groupId>commons-io</groupId>
+            		<artifactId>commons-io</artifactId>
+            	</exclusion>
+            </exclusions>
         </dependency>
 
     <!--     <dependency>

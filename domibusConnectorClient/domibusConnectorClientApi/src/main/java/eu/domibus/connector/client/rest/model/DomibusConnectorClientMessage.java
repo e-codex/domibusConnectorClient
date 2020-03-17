@@ -1,90 +1,52 @@
-package eu.domibus.connector.client.controller.persistence.model;
+package eu.domibus.connector.client.rest.model;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+public class DomibusConnectorClientMessage {
 
-@Entity
-@Table(name = "CONNECTOR_CLIENT_MESSAGE")
-public class PDomibusConnectorClientMessage {
-
-	@Id
-    @Column(name="ID")
-	@SequenceGenerator(name = "clientMessageSeqGen", sequenceName = "clientMessageSeq", initialValue = 5, allocationSize = 1)
-    @GeneratedValue(generator = "clientMessageSeqGen")
 	private Long id;
 	
-	@Column(name = "EBMS_MESSAGE_ID", length = 255)
     private String ebmsMessageId;
 	
-	@Column(name = "BACKEND_MESSAGE_ID", unique = true, length = 255)
     private String backendMessageId;
 	
-	@Column(name = "CONVERSATION_ID", length = 255)
     private String conversationId;
-	
-	@Column(name = "ORIGINAL_SENDER", length = 255)
+    
     private String originalSender;
-	
-	@Column(name = "FINAL_RECIPIENT", length = 255)
+    
     private String finalRecipient;
 	
-	@Column(name = "FROM_PARTY_ID", length = 255)
     private String fromPartyId;
 	
-	@Column(name = "FROM_PARTY_TYPE", length = 255)
     private String fromPartyType;
 	
-	@Column(name = "FROM_PARTY_ROLE", length = 255)
     private String fromPartyRole;
 	
-	@Column(name = "TO_PARTY_ID", length = 255)
     private String toPartyId;
 	
-	@Column(name = "TO_PARTY_TYPE", length = 255)
     private String toPartyType;
 	
-	@Column(name = "TO_PARTY_ROLE", length = 255)
     private String toPartyRole;
-	
-	@Column(name = "SERVICE", length = 255)
+    
     private String service;
-	
-	@Column(name = "ACTION", length = 255)
+    
     private String action;
-		
-	@Column(name = "STORAGE_STATUS", length = 255)
+	
     private String storageStatus;
 	
-	@Column(name = "STORAGE_INFO", length = 255)
     private String storageInfo;
 	
-	@Column(name = "LAST_CONFIRMATION_RECEIVED", length = 255)
     private String lastConfirmationReceived;
 	
-	@Column(name = "CREATED", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     private Date created;
 	
-	@Column(name = "UPDATED", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
     private Date updated;
 	
-	@OneToMany(mappedBy = "message", fetch = FetchType.EAGER)
-    private Set<PDomibusConnectorClientConfirmation> confirmations = new HashSet<>();
-	
-	public PDomibusConnectorClientMessage() {
+    private Set<DomibusConnectorClientConfirmation> evidences = new HashSet<>();
+    
+	public DomibusConnectorClientMessage() {
 	}
 
 	public long getId() {
@@ -239,12 +201,13 @@ public class PDomibusConnectorClientMessage {
 		this.updated = updated;
 	}
 
-	public Set<PDomibusConnectorClientConfirmation> getConfirmations() {
-		return confirmations;
+	public Set<DomibusConnectorClientConfirmation> getEvidences() {
+		return evidences;
 	}
 
-	public void setConfirmations(Set<PDomibusConnectorClientConfirmation> confirmations) {
-		this.confirmations = confirmations;
+	public void setEvidences(Set<DomibusConnectorClientConfirmation> evidences) {
+		this.evidences = evidences;
 	}
+
 
 }
