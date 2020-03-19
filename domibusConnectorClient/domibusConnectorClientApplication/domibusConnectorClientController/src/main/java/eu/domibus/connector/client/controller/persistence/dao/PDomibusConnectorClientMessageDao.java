@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
 
 @Repository
-public interface DomibusConnectorClientMessageDao extends CrudRepository<PDomibusConnectorClientMessage, Long> {
+public interface PDomibusConnectorClientMessageDao extends CrudRepository<PDomibusConnectorClientMessage, Long> {
 
 	public List<PDomibusConnectorClientMessage> findByBackendMessageId(String backendId);
 	

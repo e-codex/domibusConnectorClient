@@ -4,7 +4,10 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -13,15 +16,17 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
+
 @Entity
 @Table(name = "CONNECTOR_CLIENT_CONFIRMATION")
 public class PDomibusConnectorClientConfirmation {
 
 	@Id
     @Column(name="ID")
-	@SequenceGenerator(name = "clientConfirmationSeqGen", sequenceName = "clientConfirmationSeq", initialValue = 5, allocationSize = 1)
-    @GeneratedValue(generator = "clientConfirmationSeqGen")
-	private long id;
+	@SequenceGenerator(name = "clientConfirmationSeqGen", sequenceName = "CLIENT_CONFIRMATION_SEQ", allocationSize = 1)
+    @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "clientConfirmationSeqGen")
+	private Long id;
 	
 	@ManyToOne
     @JoinColumn(name = "MESSAGE_ID", nullable = false)
@@ -35,7 +40,8 @@ public class PDomibusConnectorClientConfirmation {
     private Date received;
 	
 	@Column(name = "STORAGE_STATUS", length = 255)
-    private String storageStatus;
+	@Enumerated(EnumType.STRING)
+    private DomibusConnectorClientStorageStatus storageStatus;
 	
 	@Column(name = "STORAGE_INFO", length = 255)
     private String storageInfo;
@@ -43,13 +49,16 @@ public class PDomibusConnectorClientConfirmation {
 	public PDomibusConnectorClientConfirmation() {
 	}
 
-	public long getId() {
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+
+	public void setId(Long id) {
 		this.id = id;
 	}
+
 
 	public PDomibusConnectorClientMessage getMessage() {
 		return message;
@@ -75,11 +84,11 @@ public class PDomibusConnectorClientConfirmation {
 		this.received = received;
 	}
 
-	public String getStorageStatus() {
+	public DomibusConnectorClientStorageStatus getStorageStatus() {
 		return storageStatus;
 	}
 
-	public void setStorageStatus(String storageStatus) {
+	public void setStorageStatus(DomibusConnectorClientStorageStatus storageStatus) {
 		this.storageStatus = storageStatus;
 	}
 

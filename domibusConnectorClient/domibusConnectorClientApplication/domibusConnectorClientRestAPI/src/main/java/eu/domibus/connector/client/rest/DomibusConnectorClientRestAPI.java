@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import eu.domibus.connector.client.controller.persistence.dao.DomibusConnectorClientMessageDao;
+import eu.domibus.connector.client.controller.persistence.dao.PDomibusConnectorClientMessageDao;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientConfirmation;
@@ -23,7 +23,7 @@ import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
 public class DomibusConnectorClientRestAPI {
 	
 	@Autowired
-	private DomibusConnectorClientMessageDao messageDao;
+	private PDomibusConnectorClientMessageDao messageDao;
 
 	public DomibusConnectorClientRestAPI() {
 		// TODO Auto-generated constructor stub
@@ -103,9 +103,11 @@ public class DomibusConnectorClientRestAPI {
 		 confirmations.forEach(confirmation -> {
 			 DomibusConnectorClientConfirmation evidence = new DomibusConnectorClientConfirmation();
 			 BeanUtils.copyProperties(confirmation, evidence);
+			 evidence.setStorageStatus(confirmation.getStorageStatus().name());
 			 msg.getEvidences().add(evidence);
 		 });
 		 BeanUtils.copyProperties(message, msg);
+		 msg.setStorageStatus(message.getStorageStatus().name());
 		 return msg;
 	}
 }

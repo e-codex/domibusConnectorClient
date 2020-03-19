@@ -1,13 +1,16 @@
 package eu.domibus.connector.client.filesystem;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
+import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
@@ -44,14 +47,14 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 	}
 
 	@Override
-	public void storeConfirmationToMessage(DomibusConnectorMessageType message) throws DomibusConnectorClientStorageException {
+	public void storeConfirmationToMessage(DomibusConnectorMessageType message, String storageLocation) throws DomibusConnectorClientStorageException {
 		DomibusConnectorMessageConfirmationType confirmation = message.getMessageConfirmations().get(0);
 		String type = confirmation.getConfirmationType().name();
 		
 		LOGGER.debug("#storeMessage: storing confirmation of type [{}] to message [{}]...", type, message.getMessageDetails().getBackendMessageId());
 		
 		try {
-			fileSystemWriter.writeConfirmationToFileSystem(message, incomingMessagesDir, outgoingMessagesDir);
+			fileSystemWriter.writeConfirmationToFileSystem(message, incomingMessagesDir, outgoingMessagesDir, storageLocation);
 		} catch (DomibusConnectorClientFileSystemException e) {
 			LOGGER.error("Exception storing confirmation [{}] to message from connector... ",type, e);
 			throw new DomibusConnectorClientStorageException(e);
@@ -62,13 +65,13 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 
 
 	@Override
-	public DomibusConnectorMessagesType checkStorageForNewMessages()
+	public Map<String, DomibusConnectorMessageType> checkStorageForNewMessages()
 			{
 		LOGGER.debug("#checkStorageForNewMessages: Start searching dir {} for unsent messages.", outgoingMessagesDir.getAbsolutePath());
 		List<File> messagesUnsent = fileSystemReader.readUnsentMessages(outgoingMessagesDir);
 
 		if (!messagesUnsent.isEmpty()) {
-			DomibusConnectorMessagesType messages = new DomibusConnectorMessagesType();
+			Map<String, DomibusConnectorMessageType> newMessages = new HashMap<String,DomibusConnectorMessageType>();
 			LOGGER.info("#checkStorageForNewMessages: Found {} new outgoing messages to process!", messagesUnsent.size());
 			for (File messageFolder : messagesUnsent) {
 				LOGGER.debug("#checkStorageForNewMessages: Processing new message folder {}", messageFolder.getAbsolutePath());
@@ -83,17 +86,21 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 					}
 					
 					if(message!=null) {
-						messages.getMessages().add(message);
+						newMessages.put(messageFolder.getAbsolutePath(), message);
 					}
 				}
 			}
-			return messages;
+			return newMessages;
 		} else {
 			LOGGER.debug("#checkStorageForNewMessages: No new messages found!");
 			return null;
 		}
 	}
 	
+	@Override
+	public DomibusConnectorClientStorageStatus checkStorageStatus(String storageLocation) {
+		return fileSystemReader.checkStorageStatus(storageLocation);
+	}
 	
 	@Override
 	public DomibusConnectorMessagesType getAllStoredMessages() {

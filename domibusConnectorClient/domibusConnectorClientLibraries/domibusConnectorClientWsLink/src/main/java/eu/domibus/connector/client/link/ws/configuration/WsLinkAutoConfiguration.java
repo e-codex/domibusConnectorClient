@@ -11,6 +11,9 @@ import org.apache.cxf.Bus;
 import org.apache.cxf.bus.spring.SpringBus;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
+import org.apache.cxf.message.Message;
+import org.apache.cxf.phase.AbstractPhaseInterceptor;
+import org.apache.cxf.phase.Phase;
 import org.apache.cxf.spring.boot.autoconfigure.CxfAutoConfiguration;
 import org.apache.cxf.ws.policy.WSPolicyFeature;
 import org.apache.logging.log4j.LogManager;
@@ -27,6 +30,7 @@ import org.springframework.context.annotation.ImportResource;
 
 import eu.domibus.connector.client.link.ws.impl.DomibusConnectorClientDeliveryWsImpl;
 import eu.domibus.connector.client.link.ws.impl.DomibusConnectorClientWSLinkImpl;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 import eu.domibus.connector.lib.spring.configuration.CxfTrustKeyStoreConfigurationProperties;
 import eu.domibus.connector.lib.spring.configuration.StoreConfigurationProperties;
 import eu.domibus.connector.link.common.DefaultWsCallbackHandler;
@@ -81,6 +85,7 @@ public class WsLinkAutoConfiguration {
         jaxWsProxyFactoryBean.setEndpointName(DomibusConnectorBackendWSService.DomibusConnectorBackendWebService);
         jaxWsProxyFactoryBean.setWsdlURL(DomibusConnectorBackendWSService.WSDL_LOCATION.toString());
         jaxWsProxyFactoryBean.setBindingId(SOAPBinding.SOAP12HTTP_MTOM_BINDING);
+        jaxWsProxyFactoryBean.getInInterceptors().add(new ProcessMessageAfterReceivedFromConnectorInterceptor());
 
         jaxWsProxyFactoryBean.getFeatures().add(policyLoader().loadPolicyFeature());
 
@@ -153,4 +158,18 @@ public class WsLinkAutoConfiguration {
     }
 
 
+    private class ProcessMessageAfterReceivedFromConnectorInterceptor extends AbstractPhaseInterceptor<Message> {
+//	    private final DomibusConnectorMessagesType connectorMessage;
+	    ProcessMessageAfterReceivedFromConnectorInterceptor() {
+	        super(Phase.POST_INVOKE);
+	    }
+	    @Override
+	    public void handleMessage(Message message) 
+//	    		throws Fault 
+	    {
+	        LOGGER.trace("ProcessMessageAfterReceivedFromConnectorInterceptor: handleMessage: invoking backendSubmissionService.processMessageAfterDeliveredToBackend");
+	        DomibusConnectorMessagesType msg = (DomibusConnectorMessagesType) message;
+//	        backendSubmissionService.processMessageAfterDeliveredToBackend(connectorMessage);
+	    }
+	}
 }

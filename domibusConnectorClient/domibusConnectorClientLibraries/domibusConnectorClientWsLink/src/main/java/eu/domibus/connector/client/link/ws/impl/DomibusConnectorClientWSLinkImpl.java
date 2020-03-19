@@ -1,5 +1,8 @@
 package eu.domibus.connector.client.link.ws.impl;
 
+import org.apache.cxf.message.Message;
+import org.apache.cxf.phase.AbstractPhaseInterceptor;
+import org.apache.cxf.phase.Phase;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,5 +43,6 @@ public class DomibusConnectorClientWSLinkImpl implements DomibusConnectorClientL
 			throw new DomibusConnectorClientException("Exeception while submitting message to Connector!", e);
 		}
 	}
-
+	
+	
 }

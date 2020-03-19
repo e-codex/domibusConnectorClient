@@ -9,6 +9,7 @@ import java.io.OutputStreamWriter;
 import java.util.Date;
 
 import javax.activation.DataHandler;
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import javax.xml.transform.OutputKeys;
 import javax.xml.transform.Source;
@@ -21,6 +22,7 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSMessageProperties;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSStorageConfiguration;
@@ -36,6 +38,8 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 @Component
 @ConfigurationProperties(prefix = DomibusConnectorClientFSStorageConfiguration.PREFIX)
 @PropertySource("classpath:/connector-client-fs-storage-default.properties")
+@Validated
+@Valid
 public class DomibusConnectorClientFileSystemWriter {
 	
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusConnectorClientFileSystemWriter.class);
@@ -64,30 +68,37 @@ public class DomibusConnectorClientFileSystemWriter {
 	@NotNull
 	private String messageSentPostfix;
 	
-	public void writeConfirmationToFileSystem(DomibusConnectorMessageType confirmationMessage, File incomingMessagesDir, File outgoingMessagesDir ) throws DomibusConnectorClientFileSystemException {
+	public void writeConfirmationToFileSystem(DomibusConnectorMessageType confirmationMessage, File incomingMessagesDir, File outgoingMessagesDir, String storageLocation ) throws DomibusConnectorClientFileSystemException {
 		DomibusConnectorMessageConfirmationType confirmation = confirmationMessage.getMessageConfirmations().get(0);
 		String type = confirmation.getConfirmationType().name();
 
 		String backendMessageId = confirmationMessage.getMessageDetails().getBackendMessageId();
 		File messageFolder = null;
+		String path = null;
 
-		if(!StringUtils.isEmpty(backendMessageId)) {
+		if(storageLocation!=null) {
+//			messageFolder = new File(storageLocation);
+			path = storageLocation + xmlFileExtension;
+		} else if(!StringUtils.isEmpty(backendMessageId)) {
 			messageFolder = new File(outgoingMessagesDir + File.separator
 					+ backendMessageId
 					+ messageSentPostfix);
-			if (!messageFolder.exists() || !messageFolder.isDirectory()) {
-				LOGGER.info("Message folder {} for outgoing message does not exist anymore. Create incoming!",
-						messageFolder.getAbsolutePath());
-				messageFolder = createIncomingMessageFolder(confirmationMessage, incomingMessagesDir);
-			}
 		} else {
 
 			messageFolder = createIncomingMessageFolder(confirmationMessage, incomingMessagesDir);
 			
 		}
 
-		String path = messageFolder.getAbsolutePath() + File.separator + type
+		if (!messageFolder.exists() || !messageFolder.isDirectory()) {
+			LOGGER.info("Message folder {} for outgoing message does not exist anymore. Create incoming!",
+					messageFolder.getAbsolutePath());
+			messageFolder = createIncomingMessageFolder(confirmationMessage, incomingMessagesDir);
+		}
+
+		if(path == null)
+			path = messageFolder.getAbsolutePath() + File.separator + type
 				+ xmlFileExtension;
+		
 		LOGGER.debug("Create evidence xml file {}", path);
 		File evidenceXml = new File(path);
 		try {
@@ -248,18 +259,18 @@ public class DomibusConnectorClientFileSystemWriter {
 		return b;
 	}
 
-	private byte[] sourceToByteArray(Source xmlInput) {
+	private @NotNull byte[] sourceToByteArray(@NotNull Source xmlInput) {
 		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");    
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
-			StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
-			transformer.transform(xmlInput, xmlOutput);            
-			return output.toByteArray();
-		} catch (IllegalArgumentException | TransformerException e) {
-			throw new RuntimeException("Exception occured during transforming xml into byte[]", e);
-		}
+            Transformer transformer = TransformerFactory.newInstance().newTransformer();
+            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            ByteArrayOutputStream output = new ByteArrayOutputStream();
+            StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
+            transformer.transform(xmlInput, xmlOutput);
+            return output.toByteArray();
+        } catch (IllegalArgumentException | TransformerException e) {
+            throw new RuntimeException("Exception occured during transforming xml into byte[]", e);
+        }
 	}
 	
 	private File createIncomingMessageFolder(DomibusConnectorMessageType message, File incomingMessagesDir) throws DomibusConnectorClientFileSystemException {
@@ -280,6 +291,70 @@ public class DomibusConnectorClientFileSystemWriter {
 		}
 
 		return messageFolder;
+	}
+
+	public DomibusConnectorClientFSMessageProperties getMessageProperties() {
+		return messageProperties;
+	}
+
+	public void setMessageProperties(DomibusConnectorClientFSMessageProperties messageProperties) {
+		this.messageProperties = messageProperties;
+	}
+
+	public String getPdfFileExtension() {
+		return pdfFileExtension;
+	}
+
+	public void setPdfFileExtension(String pdfFileExtension) {
+		this.pdfFileExtension = pdfFileExtension;
+	}
+
+	public String getXmlFileExtension() {
+		return xmlFileExtension;
+	}
+
+	public void setXmlFileExtension(String xmlFileExtension) {
+		this.xmlFileExtension = xmlFileExtension;
+	}
+
+	public String getPkcs7FileExtension() {
+		return pkcs7FileExtension;
+	}
+
+	public void setPkcs7FileExtension(String pkcs7FileExtension) {
+		this.pkcs7FileExtension = pkcs7FileExtension;
+	}
+
+	public String getDefaultPdfFileName() {
+		return defaultPdfFileName;
+	}
+
+	public void setDefaultPdfFileName(String defaultPdfFileName) {
+		this.defaultPdfFileName = defaultPdfFileName;
+	}
+
+	public String getDefaultXmlFileName() {
+		return defaultXmlFileName;
+	}
+
+	public void setDefaultXmlFileName(String defaultXmlFileName) {
+		this.defaultXmlFileName = defaultXmlFileName;
+	}
+
+	public String getDefaultDetachedSignatureFileName() {
+		return defaultDetachedSignatureFileName;
+	}
+
+	public void setDefaultDetachedSignatureFileName(String defaultDetachedSignatureFileName) {
+		this.defaultDetachedSignatureFileName = defaultDetachedSignatureFileName;
+	}
+
+	public String getMessageSentPostfix() {
+		return messageSentPostfix;
+	}
+
+	public void setMessageSentPostfix(String messageSentPostfix) {
+		this.messageSentPostfix = messageSentPostfix;
 	}
 	
 	

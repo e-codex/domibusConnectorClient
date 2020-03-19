@@ -87,10 +87,10 @@ public class MessageDetails extends VerticalLayout {
 
 			grid.setItems(messageByConnectorId.getEvidences());
 
-			grid.addColumn(DomibusConnectorClientConfirmation::getConfirmationType).setHeader("Confirmation Type").setWidth("300px");
+			grid.addColumn(DomibusConnectorClientConfirmation::getConfirmationType).setHeader("Confirmation Type").setWidth("250px");
 			grid.addColumn(DomibusConnectorClientConfirmation::getReceived).setHeader("Received").setWidth("300px");
 			grid.addColumn(DomibusConnectorClientConfirmation::getStorageInfo).setHeader("Storage Info").setWidth("300px");
-			grid.addColumn(DomibusConnectorClientConfirmation::getStorageStatus).setHeader("Storage Status").setWidth("300px");
+			grid.addColumn(DomibusConnectorClientConfirmation::getStorageStatus).setHeader("Storage Status").setWidth("150px");
 
 			grid.setWidth("1000px");
 			grid.setHeight("210px");
