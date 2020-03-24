@@ -1,5 +1,6 @@
 package eu.domibus.connector.client.storage;
 
+import java.util.List;
 import java.util.Map;
 
 import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
@@ -17,4 +18,9 @@ public interface DomibusConnectorClientStorage {
 	void storeConfirmationToMessage(DomibusConnectorMessageType message, String storageLocation) throws DomibusConnectorClientStorageException;
 
 	DomibusConnectorClientStorageStatus checkStorageStatus(String storageLocation);
+	
+	byte[] loadContentFromStorageLocation(String storageLocation, String name);
+	
+	List<String> listContentAtStorageLocation(String storageLocation);
+	
 }

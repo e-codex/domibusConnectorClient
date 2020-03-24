@@ -41,33 +41,33 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 @Validated
 @Valid
 public class DomibusConnectorClientFileSystemWriter {
-	
+
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusConnectorClientFileSystemWriter.class);
-	
+
 	@NotNull
 	private DomibusConnectorClientFSMessageProperties messageProperties;
-	
+
 	@NotNull
 	private String pdfFileExtension;
-	
+
 	@NotNull
 	private String xmlFileExtension;
-	
+
 	@NotNull
 	private String pkcs7FileExtension;
-	
+
 	@NotNull
 	private String defaultPdfFileName;
-	
+
 	@NotNull
 	private String defaultXmlFileName;
-	
+
 	@NotNull
 	private String defaultDetachedSignatureFileName;
-	
+
 	@NotNull
 	private String messageSentPostfix;
-	
+
 	public void writeConfirmationToFileSystem(DomibusConnectorMessageType confirmationMessage, File incomingMessagesDir, File outgoingMessagesDir, String storageLocation ) throws DomibusConnectorClientFileSystemException {
 		DomibusConnectorMessageConfirmationType confirmation = confirmationMessage.getMessageConfirmations().get(0);
 		String type = confirmation.getConfirmationType().name();
@@ -77,7 +77,7 @@ public class DomibusConnectorClientFileSystemWriter {
 		String path = null;
 
 		if(storageLocation!=null) {
-//			messageFolder = new File(storageLocation);
+			//			messageFolder = new File(storageLocation);
 			path = storageLocation + xmlFileExtension;
 		} else if(!StringUtils.isEmpty(backendMessageId)) {
 			messageFolder = new File(outgoingMessagesDir + File.separator
@@ -86,7 +86,7 @@ public class DomibusConnectorClientFileSystemWriter {
 		} else {
 
 			messageFolder = createIncomingMessageFolder(confirmationMessage, incomingMessagesDir);
-			
+
 		}
 
 		if (!messageFolder.exists() || !messageFolder.isDirectory()) {
@@ -97,8 +97,8 @@ public class DomibusConnectorClientFileSystemWriter {
 
 		if(path == null)
 			path = messageFolder.getAbsolutePath() + File.separator + type
-				+ xmlFileExtension;
-		
+			+ xmlFileExtension;
+
 		LOGGER.debug("Create evidence xml file {}", path);
 		File evidenceXml = new File(path);
 		try {
@@ -109,12 +109,12 @@ public class DomibusConnectorClientFileSystemWriter {
 					+ evidenceXml.getAbsolutePath(), e);
 		}
 	}
-	
+
 	public String writeMessageToFileSystem(DomibusConnectorMessageType message, File incomingMessagesDir) throws DomibusConnectorClientFileSystemException {
 		File messageFolder = createIncomingMessageFolder(message, incomingMessagesDir);
-		
+
 		LOGGER.debug("Write new message into folder {}", messageFolder.getAbsolutePath());
-		
+
 		Date messageReceived = new Date();
 
 		FSMessageDetails msgProps = null;
@@ -163,18 +163,22 @@ public class DomibusConnectorClientFileSystemWriter {
 							fileName2 += xmlFileExtension;
 						else if (detachedSignature.getMimeType().equals(DomibusConnectorDetachedSignatureMimeType.PKCS_7))
 							fileName2 += pkcs7FileExtension;
-						
+
 					}
 					msgProps.getMessageDetails().put(messageProperties.getDetachedSignatureFileName(), fileName2);
 					createFile(messageFolder, fileName2, detachedSignature.getDetachedSignature());
 				}
 			}
 			if (messageContent.getXmlContent() != null){
-				byte[] content = sourceToByteArray(messageContent.getXmlContent());
-				String fileName = action != null ? action + xmlFileExtension
-						: defaultXmlFileName;
-				msgProps.getMessageDetails().put(messageProperties.getContentXmlFileName(),fileName);
-				createFile(messageFolder, fileName, content);
+				try {
+					byte[] content = sourceToByteArray(messageContent.getXmlContent());
+					String fileName = action != null ? action + xmlFileExtension
+							: defaultXmlFileName;
+					msgProps.getMessageDetails().put(messageProperties.getContentXmlFileName(),fileName);
+					createFile(messageFolder, fileName, content);
+				}catch(DomibusConnectorClientFileSystemException e) {
+					LOGGER.error("Business Content XML file could not be stored into folder {}", messageFolder.getAbsolutePath(), e);
+				}
 			}
 		}
 		LOGGER.debug("Store message properties to file {}", messagePropertiesFile.getAbsolutePath());
@@ -198,10 +202,10 @@ public class DomibusConnectorClientFileSystemWriter {
 						+ xmlFileExtension, sourceToByteArray(confirmation.getConfirmation()));
 			}
 		}
-		
+
 		return messageFolder.getAbsolutePath();
 	}
-	
+
 	private FSMessageDetails convertMessageDetailsToMessageProperties(
 			DomibusConnectorMessageDetailsType messageDetails, Date messageReceived) {
 
@@ -228,7 +232,7 @@ public class DomibusConnectorClientFileSystemWriter {
 
 		return msgDetails;
 	}
-	
+
 	private void createFile(File messageFolder, String fileName, byte[] content)
 			throws DomibusConnectorClientFileSystemException {
 		String filePath = messageFolder.getAbsolutePath() + File.separator + fileName;
@@ -241,7 +245,7 @@ public class DomibusConnectorClientFileSystemWriter {
 					e);
 		}
 	}
-	
+
 	private void byteArrayToFile(byte[] data, File file) throws IOException {
 		if (!file.exists()) {
 			file.createNewFile();
@@ -259,22 +263,22 @@ public class DomibusConnectorClientFileSystemWriter {
 		return b;
 	}
 
-	private @NotNull byte[] sourceToByteArray(@NotNull Source xmlInput) {
+	private @NotNull byte[] sourceToByteArray(@NotNull Source xmlInput) throws DomibusConnectorClientFileSystemException {
 		try {
-            Transformer transformer = TransformerFactory.newInstance().newTransformer();
-            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-            ByteArrayOutputStream output = new ByteArrayOutputStream();
-            StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
-            transformer.transform(xmlInput, xmlOutput);
-            return output.toByteArray();
-        } catch (IllegalArgumentException | TransformerException e) {
-            throw new RuntimeException("Exception occured during transforming xml into byte[]", e);
-        }
+			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			ByteArrayOutputStream output = new ByteArrayOutputStream();
+			StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
+			transformer.transform(xmlInput, xmlOutput);
+			return output.toByteArray();
+		} catch (IllegalArgumentException | TransformerException e) {
+			throw new DomibusConnectorClientFileSystemException("Exception occured during transforming xml into byte[]", e);
+		}
 	}
-	
+
 	private File createIncomingMessageFolder(DomibusConnectorMessageType message, File incomingMessagesDir) throws DomibusConnectorClientFileSystemException {
-		
+
 		String pathname = new StringBuilder()
 				.append(incomingMessagesDir.getAbsolutePath())
 				.append(File.separator)
@@ -356,6 +360,6 @@ public class DomibusConnectorClientFileSystemWriter {
 	public void setMessageSentPostfix(String messageSentPostfix) {
 		this.messageSentPostfix = messageSentPostfix;
 	}
-	
-	
+
+
 }

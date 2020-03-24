@@ -18,12 +18,16 @@ import eu.domibus.connector.client.controller.persistence.model.PDomibusConnecto
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
+import eu.domibus.connector.client.storage.DomibusConnectorClientStorage;
 
 @RestController
 public class DomibusConnectorClientRestAPI {
 	
 	@Autowired
 	private PDomibusConnectorClientMessageDao messageDao;
+	
+	@Autowired
+	private DomibusConnectorClientStorage storage;
 
 	public DomibusConnectorClientRestAPI() {
 		// TODO Auto-generated constructor stub
@@ -84,6 +88,19 @@ public class DomibusConnectorClientRestAPI {
 		DomibusConnectorClientMessageList messages = mapMessages(msg);
 		 
 		 return messages;
+	}
+	
+	@GetMapping("/loadContentFromStorage")
+	public byte[] loadContentFromStorage(@RequestParam String storageLocation, @RequestParam String contentName) {
+		 
+		 byte[] content = storage.loadContentFromStorageLocation(storageLocation, contentName);
+		return content;
+	}
+	
+	@GetMapping("/listContentAtStorage")
+	public List<String> listContentAtStorage(@RequestParam String storageLocation) {
+		 
+		return storage.listContentAtStorageLocation(storageLocation);
 	}
 	
 	private DomibusConnectorClientMessageList mapMessages(Iterable<PDomibusConnectorClientMessage> findAll) {

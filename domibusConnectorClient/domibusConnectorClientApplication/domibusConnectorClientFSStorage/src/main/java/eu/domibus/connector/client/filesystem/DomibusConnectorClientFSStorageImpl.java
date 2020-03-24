@@ -127,6 +127,19 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 		this.outgoingMessagesDir = outgoingMessagesDir;
 	}
 
+	@Override
+	public byte[] loadContentFromStorageLocation(String storageLocation, String fileName) {
+		File messageFolder = new File(storageLocation);
+		
+		return fileSystemReader.loadContentFromMessageFolder(messageFolder, fileName);
+	}
+
+	@Override
+	public List<String> listContentAtStorageLocation(String storageLocation) {
+		File messageFolder = new File(storageLocation);
+		return fileSystemReader.getFileListFromMessageFolder(messageFolder);
+	}
+
 
 
 }

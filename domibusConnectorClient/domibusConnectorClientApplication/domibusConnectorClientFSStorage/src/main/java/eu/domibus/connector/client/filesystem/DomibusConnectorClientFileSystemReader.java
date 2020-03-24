@@ -183,6 +183,47 @@ public class DomibusConnectorClientFileSystemReader {
 		}
 		return null;
 	}
+	
+	public List<String> getFileListFromMessageFolder(File messageFolder){
+		List<String> fileNames = new ArrayList<String>();
+		if (messageFolder.exists() && messageFolder.isDirectory() && messageFolder.listFiles().length > 0) {
+//			FSMessageDetails messageDetails = loadMessageProperties(messageFolder, this.messageProperties.getFileName());
+			
+			for (File sub : messageFolder.listFiles()) {
+				fileNames.add(sub.getName());
+			}
+			
+		}
+		return fileNames;
+	}
+	
+	public byte[] loadContentFromMessageFolder(File messageFolder, String fileName) {
+		if (messageFolder.exists() && messageFolder.isDirectory() && messageFolder.listFiles().length > 0) {
+			
+//			FSMessageDetails messageDetails = loadMessageProperties(messageFolder, this.messageProperties.getFileName());
+			
+			String messageFolderPath = messageFolder.getAbsolutePath();
+			LOGGER.debug("Start reading file {} from folder {}", fileName, messageFolderPath);
+			
+			for (File sub : messageFolder.listFiles()) {
+				if(sub.getName().equals(fileName)) {
+					LOGGER.debug("Found file with name {} and length {}", sub.getName(), sub.length());
+					byte[] content = null;
+					try {
+						content = fileToByteArray(sub);
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+					
+					return content;
+				}
+				
+				
+			}
+		}
+		return null;
+	}
 
 	private FSMessageDetails loadMessageProperties(File message, String messagePropertiesFileName) {
 		String pathname = message.getAbsolutePath() + File.separator + messagePropertiesFileName;

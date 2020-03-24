@@ -25,6 +25,7 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.PWA;
 
 import eu.domibus.connector.client.ui.view.messages.Messages;
+import eu.domibus.connector.client.ui.view.sendmessage.SendMessage;
 
 //@HtmlImport("styles/shared-styles.html")
 @HtmlImport("styles/shared-styles.html")
@@ -41,9 +42,8 @@ public class DomibusConnectorClientUIMainView extends VerticalLayout {
 	Tabs TopMenu = new Tabs();
 
 	public DomibusConnectorClientUIMainView(@Autowired DomibusConnectorClientUIHeader header, 
-//			@Autowired UserInfo userInfo, 
-			@Autowired Messages messages 
-//			@Autowired PModes pmodes, 
+			@Autowired Messages messages, 
+			@Autowired SendMessage sendMessage 
 //    		@Autowired Configuration configuration, 
 //    		@Autowired Users users,
 //    		@Autowired Info info, 
@@ -55,9 +55,9 @@ public class DomibusConnectorClientUIMainView extends VerticalLayout {
 		areaMessages.add(messages);
 		areaMessages.setVisible(true);
 		
-//		Div areaPModes = new Div();
-//		areaPModes.add(pmodes);
-//		areaPModes.setVisible(false);
+		Div areaSendMessage = new Div();
+		areaSendMessage.add(sendMessage);
+		areaSendMessage.setVisible(false);
 //		
 //		Div areaConfiguration = new Div();
 //		areaConfiguration.add(configuration);
@@ -77,8 +77,8 @@ public class DomibusConnectorClientUIMainView extends VerticalLayout {
 		
 		createTab(areaMessages, "Messages", new Icon(VaadinIcon.LIST), false);
 		
-//		createTab(areaPModes, "PModes", new Icon(VaadinIcon.FILE_CODE), false);
-//		
+		createTab(areaSendMessage, "SendMessage", new Icon(VaadinIcon.MAILBOX), false);
+		
 //		createTab(areaConfiguration, "Configuration", new Icon(VaadinIcon.COG_O), false);
 //		
 //		createTab(areaUsers, "Users", new Icon(VaadinIcon.USERS), false);
@@ -88,11 +88,11 @@ public class DomibusConnectorClientUIMainView extends VerticalLayout {
 //		createTab(areaInfo, "Info", new Icon(VaadinIcon.INFO_CIRCLE_O), true);
 		
 		
-		Div pages = new Div(areaMessages
+		Div pages = new Div(areaMessages, areaSendMessage
 //				, areaPModes, areaConfiguration, areaUsers, areaTests, areaInfo
 				);
 		
-		Set<Component> pagesShown = Stream.of(areaMessages
+		Set<Component> pagesShown = Stream.of(areaMessages, areaSendMessage
 //				, areaPModes, areaConfiguration, areaUsers, areaTests, areaInfo
 				)
 		        .collect(Collectors.toSet());

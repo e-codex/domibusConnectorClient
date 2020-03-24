@@ -5,9 +5,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -51,5 +54,15 @@ public class VaadingConnectorClientUIServiceClient {
 
 	public DomibusConnectorClientMessageList getMessagesByConversationId(String conversationId) {
 		return restTemplate.getForObject(url+"/getMessagesByConversationId?conversationId={id}", DomibusConnectorClientMessageList.class, conversationId);
+	}
+	
+	public byte[] loadContentFromStorageLocation (String storageLocation, String contentName) {
+		ResponseEntity<byte[]> result = restTemplate.exchange(url + "loadContentFromStorage?storageLocation={storageLocation}&contentName={contentName}", HttpMethod.GET, null, byte[].class,storageLocation, contentName);
+		return result.getBody();
+	}
+	
+	public List<String> listContentAtStorage(String storageLocation){
+		ResponseEntity<List> result = restTemplate.exchange(url + "listContentAtStorage?storageLocation={storageLocation}", HttpMethod.GET, null, List.class,storageLocation);
+		return result.getBody();
 	}
 }

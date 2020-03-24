@@ -2,13 +2,27 @@ package eu.domibus.connector.client.link.ws.configuration;
 
 import static eu.domibus.connector.client.link.ws.configuration.ConnectorLinkWSProperties.PUSH_ENABLED_PROPERTY_NAME;
 
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStreamWriter;
 import java.util.HashMap;
 import java.util.Properties;
 
+import javax.validation.constraints.NotNull;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 import javax.xml.ws.soap.SOAPBinding;
 
 import org.apache.cxf.Bus;
 import org.apache.cxf.bus.spring.SpringBus;
+import org.apache.cxf.helpers.IOUtils;
 import org.apache.cxf.jaxws.EndpointImpl;
 import org.apache.cxf.jaxws.JaxWsProxyFactoryBean;
 import org.apache.cxf.message.Message;
@@ -159,17 +173,46 @@ public class WsLinkAutoConfiguration {
 
 
     private class ProcessMessageAfterReceivedFromConnectorInterceptor extends AbstractPhaseInterceptor<Message> {
-//	    private final DomibusConnectorMessagesType connectorMessage;
 	    ProcessMessageAfterReceivedFromConnectorInterceptor() {
 	        super(Phase.POST_INVOKE);
 	    }
 	    @Override
 	    public void handleMessage(Message message) 
-//	    		throws Fault 
 	    {
 	        LOGGER.trace("ProcessMessageAfterReceivedFromConnectorInterceptor: handleMessage: invoking backendSubmissionService.processMessageAfterDeliveredToBackend");
-	        DomibusConnectorMessagesType msg = (DomibusConnectorMessagesType) message;
-//	        backendSubmissionService.processMessageAfterDeliveredToBackend(connectorMessage);
+//	        DomibusConnectorMessagesType msgs = message.getContent(DomibusConnectorMessagesType.class);
+//	        msgs.getMessages().forEach(msg -> {
+//	        	if(msg.getMessageContent()!=null) {
+//	        		byte[] businessContent = sourceToByteArray(msg.getMessageContent().getXmlContent());
+//	        		msg.getMessageContent().setXmlContent(new StreamSource(new ByteArrayInputStream(businessContent)));
+//	        	}
+//	        });
+	        
+	        InputStream in = message.getContent(InputStream.class);
+	        byte payload[] = null;
+			try {
+				payload = IOUtils.readBytesFromStream(in);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+	        ByteArrayInputStream bin = new ByteArrayInputStream(payload);
+	        message.setContent(InputStream.class, bin);
 	    }
+	    
+	    private @NotNull byte[] sourceToByteArray(@NotNull Source xmlInput) {
+			try {
+				Transformer transformer = TransformerFactory.newInstance().newTransformer();
+				transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+				transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+				ByteArrayOutputStream output = new ByteArrayOutputStream();
+				StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
+				transformer.transform(xmlInput, xmlOutput);
+				return output.toByteArray();
+			} catch (IllegalArgumentException | TransformerException e) {
+//				throw new DomibusConnectorClientFileSystemException("Exception occured during transforming xml into byte[]", e);
+			}
+			return null;
+		}
 	}
 }
