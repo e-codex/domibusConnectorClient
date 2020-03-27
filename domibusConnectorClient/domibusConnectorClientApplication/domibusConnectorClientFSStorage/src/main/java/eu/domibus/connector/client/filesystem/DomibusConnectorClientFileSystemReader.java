@@ -9,7 +9,9 @@ import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import javax.activation.DataHandler;
@@ -31,6 +33,7 @@ import org.springframework.validation.annotation.Validated;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSMessageProperties;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSStorageConfiguration;
 import eu.domibus.connector.client.filesystem.message.FSMessageDetails;
+import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.domain.transition.DomibusConnectorActionType;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
@@ -184,17 +187,43 @@ public class DomibusConnectorClientFileSystemReader {
 		return null;
 	}
 	
-	public List<String> getFileListFromMessageFolder(File messageFolder){
-		List<String> fileNames = new ArrayList<String>();
+	public Map<String, DomibusConnectorClientMessageFileType> getFileListFromMessageFolder(File messageFolder){
+		Map<String, DomibusConnectorClientMessageFileType> files = new HashMap<String, DomibusConnectorClientMessageFileType>();
 		if (messageFolder.exists() && messageFolder.isDirectory() && messageFolder.listFiles().length > 0) {
-//			FSMessageDetails messageDetails = loadMessageProperties(messageFolder, this.messageProperties.getFileName());
+			
+			FSMessageDetails messageDetails = loadMessageProperties(messageFolder, this.messageProperties.getFileName());
 			
 			for (File sub : messageFolder.listFiles()) {
-				fileNames.add(sub.getName());
+				
+				if (sub.getName().equals(messageProperties.getFileName())) {
+					continue;
+				} else {
+
+					if (isFile(sub.getName(),messageDetails.getMessageDetails().getProperty(messageProperties.getContentXmlFileName()))) {
+						LOGGER.debug("Found content xml file with name {}", sub.getName());
+						files.put(sub.getName(), DomibusConnectorClientMessageFileType.BUSINESS_CONTENT);
+						continue;
+					} else if (isFile(sub.getName(),messageDetails.getMessageDetails().getProperty(messageProperties.getContentPdfFileName()))) {
+						LOGGER.debug("Found content pdf file with name {}", sub.getName());
+						files.put(sub.getName(), DomibusConnectorClientMessageFileType.BUSINESS_DOCUMENT);
+						continue;
+					} else if (isFile(sub.getName(),messageDetails.getMessageDetails().getProperty(messageProperties.getDetachedSignatureFileName()))) {
+						LOGGER.debug("Found detached signature file with name {}", sub.getName());
+						files.put(sub.getName(), DomibusConnectorClientMessageFileType.DETACHED_SIGNATURE);
+						continue;
+					} else if (isConfirmation(sub.getName())) {
+						LOGGER.debug("Found confirmation file {}", sub.getName());
+						files.put(sub.getName(), DomibusConnectorClientMessageFileType.CONFIRMATION);
+						continue;
+					} else {
+						LOGGER.debug("Found attachment file {}", sub.getName());
+						files.put(sub.getName(), DomibusConnectorClientMessageFileType.BUSINESS_ATTACHMENT);
+					}
+				}
 			}
 			
 		}
-		return fileNames;
+		return files;
 	}
 	
 	public byte[] loadContentFromMessageFolder(File messageFolder, String fileName) {

@@ -2,6 +2,7 @@ package eu.domibus.connector.client.rest;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
@@ -9,6 +10,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -17,114 +20,135 @@ import eu.domibus.connector.client.controller.persistence.model.PDomibusConnecto
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
+import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
+import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorage;
+import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 
 @RestController
 public class DomibusConnectorClientRestAPI {
-	
+
 	@Autowired
 	private PDomibusConnectorClientMessageDao messageDao;
-	
+
 	@Autowired
 	private DomibusConnectorClientStorage storage;
 
 	public DomibusConnectorClientRestAPI() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	@GetMapping("/getAllMessages")
 	public DomibusConnectorClientMessageList getAllMessages(){
-		 Iterable<PDomibusConnectorClientMessage> findAll = messageDao.findAll();
-		 
-		 DomibusConnectorClientMessageList messages = mapMessages(findAll);
-		 
-		 return messages;
+		Iterable<PDomibusConnectorClientMessage> findAll = messageDao.findAll();
+
+		DomibusConnectorClientMessageList messages = mapMessages(findAll);
+
+		return messages;
 	}
 
 	@GetMapping("/getMessageById")
 	public DomibusConnectorClientMessage getMessageById(@RequestParam Long id) {
 		Optional<PDomibusConnectorClientMessage> msg = messageDao.findById(id);
-		
+
 		if(msg.get() !=null) {
 			DomibusConnectorClientMessage message = mapMessage(msg.get());
 			return message;
 		}
 		return null;
 	}
-	
+
 	@GetMapping("/getMessagesByBackendMessageId")
 	public DomibusConnectorClientMessageList getMessagesByBackendMessageId(@RequestParam String backendMessageId) {
 		List<PDomibusConnectorClientMessage> msg = messageDao.findByBackendMessageId(backendMessageId);
-		
+
 		DomibusConnectorClientMessageList messages = mapMessages(msg);
-		 
-		 return messages;
+
+		return messages;
 	}
-	
+
 	@GetMapping("/getMessagesByEbmsMessageId")
 	public DomibusConnectorClientMessageList getMessagesByEbmsMessageId(@RequestParam String ebmsMessageId) {
 		List<PDomibusConnectorClientMessage> msg = messageDao.findByEbmsMessageId(ebmsMessageId);
-		
+
 		DomibusConnectorClientMessageList messages = mapMessages(msg);
-		 
-		 return messages;
+
+		return messages;
 	}
-	
+
 	@GetMapping("/getMessagesByConversationId")
 	public DomibusConnectorClientMessageList getMessagesByConversationId(@RequestParam String conversationId) {
 		List<PDomibusConnectorClientMessage> msg = messageDao.findByConversationId(conversationId);
-		
+
 		DomibusConnectorClientMessageList messages = mapMessages(msg);
-		 
-		 return messages;
+
+		return messages;
 	}
-	
+
 	@GetMapping("/getMessagesByPeriod")
 	public DomibusConnectorClientMessageList getMessagesByPeriod(@RequestParam @DateTimeFormat(pattern = "dd.MM.yyyy") Date from, 
 			@RequestParam @DateTimeFormat(pattern = "dd.MM.yyyy") Date to) {
 		List<PDomibusConnectorClientMessage> msg = messageDao.findByPeriod(from, to);
-		
+
 		DomibusConnectorClientMessageList messages = mapMessages(msg);
-		 
-		 return messages;
+
+		return messages;
 	}
-	
+
 	@GetMapping("/loadContentFromStorage")
 	public byte[] loadContentFromStorage(@RequestParam String storageLocation, @RequestParam String contentName) {
-		 
-		 byte[] content = storage.loadContentFromStorageLocation(storageLocation, contentName);
+
+		byte[] content = storage.loadContentFromStorageLocation(storageLocation, contentName);
 		return content;
 	}
-	
+
 	@GetMapping("/listContentAtStorage")
-	public List<String> listContentAtStorage(@RequestParam String storageLocation) {
-		 
+	public Map<String, DomibusConnectorClientMessageFileType> listContentAtStorage(@RequestParam String storageLocation) {
+
 		return storage.listContentAtStorageLocation(storageLocation);
 	}
-	
+
+	@PostMapping(
+			value = "/createNewMessage", consumes = "application/json", produces = "application/json")
+	public DomibusConnectorClientMessage createNewMessage(@RequestBody DomibusConnectorClientMessage newMessage) {
+		return newMessage;
+	}
+
 	private DomibusConnectorClientMessageList mapMessages(Iterable<PDomibusConnectorClientMessage> findAll) {
 		DomibusConnectorClientMessageList messages = new DomibusConnectorClientMessageList();
-		 
-		 findAll.forEach(message -> {
-			 DomibusConnectorClientMessage msg = mapMessage(message);
-			 messages.getMessages().add(msg);
-		 });
-		 
-		 return messages;
+
+		findAll.forEach(message -> {
+			DomibusConnectorClientMessage msg = mapMessage(message);
+			messages.getMessages().add(msg);
+		});
+
+		return messages;
+	}
+
+	private DomibusConnectorClientMessage mapMessage(PDomibusConnectorClientMessage message) {
+		DomibusConnectorClientMessage msg = new DomibusConnectorClientMessage();
+		Set<PDomibusConnectorClientConfirmation> confirmations = message.getConfirmations();
+		confirmations.forEach(confirmation -> {
+			DomibusConnectorClientConfirmation evidence = new DomibusConnectorClientConfirmation();
+			BeanUtils.copyProperties(confirmation, evidence);
+			evidence.setStorageStatus(confirmation.getStorageStatus().name());
+			msg.getEvidences().add(evidence);
+		});
+		BeanUtils.copyProperties(message, msg);
+		msg.setStorageStatus(message.getStorageStatus().name());
+		
+		if(filesReadable(message)) {
+			Map<String, DomibusConnectorClientMessageFileType> files = storage.listContentAtStorageLocation(message.getStorageInfo());
+			files.entrySet().forEach(file -> {
+				msg.getFiles().add(new DomibusConnectorClientMessageFile(file.getKey(), file.getValue().name()));
+			});
+		}
+		
+		return msg;
 	}
 	
-	private DomibusConnectorClientMessage mapMessage(PDomibusConnectorClientMessage message) {
-		 DomibusConnectorClientMessage msg = new DomibusConnectorClientMessage();
-		 Set<PDomibusConnectorClientConfirmation> confirmations = message.getConfirmations();
-		 confirmations.forEach(confirmation -> {
-			 DomibusConnectorClientConfirmation evidence = new DomibusConnectorClientConfirmation();
-			 BeanUtils.copyProperties(confirmation, evidence);
-			 evidence.setStorageStatus(confirmation.getStorageStatus().name());
-			 msg.getEvidences().add(evidence);
-		 });
-		 BeanUtils.copyProperties(message, msg);
-		 msg.setStorageStatus(message.getStorageStatus().name());
-		 return msg;
+	private boolean filesReadable(PDomibusConnectorClientMessage message) {
+		return message!=null && message.getStorageInfo()!=null && !message.getStorageInfo().isEmpty() && message.getStorageStatus().equals(DomibusConnectorClientStorageStatus.STORED);
 	}
 }

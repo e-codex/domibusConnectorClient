@@ -46,16 +46,24 @@ public class DomibusConnectorClientMessage {
 	
     private Set<DomibusConnectorClientConfirmation> evidences = new HashSet<>();
     
+    private Set<DomibusConnectorClientMessageFile> files = new HashSet<>();
+    
 	public DomibusConnectorClientMessage() {
 	}
 
-	public long getId() {
+	
+
+	public Long getId() {
 		return id;
 	}
 
-	public void setId(long id) {
+
+
+	public void setId(Long id) {
 		this.id = id;
 	}
+
+
 
 	public String getEbmsMessageId() {
 		return ebmsMessageId;
@@ -207,6 +215,18 @@ public class DomibusConnectorClientMessage {
 
 	public void setEvidences(Set<DomibusConnectorClientConfirmation> evidences) {
 		this.evidences = evidences;
+	}
+
+
+
+	public Set<DomibusConnectorClientMessageFile> getFiles() {
+		return files;
+	}
+
+
+
+	public void setFiles(Set<DomibusConnectorClientMessageFile> files) {
+		this.files = files;
 	}
 
 

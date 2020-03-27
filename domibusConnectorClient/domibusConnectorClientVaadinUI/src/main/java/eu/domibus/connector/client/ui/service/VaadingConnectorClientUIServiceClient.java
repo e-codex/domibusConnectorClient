@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
+import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 
 @Component
 public class VaadingConnectorClientUIServiceClient {
@@ -32,7 +33,13 @@ public class VaadingConnectorClientUIServiceClient {
 
 	public DomibusConnectorClientMessageList getAllMessages() {
 		
-		 return restTemplate.getForObject(url+"/getAllMessages", DomibusConnectorClientMessageList.class);
+		 DomibusConnectorClientMessageList messagesList = new DomibusConnectorClientMessageList();
+				 try {
+				 messagesList = restTemplate.getForObject(url+"/getAllMessages", DomibusConnectorClientMessageList.class);
+				 }catch (Exception e) {
+					 
+				 }
+		return messagesList;
 	}
 	
 	public DomibusConnectorClientMessage getMessageById(Long id) {
@@ -61,8 +68,13 @@ public class VaadingConnectorClientUIServiceClient {
 		return result.getBody();
 	}
 	
-	public List<String> listContentAtStorage(String storageLocation){
-		ResponseEntity<List> result = restTemplate.exchange(url + "listContentAtStorage?storageLocation={storageLocation}", HttpMethod.GET, null, List.class,storageLocation);
+	public Map<String, DomibusConnectorClientMessageFileType> listContentAtStorage(String storageLocation){
+		ResponseEntity<Map> result = restTemplate.exchange(url + "listContentAtStorage?storageLocation={storageLocation}", HttpMethod.GET, null, Map.class,storageLocation);
 		return result.getBody();
+	}
+	
+	public DomibusConnectorClientMessage createNewMessage(DomibusConnectorClientMessage newMessage) {
+		newMessage = restTemplate.postForObject(url + "/createNewMessage", newMessage, DomibusConnectorClientMessage.class);
+		return newMessage;
 	}
 }

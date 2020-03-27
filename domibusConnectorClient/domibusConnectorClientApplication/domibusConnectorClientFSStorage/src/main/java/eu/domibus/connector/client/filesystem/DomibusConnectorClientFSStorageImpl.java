@@ -10,6 +10,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
+import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
@@ -135,7 +136,7 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 	}
 
 	@Override
-	public List<String> listContentAtStorageLocation(String storageLocation) {
+	public Map<String, DomibusConnectorClientMessageFileType> listContentAtStorageLocation(String storageLocation) {
 		File messageFolder = new File(storageLocation);
 		return fileSystemReader.getFileListFromMessageFolder(messageFolder);
 	}

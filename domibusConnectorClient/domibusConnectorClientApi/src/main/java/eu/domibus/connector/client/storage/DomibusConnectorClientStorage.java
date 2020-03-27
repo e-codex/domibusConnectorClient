@@ -21,6 +21,6 @@ public interface DomibusConnectorClientStorage {
 	
 	byte[] loadContentFromStorageLocation(String storageLocation, String name);
 	
-	List<String> listContentAtStorageLocation(String storageLocation);
+	Map<String, DomibusConnectorClientMessageFileType> listContentAtStorageLocation(String storageLocation);
 	
 }

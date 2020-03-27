@@ -21,6 +21,12 @@ public class FormsUtil {
 		loc.setWidth("600px");
 		return loc;
 	}
+	
+	public static TextField getFormattedRequiredTextField() {
+		TextField loc = getFormattedTextField();
+		loc.setRequired(true);
+		return loc;
+	}
 
 	public static TextArea getFormattedTextArea() {
 		TextArea loc = new TextArea();

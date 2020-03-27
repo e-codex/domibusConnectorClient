@@ -1,5 +1,6 @@
 package eu.domibus.connector.client.mapping;
 
+import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.OutputStreamWriter;
 
@@ -9,6 +10,7 @@ import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.stream.StreamSource;
 
 import eu.domibus.connector.client.mapping.exception.DomibusConnectorClientContentMapperException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageContentType;
@@ -66,6 +68,7 @@ public final class DomibusConnectorClientContentMapperUtil {
     			throw new DomibusConnectorClientContentMapperException("XML Source object could not be transformed to bytes!", ex);
     		}
     		if(businessContent!=null && businessContent.length > 0) {
+    			message.getMessageContent().setXmlContent(new StreamSource(new ByteArrayInputStream(businessContent)));
     			return;
     		}else {
     			throw new DomibusConnectorClientContentMapperException("businessContent after transformation null or empty!");

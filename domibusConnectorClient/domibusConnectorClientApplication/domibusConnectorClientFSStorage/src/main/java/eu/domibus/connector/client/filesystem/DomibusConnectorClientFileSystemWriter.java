@@ -145,10 +145,11 @@ public class DomibusConnectorClientFileSystemWriter {
 				byte[] document;
 				try {
 					document = dataHandlerToBytes(messageContent.getDocument().getDocument());
+					createFile(messageFolder, fileName, document);
 				} catch (IOException e) {
-					throw new DomibusConnectorClientFileSystemException("Could not process document! ", e);
+					LOGGER.error("Could not process business document file {} at messageFolder {}", fileName, messageFolder.getAbsolutePath(), e);
+//					throw new DomibusConnectorClientFileSystemException("Could not process document! ", e);
 				}
-				createFile(messageFolder, fileName, document);
 				DomibusConnectorDetachedSignatureType detachedSignature = messageContent.getDocument().getDetachedSignature();
 				if (detachedSignature != null && detachedSignature.getDetachedSignature()!=null && detachedSignature.getDetachedSignature().length > 0
 						&& detachedSignature.getMimeType() != null) {
@@ -166,18 +167,23 @@ public class DomibusConnectorClientFileSystemWriter {
 
 					}
 					msgProps.getMessageDetails().put(messageProperties.getDetachedSignatureFileName(), fileName2);
-					createFile(messageFolder, fileName2, detachedSignature.getDetachedSignature());
+					try {
+						createFile(messageFolder, fileName2, detachedSignature.getDetachedSignature());
+					} catch (IOException e) {
+						LOGGER.error("Could not process detached signature file {} at messageFolder {}", fileName2, messageFolder.getAbsolutePath(), e);
+//						throw new DomibusConnectorClientFileSystemException("Could not process document! ", e);
+					}
 				}
 			}
 			if (messageContent.getXmlContent() != null){
+				String fileName = action != null ? action + xmlFileExtension
+						: defaultXmlFileName;
 				try {
 					byte[] content = sourceToByteArray(messageContent.getXmlContent());
-					String fileName = action != null ? action + xmlFileExtension
-							: defaultXmlFileName;
 					msgProps.getMessageDetails().put(messageProperties.getContentXmlFileName(),fileName);
 					createFile(messageFolder, fileName, content);
-				}catch(DomibusConnectorClientFileSystemException e) {
-					LOGGER.error("Business Content XML file could not be stored into folder {}", messageFolder.getAbsolutePath(), e);
+				}catch(DomibusConnectorClientFileSystemException | IOException e) {
+					LOGGER.error("Could not process business content file {} at messageFolder {}", fileName, messageFolder.getAbsolutePath(), e);
 				}
 			}
 		}
@@ -186,20 +192,25 @@ public class DomibusConnectorClientFileSystemWriter {
 
 		if (message.getMessageAttachments() != null) {
 			for (DomibusConnectorMessageAttachmentType attachment : message.getMessageAttachments()) {
-				byte[] attachmentBytes;
 				try {
-					attachmentBytes = dataHandlerToBytes(attachment.getAttachment());
+					byte[] attachmentBytes = dataHandlerToBytes(attachment.getAttachment());
+					createFile(messageFolder, attachment.getName(), attachmentBytes);
 				} catch (IOException e) {
-					throw new DomibusConnectorClientFileSystemException("Could not process attachment! ", e);
+					LOGGER.error("Could not process business attachment file {} at messageFolder {}", attachment.getName(), messageFolder.getAbsolutePath(), e);
 				}
-				createFile(messageFolder, attachment.getName(), attachmentBytes);
 			}
 		}
 
 		if (message.getMessageConfirmations() != null) {
 			for (DomibusConnectorMessageConfirmationType confirmation : message.getMessageConfirmations()) {
-				createFile(messageFolder, confirmation.getConfirmationType().name()
-						+ xmlFileExtension, sourceToByteArray(confirmation.getConfirmation()));
+				String fileName = confirmation.getConfirmationType().name()
+						+ xmlFileExtension;
+				try {
+					byte[] confirmationBytes = sourceToByteArray(confirmation.getConfirmation());
+					createFile(messageFolder, fileName, confirmationBytes);
+				} catch (IOException e) {
+					LOGGER.error("Could not process confirmation file {} at messageFolder {}",fileName, messageFolder.getAbsolutePath(), e);
+				}
 			}
 		}
 
@@ -234,16 +245,12 @@ public class DomibusConnectorClientFileSystemWriter {
 	}
 
 	private void createFile(File messageFolder, String fileName, byte[] content)
-			throws DomibusConnectorClientFileSystemException {
+			throws IOException {
 		String filePath = messageFolder.getAbsolutePath() + File.separator + fileName;
 		LOGGER.debug("#loadMessageProperties: Create file {}", filePath);
 		File file = new File(filePath);
-		try {
-			byteArrayToFile(content, file);
-		} catch (IOException e) {
-			throw new DomibusConnectorClientFileSystemException("Could not create file " + file.getAbsolutePath(),
-					e);
-		}
+		byteArrayToFile(content, file);
+		
 	}
 
 	private void byteArrayToFile(byte[] data, File file) throws IOException {
