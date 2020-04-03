@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
+import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 
 @Repository
 public interface PDomibusConnectorClientMessageDao extends CrudRepository<PDomibusConnectorClientMessage, Long> {

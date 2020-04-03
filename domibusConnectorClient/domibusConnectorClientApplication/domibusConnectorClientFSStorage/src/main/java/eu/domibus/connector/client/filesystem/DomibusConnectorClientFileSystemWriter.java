@@ -247,7 +247,7 @@ public class DomibusConnectorClientFileSystemWriter {
 	private void createFile(File messageFolder, String fileName, byte[] content)
 			throws IOException {
 		String filePath = messageFolder.getAbsolutePath() + File.separator + fileName;
-		LOGGER.debug("#loadMessageProperties: Create file {}", filePath);
+		LOGGER.debug("Create file {}", filePath);
 		File file = new File(filePath);
 		byteArrayToFile(content, file);
 		

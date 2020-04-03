@@ -1,6 +1,7 @@
 package eu.domibus.connector.client;
 
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
+import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 
@@ -38,4 +39,8 @@ public interface DomibusConnectorClientBackend {
 	 * @throws DomibusConnectorClientBackendException 
 	 */
 	public void deliverNewConfirmationToClientBackend(DomibusConnectorMessageType message) throws DomibusConnectorClientBackendException;
+	
+	void triggerConfirmationForMessage(DomibusConnectorMessageType originalMessage,
+			DomibusConnectorConfirmationType confirmationType, String confirmationAction)
+			throws DomibusConnectorClientBackendException;
 }

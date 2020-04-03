@@ -19,9 +19,12 @@ public class DomibusConnectorClientDeliveryWsImpl implements DomibusConnectorBac
 
     @Override
     public DomibsConnectorAcknowledgementType deliverMessage(DomibusConnectorMessageType msg) {
-        DomibsConnectorAcknowledgementType ackResponse = new DomibsConnectorAcknowledgementType();
+        
+    	LOGGER.info("#deliverMessage: called");
+    	DomibsConnectorAcknowledgementType ackResponse = new DomibsConnectorAcknowledgementType();
 
         if (msg.getMessageContent() != null) {
+        	LOGGER.debug("#deliverMessage: received message is a business message...");
         	 try {
              	deliveryClient.receiveDeliveredMessageFromConnector(msg);
              	ackResponse.setResultMessage("Message successfully delivered to client.");
@@ -34,6 +37,7 @@ public class DomibusConnectorClientDeliveryWsImpl implements DomibusConnectorBac
 		} else if (!CollectionUtils.isEmpty(msg.getMessageConfirmations())) {
 			// as there is no message content, but at least one message confirmation,
 			// it is a confirmation message
+			LOGGER.debug("#deliverMessage: received message is a confirmation message...");
 			try {
              	deliveryClient.receiveDeliveredConfirmationMessageFromConnector(msg);
              	ackResponse.setResultMessage("Confirmation message successfully delivered to client.");

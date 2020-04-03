@@ -1,9 +1,16 @@
 
 package eu.domibus.connector.client.spring;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapper;
 import eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapperDefaultImpl;
@@ -13,8 +20,13 @@ import eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapperDe
  * @author {@literal Stephan Spindler <stephan.spindler@extern.brz.gv.at> }
  */
 @Configuration
+@ConfigurationProperties(prefix = ConnectorClientAutoConfiguration.PREFIX)
+@PropertySource("classpath:/connector-client-library-default.properties")
+@Validated
+@Valid
 public class ConnectorClientAutoConfiguration {
 
+	public static final String PREFIX = "connector-client.library";
 
     /**
      * if not available create a default ContentMapper Bean.
@@ -27,6 +39,8 @@ public class ConnectorClientAutoConfiguration {
     public DomibusConnectorClientContentMapper contentMapper() {
     	return new DomibusConnectorClientContentMapperDefaultImpl();
     }
+
+	
 
     
 

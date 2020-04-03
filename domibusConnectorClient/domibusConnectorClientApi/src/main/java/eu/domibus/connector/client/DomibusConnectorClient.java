@@ -40,15 +40,14 @@ public interface DomibusConnectorClient {
 	public DomibusConnectorMessagesType requestNewMessagesFromConnector () throws DomibusConnectorClientException;
 	
 	/**
-	 * Triggers the generation and submission of a message confirmation at the domibusConnector.
+	 * Triggers the submission of a message confirmation at the domibusConnector.
 	 * 
-	 * @param originalMessage - The message that should be confirmed.
-	 * @param confirmationType - The type of confirmation that should be generated and submitted.
+	 * @param confirmationMessage - The message that contains the details and confirmationType that should be submitted. Can be generated 
+	 * 								at the backend side using the {@link DomibusConnectorClientMessageBuilder}.
 	 * @throws DomibusConnectorClientException
 	 */
-	public void triggerConfirmationForMessage(
-			DomibusConnectorMessageType originalMessage, 
-			DomibusConnectorConfirmationType confirmationType) throws DomibusConnectorClientException;
+	void triggerConfirmationForMessage(DomibusConnectorMessageType confirmationMessage)
+			throws DomibusConnectorClientException;
 	
 	
 	

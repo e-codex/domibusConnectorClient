@@ -32,33 +32,32 @@ public class GetMessagesFromConnectorJob {
     public void requestNewMessagesFromConnectorAndDeliverThemToClientBackend() throws DomibusConnectorClientException {
         DomibusConnectorMessagesType messages = null;
         LocalDateTime startTime = LocalDateTime.now();
-        LOGGER.info("GetMessagesFromConnectorJob started");
+        LOGGER.debug("GetMessagesFromConnectorJob started");
 
         messages = connectorClient.requestNewMessagesFromConnector();
 
         if (messages!=null && !CollectionUtils.isEmpty(messages.getMessages())) {
-            LOGGER.debug("{} new messages from connector to store...", messages.getMessages().size());
+            LOGGER.info("{} new messages from connector to store...", messages.getMessages().size());
             messages.getMessages().stream().forEach( message -> {
 
                 try {
 					clientBackend.deliverNewMessageToClientBackend(message);
 				} catch (DomibusConnectorClientBackendException e1) {
-//						throw new DomibusConnectorClientException(e1);
+					LOGGER.error("Exception occured delivering new message to the client backend", e1);
 					
 				}
                 
-                try {
-					connectorClient.triggerConfirmationForMessage(message, DomibusConnectorConfirmationType.DELIVERY);
-				} catch (DomibusConnectorClientException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
+//                try {
+//                	clientBackend.triggerConfirmationForMessage(message, DomibusConnectorConfirmationType.DELIVERY, null);
+//				} catch (DomibusConnectorClientBackendException e) {
+//					LOGGER.error("Exception occured triggering the confirmation for message at the client backend", e);
+//				}
                 
             });
         }else {
         	LOGGER.debug("No new messages from connector to store received.");
         }
-        LOGGER.info("GetMessagesFromConnectorJob finished after [{}]", Duration.between(startTime, LocalDateTime.now()));
+        LOGGER.debug("GetMessagesFromConnectorJob finished after [{}]", Duration.between(startTime, LocalDateTime.now()));
     }
 
 }

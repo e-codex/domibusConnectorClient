@@ -4,10 +4,12 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.controller.persistence.dao.PDomibusConnectorClientMessageDao;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
@@ -16,6 +18,8 @@ import eu.domibus.connector.client.storage.DomibusConnectorClientStorage;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 
 @Component
+@Validated
+@Valid
 public class UpdateStorageStatusJobService {
 
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(UpdateStorageStatusJobService.class);
@@ -38,7 +42,7 @@ public class UpdateStorageStatusJobService {
 	public void checkStorageAndUpdateDatabaseMessages() {
 
 		LocalDateTime startTime = LocalDateTime.now();
-		LOGGER.info("UpdateStorageStatusJobService started");
+		LOGGER.debug("UpdateStorageStatusJobService started");
 
 		Iterable<PDomibusConnectorClientMessage> allMessages = messageDao.findAll();
 
@@ -56,7 +60,7 @@ public class UpdateStorageStatusJobService {
 				message.getConfirmations().forEach(confirmation -> {
 					DomibusConnectorClientStorageStatus confStatus = checkStorageStatus(confirmation.getStorageInfo());
 					if(confirmation.getStorageStatus()==null || !confirmation.getStorageStatus().equals(confStatus)) {
-						confirmation.setStorageStatus(status);
+						confirmation.setStorageStatus(confStatus);
 						message.setUpdated(new Date());
 						persistenceService.mergeClientMessage(message);
 						LOGGER.info("StorageStatus for confirmation with database id {} updated to {}!", confirmation.getId(), status);
@@ -65,7 +69,7 @@ public class UpdateStorageStatusJobService {
 			}
 		});
 
-		LOGGER.info("UpdateStorageStatusJobService finished after [{}]", Duration.between(startTime, LocalDateTime.now()));
+		LOGGER.debug("UpdateStorageStatusJobService finished after [{}]", Duration.between(startTime, LocalDateTime.now()));
 	}
 	
 	private DomibusConnectorClientStorageStatus checkStorageStatus(String storageLocation) {

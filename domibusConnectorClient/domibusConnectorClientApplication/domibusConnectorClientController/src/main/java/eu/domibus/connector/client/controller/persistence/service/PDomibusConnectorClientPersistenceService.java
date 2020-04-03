@@ -1,7 +1,10 @@
 package eu.domibus.connector.client.controller.persistence.service;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,9 +14,17 @@ import eu.domibus.connector.client.controller.persistence.dao.PDomibusConnectorC
 import eu.domibus.connector.client.controller.persistence.dao.PDomibusConnectorClientMessageDao;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
+import eu.domibus.connector.client.rest.model.DomibusConnectorClientConfirmation;
+import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
+import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
+import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
+import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
+import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
+import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 import eu.domibus.connector.domain.transition.DomibusConnectorPartyType;
 
 @Component
@@ -119,4 +130,23 @@ public class PDomibusConnectorClientPersistenceService {
 		
 		return null;
 	}
+	
+	public List<PDomibusConnectorClientMessage> findUnconfirmedMessages(){
+		List<PDomibusConnectorClientMessage> unconfirmedMessages = new ArrayList<PDomibusConnectorClientMessage>();
+		messageDao.findAll().forEach(message -> {
+			unconfirmedMessages.add(message);
+			if(message.getConfirmations()!= null && !message.getConfirmations().isEmpty()) {
+				message.getConfirmations().forEach(confirmation -> {
+					if(confirmation.getConfirmationType().equals(DomibusConnectorConfirmationType.DELIVERY.name()) ||
+							confirmation.getConfirmationType().equals(DomibusConnectorConfirmationType.NON_DELIVERY.name())) {
+						unconfirmedMessages.remove(message);
+					}
+				});
+			}	
+		});
+		
+		return unconfirmedMessages;
+	}
+	
+
 }

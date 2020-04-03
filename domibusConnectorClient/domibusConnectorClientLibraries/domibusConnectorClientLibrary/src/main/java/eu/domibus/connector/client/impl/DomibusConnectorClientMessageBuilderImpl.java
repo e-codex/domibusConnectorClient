@@ -75,14 +75,33 @@ public class DomibusConnectorClientMessageBuilderImpl implements DomibusConnecto
 	
 	
 	@Override
-	public DomibusConnectorMessageType createNewConfirmationMessage(String originalEbmsMessageId, DomibusConnectorConfirmationType confirmationType) {
-		DomibusConnectorMessageType newMessage = new DomibusConnectorMessageType();
-		
-		DomibusConnectorMessageDetailsType msgDetails = new DomibusConnectorMessageDetailsType();
-
-		msgDetails.setRefToMessageId(originalEbmsMessageId);
-		
-		newMessage.setMessageDetails(msgDetails);
+	public DomibusConnectorMessageType createNewConfirmationMessage(String ebmsMessageId,
+			String conversationId, DomibusConnectorServiceType businessService,
+			String businessAction, DomibusConnectorPartyType fromParty, 
+			DomibusConnectorPartyType toParty, 
+			String finalRecipient,
+			String originalSender, 
+			DomibusConnectorConfirmationType confirmationType) {
+		DomibusConnectorMessageType newMessage = createNewMessage(
+				null, 
+				null, 
+				conversationId, 
+				null, 
+				null, 
+				businessAction, 
+				null, 
+				null, 
+				null, 
+				null, 
+				null, 
+				null, 
+				finalRecipient, 
+				originalSender);
+				
+		newMessage.getMessageDetails().setRefToMessageId(ebmsMessageId);
+		newMessage.getMessageDetails().setService(businessService);
+		newMessage.getMessageDetails().setFromParty(fromParty);
+		newMessage.getMessageDetails().setToParty(toParty);
 		
 		DomibusConnectorMessageConfirmationType confirmation = new DomibusConnectorMessageConfirmationType();
 		confirmation.setConfirmationType(confirmationType);

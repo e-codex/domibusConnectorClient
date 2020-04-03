@@ -29,12 +29,12 @@ public class SubmitMessagesToConnectorJob {
     public void checkClientBackendForNewMessagesAndSubmitThemToConnector() throws ImplementationMissingException {
         DomibusConnectorMessagesType messages = null;
         LocalDateTime startTime = LocalDateTime.now();
-        LOGGER.info("SubmitMessagesToConnectorJob started");
+        LOGGER.debug("SubmitMessagesToConnectorJob started");
 
         messages = clientBackend.checkClientForNewMessagesToSubmit();
 
         if (messages!=null && !CollectionUtils.isEmpty(messages.getMessages())) {
-            LOGGER.debug("{} new messages from client backend to submit to connector...", messages.getMessages().size());
+            LOGGER.info("{} new messages from client backend to submit to connector...", messages.getMessages().size());
             for (DomibusConnectorMessageType message : messages.getMessages()) {
             	try {
 					connectorClient.submitNewMessageToConnector(message);
@@ -46,6 +46,6 @@ public class SubmitMessagesToConnectorJob {
         }else {
         	LOGGER.debug("No new messages at the client backend to submit.");
         }
-        LOGGER.info("SubmitMessagesToConnectorJob finished after [{}]", Duration.between(startTime, LocalDateTime.now()));
+        LOGGER.debug("SubmitMessagesToConnectorJob finished after [{}]", Duration.between(startTime, LocalDateTime.now()));
     }
 }

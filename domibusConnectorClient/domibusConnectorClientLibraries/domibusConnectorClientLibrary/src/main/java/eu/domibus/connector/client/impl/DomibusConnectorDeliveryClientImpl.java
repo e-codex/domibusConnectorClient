@@ -11,13 +11,14 @@ import eu.domibus.connector.client.DomibusConnectorClientBackend;
 import eu.domibus.connector.client.DomibusConnectorDeliveryClient;
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
+import eu.domibus.connector.client.link.ws.configuration.ConnectorLinkWSProperties;
 import eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapper;
 import eu.domibus.connector.client.mapping.exception.DomibusConnectorClientContentMapperException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 @Component
-@ConditionalOnProperty(prefix = "connector-client.connector-link.ws", value = "pushEnabled", matchIfMissing = false)
-@ConditionalOnMissingBean
+@ConditionalOnProperty(prefix = ConnectorLinkWSProperties.PREFIX, value = ConnectorLinkWSProperties.PUSH_ENABLED_PROPERTY_NAME, matchIfMissing = false)
+//@ConditionalOnMissingBean(value = DomibusConnectorDeliveryClient.class)
 public class DomibusConnectorDeliveryClientImpl implements DomibusConnectorDeliveryClient {
 
 	private static final Logger LOGGER = LogManager.getLogger(DomibusConnectorDeliveryClientImpl.class);
@@ -35,6 +36,7 @@ public class DomibusConnectorDeliveryClientImpl implements DomibusConnectorDeliv
 	@Override
 	public void receiveDeliveredMessageFromConnector(DomibusConnectorMessageType message)
 			throws DomibusConnectorClientException {
+		LOGGER.info("#receiveDeliveredMessageFromConnector: received new message from connector via push.");
 		try {
         	contentMapper.mapInboundBusinessContent(message);
         } catch (DomibusConnectorClientContentMapperException e) {
@@ -47,17 +49,19 @@ public class DomibusConnectorDeliveryClientImpl implements DomibusConnectorDeliv
 		} catch (DomibusConnectorClientBackendException e) {
 			throw new DomibusConnectorClientException(e);
 		}
-
+		LOGGER.debug("receiveDeliveredMessageFromConnector: received message delivered to client backend.");
 	}
 
 	@Override
 	public void receiveDeliveredConfirmationMessageFromConnector(DomibusConnectorMessageType message)
 			throws DomibusConnectorClientException {
+		LOGGER.info("#receiveDeliveredConfirmationMessageFromConnector: received new confirmation from connector via push.");
 		try {
 			clientBackend.deliverNewConfirmationToClientBackend(message);
 		} catch (DomibusConnectorClientBackendException e) {
 			throw new DomibusConnectorClientException(e);
 		}
+		LOGGER.debug("receiveDeliveredConfirmationMessageFromConnector: received confirmation delivered to client backend.");
 	}
 
 }

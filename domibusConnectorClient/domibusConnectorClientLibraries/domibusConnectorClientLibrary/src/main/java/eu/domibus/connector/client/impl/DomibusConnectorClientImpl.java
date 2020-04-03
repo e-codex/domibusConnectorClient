@@ -1,11 +1,16 @@
 package eu.domibus.connector.client.impl;
 
+import javax.validation.Valid;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.DomibusConnectorClient;
 import eu.domibus.connector.client.DomibusConnectorClientMessageBuilder;
@@ -13,12 +18,17 @@ import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.link.DomibusConnectorClientLink;
 import eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapper;
 import eu.domibus.connector.client.mapping.exception.DomibusConnectorClientContentMapperException;
+import eu.domibus.connector.client.spring.ConnectorClientAutoConfiguration;
 import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 
 @Component
+@ConfigurationProperties(prefix = ConnectorClientAutoConfiguration.PREFIX)
+@PropertySource("classpath:/connector-client-library-default.properties")
+@Validated
+@Valid
 public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 	
 	private static final Logger LOGGER = LogManager.getLogger(DomibusConnectorClientImpl.class);
@@ -31,7 +41,7 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
     
     @Autowired
     private DomibusConnectorClientMessageBuilder messageBuilder;
-
+    
 	
 	@Override
 	public void submitNewMessageToConnector(DomibusConnectorMessageType message) throws DomibusConnectorClientException {
@@ -92,12 +102,22 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 	}
 
 	@Override
-	public void triggerConfirmationForMessage(DomibusConnectorMessageType originalMessage,
-			DomibusConnectorConfirmationType confirmationType) throws DomibusConnectorClientException {
-		DomibusConnectorMessageType confirmationMessage = messageBuilder.createNewConfirmationMessage(originalMessage.getMessageDetails().getEbmsMessageId(), confirmationType);
+	public void triggerConfirmationForMessage(DomibusConnectorMessageType confirmationMessage) throws DomibusConnectorClientException {
+		
+		String refToMessageId = confirmationMessage.getMessageDetails()!=null?confirmationMessage.getMessageDetails().getRefToMessageId():null;
+		
+		if(confirmationMessage.getMessageDetails()==null || refToMessageId==null || refToMessageId.isEmpty()) {
+			throw new DomibusConnectorClientException("The field [refToMessageId] in the messageDetails of the confirmationMessage must not be null! It must contain the ebmsId of the originalMessage that should be confirmed!");
+		}
+		
+		if(confirmationMessage.getMessageConfirmations()==null || confirmationMessage.getMessageConfirmations().get(0) == null || confirmationMessage.getMessageConfirmations().get(0).getConfirmationType()==null) {
+			throw new DomibusConnectorClientException("The confirmationMessage must contain one messageConfirmation. This messageConfirmation must contain the confirmationType that should be generated and submitted by the connector!");
+		}
+		DomibusConnectorConfirmationType confirmationType = confirmationMessage.getMessageConfirmations().get(0).getConfirmationType();
 		
 		DomibsConnectorAcknowledgementType domibusConnectorAckType = new DomibsConnectorAcknowledgementType();
         try {
+        	LOGGER.debug("Submitting confirmation message with refToMessageId {} and confirmationType {} to connector.", refToMessageId, confirmationType.name());
             domibusConnectorAckType.setResult(true); //when no exception is thrown message is assumed processed successfully!
             domibusConnectorAckType = clientService.submitMessageToConnector(confirmationMessage);
         } catch (DomibusConnectorClientException e) {
@@ -107,12 +127,12 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
         
         if(domibusConnectorAckType == null) {
         	LOGGER.error("The received acknowledgement for confirmation message with originalEbmsId {} and confirmationType {} is null! ");
-            throw new DomibusConnectorClientException("The received acknowledgement for confirmation message with originalEbmsId "+originalMessage.getMessageDetails().getEbmsMessageId()+" and confirmationType "+confirmationType.value()+" is null!");
+            throw new DomibusConnectorClientException("The received acknowledgement for confirmation message with originalEbmsId "+refToMessageId+" and confirmationType "+confirmationType.name()+" is null!");
         }
         if(!domibusConnectorAckType.isResult()) {
         	LOGGER.error("The received acknowledgement for confirmation message with originalEbmsId {} and confirmationType {} is negative! \n"
-        			+ "ResultMessage: "+domibusConnectorAckType.getResultMessage(), originalMessage.getMessageDetails().getEbmsMessageId(), confirmationType.value());
-            throw new DomibusConnectorClientException("The received acknowledgement for confirmation message with originalEbmsId "+originalMessage.getMessageDetails().getEbmsMessageId()+" and confirmationType "+confirmationType.value()+" is negative! \n"
+        			+ "ResultMessage: "+domibusConnectorAckType.getResultMessage(), refToMessageId, confirmationType.name());
+            throw new DomibusConnectorClientException("The received acknowledgement for confirmation message with originalEbmsId "+refToMessageId+" and confirmationType "+confirmationType.name()+" is negative! \n"
             		+ "ResultMessage: "+domibusConnectorAckType.getResultMessage());
         }
 	}
