@@ -16,7 +16,7 @@ import eu.domibus.connector.client.DomibusConnectorClientBackend;
 import eu.domibus.connector.client.DomibusConnectorClientMessageBuilder;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
-import eu.domibus.connector.client.controller.persistence.service.PDomibusConnectorClientPersistenceService;
+import eu.domibus.connector.client.controller.persistence.service.IDomibusConnectorClientPersistenceService;
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
@@ -36,7 +36,7 @@ public class AutoConfirmMessagesJobService {
 
 	@Autowired
 	@NotNull
-	private PDomibusConnectorClientPersistenceService persistenceService;
+	private IDomibusConnectorClientPersistenceService persistenceService;
 	
 	@Autowired
 	@NotNull

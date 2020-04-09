@@ -13,7 +13,7 @@ import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.controller.persistence.dao.PDomibusConnectorClientMessageDao;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
-import eu.domibus.connector.client.controller.persistence.service.PDomibusConnectorClientPersistenceService;
+import eu.domibus.connector.client.controller.persistence.service.IDomibusConnectorClientPersistenceService;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorage;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 
@@ -30,12 +30,9 @@ public class UpdateStorageStatusJobService {
 
 	@Autowired
 	@NotNull
-	private PDomibusConnectorClientPersistenceService persistenceService;
+	private IDomibusConnectorClientPersistenceService persistenceService;
 
-	@Autowired
-	@NotNull
-	private PDomibusConnectorClientMessageDao messageDao;
-
+	
 	public UpdateStorageStatusJobService() {
 	}
 
@@ -44,7 +41,7 @@ public class UpdateStorageStatusJobService {
 		LocalDateTime startTime = LocalDateTime.now();
 		LOGGER.debug("UpdateStorageStatusJobService started");
 
-		Iterable<PDomibusConnectorClientMessage> allMessages = messageDao.findAll();
+		Iterable<PDomibusConnectorClientMessage> allMessages = persistenceService.getMessageDao().findAll();
 
 		allMessages.forEach(message -> {
 			DomibusConnectorClientStorageStatus status = checkStorageStatus(message.getStorageInfo());

@@ -20,7 +20,7 @@ import eu.domibus.connector.client.controller.configuration.DefaultConfirmationA
 import eu.domibus.connector.client.controller.configuration.DomibusConnectorClientControllerConfig;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
-import eu.domibus.connector.client.controller.persistence.service.PDomibusConnectorClientPersistenceService;
+import eu.domibus.connector.client.controller.persistence.service.IDomibusConnectorClientPersistenceService;
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
@@ -47,7 +47,7 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 	
 	@Autowired
 	@NotNull
-	private PDomibusConnectorClientPersistenceService persistenceService;
+	private IDomibusConnectorClientPersistenceService persistenceService;
 	
 	@Autowired
 	@NotNull

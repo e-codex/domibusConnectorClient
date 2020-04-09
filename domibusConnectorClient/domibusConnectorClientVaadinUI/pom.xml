@@ -32,9 +32,15 @@
     </dependencyManagement>
   <dependencies>
   
-  <dependency>
+<!--   <dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>domibusConnectorClientApi</artifactId>
+			<version>${project.version}</version>
+		</dependency> -->
+  
+    <dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>domibusConnectorClientRestAPI</artifactId>
 			<version>${project.version}</version>
 		</dependency>
   
@@ -42,6 +48,16 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
+		
+		<dependency>
+    <groupId>org.springframework.boot</groupId>
+    <artifactId>spring-boot-starter-webflux</artifactId>
+</dependency>
+<dependency>
+    <groupId>org.projectreactor</groupId>
+    <artifactId>reactor-spring</artifactId>
+    <version>1.0.1.RELEASE</version>
+</dependency>
 		
 	<!-- 	  <dependency>
 			<groupId>org.springframework.boot</groupId>

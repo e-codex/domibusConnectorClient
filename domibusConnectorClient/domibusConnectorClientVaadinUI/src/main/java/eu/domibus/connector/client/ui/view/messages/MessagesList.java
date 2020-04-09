@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dependency.HtmlImport;
+import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
 import com.vaadin.flow.component.icon.Icon;
@@ -49,6 +50,7 @@ public class MessagesList extends VerticalLayout {
 		
 		grid.setItems(fullList);
 		grid.addComponentColumn(domibusConnectorClientMessage -> getDetailsLink(domibusConnectorClientMessage.getId())).setHeader("Details").setWidth("50px");
+		grid.addComponentColumn(domibusConnectorClientMessage -> deleteMessageLink(domibusConnectorClientMessage.getId())).setHeader("Details").setWidth("50px");
 		grid.addColumn(DomibusConnectorClientMessage::getEbmsMessageId).setHeader("ebmsMessageID").setWidth("150px");
 		grid.addColumn(DomibusConnectorClientMessage::getBackendMessageId).setHeader("backendMessageID").setWidth("150px");
 		grid.addColumn(DomibusConnectorClientMessage::getConversationId).setHeader("conversationID").setWidth("150px");
@@ -60,7 +62,7 @@ public class MessagesList extends VerticalLayout {
 		grid.addColumn(DomibusConnectorClientMessage::getLastConfirmationReceived).setHeader("last confirmation received").setWidth("150px");
 		grid.addColumn(DomibusConnectorClientMessage::getStorageInfo).setHeader("Storage info").setWidth("150px");
 		grid.addColumn(DomibusConnectorClientMessage::getStorageStatus).setHeader("Storage status").setWidth("100px");
-		grid.setWidth("2330px");
+		grid.setWidth("2380px");
 		grid.setHeight("700px");
 		grid.setMultiSort(true);
 		
@@ -209,6 +211,16 @@ public class MessagesList extends VerticalLayout {
 		Button getDetails = new Button(new Icon(VaadinIcon.SEARCH));
 		getDetails.addClickListener(e -> showConnectorMessage(l));
 		return getDetails;
+	}
+	
+	private Button deleteMessageLink(Long l) {
+		Button deleteMessage = new Button(new Icon(VaadinIcon.DEL));
+		deleteMessage.addClickListener(e -> deleteMessage(l));
+		return deleteMessage;
+	}
+	
+	private void deleteMessage(Long l) {
+		Dialog diag = new Dialog();
 	}
 	
 	private void showConnectorMessage(long l) {

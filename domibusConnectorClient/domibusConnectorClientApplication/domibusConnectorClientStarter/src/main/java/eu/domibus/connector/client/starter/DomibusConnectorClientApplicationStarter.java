@@ -21,11 +21,10 @@ import org.springframework.util.SystemPropertyUtils;
 @EnableScheduling
 @EnableTransactionManagement
 @PropertySource({"classpath:/default-connector-client.properties"})
-public class DomibusConnectorClient 
-//extends SpringBootServletInitializer 
+public class DomibusConnectorClientApplicationStarter
 {
 
-	private static final Logger LOGGER = LoggerFactory.getLogger(DomibusConnectorClient.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(DomibusConnectorClientApplicationStarter.class);
 	
 	public static final String CONNECTOR_CLIENT_CONFIG_FILE = "connector.client.config.file";
 	
@@ -66,7 +65,7 @@ public class DomibusConnectorClient
             LOGGER.warn("SystemProperty \"{}\" not given or not resolveable! Startup using default spring external configuration!", CONNECTOR_CLIENT_CONFIG_FILE);
         }
         application.properties(springProperties); //pass the mapped CONNECTOR_CONFIG_FILE to the spring properties...
-        return application.sources(DomibusConnectorClient.class);
+        return application.sources(DomibusConnectorClientApplicationStarter.class);
     }
 	
 	public static @Nullable

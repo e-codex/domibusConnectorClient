@@ -13,6 +13,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
@@ -24,7 +25,9 @@ public class VaadingConnectorClientUIServiceClient {
 	@Autowired
 	private RestTemplate restTemplate;
 	
-	private String url = "http://localhost:8080";
+	WebClient client = WebClient.create("http://localhost:8080");
+	
+	private String url = "http://localhost:8080/restservice";
 	
 	
 	public VaadingConnectorClientUIServiceClient() {
@@ -34,6 +37,7 @@ public class VaadingConnectorClientUIServiceClient {
 	public DomibusConnectorClientMessageList getAllMessages() {
 		
 		 DomibusConnectorClientMessageList messagesList = new DomibusConnectorClientMessageList();
+		 	
 				 try {
 				 messagesList = restTemplate.getForObject(url+"/getAllMessages", DomibusConnectorClientMessageList.class);
 				 }catch (Exception e) {
@@ -64,17 +68,21 @@ public class VaadingConnectorClientUIServiceClient {
 	}
 	
 	public byte[] loadContentFromStorageLocation (String storageLocation, String contentName) {
-		ResponseEntity<byte[]> result = restTemplate.exchange(url + "loadContentFromStorage?storageLocation={storageLocation}&contentName={contentName}", HttpMethod.GET, null, byte[].class,storageLocation, contentName);
+		ResponseEntity<byte[]> result = restTemplate.exchange(url + "/loadContentFromStorage?storageLocation={storageLocation}&contentName={contentName}", HttpMethod.GET, null, byte[].class,storageLocation, contentName);
 		return result.getBody();
 	}
 	
 	public Map<String, DomibusConnectorClientMessageFileType> listContentAtStorage(String storageLocation){
-		ResponseEntity<Map> result = restTemplate.exchange(url + "listContentAtStorage?storageLocation={storageLocation}", HttpMethod.GET, null, Map.class,storageLocation);
+		ResponseEntity<Map> result = restTemplate.exchange(url + "/listContentAtStorage?storageLocation={storageLocation}", HttpMethod.GET, null, Map.class,storageLocation);
 		return result.getBody();
 	}
 	
 	public DomibusConnectorClientMessage createNewMessage(DomibusConnectorClientMessage newMessage) {
 		newMessage = restTemplate.postForObject(url + "/createNewMessage", newMessage, DomibusConnectorClientMessage.class);
 		return newMessage;
+	}
+	
+	public void deleteMessageById(Long id) {
+		restTemplate.getForObject(url+"/deleteMessageById?id={id}", DomibusConnectorClientMessage.class, id.toString());
 	}
 }
