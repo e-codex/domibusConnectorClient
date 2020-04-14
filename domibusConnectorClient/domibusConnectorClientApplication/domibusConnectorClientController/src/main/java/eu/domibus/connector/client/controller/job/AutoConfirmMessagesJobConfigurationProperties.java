@@ -16,7 +16,7 @@ import eu.domibus.connector.lib.spring.DomibusConnectorDuration;
 @Valid
 public class AutoConfirmMessagesJobConfigurationProperties {
 	
-	public static final String PREFIX = "connector-client.timer.auto-confirm-messages";
+	public static final String PREFIX = "connector-client.controller.auto-confirm-messages-job";
 	
 	@NestedConfigurationProperty
     @NotNull

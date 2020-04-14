@@ -37,4 +37,18 @@
 </dependency>
   
   </dependencies>
+  <build>
+  <resources>
+    <resource>
+        <filtering>false</filtering>
+        <directory>src/main/resources</directory>
+    </resource>
+    <resource>
+        <filtering>true</filtering>
+        <directory>src/main/resources-filtered</directory>
+    </resource>
+</resources>
+  
+  </build>
+
 </project>

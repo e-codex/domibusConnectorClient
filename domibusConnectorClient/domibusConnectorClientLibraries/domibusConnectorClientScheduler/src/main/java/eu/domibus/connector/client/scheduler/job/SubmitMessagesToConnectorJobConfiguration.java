@@ -23,7 +23,7 @@ public class SubmitMessagesToConnectorJobConfiguration implements Job {
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(SubmitMessagesToConnectorJobConfiguration.class);
 
 	@Autowired
-    SubmitMessagesToConnectorJob submitMessagesToConnectorJob;
+    SubmitMessagesToConnectorJobService submitMessagesToConnectorJob;
 
 //	@Value("${connector.client.timer.check.outgoing.messages.ms}")
 //    private Long repeatInterval;

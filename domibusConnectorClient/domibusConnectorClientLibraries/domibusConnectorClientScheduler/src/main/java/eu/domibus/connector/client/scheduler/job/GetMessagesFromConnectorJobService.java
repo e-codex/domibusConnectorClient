@@ -3,11 +3,14 @@ package eu.domibus.connector.client.scheduler.job;
 import java.time.Duration;
 import java.time.LocalDateTime;
 
+import javax.validation.Valid;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.DomibusConnectorClient;
 import eu.domibus.connector.client.DomibusConnectorClientBackend;
@@ -17,10 +20,12 @@ import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 
 
-//@Component
-public class GetMessagesFromConnectorJob {
+@Component
+@Validated
+@Valid
+public class GetMessagesFromConnectorJobService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GetMessagesFromConnectorJob.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(GetMessagesFromConnectorJobService.class);
 
     @Autowired
     private DomibusConnectorClientBackend clientBackend;

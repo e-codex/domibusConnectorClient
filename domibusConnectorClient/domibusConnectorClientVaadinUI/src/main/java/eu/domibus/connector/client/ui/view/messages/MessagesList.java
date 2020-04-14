@@ -11,6 +11,8 @@ import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
+import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -20,7 +22,9 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.spring.annotation.UIScope;
 
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
+import eu.domibus.connector.client.ui.component.LumoLabel;
 import eu.domibus.connector.client.ui.service.VaadingConnectorClientUIServiceClient;
+import eu.domibus.connector.client.ui.view.sendmessage.ReplyToMessageDialog;
 
 @HtmlImport("styles/shared-styles.html")
 //@StyleSheet("styles/grid.css")
@@ -50,7 +54,7 @@ public class MessagesList extends VerticalLayout {
 		
 		grid.setItems(fullList);
 		grid.addComponentColumn(domibusConnectorClientMessage -> getDetailsLink(domibusConnectorClientMessage.getId())).setHeader("Details").setWidth("50px");
-		grid.addComponentColumn(domibusConnectorClientMessage -> deleteMessageLink(domibusConnectorClientMessage.getId())).setHeader("Details").setWidth("50px");
+		grid.addComponentColumn(domibusConnectorClientMessage -> deleteMessageLink(domibusConnectorClientMessage.getId())).setHeader("Delete").setWidth("50px");
 		grid.addColumn(DomibusConnectorClientMessage::getEbmsMessageId).setHeader("ebmsMessageID").setWidth("150px");
 		grid.addColumn(DomibusConnectorClientMessage::getBackendMessageId).setHeader("backendMessageID").setWidth("150px");
 		grid.addColumn(DomibusConnectorClientMessage::getConversationId).setHeader("conversationID").setWidth("150px");
@@ -214,13 +218,28 @@ public class MessagesList extends VerticalLayout {
 	}
 	
 	private Button deleteMessageLink(Long l) {
-		Button deleteMessage = new Button(new Icon(VaadinIcon.DEL));
+		Button deleteMessage = new Button(new Icon(VaadinIcon.DEL_A));
 		deleteMessage.addClickListener(e -> deleteMessage(l));
 		return deleteMessage;
 	}
 	
 	private void deleteMessage(Long l) {
 		Dialog diag = new Dialog();
+		
+		Div headerContent = new Div();
+		Label header = new Label("Delete message");
+		header.getStyle().set("font-weight", "bold");
+		header.getStyle().set("font-style", "italic");
+		headerContent.getStyle().set("text-align", "center");
+		headerContent.getStyle().set("padding", "10px");
+		headerContent.add(header);
+		diag.add(headerContent);
+
+		LumoLabel label = new LumoLabel("Are you sure you want to delete that message? All database references and storage files (if available) are deleted as well!");
+		
+		diag.add(label);
+
+		diag.open();
 	}
 	
 	private void showConnectorMessage(long l) {

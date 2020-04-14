@@ -26,7 +26,7 @@ import org.springframework.util.CollectionUtils;
 
 @Configuration
 @PropertySource("classpath:connector-client-quartz.properties") //load default quartz properties
-@ComponentScan(basePackageClasses = SchedulerJobPackage.class) //load all spring beans from this package - the jobs
+//@ComponentScan(basePackageClasses = SchedulerJobPackage.class) //load all spring beans from this package - the jobs
 public class DomibusConnectorClientSchedulerAutoConfiguration {
 
 	private static final Logger LOGGER = LogManager.getLogger(DomibusConnectorClientSchedulerAutoConfiguration.class);

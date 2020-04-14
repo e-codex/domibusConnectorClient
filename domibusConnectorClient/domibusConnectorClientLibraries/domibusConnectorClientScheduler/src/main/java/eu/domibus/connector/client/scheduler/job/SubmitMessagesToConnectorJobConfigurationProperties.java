@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @ConfigurationProperties(prefix = SubmitMessagesToConnectorJobConfigurationProperties.PREFIX)
 public class SubmitMessagesToConnectorJobConfigurationProperties {
 
-    public static final String PREFIX = "connector-client.timer.check.outgoing-messages";
+    public static final String PREFIX = "connector-client.scheduler.submit-messages-to-connector-job";
 
     private DomibusConnectorDuration repeatInterval;
 

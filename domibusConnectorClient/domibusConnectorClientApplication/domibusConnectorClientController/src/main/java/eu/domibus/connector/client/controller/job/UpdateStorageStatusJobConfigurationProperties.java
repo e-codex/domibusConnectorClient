@@ -16,7 +16,7 @@ import org.springframework.validation.annotation.Validated;
 @Valid
 public class UpdateStorageStatusJobConfigurationProperties {
 
-    public static final String PREFIX = "connector-client.timer.update-storage-status";
+    public static final String PREFIX = "connector-client.controller.update-storage-status-job";
 
     @NestedConfigurationProperty
     @NotNull

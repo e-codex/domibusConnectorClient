@@ -1,8 +1,8 @@
 
 package eu.domibus.connector.client.starter.configuration;
 
-import eu.domibus.connector.client.scheduler.job.GetMessagesFromConnectorJob;
-import eu.domibus.connector.client.scheduler.job.SubmitMessagesToConnectorJob;
+import eu.domibus.connector.client.scheduler.job.GetMessagesFromConnectorJobService;
+import eu.domibus.connector.client.scheduler.job.SubmitMessagesToConnectorJobService;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ImportResource;
@@ -33,15 +33,15 @@ public class DomibusConnectorClientConfiguration {
 //    DomibusConnectorClientSubmissionController domibusConnectorClientSubmissionController() {
 //        return new DomibusConnectorClientSubmissionController();
 //    }
-
-    @Bean
-    GetMessagesFromConnectorJob transportMessagesFromConnectorToNationalService() {
-        return new GetMessagesFromConnectorJob();
-    }
-
-    @Bean
-    SubmitMessagesToConnectorJob transportMessagesFromNationalToConnectorService() {
-        return new SubmitMessagesToConnectorJob();
-    }
+//
+//    @Bean
+//    GetMessagesFromConnectorJob transportMessagesFromConnectorToNationalService() {
+//        return new GetMessagesFromConnectorJob();
+//    }
+//
+//    @Bean
+//    SubmitMessagesToConnectorJob transportMessagesFromNationalToConnectorService() {
+//        return new SubmitMessagesToConnectorJob();
+//    }
     
 }

@@ -16,7 +16,7 @@ import org.springframework.validation.annotation.Validated;
 @Valid
 public class GetMessagesFromConnectorJobConfigurationProperties {
 
-    public static final String PREFIX = "connector-client.timer.check.incoming-messages";
+    public static final String PREFIX = "connector-client.scheduler.get-messages-from-connector-job";
 
     @NestedConfigurationProperty
     @NotNull

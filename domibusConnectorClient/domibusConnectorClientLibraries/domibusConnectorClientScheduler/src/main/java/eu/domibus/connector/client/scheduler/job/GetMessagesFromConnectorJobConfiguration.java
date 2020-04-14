@@ -24,7 +24,7 @@ public class GetMessagesFromConnectorJobConfiguration implements Job {
 	private static final Logger LOGGER = LogManager.getLogger(GetMessagesFromConnectorJobConfiguration.class);
 
 	@Autowired
-	private GetMessagesFromConnectorJob transportMessagesFromConnectorToNationalService;
+	private GetMessagesFromConnectorJobService getMessagesFromConnectorJob;
 
 	@Autowired
 	GetMessagesFromConnectorJobConfigurationProperties properties;
@@ -33,7 +33,7 @@ public class GetMessagesFromConnectorJobConfiguration implements Job {
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		LOGGER.debug("Running GetMessagesFromConnectorJob");
         try {
-            transportMessagesFromConnectorToNationalService.requestNewMessagesFromConnectorAndDeliverThemToClientBackend();
+        	getMessagesFromConnectorJob.requestNewMessagesFromConnectorAndDeliverThemToClientBackend();
         } catch (DomibusConnectorClientException e) {
             throw new JobExecutionException(e);
         }
