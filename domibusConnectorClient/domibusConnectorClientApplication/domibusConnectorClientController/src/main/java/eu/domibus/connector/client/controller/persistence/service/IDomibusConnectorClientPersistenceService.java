@@ -22,7 +22,7 @@ public interface IDomibusConnectorClientPersistenceService {
 
 	PDomibusConnectorClientMessage findOriginalClientMessage(DomibusConnectorMessageType message);
 
-	List<PDomibusConnectorClientMessage> findUnconfirmedMessages();
+//	List<PDomibusConnectorClientMessage> findUnconfirmedMessages();
 	
 	PDomibusConnectorClientMessageDao getMessageDao();
 

@@ -1,9 +1,16 @@
 package eu.domibus.connector.client.ui.form;
 
+import java.time.ZoneId;
+import java.util.Date;
+
+import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
+import com.vaadin.flow.data.converter.LocalDateTimeToDateConverter;
+import com.vaadin.flow.data.converter.StringToDateConverter;
+import com.vaadin.flow.function.ValueProvider;
 
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 
@@ -27,7 +34,7 @@ public class DomibusConnectorClientMessageForm extends FormLayout {
 	private TextField storageInfo = FormsUtil.getFormattedTextFieldReadOnly();
 	private TextField lastConfirmationReceived = FormsUtil.getFormattedTextFieldReadOnly();
 	private TextField createdString = FormsUtil.getFormattedTextFieldReadOnly();
-	private TextField updatedString = FormsUtil.getFormattedTextFieldReadOnly();
+	private TextField confirmationTriggeredString = FormsUtil.getFormattedTextFieldReadOnly();
 	
 	private Binder<DomibusConnectorClientMessage> binder = new Binder<>(DomibusConnectorClientMessage.class);
 	
@@ -56,7 +63,9 @@ public class DomibusConnectorClientMessageForm extends FormLayout {
 		addFormItem(storageInfo, "Storage Info");
 		addFormItem(lastConfirmationReceived, "Last Confirmation Received");
 		addFormItem(createdString, "Message created at");
-		addFormItem(updatedString, "From Party Type");
+		addFormItem(confirmationTriggeredString, "Confirmation triggered at");
+		
+		
 	}
 
 	public void setConnectorClientMessage(DomibusConnectorClientMessage message) {

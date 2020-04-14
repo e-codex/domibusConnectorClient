@@ -1,5 +1,7 @@
 package eu.domibus.connector.client.rest.model;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -42,7 +44,7 @@ public class DomibusConnectorClientMessage {
 	
     private Date created;
 	
-    private Date updated;
+    private Date confirmationTriggered;
 	
     private Set<DomibusConnectorClientConfirmation> evidences = new HashSet<>();
     
@@ -193,21 +195,34 @@ public class DomibusConnectorClientMessage {
 		this.lastConfirmationReceived = lastConfirmationReceived;
 	}
 
+
 	public Date getCreated() {
 		return created;
+	}
+
+	public String getCreatedString() {
+		return created!=null?created.toString():null;
 	}
 
 	public void setCreated(Date created) {
 		this.created = created;
 	}
 
-	public Date getUpdated() {
-		return updated;
+
+
+	public Date getConfirmationTriggered() {
+		return confirmationTriggered;
 	}
 
-	public void setUpdated(Date updated) {
-		this.updated = updated;
+	public String getConfirmationTriggeredString() {
+		return confirmationTriggered!=null?confirmationTriggered.toString():null;
 	}
+
+	public void setConfirmationTriggered(Date confirmationTriggered) {
+		this.confirmationTriggered = confirmationTriggered;
+	}
+
+
 
 	public Set<DomibusConnectorClientConfirmation> getEvidences() {
 		return evidences;

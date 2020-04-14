@@ -10,9 +10,9 @@ public class DomibusConnectorClientConfirmation {
 	
 	private Date received;
 	
-	private String storageStatus;
-	
-	private String storageInfo;
+//	private String storageStatus;
+//	
+//	private String storageInfo;
 	
 	public DomibusConnectorClientConfirmation() {
 	}
@@ -41,21 +41,21 @@ public class DomibusConnectorClientConfirmation {
 		this.received = received;
 	}
 
-	public String getStorageStatus() {
-		return storageStatus;
-	}
-
-	public void setStorageStatus(String storageStatus) {
-		this.storageStatus = storageStatus;
-	}
-
-	public String getStorageInfo() {
-		return storageInfo;
-	}
-
-	public void setStorageInfo(String storageInfo) {
-		this.storageInfo = storageInfo;
-	}
+//	public String getStorageStatus() {
+//		return storageStatus;
+//	}
+//
+//	public void setStorageStatus(String storageStatus) {
+//		this.storageStatus = storageStatus;
+//	}
+//
+//	public String getStorageInfo() {
+//		return storageInfo;
+//	}
+//
+//	public void setStorageInfo(String storageInfo) {
+//		this.storageInfo = storageInfo;
+//	}
 	
 	
 

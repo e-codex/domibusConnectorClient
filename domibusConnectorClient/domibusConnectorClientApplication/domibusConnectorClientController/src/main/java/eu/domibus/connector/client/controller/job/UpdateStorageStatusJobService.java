@@ -48,22 +48,22 @@ public class UpdateStorageStatusJobService {
 			
 			if(message.getStorageStatus()==null || !message.getStorageStatus().equals(status)) {
 				message.setStorageStatus(status);
-				message.setUpdated(new Date());
+//				message.setUpdated(new Date());
 				persistenceService.mergeClientMessage(message);
 				LOGGER.info("StorageStatus for clientMessage with database id {} updated to {}!", message.getId(), status);
 			}
 			
-			if(!message.getConfirmations().isEmpty()) {
-				message.getConfirmations().forEach(confirmation -> {
-					DomibusConnectorClientStorageStatus confStatus = checkStorageStatus(confirmation.getStorageInfo());
-					if(confirmation.getStorageStatus()==null || !confirmation.getStorageStatus().equals(confStatus)) {
-						confirmation.setStorageStatus(confStatus);
-						message.setUpdated(new Date());
-						persistenceService.mergeClientMessage(message);
-						LOGGER.info("StorageStatus for confirmation with database id {} updated to {}!", confirmation.getId(), status);
-					}
-				});
-			}
+//			if(!message.getConfirmations().isEmpty()) {
+//				message.getConfirmations().forEach(confirmation -> {
+//					DomibusConnectorClientStorageStatus confStatus = checkStorageStatus(confirmation.getStorageInfo());
+//					if(confirmation.getStorageStatus()==null || !confirmation.getStorageStatus().equals(confStatus)) {
+//						confirmation.setStorageStatus(confStatus);
+//						message.setUpdated(new Date());
+//						persistenceService.mergeClientMessage(message);
+//						LOGGER.info("StorageStatus for confirmation with database id {} updated to {}!", confirmation.getId(), status);
+//					}
+//				});
+//			}
 		});
 
 		LOGGER.debug("UpdateStorageStatusJobService finished after [{}]", Duration.between(startTime, LocalDateTime.now()));

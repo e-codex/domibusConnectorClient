@@ -20,8 +20,11 @@ public interface PDomibusConnectorClientMessageDao extends CrudRepository<PDomib
 	public List<PDomibusConnectorClientMessage> findByConversationId(String conversationId);
 	
 	@Query("SELECT m FROM PDomibusConnectorClientMessage m WHERE "
-			+ "(m.updated is not null AND m.updated between ?1 and ?2) "
-    		+ "OR (m.created is not null AND m.created between ?1 and ?2)")
+			+ "(m.created is not null AND m.created between ?1 and ?2)")
     public List<PDomibusConnectorClientMessage> findByPeriod(Date from, Date to);
+	
+	@Query("SELECT m FROM PDomibusConnectorClientMessage m WHERE "
+			+ "m.confirmationTriggered is null")
+    public List<PDomibusConnectorClientMessage> findUnconfirmed();
 	
 }

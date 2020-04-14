@@ -46,7 +46,7 @@ public class AutoConfirmMessagesJobService {
 		LocalDateTime startTime = LocalDateTime.now();
 		LOGGER.debug("AutoConfirmMessagesJobService started");
 		
-		List<PDomibusConnectorClientMessage> unconfirmedMessages = persistenceService.findUnconfirmedMessages();
+		List<PDomibusConnectorClientMessage> unconfirmedMessages = persistenceService.getMessageDao().findUnconfirmed();
 
 		unconfirmedMessages.forEach(message -> {
 			DomibusConnectorConfirmationType type = null;
@@ -72,14 +72,16 @@ public class AutoConfirmMessagesJobService {
 					message.getOriginalSender());
 		      try {
 		    	clientBackend.triggerConfirmationForMessage(originalMessage, type, null);
-		    	DomibusConnectorMessageConfirmationType confirmationType = new DomibusConnectorMessageConfirmationType();
-		    	confirmationType.setConfirmationType(type);
-				PDomibusConnectorClientConfirmation clientConfirmation = persistenceService.persistNewConfirmation(confirmationType , message);
-		    	message.getConfirmations().add(clientConfirmation);
-		    	persistenceService.mergeClientMessage(message);
+//		    	DomibusConnectorMessageConfirmationType confirmationType = new DomibusConnectorMessageConfirmationType();
+//		    	confirmationType.setConfirmationType(type);
+//				PDomibusConnectorClientConfirmation clientConfirmation = persistenceService.persistNewConfirmation(confirmationType , message);
+//		    	message.getConfirmations().add(clientConfirmation);
+//		    	persistenceService.mergeClientMessage(message);
 			} catch (DomibusConnectorClientBackendException e) {
 				LOGGER.error("Exception occured triggering the confirmation for message at the client backend", e);
 			}
+		      message.setConfirmationTriggered(new Date());
+		      persistenceService.mergeClientMessage(message);
 		});
 		
 		LOGGER.debug("AutoConfirmMessagesJobService finished after [{}]", Duration.between(startTime, LocalDateTime.now()));

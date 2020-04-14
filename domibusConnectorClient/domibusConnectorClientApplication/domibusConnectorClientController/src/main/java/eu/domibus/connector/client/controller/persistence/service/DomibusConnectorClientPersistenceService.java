@@ -64,7 +64,7 @@ public class DomibusConnectorClientPersistenceService implements IDomibusConnect
 					newMessage.setToPartyType(toParty.getPartyIdType());
 				}
 			}
-			newMessage.setUpdated(new Date());
+//			newMessage.setUpdated(new Date());
 			newMessage.setCreated(new Date());
 			
 			newMessage = messageDao.save(newMessage);
@@ -111,7 +111,7 @@ public class DomibusConnectorClientPersistenceService implements IDomibusConnect
 	 */
 	@Override
 	public PDomibusConnectorClientMessage mergeClientMessage(PDomibusConnectorClientMessage clientMessage) {
-		clientMessage.setUpdated(new Date());
+//		clientMessage.setUpdated(new Date());
 		
 		clientMessage.getConfirmations().forEach(confirmation -> {
 			confirmationDao.save(confirmation);
@@ -144,23 +144,23 @@ public class DomibusConnectorClientPersistenceService implements IDomibusConnect
 	/* (non-Javadoc)
 	 * @see eu.domibus.connector.client.controller.persistence.service.IPDomibusConnectorClientPersistenceService#findUnconfirmedMessages()
 	 */
-	@Override
-	public List<PDomibusConnectorClientMessage> findUnconfirmedMessages(){
-		List<PDomibusConnectorClientMessage> unconfirmedMessages = new ArrayList<PDomibusConnectorClientMessage>();
-		messageDao.findAll().forEach(message -> {
-			unconfirmedMessages.add(message);
-			if(message.getConfirmations()!= null && !message.getConfirmations().isEmpty()) {
-				message.getConfirmations().forEach(confirmation -> {
-					if(confirmation.getConfirmationType().equals(DomibusConnectorConfirmationType.DELIVERY.name()) ||
-							confirmation.getConfirmationType().equals(DomibusConnectorConfirmationType.NON_DELIVERY.name())) {
-						unconfirmedMessages.remove(message);
-					}
-				});
-			}	
-		});
-		
-		return unconfirmedMessages;
-	}
+//	@Override
+//	public List<PDomibusConnectorClientMessage> findUnconfirmedMessages(){
+//		List<PDomibusConnectorClientMessage> unconfirmedMessages = new ArrayList<PDomibusConnectorClientMessage>();
+//		messageDao.findUnconfirmed().forEach(message -> {
+//			unconfirmedMessages.add(message);
+//			if(message.getConfirmations()!= null && !message.getConfirmations().isEmpty()) {
+//				message.getConfirmations().forEach(confirmation -> {
+//					if(confirmation.getConfirmationType().equals(DomibusConnectorConfirmationType.DELIVERY.name()) ||
+//							confirmation.getConfirmationType().equals(DomibusConnectorConfirmationType.NON_DELIVERY.name())) {
+//						unconfirmedMessages.remove(message);
+//					}
+//				});
+//			}	
+//		});
+//		
+//		return unconfirmedMessages;
+//	}
 
 	@Override
 	public PDomibusConnectorClientMessageDao getMessageDao() {

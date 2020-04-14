@@ -161,7 +161,7 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 		confirmations.forEach(confirmation -> {
 			DomibusConnectorClientConfirmation evidence = new DomibusConnectorClientConfirmation();
 			BeanUtils.copyProperties(confirmation, evidence);
-			evidence.setStorageStatus(confirmation.getStorageStatus().name());
+//			evidence.setStorageStatus(confirmation.getStorageStatus().name());
 			msg.getEvidences().add(evidence);
 		});
 		BeanUtils.copyProperties(message, msg);

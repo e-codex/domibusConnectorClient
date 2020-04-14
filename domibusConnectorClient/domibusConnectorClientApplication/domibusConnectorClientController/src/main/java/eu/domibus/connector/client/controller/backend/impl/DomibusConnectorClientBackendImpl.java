@@ -130,7 +130,7 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 			PDomibusConnectorClientConfirmation newConfirmation = persistenceService.persistNewConfirmation(confirmation, originalClientMessage);
 			originalClientMessage.getConfirmations().add(newConfirmation);
 			originalClientMessage.setLastConfirmationReceived(newConfirmation.getConfirmationType());
-			originalClientMessage.setUpdated(new Date());
+//			originalClientMessage.setUpdated(new Date());
 			persistenceService.mergeClientMessage(originalClientMessage);
 			LOGGER.debug("#deliverNewConfirmationToClientBackend: confirmation persisted into database and merged with original message.");
 		}

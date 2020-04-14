@@ -83,9 +83,9 @@ public class PDomibusConnectorClientMessage {
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
 	
-	@Column(name = "UPDATED", nullable = false)
+	@Column(name = "CONFIRMATION_TRIGGERED", nullable = true)
     @Temporal(TemporalType.TIMESTAMP)
-    private Date updated;
+    private Date confirmationTriggered;
 	
 	@OneToMany(mappedBy = "message", fetch = FetchType.EAGER)
     private Set<PDomibusConnectorClientConfirmation> confirmations = new HashSet<>();
@@ -243,13 +243,18 @@ public class PDomibusConnectorClientMessage {
 		this.created = created;
 	}
 
-	public Date getUpdated() {
-		return updated;
+	
+	public Date getConfirmationTriggered() {
+		return confirmationTriggered;
 	}
 
-	public void setUpdated(Date updated) {
-		this.updated = updated;
+
+
+	public void setConfirmationTriggered(Date confirmationTriggered) {
+		this.confirmationTriggered = confirmationTriggered;
 	}
+
+
 
 	public Set<PDomibusConnectorClientConfirmation> getConfirmations() {
 		return confirmations;

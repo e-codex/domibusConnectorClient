@@ -39,12 +39,12 @@ public class PDomibusConnectorClientConfirmation {
     @Temporal(TemporalType.TIMESTAMP)
     private Date received;
 	
-	@Column(name = "STORAGE_STATUS", length = 255)
-	@Enumerated(EnumType.STRING)
-    private DomibusConnectorClientStorageStatus storageStatus;
-	
-	@Column(name = "STORAGE_INFO", length = 255)
-    private String storageInfo;
+//	@Column(name = "STORAGE_STATUS", length = 255)
+//	@Enumerated(EnumType.STRING)
+//    private DomibusConnectorClientStorageStatus storageStatus;
+//	
+//	@Column(name = "STORAGE_INFO", length = 255)
+//    private String storageInfo;
 	
 	public PDomibusConnectorClientConfirmation() {
 	}
@@ -84,22 +84,22 @@ public class PDomibusConnectorClientConfirmation {
 		this.received = received;
 	}
 
-	public DomibusConnectorClientStorageStatus getStorageStatus() {
-		return storageStatus;
-	}
-
-	public void setStorageStatus(DomibusConnectorClientStorageStatus storageStatus) {
-		this.storageStatus = storageStatus;
-	}
-
-	public String getStorageInfo() {
-		return storageInfo;
-	}
-
-	public void setStorageInfo(String storageInfo) {
-		this.storageInfo = storageInfo;
-	}
-	
+//	public DomibusConnectorClientStorageStatus getStorageStatus() {
+//		return storageStatus;
+//	}
+//
+//	public void setStorageStatus(DomibusConnectorClientStorageStatus storageStatus) {
+//		this.storageStatus = storageStatus;
+//	}
+//
+//	public String getStorageInfo() {
+//		return storageInfo;
+//	}
+//
+//	public void setStorageInfo(String storageInfo) {
+//		this.storageInfo = storageInfo;
+//	}
+//	
 	
 
 }
