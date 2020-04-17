@@ -123,13 +123,22 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 		DomibusConnectorMessageConfirmationType confirmation = message.getMessageConfirmations().get(0);
 		
 		PDomibusConnectorClientMessage originalClientMessage = persistenceService.findOriginalClientMessage(message);
-		String storageLocation = null;
-		if(originalClientMessage!=null)
-			storageLocation = originalClientMessage.getStorageInfo() + File.separator + confirmation.getConfirmationType().name();
+		if(originalClientMessage == null) {
+			throw new DomibusConnectorClientBackendException("Original client message with ebmsId "+message.getMessageDetails().getRefToMessageId()+" not found! Confirmation of type "+confirmation.getConfirmationType().name()+" cannot be stored!") ;
+		}
+		
+		String storageLocation = originalClientMessage.getStorageInfo();
+		if(storageLocation == null && !originalClientMessage.getStorageStatus().equals(DomibusConnectorClientStorageStatus.STORED)) {
+			originalClientMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.CONFIRMATION_RECEPTION_FAILED);
+			persistenceService.mergeClientMessage(originalClientMessage);
+			throw new DomibusConnectorClientBackendException("Storage location or status of originalMessage with ebmsId "+message.getMessageDetails().getRefToMessageId()+" not valid! Confirmation of type "+confirmation.getConfirmationType().name()+" cannot be stored!") ;
+		}
 		
 		try {
 			storage.storeConfirmationToMessage(message, storageLocation);
 		} catch (DomibusConnectorClientStorageException e) {
+			originalClientMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.CONFIRMATION_RECEPTION_FAILED);
+			persistenceService.mergeClientMessage(originalClientMessage);
 			throw new DomibusConnectorClientBackendException(e);
 		}
 		LOGGER.debug("#deliverNewConfirmationToClientBackend: confirmation stored.");

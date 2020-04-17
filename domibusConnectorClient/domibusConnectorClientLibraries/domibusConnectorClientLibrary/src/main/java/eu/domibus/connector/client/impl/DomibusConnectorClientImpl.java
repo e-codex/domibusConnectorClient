@@ -86,13 +86,14 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 		if (messages!=null && !CollectionUtils.isEmpty(messages.getMessages())) {
             LOGGER.debug("{} new messages from connector to transport to client...", messages.getMessages().size());
             messages.getMessages().stream().forEach( message -> {
-
+            	if(message.getMessageContent()!=null) {
                 try {
                 	contentMapper.mapInboundBusinessContent(message);
                 } catch (DomibusConnectorClientContentMapperException e) {
 					LOGGER.error("Exception while mapping inbound message with ebmsId {}: ", message.getMessageDetails().getEbmsMessageId(), e);
 					e.printStackTrace();
 				}
+            	}
             });
 //        }else {
 //        	throw new DomibusConnectorClientException("The received DomibusConnectorMessagesType from the connector is either null, or its containing collection is null or empty!");

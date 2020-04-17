@@ -50,16 +50,16 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 		DomibusConnectorMessageConfirmationType confirmation = message.getMessageConfirmations().get(0);
 		String type = confirmation.getConfirmationType().name();
 		
-		LOGGER.debug("#storeMessage: storing confirmation of type [{}] to message [{}]...", type, message.getMessageDetails().getBackendMessageId());
+		LOGGER.debug("#storeMessage: storing confirmation of type [{}] to message [{}]...", type, message.getMessageDetails().getRefToMessageId());
 		
 		try {
-			fileSystemWriter.writeConfirmationToFileSystem(message, messagesDir, storageLocation);
+			fileSystemWriter.writeConfirmationToFileSystem(message, storageLocation);
 		} catch (DomibusConnectorClientFileSystemException e) {
 			LOGGER.error("Exception storing confirmation [{}] to message from connector... ",type, e);
 			throw new DomibusConnectorClientStorageException(e);
 		}
 		
-		LOGGER.debug("#storeMessage: confirmation [{}] to message [{}] successfully stored.", type, message.getMessageDetails().getBackendMessageId());
+		LOGGER.debug("#storeMessage: confirmation [{}] to message [{}] successfully stored.", type, message.getMessageDetails().getRefToMessageId());
 	}
 
 

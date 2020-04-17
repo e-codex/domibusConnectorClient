@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import javax.validation.Valid;
 
+import org.apache.cxf.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,44 +26,52 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 @Valid
 public class GetMessagesFromConnectorJobService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(GetMessagesFromConnectorJobService.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(GetMessagesFromConnectorJobService.class);
 
-    @Autowired
-    private DomibusConnectorClientBackend clientBackend;
-    
-    @Autowired
-    private DomibusConnectorClient connectorClient;
-    
-    
-    public void requestNewMessagesFromConnectorAndDeliverThemToClientBackend() throws DomibusConnectorClientException {
-        DomibusConnectorMessagesType messages = null;
-        LocalDateTime startTime = LocalDateTime.now();
-        LOGGER.debug("GetMessagesFromConnectorJob started");
+	@Autowired
+	private DomibusConnectorClientBackend clientBackend;
 
-        messages = connectorClient.requestNewMessagesFromConnector();
+	@Autowired
+	private DomibusConnectorClient connectorClient;
 
-        if (messages!=null && !CollectionUtils.isEmpty(messages.getMessages())) {
-            LOGGER.info("{} new messages from connector to store...", messages.getMessages().size());
-            messages.getMessages().stream().forEach( message -> {
 
-                try {
-					clientBackend.deliverNewMessageToClientBackend(message);
-				} catch (DomibusConnectorClientBackendException e1) {
-					LOGGER.error("Exception occured delivering new message to the client backend", e1);
-					
+	public void requestNewMessagesFromConnectorAndDeliverThemToClientBackend() throws DomibusConnectorClientException {
+		DomibusConnectorMessagesType messages = null;
+		LocalDateTime startTime = LocalDateTime.now();
+		LOGGER.debug("GetMessagesFromConnectorJob started");
+
+		messages = connectorClient.requestNewMessagesFromConnector();
+
+		if (messages!=null && !CollectionUtils.isEmpty(messages.getMessages())) {
+			LOGGER.info("{} new messages from connector to store...", messages.getMessages().size());
+			messages.getMessages().stream().forEach( message -> {
+				if(message.getMessageContent()!=null) {
+					try {
+						clientBackend.deliverNewMessageToClientBackend(message);
+					} catch (DomibusConnectorClientBackendException e1) {
+						LOGGER.error("Exception occured delivering new message to the client backend", e1);
+
+					}
+				}else if (message.getMessageConfirmations()!=null && !message.getMessageConfirmations().isEmpty()) {
+					try {
+						clientBackend.deliverNewConfirmationToClientBackend(message);
+					} catch (DomibusConnectorClientBackendException e1) {
+						LOGGER.error("Exception occured delivering new confirmation to the client backend", e1);
+
+					}
 				}
-                
-//                try {
-//                	clientBackend.triggerConfirmationForMessage(message, DomibusConnectorConfirmationType.DELIVERY, null);
-//				} catch (DomibusConnectorClientBackendException e) {
-//					LOGGER.error("Exception occured triggering the confirmation for message at the client backend", e);
-//				}
-                
-            });
-        }else {
-        	LOGGER.debug("No new messages from connector to store received.");
-        }
-        LOGGER.debug("GetMessagesFromConnectorJob finished after [{}]", Duration.between(startTime, LocalDateTime.now()));
-    }
+
+				//                try {
+				//                	clientBackend.triggerConfirmationForMessage(message, DomibusConnectorConfirmationType.DELIVERY, null);
+				//				} catch (DomibusConnectorClientBackendException e) {
+				//					LOGGER.error("Exception occured triggering the confirmation for message at the client backend", e);
+				//				}
+
+			});
+		}else {
+			LOGGER.debug("No new messages from connector to store received.");
+		}
+		LOGGER.debug("GetMessagesFromConnectorJob finished after [{}]", Duration.between(startTime, LocalDateTime.now()));
+	}
 
 }

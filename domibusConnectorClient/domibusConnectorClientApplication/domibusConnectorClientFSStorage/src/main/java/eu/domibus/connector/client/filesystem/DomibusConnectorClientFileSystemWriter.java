@@ -68,38 +68,22 @@ public class DomibusConnectorClientFileSystemWriter {
 	@NotNull
 	private String messageSentPostfix;
 
-	public void writeConfirmationToFileSystem(DomibusConnectorMessageType confirmationMessage, File messagesDir, String storageLocation ) throws DomibusConnectorClientFileSystemException {
+	public void writeConfirmationToFileSystem(DomibusConnectorMessageType confirmationMessage, String storageLocation ) throws DomibusConnectorClientFileSystemException {
 		DomibusConnectorMessageConfirmationType confirmation = confirmationMessage.getMessageConfirmations().get(0);
 		String type = confirmation.getConfirmationType().name();
 
-//		String backendMessageId = confirmationMessage.getMessageDetails().getBackendMessageId();
-		File messageFolder = null;
-		String path = null;
-
-		if(storageLocation!=null) {
-			messageFolder = new File(storageLocation);
-			path = storageLocation + xmlFileExtension;
-//		} else if(!StringUtils.isEmpty(backendMessageId)) {
-//			messageFolder = new File(messagesDir + File.separator
-//					+ backendMessageId
-//					+ messageSentPostfix);
-		} else {
-
-			messageFolder = createMessageFolder(confirmationMessage, messagesDir);
-
+		if(storageLocation == null || storageLocation.isEmpty()) {
+			throw new DomibusConnectorClientFileSystemException("Storage location to store confirmation of type "+type+" for message "+confirmationMessage.getMessageDetails().getRefToMessageId()+" is null or empty! ");
 		}
-
-		if (!messageFolder.exists() || !messageFolder.isDirectory()) {
-			LOGGER.info("Message folder {} of original message does not exist anymore. Create folder!",
-					messageFolder.getAbsolutePath());
-			messageFolder = createMessageFolder(confirmationMessage, messagesDir);
+		
+		File messageFolder = new File(storageLocation);
+		if(!messageFolder.exists() || !messageFolder.isDirectory()) {
+			throw new DomibusConnectorClientFileSystemException("Storage location to store confirmation of type "+type+" for message "+confirmationMessage.getMessageDetails().getRefToMessageId()+" is not valid! "+storageLocation);
 		}
+		
+		String path = messageFolder.getAbsolutePath() + File.separator + type + xmlFileExtension;;
 
-		if(path == null)
-			path = messageFolder.getAbsolutePath() + File.separator + type
-			+ xmlFileExtension;
-
-		LOGGER.debug("Create evidence xml file {}", path);
+		LOGGER.debug("Create confirmation file {}", path);
 		File evidenceXml = new File(path);
 		try {
 			byte[] xmlBytes = sourceToByteArray(confirmation.getConfirmation());
