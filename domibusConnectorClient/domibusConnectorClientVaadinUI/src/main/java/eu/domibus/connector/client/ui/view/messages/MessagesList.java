@@ -63,10 +63,11 @@ public class MessagesList extends VerticalLayout {
 		grid.addColumn(DomibusConnectorClientMessage::getService).setHeader("Service").setWidth("100px");
 		grid.addColumn(DomibusConnectorClientMessage::getAction).setHeader("Action").setWidth("100px");
 		grid.addColumn(DomibusConnectorClientMessage::getCreated).setHeader("Created").setWidth("150px");
+		grid.addColumn(DomibusConnectorClientMessage::getMessageStatus).setHeader("Message status").setWidth("100px");
 		grid.addColumn(DomibusConnectorClientMessage::getLastConfirmationReceived).setHeader("last confirmation received").setWidth("150px");
 		grid.addColumn(DomibusConnectorClientMessage::getStorageInfo).setHeader("Storage info").setWidth("150px");
 		grid.addColumn(DomibusConnectorClientMessage::getStorageStatus).setHeader("Storage status").setWidth("100px");
-		grid.setWidth("2380px");
+		grid.setWidth("2480px");
 		grid.setHeight("700px");
 		grid.setMultiSort(true);
 		

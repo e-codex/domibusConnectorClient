@@ -8,6 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
+import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessageStatus;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 
 @Repository
@@ -24,7 +25,7 @@ public interface PDomibusConnectorClientMessageDao extends CrudRepository<PDomib
     public List<PDomibusConnectorClientMessage> findByPeriod(Date from, Date to);
 	
 	@Query("SELECT m FROM PDomibusConnectorClientMessage m WHERE "
-			+ "m.confirmationTriggered is null")
+			+ "m.messageStatus='RECEIVED'")
     public List<PDomibusConnectorClientMessage> findUnconfirmed();
 	
 }

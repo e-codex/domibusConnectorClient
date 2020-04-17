@@ -11,6 +11,7 @@ import eu.domibus.connector.client.controller.persistence.dao.PDomibusConnectorC
 import eu.domibus.connector.client.controller.persistence.dao.PDomibusConnectorClientMessageDao;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
+import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessageStatus;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType;
@@ -34,7 +35,7 @@ public class DomibusConnectorClientPersistenceService implements IDomibusConnect
 	 * @see eu.domibus.connector.client.controller.persistence.service.IPDomibusConnectorClientPersistenceService#persistNewMessage(eu.domibus.connector.domain.transition.DomibusConnectorMessageType)
 	 */
 	@Override
-	public PDomibusConnectorClientMessage persistNewMessage(DomibusConnectorMessageType message) {
+	public PDomibusConnectorClientMessage persistNewMessage(DomibusConnectorMessageType message, PDomibusConnectorClientMessageStatus status) {
 		if(message!=null) {
 			PDomibusConnectorClientMessage newMessage = new PDomibusConnectorClientMessage();
 
@@ -66,6 +67,7 @@ public class DomibusConnectorClientPersistenceService implements IDomibusConnect
 			}
 //			newMessage.setUpdated(new Date());
 			newMessage.setCreated(new Date());
+			newMessage.setMessageStatus(status);
 			
 			newMessage = messageDao.save(newMessage);
 

@@ -2,6 +2,7 @@ package eu.domibus.connector.client.ui.service;
 
 import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
@@ -9,13 +10,18 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
+import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
+import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFileList;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
 import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 
@@ -78,6 +84,22 @@ public class VaadingConnectorClientUIServiceClient {
 	}
 	
 	public DomibusConnectorClientMessage createNewMessage(DomibusConnectorClientMessage newMessage) {
+//		// create headers
+//		HttpHeaders headers = new HttpHeaders();
+//		// set `content-type` header
+//		headers.setContentType(MediaType.APPLICATION_JSON);
+//		// set `accept` header
+//		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
+//		
+//		// request body parameters
+//		Map<String, Object> map = new HashMap<>();
+//		map.put("newMessage", newMessage);
+//		map.put("files", files);
+//		
+//		// build the request
+//		HttpEntity<Map<String, Object>> entity = new HttpEntity<>(map, headers);
+
+		
 		newMessage = restTemplate.postForObject(url + "/createNewMessage", newMessage, DomibusConnectorClientMessage.class);
 		return newMessage;
 	}

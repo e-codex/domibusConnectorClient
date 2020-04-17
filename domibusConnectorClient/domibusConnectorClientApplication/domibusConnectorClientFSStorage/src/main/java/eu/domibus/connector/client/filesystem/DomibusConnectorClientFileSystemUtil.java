@@ -59,6 +59,12 @@ public class DomibusConnectorClientFileSystemUtil {
 //				throw new DomibusConnectorClientFileSystemException("No backendMessageId set in message!");
 //			}
 //			
+		 
+		 	if(messageId==null || messageId.isEmpty()) {
+		 		messageId = generateBackendMessageId();
+		 		message.getMessageDetails().setBackendMessageId(messageId);
+		 	}
+		 	
 			String fromPartyId = message.getMessageDetails().getFromParty().getPartyId();
 			if(StringUtils.isEmpty(fromPartyId)) {
 				throw new DomibusConnectorClientFileSystemException("No fromPartyId set in message!");

@@ -16,6 +16,7 @@ import eu.domibus.connector.client.DomibusConnectorClientBackend;
 import eu.domibus.connector.client.DomibusConnectorClientMessageBuilder;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
+import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessageStatus;
 import eu.domibus.connector.client.controller.persistence.service.IDomibusConnectorClientPersistenceService;
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
@@ -80,7 +81,7 @@ public class AutoConfirmMessagesJobService {
 			} catch (DomibusConnectorClientBackendException e) {
 				LOGGER.error("Exception occured triggering the confirmation for message at the client backend", e);
 			}
-		      message.setConfirmationTriggered(new Date());
+		      message.setMessageStatus(PDomibusConnectorClientMessageStatus.CONFIRMATION_TRIGGERED);
 		      persistenceService.mergeClientMessage(message);
 		});
 		

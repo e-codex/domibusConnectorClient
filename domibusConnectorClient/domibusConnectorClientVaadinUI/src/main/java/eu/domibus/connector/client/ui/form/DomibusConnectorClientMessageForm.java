@@ -34,7 +34,7 @@ public class DomibusConnectorClientMessageForm extends FormLayout {
 	private TextField storageInfo = FormsUtil.getFormattedTextFieldReadOnly();
 	private TextField lastConfirmationReceived = FormsUtil.getFormattedTextFieldReadOnly();
 	private TextField createdString = FormsUtil.getFormattedTextFieldReadOnly();
-	private TextField confirmationTriggeredString = FormsUtil.getFormattedTextFieldReadOnly();
+	private TextField messageStatus = FormsUtil.getFormattedTextFieldReadOnly();
 	
 	private Binder<DomibusConnectorClientMessage> binder = new Binder<>(DomibusConnectorClientMessage.class);
 	
@@ -63,7 +63,7 @@ public class DomibusConnectorClientMessageForm extends FormLayout {
 		addFormItem(storageInfo, "Storage Info");
 		addFormItem(lastConfirmationReceived, "Last Confirmation Received");
 		addFormItem(createdString, "Message created at");
-		addFormItem(confirmationTriggeredString, "Confirmation triggered at");
+		addFormItem(messageStatus, "Message status");
 		
 		
 	}

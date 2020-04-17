@@ -68,31 +68,31 @@ public class DomibusConnectorClientFileSystemWriter {
 	@NotNull
 	private String messageSentPostfix;
 
-	public void writeConfirmationToFileSystem(DomibusConnectorMessageType confirmationMessage, File incomingMessagesDir, File outgoingMessagesDir, String storageLocation ) throws DomibusConnectorClientFileSystemException {
+	public void writeConfirmationToFileSystem(DomibusConnectorMessageType confirmationMessage, File messagesDir, String storageLocation ) throws DomibusConnectorClientFileSystemException {
 		DomibusConnectorMessageConfirmationType confirmation = confirmationMessage.getMessageConfirmations().get(0);
 		String type = confirmation.getConfirmationType().name();
 
-		String backendMessageId = confirmationMessage.getMessageDetails().getBackendMessageId();
+//		String backendMessageId = confirmationMessage.getMessageDetails().getBackendMessageId();
 		File messageFolder = null;
 		String path = null;
 
 		if(storageLocation!=null) {
-			//			messageFolder = new File(storageLocation);
+			messageFolder = new File(storageLocation);
 			path = storageLocation + xmlFileExtension;
-		} else if(!StringUtils.isEmpty(backendMessageId)) {
-			messageFolder = new File(outgoingMessagesDir + File.separator
-					+ backendMessageId
-					+ messageSentPostfix);
+//		} else if(!StringUtils.isEmpty(backendMessageId)) {
+//			messageFolder = new File(messagesDir + File.separator
+//					+ backendMessageId
+//					+ messageSentPostfix);
 		} else {
 
-			messageFolder = createIncomingMessageFolder(confirmationMessage, incomingMessagesDir);
+			messageFolder = createMessageFolder(confirmationMessage, messagesDir);
 
 		}
 
 		if (!messageFolder.exists() || !messageFolder.isDirectory()) {
-			LOGGER.info("Message folder {} for outgoing message does not exist anymore. Create incoming!",
+			LOGGER.info("Message folder {} of original message does not exist anymore. Create folder!",
 					messageFolder.getAbsolutePath());
-			messageFolder = createIncomingMessageFolder(confirmationMessage, incomingMessagesDir);
+			messageFolder = createMessageFolder(confirmationMessage, messagesDir);
 		}
 
 		if(path == null)
@@ -110,8 +110,8 @@ public class DomibusConnectorClientFileSystemWriter {
 		}
 	}
 
-	public String writeMessageToFileSystem(DomibusConnectorMessageType message, File incomingMessagesDir) throws DomibusConnectorClientFileSystemException {
-		File messageFolder = createIncomingMessageFolder(message, incomingMessagesDir);
+	public String writeMessageToFileSystem(DomibusConnectorMessageType message, File messagesDir) throws DomibusConnectorClientFileSystemException {
+		File messageFolder = createMessageFolder(message, messagesDir);
 
 		LOGGER.debug("Write new message into folder {}", messageFolder.getAbsolutePath());
 
@@ -230,14 +230,20 @@ public class DomibusConnectorClientFileSystemWriter {
 		if (StringUtils.hasText(messageDetails.getConversationId())) {
 			msgDetails.getMessageDetails().put(messageProperties.getConversationId(), messageDetails.getConversationId());
 		}
-		msgDetails.getMessageDetails().put(messageProperties.getToPartyId(), messageDetails.getToParty().getPartyId());
-		msgDetails.getMessageDetails().put(messageProperties.getToPartyRole(), messageDetails.getToParty().getRole());
-		msgDetails.getMessageDetails().put(messageProperties.getFromPartyId(), messageDetails.getFromParty().getPartyId());
-		msgDetails.getMessageDetails().put(messageProperties.getFromPartyRole(), messageDetails.getFromParty().getRole());
+		if(messageDetails.getToParty()!=null) {
+			msgDetails.getMessageDetails().put(messageProperties.getToPartyId(), messageDetails.getToParty().getPartyId());
+			msgDetails.getMessageDetails().put(messageProperties.getToPartyRole(), messageDetails.getToParty().getRole());
+		}
+		if(messageDetails.getFromParty()!=null) {
+			msgDetails.getMessageDetails().put(messageProperties.getFromPartyId(), messageDetails.getFromParty().getPartyId());
+			msgDetails.getMessageDetails().put(messageProperties.getFromPartyRole(), messageDetails.getFromParty().getRole());
+		}
 		msgDetails.getMessageDetails().put(messageProperties.getFinalRecipient(), messageDetails.getFinalRecipient());
 		msgDetails.getMessageDetails().put(messageProperties.getOriginalSender(), messageDetails.getOriginalSender());
-		msgDetails.getMessageDetails().put(messageProperties.getAction(), messageDetails.getAction().getAction());
-		msgDetails.getMessageDetails().put(messageProperties.getService(), messageDetails.getService().getService());
+		if(messageDetails.getAction()!=null)
+			msgDetails.getMessageDetails().put(messageProperties.getAction(), messageDetails.getAction().getAction());
+		if(messageDetails.getService()!=null)
+			msgDetails.getMessageDetails().put(messageProperties.getService(), messageDetails.getService().getService());
 		if(messageReceived!=null)
 			msgDetails.getMessageDetails().put(messageProperties.getMessageReceivedDatetime(), DomibusConnectorClientFileSystemUtil.convertDateToProperty(messageReceived));
 
@@ -284,20 +290,20 @@ public class DomibusConnectorClientFileSystemWriter {
 		}
 	}
 
-	private File createIncomingMessageFolder(DomibusConnectorMessageType message, File incomingMessagesDir) throws DomibusConnectorClientFileSystemException {
+	private File createMessageFolder(DomibusConnectorMessageType message, File messagesDir) throws DomibusConnectorClientFileSystemException {
 
 		String pathname = new StringBuilder()
-				.append(incomingMessagesDir.getAbsolutePath())
+				.append(messagesDir.getAbsolutePath())
 				.append(File.separator)
 				.append(DomibusConnectorClientFileSystemUtil.getMessageFolderName(message, message.getMessageDetails().getEbmsMessageId()))
 				.toString();
 		File messageFolder = new File(pathname);
 		if (!messageFolder.exists() || !messageFolder.isDirectory()) {
-			LOGGER.debug("Message folder {} for incoming message does not exist. Create folder!",
+			LOGGER.debug("Message folder {} does not exist. Create folder!",
 					messageFolder.getAbsolutePath());
 			if (!messageFolder.mkdir()) {
 				throw new DomibusConnectorClientFileSystemException(
-						"Incoming message folder cannot be created!");
+						"Message folder cannot be created!");
 			}
 		}
 

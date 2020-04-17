@@ -10,6 +10,7 @@ import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import eu.domibus.connector.client.DomibusConnectorClientMessageBuilder;
 import eu.domibus.connector.domain.transition.DomibusConnectorActionType;
@@ -44,14 +45,18 @@ public class DomibusConnectorClientMessageBuilderImpl implements DomibusConnecto
 		msgDetails.setEbmsMessageId(ebmsMessageId);
 		msgDetails.setConversationId(conversationId);
 		
+		if (StringUtils.hasText(businessService)) {
 		DomibusConnectorServiceType service = new DomibusConnectorServiceType();
 		service.setService(businessService);
 		service.setServiceType(businessServiceType);
 		msgDetails.setService(service);
+		}
 		
+		if (StringUtils.hasText(businessAction)) {
 		DomibusConnectorActionType action = new DomibusConnectorActionType();
 		action.setAction(businessAction);
 		msgDetails.setAction(action);
+		}
 		
 		DomibusConnectorPartyType fromParty = new DomibusConnectorPartyType();
 		fromParty.setPartyId(fromPartyId);

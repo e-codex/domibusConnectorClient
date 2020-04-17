@@ -26,9 +26,7 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 	@Autowired
 	DomibusConnectorClientFileSystemWriter fileSystemWriter;
 	
-	File incomingMessagesDir;
-
-	File outgoingMessagesDir;
+	File messagesDir;
 	
 	@Override
 	public String storeMessage(DomibusConnectorMessageType message) throws DomibusConnectorClientStorageException {
@@ -37,7 +35,7 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 		
 		String messageLocation = null;
 		try {
-			messageLocation = fileSystemWriter.writeMessageToFileSystem(message, incomingMessagesDir);
+			messageLocation = fileSystemWriter.writeMessageToFileSystem(message, messagesDir);
 		} catch (DomibusConnectorClientFileSystemException e) {
 			LOGGER.error("Exception storing message [{}] from connector... ", message, e);
 			throw new DomibusConnectorClientStorageException(e);
@@ -55,7 +53,7 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 		LOGGER.debug("#storeMessage: storing confirmation of type [{}] to message [{}]...", type, message.getMessageDetails().getBackendMessageId());
 		
 		try {
-			fileSystemWriter.writeConfirmationToFileSystem(message, incomingMessagesDir, outgoingMessagesDir, storageLocation);
+			fileSystemWriter.writeConfirmationToFileSystem(message, messagesDir, storageLocation);
 		} catch (DomibusConnectorClientFileSystemException e) {
 			LOGGER.error("Exception storing confirmation [{}] to message from connector... ",type, e);
 			throw new DomibusConnectorClientStorageException(e);
@@ -68,8 +66,8 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 	@Override
 	public Map<String, DomibusConnectorMessageType> checkStorageForNewMessages()
 			{
-		LOGGER.debug("#checkStorageForNewMessages: Start searching dir {} for unsent messages.", outgoingMessagesDir.getAbsolutePath());
-		List<File> messagesUnsent = fileSystemReader.readUnsentMessages(outgoingMessagesDir);
+		LOGGER.debug("#checkStorageForNewMessages: Start searching dir {} for unsent messages.", messagesDir.getAbsolutePath());
+		List<File> messagesUnsent = fileSystemReader.readUnsentMessages(messagesDir);
 
 		if (!messagesUnsent.isEmpty()) {
 			Map<String, DomibusConnectorMessageType> newMessages = new HashMap<String,DomibusConnectorMessageType>();
@@ -110,24 +108,6 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 	}
 	
 	
-	
-
-	public File getIncomingMessagesDir() {
-		return incomingMessagesDir;
-	}
-
-	public void setIncomingMessagesDir(File incomingMessagesDir) {
-		this.incomingMessagesDir = incomingMessagesDir;
-	}
-
-	public File getOutgoingMessagesDir() {
-		return outgoingMessagesDir;
-	}
-
-	public void setOutgoingMessagesDir(File outgoingMessagesDir) {
-		this.outgoingMessagesDir = outgoingMessagesDir;
-	}
-
 	@Override
 	public byte[] loadContentFromStorageLocation(String storageLocation, String fileName) {
 		File messageFolder = new File(storageLocation);
@@ -139,6 +119,15 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 	public Map<String, DomibusConnectorClientMessageFileType> listContentAtStorageLocation(String storageLocation) {
 		File messageFolder = new File(storageLocation);
 		return fileSystemReader.getFileListFromMessageFolder(messageFolder);
+	}
+
+	public File getMessagesDir() {
+		return messagesDir;
+	}
+
+	@Override
+	public void setMessagesDir(File messagesDir) {
+		this.messagesDir = messagesDir;
 	}
 
 

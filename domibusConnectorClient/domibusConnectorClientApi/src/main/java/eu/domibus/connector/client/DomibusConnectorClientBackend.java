@@ -19,8 +19,9 @@ public interface DomibusConnectorClientBackend {
 	 * recognize new messages at its backend.
 	 *  
 	 * @return messages object holding a Collection of messages.
+	 * @throws DomibusConnectorClientBackendException 
 	 */
-	public DomibusConnectorMessagesType checkClientForNewMessagesToSubmit();
+	public DomibusConnectorMessagesType checkClientForNewMessagesToSubmit() throws DomibusConnectorClientBackendException;
 	
 	/**
 	 * This method triggers the client's backend to store/put/forward messages received.

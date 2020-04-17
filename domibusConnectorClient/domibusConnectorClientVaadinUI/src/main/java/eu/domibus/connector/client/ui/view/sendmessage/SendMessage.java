@@ -75,6 +75,15 @@ public class SendMessage  extends VerticalLayout {
 		
 	}
 	
+	public void loadPreparedMessage(Long connectorMessageId) {
+		DomibusConnectorClientMessage messageByConnectorId = messageService.getMessageById(connectorMessageId);
+		messageForm.setConnectorClientMessage(messageByConnectorId);
+
+		buildMessageFilesArea(messageByConnectorId);
+
+
+	}
+	
 	private void buildMessageFilesArea(DomibusConnectorClientMessage messageByConnectorId) {
 		
 		messageFilesArea.removeAll();

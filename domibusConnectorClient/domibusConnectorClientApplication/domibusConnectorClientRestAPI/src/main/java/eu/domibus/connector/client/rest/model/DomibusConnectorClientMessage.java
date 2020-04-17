@@ -1,7 +1,5 @@
 package eu.domibus.connector.client.rest.model;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -41,31 +39,25 @@ public class DomibusConnectorClientMessage {
     private String storageInfo;
 	
     private String lastConfirmationReceived;
+    
+    private String messageStatus;
 	
     private Date created;
 	
-    private Date confirmationTriggered;
-	
     private Set<DomibusConnectorClientConfirmation> evidences = new HashSet<>();
     
-    private Set<DomibusConnectorClientMessageFile> files = new HashSet<>();
+    private DomibusConnectorClientMessageFileList files = new DomibusConnectorClientMessageFileList();
     
 	public DomibusConnectorClientMessage() {
 	}
-
-	
 
 	public Long getId() {
 		return id;
 	}
 
-
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-
 
 	public String getEbmsMessageId() {
 		return ebmsMessageId;
@@ -196,6 +188,14 @@ public class DomibusConnectorClientMessage {
 	}
 
 
+	public String getMessageStatus() {
+		return messageStatus;
+	}
+
+	public void setMessageStatus(String messageStatus) {
+		this.messageStatus = messageStatus;
+	}
+
 	public Date getCreated() {
 		return created;
 	}
@@ -208,22 +208,6 @@ public class DomibusConnectorClientMessage {
 		this.created = created;
 	}
 
-
-
-	public Date getConfirmationTriggered() {
-		return confirmationTriggered;
-	}
-
-	public String getConfirmationTriggeredString() {
-		return confirmationTriggered!=null?confirmationTriggered.toString():null;
-	}
-
-	public void setConfirmationTriggered(Date confirmationTriggered) {
-		this.confirmationTriggered = confirmationTriggered;
-	}
-
-
-
 	public Set<DomibusConnectorClientConfirmation> getEvidences() {
 		return evidences;
 	}
@@ -232,15 +216,11 @@ public class DomibusConnectorClientMessage {
 		this.evidences = evidences;
 	}
 
-
-
-	public Set<DomibusConnectorClientMessageFile> getFiles() {
+	public DomibusConnectorClientMessageFileList getFiles() {
 		return files;
 	}
 
-
-
-	public void setFiles(Set<DomibusConnectorClientMessageFile> files) {
+	public void setFiles(DomibusConnectorClientMessageFileList files) {
 		this.files = files;
 	}
 

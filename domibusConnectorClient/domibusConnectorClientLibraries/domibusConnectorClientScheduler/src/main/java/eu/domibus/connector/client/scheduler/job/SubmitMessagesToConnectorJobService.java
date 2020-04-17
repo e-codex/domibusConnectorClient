@@ -12,6 +12,7 @@ import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.DomibusConnectorClient;
 import eu.domibus.connector.client.DomibusConnectorClientBackend;
+import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
@@ -36,7 +37,12 @@ public class SubmitMessagesToConnectorJobService {
         LocalDateTime startTime = LocalDateTime.now();
         LOGGER.debug("SubmitMessagesToConnectorJob started");
 
-        messages = clientBackend.checkClientForNewMessagesToSubmit();
+        try {
+			messages = clientBackend.checkClientForNewMessagesToSubmit();
+		} catch (DomibusConnectorClientBackendException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 
         if (messages!=null && !CollectionUtils.isEmpty(messages.getMessages())) {
             LOGGER.info("{} new messages from client backend to submit to connector...", messages.getMessages().size());

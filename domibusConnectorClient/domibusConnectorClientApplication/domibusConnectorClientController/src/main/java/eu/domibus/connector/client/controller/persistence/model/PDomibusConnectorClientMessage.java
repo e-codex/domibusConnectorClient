@@ -18,6 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 
 @Entity
@@ -83,9 +84,9 @@ public class PDomibusConnectorClientMessage {
     @Temporal(TemporalType.TIMESTAMP)
     private Date created;
 	
-	@Column(name = "CONFIRMATION_TRIGGERED", nullable = true)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date confirmationTriggered;
+	@Column(name = "MESSAGE_STATUS", length = 255)
+	@Enumerated(EnumType.STRING)
+	private PDomibusConnectorClientMessageStatus messageStatus;
 	
 	@OneToMany(mappedBy = "message", fetch = FetchType.EAGER)
     private Set<PDomibusConnectorClientConfirmation> confirmations = new HashSet<>();
@@ -243,15 +244,15 @@ public class PDomibusConnectorClientMessage {
 		this.created = created;
 	}
 
-	
-	public Date getConfirmationTriggered() {
-		return confirmationTriggered;
+
+	public PDomibusConnectorClientMessageStatus getMessageStatus() {
+		return messageStatus;
 	}
 
 
 
-	public void setConfirmationTriggered(Date confirmationTriggered) {
-		this.confirmationTriggered = confirmationTriggered;
+	public void setMessageStatus(PDomibusConnectorClientMessageStatus messageStatus) {
+		this.messageStatus = messageStatus;
 	}
 
 

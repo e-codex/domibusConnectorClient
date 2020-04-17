@@ -32,6 +32,7 @@ import eu.domibus.connector.client.ui.component.LumoLabel;
 import eu.domibus.connector.client.ui.form.DomibusConnectorClientMessageForm;
 import eu.domibus.connector.client.ui.service.VaadingConnectorClientUIServiceClient;
 import eu.domibus.connector.client.ui.view.sendmessage.ReplyToMessageDialog;
+import eu.domibus.connector.client.ui.view.sendmessage.SendMessages;
 
 @HtmlImport("styles/shared-styles.html")
 //@StyleSheet("styles/grid.css")
@@ -40,14 +41,16 @@ import eu.domibus.connector.client.ui.view.sendmessage.ReplyToMessageDialog;
 public class MessageDetails extends VerticalLayout {
 
 	private VaadingConnectorClientUIServiceClient messageService;
+	private SendMessages sendMessagesView;
 	private DomibusConnectorClientMessageForm messageForm = new DomibusConnectorClientMessageForm();
 	private VerticalLayout messageEvidencesArea = new VerticalLayout(); 
 	private VerticalLayout messageFilesArea = new VerticalLayout();
 	//	private Map<String, DomibusConnectorClientMessageFileType> filesAtStorage = null;
 
-	public MessageDetails(@Autowired VaadingConnectorClientUIServiceClient messageService) {
+	public MessageDetails(@Autowired VaadingConnectorClientUIServiceClient messageService, @Autowired SendMessages sendMessages) {
 
 		this.messageService = messageService;
+		this.sendMessagesView = sendMessages;
 
 		Button refreshBtn = new Button(new Icon(VaadinIcon.REFRESH));
 		refreshBtn.setText("Refresh");
@@ -101,7 +104,7 @@ public class MessageDetails extends VerticalLayout {
 		headerContent.add(header);
 		replyToMessageDialog.add(headerContent);
 
-		ReplyToMessageDialog view = new ReplyToMessageDialog(replyToMessageDialog, messageForm.getConnectorClientMessage());
+		ReplyToMessageDialog view = new ReplyToMessageDialog(replyToMessageDialog, messageForm.getConnectorClientMessage(), sendMessagesView, messageService);
 		replyToMessageDialog.add(view);
 
 		replyToMessageDialog.open();
@@ -140,9 +143,9 @@ public class MessageDetails extends VerticalLayout {
 			
 			Grid<DomibusConnectorClientMessageFile> grid = new Grid<>();
 
-			grid.setItems(messageByConnectorId.getFiles());
+			grid.setItems(messageByConnectorId.getFiles().getFiles());
 
-			grid.addComponentColumn(domibusConnectorClientMessageFile -> createDownloadButton(filesEnabled,domibusConnectorClientMessageFile.getFileName(),messageByConnectorId.getStorageInfo())).setHeader("Filename").setWidth("500px");
+			grid.addComponentColumn(domibusConnectorClientMessageFile -> createDownloadButton(filesEnabled,domibusConnectorClientMessageFile.getFileName(),domibusConnectorClientMessageFile.getStorageLocation())).setHeader("Filename").setWidth("500px");
 			grid.addColumn(DomibusConnectorClientMessageFile::getFileType).setHeader("Filetype").setWidth("450px");
 
 			grid.setWidth("1000px");

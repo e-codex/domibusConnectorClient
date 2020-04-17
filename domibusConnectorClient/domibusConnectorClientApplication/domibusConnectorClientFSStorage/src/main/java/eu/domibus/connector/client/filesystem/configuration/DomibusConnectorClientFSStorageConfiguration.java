@@ -29,11 +29,7 @@ public class DomibusConnectorClientFSStorageConfiguration {
     
     @NestedConfigurationProperty
     @CheckFolderWriteable
-    private DirectoryConfigurationProperties incoming;
-    
-    @NestedConfigurationProperty
-    @CheckFolderWriteable
-    private DirectoryConfigurationProperties outgoing;
+    private DirectoryConfigurationProperties messages;
     
     @NestedConfigurationProperty
     @NotNull
@@ -47,27 +43,18 @@ public class DomibusConnectorClientFSStorageConfiguration {
 	public DomibusConnectorClientStorage domibusConnectorClientFSStorage() {
     	DomibusConnectorClientFSStorage fsStorage = new DomibusConnectorClientFSStorageImpl();
 		
-		fsStorage.setIncomingMessagesDir(incoming.getPath().toFile());
-		
-		fsStorage.setOutgoingMessagesDir(outgoing.getPath().toFile());
+		fsStorage.setMessagesDir(messages.getPath().toFile());
 		
 		return fsStorage;
 	}
 
-	public DirectoryConfigurationProperties getIncoming() {
-		return incoming;
+	
+	public DirectoryConfigurationProperties getMessages() {
+		return messages;
 	}
 
-	public void setIncoming(DirectoryConfigurationProperties incoming) {
-		this.incoming = incoming;
-	}
-
-	public DirectoryConfigurationProperties getOutgoing() {
-		return outgoing;
-	}
-
-	public void setOutgoing(DirectoryConfigurationProperties outgoing) {
-		this.outgoing = outgoing;
+	public void setMessages(DirectoryConfigurationProperties messages) {
+		this.messages = messages;
 	}
 
 	public DomibusConnectorClientFSMessageProperties getMessageProperties() {

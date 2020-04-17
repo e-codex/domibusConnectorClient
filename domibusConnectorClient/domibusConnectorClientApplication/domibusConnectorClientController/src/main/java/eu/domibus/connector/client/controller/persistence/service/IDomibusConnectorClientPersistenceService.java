@@ -5,12 +5,13 @@ import java.util.List;
 import eu.domibus.connector.client.controller.persistence.dao.PDomibusConnectorClientMessageDao;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
+import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessageStatus;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 public interface IDomibusConnectorClientPersistenceService {
 
-	PDomibusConnectorClientMessage persistNewMessage(DomibusConnectorMessageType message);
+	PDomibusConnectorClientMessage persistNewMessage(DomibusConnectorMessageType message, PDomibusConnectorClientMessageStatus status);
 
 	PDomibusConnectorClientMessage persistAllConfirmaitonsForMessage(PDomibusConnectorClientMessage clientMessage,
 			DomibusConnectorMessageType message);
