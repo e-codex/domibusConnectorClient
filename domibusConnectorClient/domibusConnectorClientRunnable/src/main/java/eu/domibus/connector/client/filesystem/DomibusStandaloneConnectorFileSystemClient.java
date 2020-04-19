@@ -100,6 +100,9 @@ public class DomibusStandaloneConnectorFileSystemClient implements InitializingB
 	public void setMessageResponse(DomibusConnectorMessageResponseType responseType) throws DomibusConnectorNationalBackendClientException {
 		//List<File> files = fileSystemReader.readMessagesWithPostfix(outgoingMessagesDir, DomibusConnectorRunnableConstants.MESSAGE_SENDING_FOLDER_POSTFIX);
 		String responseForMessageId = responseType.getResponseForMessageId();
+		if (responseForMessageId == null) {
+			throw new RuntimeException("Cannot handle response, because responseForMessageId is null!");
+		}
 		String msgFolderName = outgoingMessagesDir + File.separator + responseForMessageId + DomibusConnectorRunnableConstants.MESSAGE_SENDING_FOLDER_POSTFIX;
 		File msgFolderFile = new File(msgFolderName);
 				; // + "_" + msg.getMessageDetails().getFromParty().getPartyId()
