@@ -1,36 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>eu.domibus.connector-client</groupId>
     <artifactId>domibusConnectorClient</artifactId>
-    <version>4.1.0-alpha7</version>
+    <version>4.1.0-beta1</version>
   </parent>
   <artifactId>domibusConnectorClientDistribution</artifactId>
-  
- 
-    <build>
-        <finalName>domibusConnectorClient</finalName>
-        <plugins>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.4</version>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/assemblyClientLibrary.xml</descriptor>
-                        <descriptor>src/main/assembly/assemblyStandaloneClient.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>create-distribution-package</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-    <packaging>pom</packaging>
+  <packaging>pom</packaging>
+  <build>
+    <finalName>domibusConnectorClient</finalName>
+    <plugins>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <version>2.4</version>
+        <executions>
+          <execution>
+            <id>create-distribution-package</id>
+            <phase>package</phase>
+            <goals>
+              <goal>single</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <descriptors>
+            <descriptor>src/main/assembly/assemblyClientLibrary.xml</descriptor>
+            <descriptor>src/main/assembly/assemblyStandaloneClient.xml</descriptor>
+          </descriptors>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
 </project>
