@@ -26,7 +26,7 @@ public class DomibusConnectorClientApplicationStarter
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(DomibusConnectorClientApplicationStarter.class);
 	
-	public static final String CONNECTOR_CLIENT_CONFIG_FILE = "connector.client.config.file";
+	public static final String CONNECTOR_CLIENT_CONFIG_FILE = "connector-client.properties";
 	
 	public static final String SPRING_CONFIG_LOCATION = "spring.config.location";
 	public static final String SPRING_CONFIG_NAME = "spring.config.name";
@@ -51,14 +51,14 @@ public class DomibusConnectorClientApplicationStarter
 
             int lastIndex = connectorConfigFile.contains(File.separator)?connectorConfigFile.lastIndexOf(File.separatorChar):connectorConfigFile.lastIndexOf("/");
             lastIndex++;
-            String connectorConfigLocation = connectorConfigFile.substring(0, lastIndex);
+//            String connectorConfigLocation = connectorConfigFile.substring(0, lastIndex);
             String configName = connectorConfigFile.substring(lastIndex);
 
-            LOGGER.info(String.format("Setting:\n%s=%s\n%s=%s\n%s=%s\n%s=%s",
-                    SPRING_CONFIG_LOCATION, connectorConfigLocation,
+            LOGGER.info(String.format("Setting:\n%s=%s\n%s=%s",
+                    SPRING_CONFIG_LOCATION, connectorConfigFile,
                     SPRING_CONFIG_NAME, configName));
 
-            springProperties.setProperty(SPRING_CONFIG_LOCATION, connectorConfigLocation);
+            springProperties.setProperty(SPRING_CONFIG_LOCATION, connectorConfigFile);
             springProperties.setProperty(SPRING_CONFIG_NAME, configName);
 
         }else {
