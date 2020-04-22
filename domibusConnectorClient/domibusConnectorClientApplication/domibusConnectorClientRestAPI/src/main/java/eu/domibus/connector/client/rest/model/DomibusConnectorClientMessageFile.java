@@ -8,7 +8,7 @@ public class DomibusConnectorClientMessageFile {
 	
 	private DomibusConnectorClientMessageFileType fileType;
 	
-	private String storageLocation;
+	private byte[] fileContent;
 	
 	public DomibusConnectorClientMessageFile() {
 		// TODO Auto-generated constructor stub
@@ -19,10 +19,10 @@ public class DomibusConnectorClientMessageFile {
 		this.setFileType(type);
 	}
 	
-	public DomibusConnectorClientMessageFile(String name, DomibusConnectorClientMessageFileType type, String storageLocation) {
+	public DomibusConnectorClientMessageFile(String name, DomibusConnectorClientMessageFileType type, byte[] content) {
 		this.fileName = name;
 		this.setFileType(type);
-		this.setStorageLocation(storageLocation);
+		this.setFileContent(content);
 	}
 
 	public String getFileName() {
@@ -42,12 +42,12 @@ public class DomibusConnectorClientMessageFile {
 		this.fileType = fileType;
 	}
 
-	public String getStorageLocation() {
-		return storageLocation;
+	public byte[] getFileContent() {
+		return fileContent;
 	}
 
-	public void setStorageLocation(String storageLocation) {
-		this.storageLocation = storageLocation;
+	public void setFileContent(byte[] fileContent) {
+		this.fileContent = fileContent;
 	}
 
 	

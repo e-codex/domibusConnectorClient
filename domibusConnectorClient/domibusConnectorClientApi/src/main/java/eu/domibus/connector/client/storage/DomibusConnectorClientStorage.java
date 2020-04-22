@@ -23,4 +23,6 @@ public interface DomibusConnectorClientStorage {
 	
 	Map<String, DomibusConnectorClientMessageFileType> listContentAtStorageLocation(String storageLocation);
 	
+	void deleteFromStorage(String storageLocation) throws DomibusConnectorClientStorageException;
+	
 }

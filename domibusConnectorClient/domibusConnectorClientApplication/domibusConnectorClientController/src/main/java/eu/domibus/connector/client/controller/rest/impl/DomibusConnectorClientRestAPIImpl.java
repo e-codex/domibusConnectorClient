@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
+import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -141,27 +143,89 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 	/* (non-Javadoc)
 	 * @see eu.domibus.connector.client.rest.IDomibusConnectorClientRestAPI#createNewMessage(eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage)
 	 */
+//	@Override
+//	public DomibusConnectorClientMessage createNewMessage(DomibusConnectorClientMessage newMessage) {
+//		DomibusConnectorMessageType message = mapMessageToTransition(newMessage);
+//		
+////		message = mapMessageFilesToTransition(files.getFiles(), message);
+//		
+//		try {
+//			String storageLocation = storage.storeMessage(message);
+//			PDomibusConnectorClientMessage pMessage = persistenceService.persistNewMessage(message, PDomibusConnectorClientMessageStatus.PREPARED);
+//			newMessage.setId(pMessage.getId());
+//			pMessage.setStorageInfo(storageLocation);
+//			pMessage.setStorageStatus(DomibusConnectorClientStorageStatus.STORED);
+//			persistenceService.mergeClientMessage(pMessage);
+//			newMessage.setStorageInfo(pMessage.getStorageInfo());
+//			newMessage.setStorageStatus(pMessage.getStorageStatus().name());
+//		} catch (DomibusConnectorClientStorageException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		
+//		return newMessage;
+//	}
+	
 	@Override
-	public DomibusConnectorClientMessage createNewMessage(DomibusConnectorClientMessage newMessage) {
-		DomibusConnectorMessageType message = mapMessageToTransition(newMessage);
+	public DomibusConnectorClientMessage saveMessage(DomibusConnectorClientMessage message) {
+		if(StringUtils.isEmpty(message.getBackendMessageId())) {
+			String backendMessageId = generateBackendMessageId();
+			message.setBackendMessageId(backendMessageId);
+		}
 		
-//		message = mapMessageFilesToTransition(files.getFiles(), message);
+		DomibusConnectorMessageType msg = mapMessageToTransition(message);
 		
 		try {
-			String storageLocation = storage.storeMessage(message);
-			PDomibusConnectorClientMessage pMessage = persistenceService.persistNewMessage(message, PDomibusConnectorClientMessageStatus.PREPARED);
-			newMessage.setId(pMessage.getId());
+			PDomibusConnectorClientMessage pMessage = null;
+			if(message.getId()!=null) {
+				Optional<PDomibusConnectorClientMessage> findById = persistenceService.getMessageDao().findById(message.getId());
+				if(findById==null || findById.get()==null) {
+					pMessage = persistenceService.persistNewMessage(msg, PDomibusConnectorClientMessageStatus.PREPARED);
+				}else {
+					pMessage = findById.get();
+				}
+			}else {
+				pMessage = persistenceService.persistNewMessage(msg, PDomibusConnectorClientMessageStatus.PREPARED);
+			}
+			message.setCreated(pMessage.getCreated());
+			message.setId(pMessage.getId());
+			pMessage = mapMessageToModel(message, pMessage);
+
+			String storageLocation = storage.storeMessage(msg);
 			pMessage.setStorageInfo(storageLocation);
 			pMessage.setStorageStatus(DomibusConnectorClientStorageStatus.STORED);
+			
 			persistenceService.mergeClientMessage(pMessage);
-			newMessage.setStorageInfo(pMessage.getStorageInfo());
-			newMessage.setStorageStatus(pMessage.getStorageStatus().name());
+			
+			message.setStorageInfo(pMessage.getStorageInfo());
+			message.setStorageStatus(pMessage.getStorageStatus().name());
 		} catch (DomibusConnectorClientStorageException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		return newMessage;
+		return message;
+	}
+	
+	@Override
+	public String deleteMessageById(Long id) {
+		Optional<PDomibusConnectorClientMessage> msg = persistenceService.getMessageDao().findById(id);
+
+		
+		if(msg.get() !=null) {
+			String storageInfo = msg.get().getStorageInfo();
+			if(storageInfo!=null && !storageInfo.isEmpty()) {
+				try {
+					storage.deleteFromStorage(msg.get().getStorageInfo());
+				} catch (DomibusConnectorClientStorageException e) {
+					e.printStackTrace();
+				}
+			}
+			
+			persistenceService.deleteMessage(msg.get());
+		}
+		return "success";
+		
 	}
 
 //	private DomibusConnectorMessageType mapMessageFilesToTransition(List<DomibusConnectorClientMessageFile> files,
@@ -211,11 +275,23 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 		if(filesReadable(message)) {
 			Map<String, DomibusConnectorClientMessageFileType> files = storage.listContentAtStorageLocation(message.getStorageInfo());
 			files.entrySet().forEach(file -> {
-				msg.getFiles().add(new DomibusConnectorClientMessageFile(file.getKey(), file.getValue(), message.getStorageInfo()));
+//				storage.loadContentFromStorageLocation(message.getStorageInfo(), file.getKey());
+				msg.getFiles().add(new DomibusConnectorClientMessageFile(file.getKey(), file.getValue()));
 			});
 		}
 		
 		return msg;
+	}
+	
+	private PDomibusConnectorClientMessage mapMessageToModel(DomibusConnectorClientMessage msg, PDomibusConnectorClientMessage pMessage) {
+		if(pMessage == null) {
+			pMessage = new PDomibusConnectorClientMessage();
+		}
+		BeanUtils.copyProperties(msg, pMessage);
+//		pMessage.setStorageStatus(DomibusConnectorClientStorageStatus.valueOf(msg.getStorageStatus()));
+//		pMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.valueOf(msg.getMessageStatus()));
+		
+		return pMessage;
 	}
 	
 	private DomibusConnectorMessageType mapMessageToTransition(DomibusConnectorClientMessage clientMessage) {
@@ -231,8 +307,11 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 		
 		if(clientMessage.getFiles()!=null && !clientMessage.getFiles().getFiles().isEmpty()) {
 			clientMessage.getFiles().getFiles().forEach(file -> {
-				byte[] fileContent = storage.loadContentFromStorageLocation(file.getStorageLocation(), file.getFileName());
-				if(fileContent.length > 0) {
+				byte[] fileContent = file.getFileContent();
+				if(fileContent==null) {
+					fileContent = storage.loadContentFromStorageLocation(clientMessage.getStorageInfo(), file.getFileName());
+				}
+				if(fileContent != null && fileContent.length > 0) {
 					if(file.getFileType().equals(DomibusConnectorClientMessageFileType.BUSINESS_CONTENT)) {
 						messageBuilder.addBusinessContentXMLAsBinary(message, fileContent);
 					}else if(file.getFileType().equals(DomibusConnectorClientMessageFileType.BUSINESS_DOCUMENT)) {
@@ -250,4 +329,10 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 	private boolean filesReadable(PDomibusConnectorClientMessage message) {
 		return message!=null && message.getStorageInfo()!=null && !message.getStorageInfo().isEmpty() && message.getStorageStatus().equals(DomibusConnectorClientStorageStatus.STORED);
 	}
+
+	private String generateBackendMessageId() {
+		return UUID.randomUUID().toString() + "@connector-client.eu";
+	}
+
+
 }

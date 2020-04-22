@@ -1,116 +1,64 @@
 package eu.domibus.connector.client.ui.view;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-import org.springframework.beans.factory.annotation.Autowired;
-
 import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.dependency.CssImport;
-import com.vaadin.flow.component.dependency.HtmlImport;
-import com.vaadin.flow.component.dependency.JsModule;
-import com.vaadin.flow.component.html.Div;
+import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
-import com.vaadin.flow.router.PageTitle;
-import com.vaadin.flow.router.Route;
-import com.vaadin.flow.server.PWA;
+import com.vaadin.flow.router.RouterLayout;
+import com.vaadin.flow.router.RouterLink;
+import com.vaadin.flow.spring.annotation.UIScope;
 
 import eu.domibus.connector.client.ui.view.messages.Messages;
-import eu.domibus.connector.client.ui.view.sendmessage.SendMessage;
+import eu.domibus.connector.client.ui.view.sendmessage.SendMessages;
 
-//@HtmlImport("styles/shared-styles.html")
-@HtmlImport("styles/shared-styles.html")
-@Route("")
-@PageTitle("domibusConnectorClient")
-public class DomibusConnectorClientUIMainView extends VerticalLayout {
+@UIScope
+@org.springframework.stereotype.Component
+public class DomibusConnectorClientUIMainView extends AppLayout implements RouterLayout {
 
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	
-	Map<Tab, Component> tabsToPages = new HashMap<>();
-	Tabs TopMenu = new Tabs();
 
-	public DomibusConnectorClientUIMainView(@Autowired DomibusConnectorClientUIHeader header, 
-			@Autowired Messages messages, 
-			@Autowired SendMessage sendMessage 
-//    		@Autowired Configuration configuration, 
-//    		@Autowired Users users,
-//    		@Autowired Info info, 
-//    		@Autowired ConnectorTests connectorTests
+	Tabs mainMenu = new Tabs();
+	
+	Tab messagesTab;
+	Tab sendMessagesTab;
+
+	public DomibusConnectorClientUIMainView(
     		) {
-//		this.userInfo = userInfo;
+		
+		setPrimarySection(Section.NAVBAR);
+
+        VerticalLayout topBar = new VerticalLayout();
+        topBar.add(new DomibusConnectorClientUIHeader());
+        addToNavbar(topBar);
         
-    	Div areaMessages = new Div();
-		areaMessages.add(messages);
-		areaMessages.setVisible(true);
+        messagesTab = new Tab(createRouterLink("Messages", new Icon(VaadinIcon.ENVELOPES), Messages.class));
+        messagesTab.setSelected(false);
+        
+        sendMessagesTab =new Tab(createRouterLink("Send Messages", new Icon(VaadinIcon.MAILBOX), SendMessages.class));
+        sendMessagesTab.setSelected(false);
+        
+        mainMenu.add(messagesTab, sendMessagesTab);
+        
+        mainMenu.setOrientation(Tabs.Orientation.HORIZONTAL);
 		
-		Div areaSendMessage = new Div();
-		areaSendMessage.add(sendMessage);
-		areaSendMessage.setVisible(false);
-//		
-//		Div areaConfiguration = new Div();
-//		areaConfiguration.add(configuration);
-//		areaConfiguration.setVisible(false);
-//		
-//		Div areaUsers = new Div();
-//		areaUsers.add(users);
-//		areaUsers.setVisible(false);
-//		
-//		Div areaTests = new Div();
-//		areaTests.add(connectorTests);
-//		areaTests.setVisible(false);
-//		
-//		Div areaInfo = new Div();
-//		areaInfo.add(info);
-//		areaInfo.setVisible(true);
-		
-		createTab(areaMessages, "Messages", new Icon(VaadinIcon.LIST), false);
-		
-		createTab(areaSendMessage, "SendMessage", new Icon(VaadinIcon.MAILBOX), false);
-		
-//		createTab(areaConfiguration, "Configuration", new Icon(VaadinIcon.COG_O), false);
-//		
-//		createTab(areaUsers, "Users", new Icon(VaadinIcon.USERS), false);
-//		
-//		createTab(areaTests, "Connector Tests", new Icon(VaadinIcon.CONNECT_O), false);
-//		
-//		createTab(areaInfo, "Info", new Icon(VaadinIcon.INFO_CIRCLE_O), true);
-		
-		
-		Div pages = new Div(areaMessages, areaSendMessage
-//				, areaPModes, areaConfiguration, areaUsers, areaTests, areaInfo
-				);
-		
-		Set<Component> pagesShown = Stream.of(areaMessages, areaSendMessage
-//				, areaPModes, areaConfiguration, areaUsers, areaTests, areaInfo
-				)
-		        .collect(Collectors.toSet());
-		
-		TopMenu.addSelectedChangeListener(event -> {
-		    pagesShown.forEach(page -> page.setVisible(false));
-		    pagesShown.clear();
-		    Component selectedPage = tabsToPages.get(TopMenu.getSelectedTab());
-		    selectedPage.setVisible(true);
-		    pagesShown.add(selectedPage);
+        mainMenu.addSelectedChangeListener(e -> {
+			e.getPreviousTab().setSelected(false);
+			e.getSelectedTab().setSelected(true);
 		});
-		
-		add(header, 
-//				userInfo,
-				TopMenu,pages);
+       
+        topBar.add(mainMenu);
 	}
 	
-	private void createTab(Div tabArea, String tabLabel, Icon tabIcon, boolean selected) {
+	private RouterLink createRouterLink(String tabLabel, Icon tabIcon, Class<? extends Component> component) {
 		Span tabText = new Span(tabLabel);
 		tabText.getStyle().set("font-size", "20px");
 		
@@ -118,15 +66,11 @@ public class DomibusConnectorClientUIMainView extends VerticalLayout {
 		
 		HorizontalLayout tabLayout = new HorizontalLayout(tabIcon, tabText);
 		tabLayout.setAlignItems(Alignment.CENTER);
-		Tab tab = new Tab(tabLayout);
-		tab.setSelected(selected);
 		
-		tabsToPages.put(tab, tabArea);
-		TopMenu.add(tab);
-		if(selected) {
-			TopMenu.setSelectedTab(tab);
-		}
+		RouterLink routerLink = new RouterLink(null, component);
+		routerLink.add(tabLayout);
 		
+		return routerLink;
 	}
 
 }

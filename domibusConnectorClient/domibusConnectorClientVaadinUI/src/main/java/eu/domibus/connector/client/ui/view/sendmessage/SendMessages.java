@@ -15,13 +15,26 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.tabs.Tab;
 import com.vaadin.flow.component.tabs.Tabs;
+import com.vaadin.flow.router.ParentLayout;
+import com.vaadin.flow.router.Route;
+import com.vaadin.flow.router.RoutePrefix;
+import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.spring.annotation.UIScope;
 
-@HtmlImport("styles/shared-styles.html")
-//@StyleSheet("styles/grid.css")
+import eu.domibus.connector.client.ui.view.DomibusConnectorClientUIMainView;
+import eu.domibus.connector.client.ui.view.messages.Messages;
+import eu.domibus.connector.client.ui.view.messages.SendMessage;
+
 @UIScope
+@ParentLayout(DomibusConnectorClientUIMainView.class)
+@RoutePrefix(SendMessages.ROUTE_PREFIX)
+@Route(value = SendMessages.ROUTE, layout = DomibusConnectorClientUIMainView.class)
 @org.springframework.stereotype.Component
-public class SendMessages extends VerticalLayout {
+public class SendMessages extends VerticalLayout implements RouterLayout {
+	
+	public static final String ROUTE_PREFIX = "sendMessages";
+	
+	public static final String ROUTE = "sendMessages";
 
 	Div areaSendMessage = null;
 	
@@ -33,7 +46,6 @@ public class SendMessages extends VerticalLayout {
 	
 	public SendMessages(@Autowired SendMessage sendMessage) {
 		this.sendMessage = sendMessage;
-		
 		
 		areaSendMessage = new Div();
 		areaSendMessage.add(sendMessage);

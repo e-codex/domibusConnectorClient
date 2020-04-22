@@ -1,4 +1,4 @@
-package eu.domibus.connector.client.ui.view.sendmessage;
+package eu.domibus.connector.client.ui.view.messages;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -21,11 +21,11 @@ import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.client.ui.component.LumoLabel;
 import eu.domibus.connector.client.ui.service.VaadingConnectorClientUIServiceClient;
-import eu.domibus.connector.client.ui.view.messages.Messages;
+import eu.domibus.connector.client.ui.view.sendmessage.SendMessages;
 
 public class ReplyToMessageDialog extends VerticalLayout {
 	
-	private SendMessages sendMessagesView;
+	private Messages messagesView;
 	private VaadingConnectorClientUIServiceClient messageService;
 	private Dialog replyToMessageDialog;
 	
@@ -33,8 +33,8 @@ public class ReplyToMessageDialog extends VerticalLayout {
 	List<DomibusConnectorClientMessageFile> files = null;
 	private DomibusConnectorClientMessage originalMessage;
 
-	public ReplyToMessageDialog(Dialog replyToMessageDialog, DomibusConnectorClientMessage message, SendMessages sendMessagesView2, VaadingConnectorClientUIServiceClient messageService) {
-		this.sendMessagesView = sendMessagesView2;
+	public ReplyToMessageDialog(Dialog replyToMessageDialog, DomibusConnectorClientMessage message, Messages messagesView, VaadingConnectorClientUIServiceClient messageService) {
+		this.messagesView = messagesView;
 		this.messageService = messageService;
 		this.replyToMessageDialog = replyToMessageDialog;
 		originalMessage = message;
@@ -114,15 +114,16 @@ public class ReplyToMessageDialog extends VerticalLayout {
 		if(!selectedFiles.isEmpty()) {
 			files = new ArrayList<DomibusConnectorClientMessageFile>();
 			selectedFiles.forEach(file -> {
-				DomibusConnectorClientMessageFile att = new DomibusConnectorClientMessageFile(file, DomibusConnectorClientMessageFileType.BUSINESS_ATTACHMENT, originalMessage.getStorageInfo());
+				byte[] fileContent = this.messageService.loadContentFromStorageLocation(originalMessage.getStorageInfo(), file);
+				DomibusConnectorClientMessageFile att = new DomibusConnectorClientMessageFile(file, DomibusConnectorClientMessageFileType.BUSINESS_ATTACHMENT, fileContent);
 				files.add(att);
 			});
 		}
 		
 		replyMessage.getFiles().setFiles(files);
-		replyMessage = messageService.createNewMessage(replyMessage);
+		replyMessage = messageService.saveMessage(replyMessage);
 		
-		sendMessagesView.showSendMessage(replyMessage.getId());
+		messagesView.showSendMessage(replyMessage.getId());
 		
 		replyToMessageDialog.close();
 	}

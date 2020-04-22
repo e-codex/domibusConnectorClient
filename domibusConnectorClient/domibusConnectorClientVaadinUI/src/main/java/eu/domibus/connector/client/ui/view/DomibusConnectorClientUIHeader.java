@@ -1,6 +1,5 @@
 package eu.domibus.connector.client.ui.view;
 
-import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Image;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -8,11 +7,14 @@ import com.vaadin.flow.spring.annotation.UIScope;
 
 import eu.domibus.connector.client.ui.component.LumoLabel;
 
-@HtmlImport("styles/shared-styles.html")
-//@StyleSheet("styles/grid.css")
 @UIScope
 @org.springframework.stereotype.Component
 public class DomibusConnectorClientUIHeader extends HorizontalLayout {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	public DomibusConnectorClientUIHeader() {
 		Div ecodexLogo = new Div();
@@ -36,7 +38,6 @@ public class DomibusConnectorClientUIHeader extends HorizontalLayout {
 		europa.setHeight("50px");
 		europaLogo.add(europa);
 		europaLogo.setHeight("50px");
-//		europaLogo.getStyle().set("margin-right", "3em");
 		
 		
 		add(ecodexLogo, domibusConnector, europaLogo);
@@ -44,8 +45,6 @@ public class DomibusConnectorClientUIHeader extends HorizontalLayout {
 		expand(domibusConnector);
 		setJustifyContentMode(com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode.CENTER);
 		setWidth("95%");
-//		headerLayout.getStyle().set("border-bottom", "1px solid #9E9E9E");
-//		headerLayout.getStyle().set("padding-bottom", "16px");
 	}
 
 

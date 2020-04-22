@@ -1,6 +1,5 @@
 package eu.domibus.connector.client.controller.persistence.service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +11,6 @@ import eu.domibus.connector.client.controller.persistence.dao.PDomibusConnectorC
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessageStatus;
-import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
@@ -20,6 +18,8 @@ import eu.domibus.connector.domain.transition.DomibusConnectorPartyType;
 
 @Component
 public class DomibusConnectorClientPersistenceService implements IDomibusConnectorClientPersistenceService {
+	
+	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusConnectorClientPersistenceService.class);
 
 	@Autowired
 	private PDomibusConnectorClientMessageDao messageDao;
@@ -27,13 +27,8 @@ public class DomibusConnectorClientPersistenceService implements IDomibusConnect
 	@Autowired
 	private PDomibusConnectorClientConfirmationDao confirmationDao;
 
-	public DomibusConnectorClientPersistenceService() {
-		// TODO Auto-generated constructor stub
-	}
+	public DomibusConnectorClientPersistenceService() {}
 
-	/* (non-Javadoc)
-	 * @see eu.domibus.connector.client.controller.persistence.service.IPDomibusConnectorClientPersistenceService#persistNewMessage(eu.domibus.connector.domain.transition.DomibusConnectorMessageType)
-	 */
 	@Override
 	public PDomibusConnectorClientMessage persistNewMessage(DomibusConnectorMessageType message, PDomibusConnectorClientMessageStatus status) {
 		if(message!=null) {
@@ -65,7 +60,6 @@ public class DomibusConnectorClientPersistenceService implements IDomibusConnect
 					newMessage.setToPartyType(toParty.getPartyIdType());
 				}
 			}
-//			newMessage.setUpdated(new Date());
 			newMessage.setCreated(new Date());
 			newMessage.setMessageStatus(status);
 			
@@ -76,9 +70,6 @@ public class DomibusConnectorClientPersistenceService implements IDomibusConnect
 		return null;
 	}
 	
-	/* (non-Javadoc)
-	 * @see eu.domibus.connector.client.controller.persistence.service.IPDomibusConnectorClientPersistenceService#persistAllConfirmaitonsForMessage(eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage, eu.domibus.connector.domain.transition.DomibusConnectorMessageType)
-	 */
 	@Override
 	public PDomibusConnectorClientMessage persistAllConfirmaitonsForMessage(PDomibusConnectorClientMessage clientMessage, DomibusConnectorMessageType message) {
 		List<DomibusConnectorMessageConfirmationType> messageConfirmations = message.getMessageConfirmations();
@@ -93,9 +84,6 @@ public class DomibusConnectorClientPersistenceService implements IDomibusConnect
 		return clientMessage;
 	}
 	
-	/* (non-Javadoc)
-	 * @see eu.domibus.connector.client.controller.persistence.service.IPDomibusConnectorClientPersistenceService#persistNewConfirmation(eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType, eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage)
-	 */
 	@Override
 	public PDomibusConnectorClientConfirmation persistNewConfirmation(DomibusConnectorMessageConfirmationType confirmation, PDomibusConnectorClientMessage clientMessage) {
 		PDomibusConnectorClientConfirmation clientConfirmation = new PDomibusConnectorClientConfirmation();
@@ -108,12 +96,8 @@ public class DomibusConnectorClientPersistenceService implements IDomibusConnect
 		return clientConfirmation;
 	}
 	
-	/* (non-Javadoc)
-	 * @see eu.domibus.connector.client.controller.persistence.service.IPDomibusConnectorClientPersistenceService#mergeClientMessage(eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage)
-	 */
 	@Override
 	public PDomibusConnectorClientMessage mergeClientMessage(PDomibusConnectorClientMessage clientMessage) {
-//		clientMessage.setUpdated(new Date());
 		
 		clientMessage.getConfirmations().forEach(confirmation -> {
 			confirmationDao.save(confirmation);
@@ -124,9 +108,6 @@ public class DomibusConnectorClientPersistenceService implements IDomibusConnect
 	}
 	
 	
-	/* (non-Javadoc)
-	 * @see eu.domibus.connector.client.controller.persistence.service.IPDomibusConnectorClientPersistenceService#findOriginalClientMessage(eu.domibus.connector.domain.transition.DomibusConnectorMessageType)
-	 */
 	@Override
 	public PDomibusConnectorClientMessage findOriginalClientMessage(DomibusConnectorMessageType message) {
 		DomibusConnectorMessageDetailsType messageDetails = message.getMessageDetails();
@@ -143,30 +124,22 @@ public class DomibusConnectorClientPersistenceService implements IDomibusConnect
 		return null;
 	}
 	
-	/* (non-Javadoc)
-	 * @see eu.domibus.connector.client.controller.persistence.service.IPDomibusConnectorClientPersistenceService#findUnconfirmedMessages()
-	 */
-//	@Override
-//	public List<PDomibusConnectorClientMessage> findUnconfirmedMessages(){
-//		List<PDomibusConnectorClientMessage> unconfirmedMessages = new ArrayList<PDomibusConnectorClientMessage>();
-//		messageDao.findUnconfirmed().forEach(message -> {
-//			unconfirmedMessages.add(message);
-//			if(message.getConfirmations()!= null && !message.getConfirmations().isEmpty()) {
-//				message.getConfirmations().forEach(confirmation -> {
-//					if(confirmation.getConfirmationType().equals(DomibusConnectorConfirmationType.DELIVERY.name()) ||
-//							confirmation.getConfirmationType().equals(DomibusConnectorConfirmationType.NON_DELIVERY.name())) {
-//						unconfirmedMessages.remove(message);
-//					}
-//				});
-//			}	
-//		});
-//		
-//		return unconfirmedMessages;
-//	}
-
 	@Override
 	public PDomibusConnectorClientMessageDao getMessageDao() {
 		return messageDao;
+	}
+
+	@Override
+	public void deleteMessage(PDomibusConnectorClientMessage clientMessage) {
+		LOGGER.debug("#deleteMessage: called");
+		if(!clientMessage.getConfirmations().isEmpty()) {
+			for(PDomibusConnectorClientConfirmation confirmation:clientMessage.getConfirmations()) {
+				this.confirmationDao.delete(confirmation);
+			}
+		}
+		
+		this.messageDao.delete(clientMessage);
+		LOGGER.debug("#deleteMessage: success");
 	}
 	
 

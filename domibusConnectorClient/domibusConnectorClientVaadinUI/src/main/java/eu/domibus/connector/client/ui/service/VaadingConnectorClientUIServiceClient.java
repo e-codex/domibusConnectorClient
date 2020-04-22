@@ -83,28 +83,17 @@ public class VaadingConnectorClientUIServiceClient {
 		return result.getBody();
 	}
 	
-	public DomibusConnectorClientMessage createNewMessage(DomibusConnectorClientMessage newMessage) {
-//		// create headers
-//		HttpHeaders headers = new HttpHeaders();
-//		// set `content-type` header
-//		headers.setContentType(MediaType.APPLICATION_JSON);
-//		// set `accept` header
-//		headers.setAccept(Collections.singletonList(MediaType.APPLICATION_JSON));
-//		
-//		// request body parameters
-//		Map<String, Object> map = new HashMap<>();
-//		map.put("newMessage", newMessage);
-//		map.put("files", files);
-//		
-//		// build the request
-//		HttpEntity<Map<String, Object>> entity = new HttpEntity<>(map, headers);
-
-		
-		newMessage = restTemplate.postForObject(url + "/createNewMessage", newMessage, DomibusConnectorClientMessage.class);
-		return newMessage;
+//	public DomibusConnectorClientMessage createNewMessage(DomibusConnectorClientMessage newMessage) {
+//		newMessage = restTemplate.postForObject(url + "/createNewMessage", newMessage, DomibusConnectorClientMessage.class);
+//		return newMessage;
+//	}
+//	
+	public DomibusConnectorClientMessage saveMessage(DomibusConnectorClientMessage message) {
+		message = restTemplate.postForObject(url + "/saveMessage", message, DomibusConnectorClientMessage.class);
+		return message;
 	}
 	
 	public void deleteMessageById(Long id) {
-		restTemplate.getForObject(url+"/deleteMessageById?id={id}", DomibusConnectorClientMessage.class, id.toString());
+		restTemplate.getForObject(url+"/deleteMessageById?id={id}", String.class, id.toString());
 	}
 }

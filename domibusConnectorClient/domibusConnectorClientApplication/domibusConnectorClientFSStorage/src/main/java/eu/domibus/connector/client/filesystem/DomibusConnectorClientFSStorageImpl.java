@@ -130,6 +130,18 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 		this.messagesDir = messagesDir;
 	}
 
+	@Override
+	public void deleteFromStorage(String storageLocation) throws DomibusConnectorClientStorageException{
+		LOGGER.debug("#deleteFromStorage: called with storageLocation {}", storageLocation);
+		try {
+			this.fileSystemWriter.deleteFromStorage(storageLocation);
+		} catch (DomibusConnectorClientFileSystemException e) {
+			throw new DomibusConnectorClientStorageException(e);
+		}
+		
+		LOGGER.debug("#deleteFromStorage: successfully deleted storageLocation {}", storageLocation);
+	}
+
 
 
 }

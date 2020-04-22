@@ -1,15 +1,11 @@
 package eu.domibus.connector.client.ui.view.messages;
 
 import java.io.ByteArrayInputStream;
-import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StringUtils;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
@@ -20,46 +16,82 @@ import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.icon.VaadinIcon;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.router.AfterNavigationEvent;
+import com.vaadin.flow.router.AfterNavigationObserver;
+import com.vaadin.flow.router.BeforeEvent;
+import com.vaadin.flow.router.HasUrlParameter;
+import com.vaadin.flow.router.OptionalParameter;
+import com.vaadin.flow.router.Route;
 import com.vaadin.flow.server.StreamResource;
 import com.vaadin.flow.spring.annotation.UIScope;
 
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
-import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.client.ui.component.LumoLabel;
 import eu.domibus.connector.client.ui.form.DomibusConnectorClientMessageForm;
 import eu.domibus.connector.client.ui.service.VaadingConnectorClientUIServiceClient;
-import eu.domibus.connector.client.ui.view.sendmessage.ReplyToMessageDialog;
-import eu.domibus.connector.client.ui.view.sendmessage.SendMessages;
 
-@HtmlImport("styles/shared-styles.html")
-//@StyleSheet("styles/grid.css")
 @Component
+@Route(value = MessageDetails.ROUTE, layout= Messages.class)
 @UIScope
-public class MessageDetails extends VerticalLayout {
+public class MessageDetails extends VerticalLayout implements HasUrlParameter<Long>,AfterNavigationObserver {
+	
+	public static final String ROUTE = "messageDetails";
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private VaadingConnectorClientUIServiceClient messageService;
-	private SendMessages sendMessagesView;
 	private DomibusConnectorClientMessageForm messageForm = new DomibusConnectorClientMessageForm();
 	private VerticalLayout messageEvidencesArea = new VerticalLayout(); 
 	private VerticalLayout messageFilesArea = new VerticalLayout();
-	//	private Map<String, DomibusConnectorClientMessageFileType> filesAtStorage = null;
-
-	public MessageDetails(@Autowired VaadingConnectorClientUIServiceClient messageService, @Autowired SendMessages sendMessages) {
+	
+	Button replyToMessageButton;
+	Button refreshButton;
+	Button deleteMessageButton;
+	
+	Messages messagesView;
+	
+	public MessageDetails(@Autowired VaadingConnectorClientUIServiceClient messageService, @Autowired Messages messagesView) {
 
 		this.messageService = messageService;
-		this.sendMessagesView = sendMessages;
-
-		Button refreshBtn = new Button(new Icon(VaadinIcon.REFRESH));
-		refreshBtn.setText("Refresh");
-		refreshBtn.addClickListener(e -> {
-			if(!StringUtils.isEmpty(messageForm.getConnectorClientMessage().getId()))loadMessageDetails(messageForm.getConnectorClientMessage().getId());
+		this.messagesView = messagesView;
+		this.messagesView.setMessageDetailsView(this);
+	
+		refreshButton = new Button(new Icon(VaadinIcon.REFRESH));
+		refreshButton.setText("Refresh");
+		refreshButton.addClickListener(e -> {
+			loadMessageDetails(messageForm.getConnectorClientMessage().getId());
 		});
+		refreshButton.setEnabled(false);
+		
+		deleteMessageButton = new Button(new Icon(VaadinIcon.ERASER));
+		deleteMessageButton.setText("Delete");
+		deleteMessageButton.addClickListener(e -> {
+			Dialog deleteMessageDialog = this.messagesView.getDeleteMessageDialog();
+			Button delButton = new Button("Delete Message");
+			delButton.addClickListener(e1 -> {
+				this.messageService.deleteMessageById(messageForm.getConnectorClientMessage().getId());
+				deleteMessageDialog.close();
+				clearMessageDetails();
+				this.messagesView.showMessagesList();
+			});
+			deleteMessageDialog.add(delButton);
+			deleteMessageDialog.open();
+		});
+		deleteMessageButton.setEnabled(false);
 
+		replyToMessageButton = new Button(new Icon(VaadinIcon.PLUS));
+		replyToMessageButton.setText("Send reply to Message");
+		replyToMessageButton.addClickListener(e -> openReplyToMessageDialog());
+		replyToMessageButton.setEnabled(false);
+		
 		HorizontalLayout buttons = new HorizontalLayout(
-				refreshBtn
+				refreshButton, deleteMessageButton, replyToMessageButton
 				);
 		buttons.setWidth("100vw");
 		add(buttons);
@@ -68,27 +100,15 @@ public class MessageDetails extends VerticalLayout {
 		messageForm.getStyle().set("margin-top","25px");
 
 		messageDetailsArea.add(messageForm);
-		//setAlignItems(Alignment.START);
 		messageForm.setEnabled(true);
-		//		messageDetailsArea.setHeight("100vh");
 		messageDetailsArea.setWidth("500px");
 		add(messageDetailsArea);
-
-		Div replyToMessage = new Div();
-
-		Button replyToMessageButton = new Button(new Icon(VaadinIcon.PLUS));
-		replyToMessageButton.setText("Send reply to Message");
-		replyToMessageButton.addClickListener(e -> openReplyToMessageDialog());
-		replyToMessage.add(replyToMessageButton);
-
-		add(replyToMessage);
 
 		add(messageFilesArea);
 
 		add(messageEvidencesArea);
 
 		setSizeFull();
-		//		setHeight("100vh");
 	}
 
 
@@ -104,23 +124,29 @@ public class MessageDetails extends VerticalLayout {
 		headerContent.add(header);
 		replyToMessageDialog.add(headerContent);
 
-		ReplyToMessageDialog view = new ReplyToMessageDialog(replyToMessageDialog, messageForm.getConnectorClientMessage(), sendMessagesView, messageService);
+		ReplyToMessageDialog view = new ReplyToMessageDialog(replyToMessageDialog, messageForm.getConnectorClientMessage(), messagesView, messageService);
 		replyToMessageDialog.add(view);
 
 		replyToMessageDialog.open();
 	}
 
 
-	public void loadMessageDetails(Long connectorMessageId) {
-		DomibusConnectorClientMessage messageByConnectorId = messageService.getMessageById(connectorMessageId);
-		messageForm.setConnectorClientMessage(messageByConnectorId);
+	public void loadMessageDetails(Long msgId) {
+		
+		if(msgId!=null) {
+		DomibusConnectorClientMessage msg = messageService.getMessageById(msgId);
+		messageForm.setConnectorClientMessage(msg);
 
-		buildMessageFilesArea(messageByConnectorId);
+		buildMessageFilesArea(msg);
 
-		buildMessageEvidencesArea(messageByConnectorId);
-
+		buildMessageEvidencesArea(msg);
+		
+		refreshButton.setEnabled(true);
+		deleteMessageButton.setEnabled(true);
+		replyToMessageButton.setEnabled(messageForm.getConnectorClientMessage()!=null && messageForm.getConnectorClientMessage().getMessageStatus().equals("CONFIRMED"));
+		}
 	}
-
+	
 	private void buildMessageFilesArea(DomibusConnectorClientMessage messageByConnectorId) {
 
 		messageFilesArea.removeAll();
@@ -145,11 +171,10 @@ public class MessageDetails extends VerticalLayout {
 
 			grid.setItems(messageByConnectorId.getFiles().getFiles());
 
-			grid.addComponentColumn(domibusConnectorClientMessageFile -> createDownloadButton(filesEnabled,domibusConnectorClientMessageFile.getFileName(),domibusConnectorClientMessageFile.getStorageLocation())).setHeader("Filename").setWidth("500px");
+			grid.addComponentColumn(domibusConnectorClientMessageFile -> createDownloadButton(filesEnabled,domibusConnectorClientMessageFile.getFileName(),messageByConnectorId.getStorageInfo())).setHeader("Filename").setWidth("500px");
 			grid.addColumn(DomibusConnectorClientMessageFile::getFileType).setHeader("Filetype").setWidth("450px");
 
 			grid.setWidth("1000px");
-//			grid.setHeight("210px");
 			grid.setMultiSort(true);
 
 			for(Column<DomibusConnectorClientMessageFile> col : grid.getColumns()) {
@@ -208,8 +233,6 @@ public class MessageDetails extends VerticalLayout {
 
 			grid.addColumn(DomibusConnectorClientConfirmation::getConfirmationType).setHeader("Confirmation Type").setWidth("250px");
 			grid.addColumn(DomibusConnectorClientConfirmation::getReceived).setHeader("Received").setWidth("300px");
-//			grid.addColumn(DomibusConnectorClientConfirmation::getStorageInfo).setHeader("Storage Info").setWidth("300px");
-//			grid.addColumn(DomibusConnectorClientConfirmation::getStorageStatus).setHeader("Storage Status").setWidth("150px");
 
 			grid.setWidth("1000px");
 			grid.setHeight("210px");
@@ -227,10 +250,42 @@ public class MessageDetails extends VerticalLayout {
 			messageEvidencesArea.add(details);
 
 			messageEvidencesArea.setWidth("100vw");
-			//			add(messageEvidencesArea);
 			messageEvidencesArea.setVisible(true);
 		}
 
+	}
+
+
+	@Override
+	  public void setParameter(BeforeEvent event
+	    , @OptionalParameter Long parameter) {
+	    if(parameter!=null) {
+	    	loadMessageDetails(parameter);
+	    }else {
+	    	clearMessageDetails();
+	    }
+	  }
+	
+	private void clearMessageDetails() {
+		messageForm.setConnectorClientMessage(new DomibusConnectorClientMessage());
+		refreshButton.setEnabled(false);
+		deleteMessageButton.setEnabled(false);
+		replyToMessageButton.setEnabled(false);
+		
+		messageEvidencesArea.removeAll();
+		messageEvidencesArea.setVisible(false);
+		
+		messageFilesArea.removeAll();
+		messageFilesArea.setVisible(false);
+	}
+
+
+	@Override
+	public void afterNavigation(AfterNavigationEvent arg0) {
+		if(this.messagesView.getMessagesListView()!=null)this.messagesView.getMessagesListView().setVisible(false);
+		if(this.messagesView.getSendMessageView()!=null)this.messagesView.getSendMessageView().setVisible(false);
+		this.setVisible(true);
+		
 	}
 
 }

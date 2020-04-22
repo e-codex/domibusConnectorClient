@@ -26,5 +26,7 @@ public interface IDomibusConnectorClientPersistenceService {
 //	List<PDomibusConnectorClientMessage> findUnconfirmedMessages();
 	
 	PDomibusConnectorClientMessageDao getMessageDao();
+	
+	void deleteMessage(PDomibusConnectorClientMessage clientMessage);
 
 }

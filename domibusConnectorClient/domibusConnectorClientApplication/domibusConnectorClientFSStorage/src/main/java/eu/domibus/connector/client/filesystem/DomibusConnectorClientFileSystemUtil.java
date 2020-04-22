@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.UUID;
 
 import org.apache.commons.io.FileUtils;
 import org.springframework.util.StringUtils;
@@ -61,8 +60,7 @@ public class DomibusConnectorClientFileSystemUtil {
 //			
 		 
 		 	if(messageId==null || messageId.isEmpty()) {
-		 		messageId = generateBackendMessageId();
-		 		message.getMessageDetails().setBackendMessageId(messageId);
+		 		throw new DomibusConnectorClientFileSystemException("Neither ebmsId nor backendMessageId set in message!");
 		 	}
 		 	
 			String fromPartyId = message.getMessageDetails().getFromParty().getPartyId();
@@ -84,7 +82,5 @@ public class DomibusConnectorClientFileSystemUtil {
 						.toString();
 		}
 
-	public static String generateBackendMessageId() {
-		return UUID.randomUUID().toString() + "@connector-client.eu";
-	}
+	
 }

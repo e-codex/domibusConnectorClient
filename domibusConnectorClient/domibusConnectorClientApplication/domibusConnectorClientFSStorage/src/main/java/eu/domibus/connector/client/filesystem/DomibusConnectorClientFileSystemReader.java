@@ -12,6 +12,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.activation.DataHandler;
@@ -448,11 +449,15 @@ public class DomibusConnectorClientFileSystemReader {
 			LOGGER.debug("Found backendMessageId in Properties: {}", backendMessageId);
 		}
 		if (!StringUtils.hasText(backendMessageId)) {
-			backendMessageId = DomibusConnectorClientFileSystemUtil.generateBackendMessageId();
+			backendMessageId = generateBackendMessageId();
 			messageProperties.getMessageDetails().put(this.messageProperties.getBackendMessageId(), backendMessageId);
 			LOGGER.debug("No backendMessageId resolved. Generated " + backendMessageId);
 		}
 		return backendMessageId;
+	}
+	
+	private String generateBackendMessageId() {
+		return UUID.randomUUID().toString() + "@connector-client.eu";
 	}
 
 	private DomibusConnectorMessageDetailsType convertMessagePropertiesToMessageDetails(FSMessageDetails properties) {

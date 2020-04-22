@@ -6,7 +6,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import javax.activation.DataHandler;
 import javax.validation.Valid;
@@ -200,6 +202,46 @@ public class DomibusConnectorClientFileSystemWriter {
 
 		return messageFolder.getAbsolutePath();
 	}
+	
+	public void deleteFromStorage(String storageLocation) throws DomibusConnectorClientFileSystemException {
+		
+		if(storageLocation == null || storageLocation.isEmpty()) {
+			throw new DomibusConnectorClientFileSystemException("Storage location to be deleted is null or empty! ");
+		}
+		
+		File messageFolder = new File(storageLocation);
+		if(!messageFolder.exists() || !messageFolder.isDirectory()) {
+			throw new DomibusConnectorClientFileSystemException("Storage location to be deleted is not valid! ");
+		}
+		
+		try {
+			deleteDirectory(messageFolder);
+		} catch (Exception e) {
+			throw new DomibusConnectorClientFileSystemException("Storage location and/or its contents could not be deleted! ", e);
+		}
+		
+		
+		
+	}
+	
+	private void deleteDirectory(File directory) throws Exception {
+		List<File> filesToBeDeleted = new ArrayList<File>();
+		
+		for (File sub : directory.listFiles()) {
+			filesToBeDeleted.add(sub);
+		}
+		
+		if(!filesToBeDeleted.isEmpty()) {
+			for(File sub: filesToBeDeleted) {
+				if(sub.isDirectory()) 
+					deleteDirectory(sub);
+				else
+					sub.delete();
+			}
+		}
+		
+		directory.delete();
+	}
 
 	private FSMessageDetails convertMessageDetailsToMessageProperties(
 			DomibusConnectorMessageDetailsType messageDetails, Date messageReceived) {
@@ -237,10 +279,11 @@ public class DomibusConnectorClientFileSystemWriter {
 	private void createFile(File messageFolder, String fileName, byte[] content)
 			throws IOException {
 		String filePath = messageFolder.getAbsolutePath() + File.separator + fileName;
-		LOGGER.debug("Create file {}", filePath);
 		File file = new File(filePath);
-		byteArrayToFile(content, file);
-		
+		if(!file.exists()) {
+			LOGGER.debug("Create file {}", filePath);
+			byteArrayToFile(content, file);
+		}
 	}
 
 	private void byteArrayToFile(byte[] data, File file) throws IOException {
@@ -276,10 +319,11 @@ public class DomibusConnectorClientFileSystemWriter {
 
 	private File createMessageFolder(DomibusConnectorMessageType message, File messagesDir) throws DomibusConnectorClientFileSystemException {
 
+		String messageId = message.getMessageDetails().getEbmsMessageId()!=null && !message.getMessageDetails().getEbmsMessageId().isEmpty()?message.getMessageDetails().getEbmsMessageId():message.getMessageDetails().getBackendMessageId();
 		String pathname = new StringBuilder()
 				.append(messagesDir.getAbsolutePath())
 				.append(File.separator)
-				.append(DomibusConnectorClientFileSystemUtil.getMessageFolderName(message, message.getMessageDetails().getEbmsMessageId()))
+				.append(DomibusConnectorClientFileSystemUtil.getMessageFolderName(message, messageId ))
 				.toString();
 		File messageFolder = new File(pathname);
 		if (!messageFolder.exists() || !messageFolder.isDirectory()) {
