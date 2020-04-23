@@ -2,6 +2,7 @@ package eu.domibus.connector.client.controller.persistence.dao;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
@@ -27,5 +28,7 @@ public interface PDomibusConnectorClientMessageDao extends CrudRepository<PDomib
 	@Query("SELECT m FROM PDomibusConnectorClientMessage m WHERE "
 			+ "m.messageStatus='RECEIVED'")
     public List<PDomibusConnectorClientMessage> findUnconfirmed();
+	
+	public Optional<PDomibusConnectorClientMessage> findOneByEbmsMessageIdAndBackendMessageId(String ebmsMessageId, String backendId);
 	
 }

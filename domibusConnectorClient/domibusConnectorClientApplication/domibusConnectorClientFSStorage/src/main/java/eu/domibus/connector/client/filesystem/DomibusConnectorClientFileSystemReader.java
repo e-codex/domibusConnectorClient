@@ -123,7 +123,7 @@ public class DomibusConnectorClientFileSystemReader {
 
 		if (messagesDir.listFiles().length > 0) {
 			for (File sub : messagesDir.listFiles()) {
-				if (sub.isDirectory()) {
+				if (sub.isDirectory() && sub.listFiles()!=null && sub.listFiles().length > 0) {
 					messages.add(sub);
 				}
 			}
@@ -148,39 +148,39 @@ public class DomibusConnectorClientFileSystemReader {
 	public DomibusConnectorMessageType readMessageFromFolder(File messageFolder) throws DomibusConnectorClientFileSystemException {
 		FSMessageDetails messageDetails = loadMessageProperties(messageFolder, this.messageProperties.getFileName());
 
-		String backendMessageId = extractBackendMessageId(messageDetails);
+//		String backendMessageId = extractBackendMessageId(messageDetails);
 
-		String newMessageFolderPath = messageFolder.getAbsolutePath().substring(0,
-				messageFolder.getAbsolutePath().lastIndexOf(File.separator)+1);
-
-
-		messageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(messageFolder, newMessageFolderPath, backendMessageId);
+//		String newMessageFolderPath = messageFolder.getAbsolutePath().substring(0,
+//				messageFolder.getAbsolutePath().lastIndexOf(File.separator)+1);
+//
+//
+//		messageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(messageFolder, newMessageFolderPath, backendMessageId);
 
 
 		if (messageFolder.exists() && messageFolder.isDirectory() && messageFolder.listFiles().length > 0) {
 			String messageFolderPath = messageFolder.getAbsolutePath();
 			LOGGER.info("Start reading message from folder {}", messageFolderPath);
 
-			File workMessageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(messageFolder, messageFolderPath, messageProcessingPostfix);
+//			File workMessageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(messageFolder, messageFolderPath, messageProcessingPostfix);
 
 			DomibusConnectorMessageType message = new DomibusConnectorMessageType();
 
 			try {
-				message = processMessageFolderFiles(workMessageFolder, messageDetails);
+				message = processMessageFolderFiles(messageFolder, messageDetails);
 			} catch (Exception e) {
-				LOGGER.error("#readMessageFromFolder: an error occured, renaming folder to failed", e);
-				File failedMessageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(workMessageFolder, messageFolderPath, messageFailedPostfix);
+				LOGGER.error("#readMessageFromFolder: an error occured!", e);
+//				File failedMessageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(workMessageFolder, messageFolderPath, messageFailedPostfix);
 
-				throw new DomibusConnectorClientFileSystemException("Could not process message folder "+failedMessageFolder.getAbsolutePath());
+				throw new DomibusConnectorClientFileSystemException("Could not process message folder "+messageFolder.getAbsolutePath());
 			}
 
-			messageDetails.getMessageDetails().put(messageProperties.getMessageSentDatetime(),DomibusConnectorClientFileSystemUtil.convertDateToProperty(new Date()));
-			messageDetails.storePropertiesToFile(new File(workMessageFolder, messageProperties.getFileName()));
-			try {
-				DomibusConnectorClientFileSystemUtil.renameMessageFolder(workMessageFolder, messageFolderPath, messageSendingPostfix);
-			} catch (DomibusConnectorClientFileSystemException e) {
-				LOGGER.error("",e);
-			}
+//			messageDetails.getMessageDetails().put(messageProperties.getMessageSentDatetime(),DomibusConnectorClientFileSystemUtil.convertDateToProperty(new Date()));
+//			messageDetails.storePropertiesToFile(new File(workMessageFolder, messageProperties.getFileName()));
+//			try {
+//				DomibusConnectorClientFileSystemUtil.renameMessageFolder(workMessageFolder, messageFolderPath, messageSendingPostfix);
+//			} catch (DomibusConnectorClientFileSystemException e) {
+//				LOGGER.error("",e);
+//			}
 
 
 			return message;
@@ -343,7 +343,7 @@ public class DomibusConnectorClientFileSystemReader {
 						}
 					}
 					message.getMessageConfirmations().add(confirmation);
-				} else {
+				} else if (!isFile(sub.getName(), this.messageProperties.getFileName())){
 					LOGGER.debug("Processing attachment File {}", sub.getName());
 
 					byte[] attachmentData = null;
@@ -464,9 +464,14 @@ public class DomibusConnectorClientFileSystemReader {
 
 		DomibusConnectorMessageDetailsType messageDetails = new DomibusConnectorMessageDetailsType();
 
+		messageDetails.setEbmsMessageId(properties.getMessageDetails().getProperty(messageProperties.getEbmsMessageId()));
+		
 		messageDetails.setFinalRecipient(properties.getMessageDetails().getProperty(messageProperties.getFinalRecipient()));
 		messageDetails.setOriginalSender(properties.getMessageDetails().getProperty(messageProperties.getOriginalSender()));
-		messageDetails.setBackendMessageId(properties.getMessageDetails().getProperty(messageProperties.getNationalMessageId()));
+		if(!StringUtils.isEmpty(properties.getMessageDetails().getProperty(messageProperties.getBackendMessageId())))
+			messageDetails.setBackendMessageId(properties.getMessageDetails().getProperty(messageProperties.getBackendMessageId()));
+		else
+			messageDetails.setBackendMessageId(properties.getMessageDetails().getProperty(messageProperties.getNationalMessageId()));
 
 
 		String fromPartyId = properties.getMessageDetails().getProperty(messageProperties.getFromPartyId());

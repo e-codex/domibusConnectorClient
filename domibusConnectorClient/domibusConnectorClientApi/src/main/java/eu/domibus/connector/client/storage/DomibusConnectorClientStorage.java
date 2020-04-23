@@ -11,7 +11,7 @@ public interface DomibusConnectorClientStorage {
 
 	Map<String, DomibusConnectorMessageType> checkStorageForNewMessages();
 
-	DomibusConnectorMessagesType getAllStoredMessages();
+	Map<String, DomibusConnectorMessageType> getAllStoredMessages();
 	
 	String storeMessage(DomibusConnectorMessageType message) throws DomibusConnectorClientStorageException;
 	

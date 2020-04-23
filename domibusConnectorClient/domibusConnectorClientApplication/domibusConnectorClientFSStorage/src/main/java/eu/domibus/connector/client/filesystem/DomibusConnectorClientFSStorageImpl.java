@@ -102,8 +102,21 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 	}
 	
 	@Override
-	public DomibusConnectorMessagesType getAllStoredMessages() {
-		// TODO Auto-generated method stub
+	public Map<String, DomibusConnectorMessageType> getAllStoredMessages() {
+		List<File> readAllMessagesFromDir = fileSystemReader.readAllMessagesFromDir(messagesDir);
+		if(!readAllMessagesFromDir.isEmpty()) {
+			Map<String, DomibusConnectorMessageType> allMessages = new HashMap<String, DomibusConnectorMessageType>();
+			readAllMessagesFromDir.forEach(fileFolder -> {
+				DomibusConnectorMessageType message = null;
+				try {
+					message = fileSystemReader.readMessageFromFolder(fileFolder);
+					allMessages.put(fileFolder.getAbsolutePath(), message);
+				} catch (DomibusConnectorClientFileSystemException e) {
+					LOGGER.error("Exception read message from folder {}", fileFolder.getAbsolutePath(), e);
+				}
+			});
+			return allMessages;
+		}
 		return null;
 	}
 	
