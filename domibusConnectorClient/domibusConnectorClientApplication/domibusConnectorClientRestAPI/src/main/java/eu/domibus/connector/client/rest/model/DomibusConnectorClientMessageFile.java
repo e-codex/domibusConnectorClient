@@ -10,6 +10,8 @@ public class DomibusConnectorClientMessageFile {
 	
 	private byte[] fileContent;
 	
+	private String storageLocation;
+	
 	public DomibusConnectorClientMessageFile() {
 		// TODO Auto-generated constructor stub
 	}
@@ -48,6 +50,14 @@ public class DomibusConnectorClientMessageFile {
 
 	public void setFileContent(byte[] fileContent) {
 		this.fileContent = fileContent;
+	}
+
+	public String getStorageLocation() {
+		return storageLocation;
+	}
+
+	public void setStorageLocation(String storageLocation) {
+		this.storageLocation = storageLocation;
 	}
 
 	

@@ -29,6 +29,7 @@ import org.springframework.validation.annotation.Validated;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSMessageProperties;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSStorageConfiguration;
 import eu.domibus.connector.client.filesystem.message.FSMessageDetails;
+import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureMimeType;
 import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageAttachmentType;
@@ -66,9 +67,9 @@ public class DomibusConnectorClientFileSystemWriter {
 
 	@NotNull
 	private String defaultDetachedSignatureFileName;
-
+	
 	@NotNull
-	private String messageSentPostfix;
+	private String messageReadyPostfix;
 
 	public void writeConfirmationToFileSystem(DomibusConnectorMessageType confirmationMessage, String storageLocation ) throws DomibusConnectorClientFileSystemException {
 		DomibusConnectorMessageConfirmationType confirmation = confirmationMessage.getMessageConfirmations().get(0);
@@ -95,9 +96,92 @@ public class DomibusConnectorClientFileSystemWriter {
 					+ evidenceXml.getAbsolutePath(), e);
 		}
 	}
+	
+	public void writeMessageFileToFileSystem(String storageLocation, String fileName, DomibusConnectorClientMessageFileType fileType, byte[] fileContent) throws DomibusConnectorClientFileSystemException {
+		if(storageLocation == null || storageLocation.isEmpty()) {
+			throw new DomibusConnectorClientFileSystemException("Storage location to store file to is null or empty! ");
+		}
+		
+		File messageFolder = new File(storageLocation);
+		if(!messageFolder.exists() || !messageFolder.isDirectory()) {
+			throw new DomibusConnectorClientFileSystemException("Storage location to store file to is not valid! "+storageLocation);
+		}
+		
+		FSMessageDetails messageDetails = DomibusConnectorClientFileSystemUtil.loadMessageProperties(messageFolder, this.messageProperties.getFileName());
+		
+		switch(fileType) {
+		case BUSINESS_CONTENT:messageDetails.getMessageDetails().put(messageProperties.getContentXmlFileName(),fileName);break;
+		case BUSINESS_DOCUMENT:messageDetails.getMessageDetails().put(messageProperties.getContentPdfFileName(),fileName);break;
+		case DETACHED_SIGNATURE:messageDetails.getMessageDetails().put(messageProperties.getDetachedSignatureFileName(),fileName);break;
+		default:
+		}
+		
+		File messagePropertiesFile = new File(messageFolder, this.messageProperties.getFileName());
+		DomibusConnectorClientFileSystemUtil.storeMessagePropertiesToFile(messageDetails, messagePropertiesFile);
+		
+		try {
+			createFile(messageFolder, fileName, fileContent);
+		} catch (IOException e1) {
+			throw new DomibusConnectorClientFileSystemException("Could not create file "+fileName+" at message folder "
+					+ messageFolder.getAbsolutePath(), e1);
+		}
+		
+	}
+	
+	public void deleteMessageFileFromFileSystem(String storageLocation, String fileName, DomibusConnectorClientMessageFileType fileType) throws DomibusConnectorClientFileSystemException {
+		if(storageLocation == null || storageLocation.isEmpty()) {
+			throw new DomibusConnectorClientFileSystemException("Storage location to store file to is null or empty! ");
+		}
+		
+		File messageFolder = new File(storageLocation);
+		if(!messageFolder.exists() || !messageFolder.isDirectory()) {
+			throw new DomibusConnectorClientFileSystemException("Storage location to store file to is not valid! "+storageLocation);
+		}
+		
+		FSMessageDetails messageDetails = DomibusConnectorClientFileSystemUtil.loadMessageProperties(messageFolder, this.messageProperties.getFileName());
+		
+		switch(fileType) {
+		case BUSINESS_CONTENT:messageDetails.getMessageDetails().remove(messageProperties.getContentXmlFileName(),fileName);break;
+		case BUSINESS_DOCUMENT:messageDetails.getMessageDetails().remove(messageProperties.getContentPdfFileName(),fileName);break;
+		case DETACHED_SIGNATURE:messageDetails.getMessageDetails().remove(messageProperties.getDetachedSignatureFileName(),fileName);break;
+		default:
+		}
+		
+		File messagePropertiesFile = new File(messageFolder, this.messageProperties.getFileName());
+		DomibusConnectorClientFileSystemUtil.storeMessagePropertiesToFile(messageDetails, messagePropertiesFile);
+		
+		deleteFile(messageFolder, fileName);
+		
+	}
+	
+	public String updateMessageAtStorageToSent(String storageLocation) throws DomibusConnectorClientFileSystemException {
+		if(storageLocation == null || storageLocation.isEmpty()) {
+			throw new DomibusConnectorClientFileSystemException("Storage location to store file to is null or empty! ");
+		}
+		
+		File messageFolder = new File(storageLocation);
+		if(!messageFolder.exists() || !messageFolder.isDirectory()) {
+			throw new DomibusConnectorClientFileSystemException("Storage location to store file to is not valid! "+storageLocation);
+		}
+		
+		FSMessageDetails messageDetails = DomibusConnectorClientFileSystemUtil.loadMessageProperties(messageFolder, this.messageProperties.getFileName());
+		
+		messageDetails.getMessageDetails().put(messageProperties.getMessageSentDatetime(),DomibusConnectorClientFileSystemUtil.convertDateToProperty(new Date()));
+		
+		File messagePropertiesFile = new File(messageFolder, this.messageProperties.getFileName());
+		DomibusConnectorClientFileSystemUtil.storeMessagePropertiesToFile(messageDetails, messagePropertiesFile);
+		
+		if(messageFolder.getAbsolutePath().endsWith(messageReadyPostfix)) {
+			String newFolderName = messageFolder.getAbsolutePath().substring(0, messageFolder.getAbsolutePath().length() - messageReadyPostfix.length());
+			File newMessageFolder = new File(newFolderName);
+			messageFolder.renameTo(newMessageFolder);
+			return newFolderName;
+		}
+		return messageFolder.getAbsolutePath();
+	}
 
 	public String writeMessageToFileSystem(DomibusConnectorMessageType message, File messagesDir) throws DomibusConnectorClientFileSystemException {
-		File messageFolder = createMessageFolder(message, messagesDir);
+		File messageFolder = createMessageFolder(message, messagesDir, true);
 
 		LOGGER.debug("Write new message into folder {}", messageFolder.getAbsolutePath());
 
@@ -285,6 +369,17 @@ public class DomibusConnectorClientFileSystemWriter {
 			byteArrayToFile(content, file);
 		}
 	}
+	
+	private void deleteFile(File messageFolder, String fileName) throws DomibusConnectorClientFileSystemException {
+		String filePath = messageFolder.getAbsolutePath() + File.separator + fileName;
+		File file = new File(filePath);
+		if(file.exists()) {
+			LOGGER.debug("delete file {}", filePath);
+			if(!file.delete()){
+				throw new DomibusConnectorClientFileSystemException("File "+file.getAbsolutePath()+" could not be deleted!");
+			}
+		}
+	}
 
 	private void byteArrayToFile(byte[] data, File file) throws IOException {
 		if (!file.exists()) {
@@ -317,7 +412,7 @@ public class DomibusConnectorClientFileSystemWriter {
 		}
 	}
 
-	private File createMessageFolder(DomibusConnectorMessageType message, File messagesDir) throws DomibusConnectorClientFileSystemException {
+	private File createMessageFolder(DomibusConnectorMessageType message, File messagesDir, boolean createIfNonExistent) throws DomibusConnectorClientFileSystemException {
 
 		String messageId = message.getMessageDetails().getEbmsMessageId()!=null && !message.getMessageDetails().getEbmsMessageId().isEmpty()?message.getMessageDetails().getEbmsMessageId():message.getMessageDetails().getBackendMessageId();
 		String pathname = new StringBuilder()
@@ -326,7 +421,7 @@ public class DomibusConnectorClientFileSystemWriter {
 				.append(DomibusConnectorClientFileSystemUtil.getMessageFolderName(message, messageId ))
 				.toString();
 		File messageFolder = new File(pathname);
-		if (!messageFolder.exists() || !messageFolder.isDirectory()) {
+		if (createIfNonExistent && (!messageFolder.exists() || !messageFolder.isDirectory())) {
 			LOGGER.debug("Message folder {} does not exist. Create folder!",
 					messageFolder.getAbsolutePath());
 			if (!messageFolder.mkdir()) {
@@ -394,13 +489,15 @@ public class DomibusConnectorClientFileSystemWriter {
 		this.defaultDetachedSignatureFileName = defaultDetachedSignatureFileName;
 	}
 
-	public String getMessageSentPostfix() {
-		return messageSentPostfix;
+	public String getMessageReadyPostfix() {
+		return messageReadyPostfix;
 	}
 
-	public void setMessageSentPostfix(String messageSentPostfix) {
-		this.messageSentPostfix = messageSentPostfix;
+	public void setMessageReadyPostfix(String messageReadyPostfix) {
+		this.messageReadyPostfix = messageReadyPostfix;
 	}
+
+
 
 
 }

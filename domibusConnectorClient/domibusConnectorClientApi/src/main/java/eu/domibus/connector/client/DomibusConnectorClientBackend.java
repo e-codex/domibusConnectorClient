@@ -44,4 +44,7 @@ public interface DomibusConnectorClientBackend {
 	void triggerConfirmationForMessage(DomibusConnectorMessageType originalMessage,
 			DomibusConnectorConfirmationType confirmationType, String confirmationAction)
 			throws DomibusConnectorClientBackendException;
+
+	void submitStoredClientBackendMessage(String storageLocation) throws DomibusConnectorClientBackendException;
+	
 }

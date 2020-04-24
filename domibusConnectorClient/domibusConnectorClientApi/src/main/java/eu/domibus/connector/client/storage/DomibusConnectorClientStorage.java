@@ -1,11 +1,9 @@
 package eu.domibus.connector.client.storage;
 
-import java.util.List;
 import java.util.Map;
 
 import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
-import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 
 public interface DomibusConnectorClientStorage {
 
@@ -25,4 +23,12 @@ public interface DomibusConnectorClientStorage {
 	
 	void deleteFromStorage(String storageLocation) throws DomibusConnectorClientStorageException;
 	
+	boolean storeFileIntoStorage(String storageLocation, String fileName, DomibusConnectorClientMessageFileType fileType, byte[] content);
+	
+	DomibusConnectorMessageType getStoredMessage(String storageLocation) throws DomibusConnectorClientStorageException;
+	
+	String updateStoredMessageToSent(String storageLocation) throws DomibusConnectorClientStorageException;
+
+	boolean deleteFileFromStorage(String storageLocation, String fileName,
+			DomibusConnectorClientMessageFileType fileType);
 }

@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
+import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
 import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 
@@ -22,13 +23,13 @@ public interface DomibusConnectorClientRestAPI {
 
 	@GetMapping("/getMessageById")
 	DomibusConnectorClientMessage getMessageById(@RequestParam Long id);
+	
+	@GetMapping("/getMessageByBackendMessageId")
+	DomibusConnectorClientMessage getMessageByBackendMessageId(@RequestParam String backendMessageId);
 
-	@GetMapping("/getMessagesByBackendMessageId")
-	DomibusConnectorClientMessageList getMessagesByBackendMessageId(@RequestParam String backendMessageId);
-
-	@GetMapping("/getMessagesByEbmsMessageId")
-	DomibusConnectorClientMessageList getMessagesByEbmsMessageId(@RequestParam String ebmsMessageId);
-
+	@GetMapping("/getMessageByEbmsMessageId")
+	DomibusConnectorClientMessage getMessageByEbmsMessageId(@RequestParam String ebmsMessageId);
+	
 	@GetMapping("/getMessagesByConversationId")
 	DomibusConnectorClientMessageList getMessagesByConversationId(@RequestParam String conversationId);
 
@@ -49,7 +50,20 @@ public interface DomibusConnectorClientRestAPI {
 			value = "/saveMessage", consumes = "application/json", produces = "application/json")
 	DomibusConnectorClientMessage saveMessage(@RequestBody DomibusConnectorClientMessage message);
 	
+	@PostMapping(
+			value = "/uploadMessageFile", consumes = "application/json", produces = "application/json")
+	Boolean uploadMessageFile(@RequestBody DomibusConnectorClientMessageFile messageFile);
+	
 	@GetMapping("/deleteMessageById")
 	String deleteMessageById(@RequestParam Long id);
+	
+	@GetMapping("/submitClientMessage")
+	String submitClientMessage(@RequestParam String storageLocation);
+
+	@PostMapping(
+			value = "/deleteMessageFile", consumes = "application/json", produces = "application/json")
+	Boolean deleteMessageFile(@RequestBody DomibusConnectorClientMessageFile messageFile);
+
+	
 
 }

@@ -76,7 +76,7 @@ public class SendMessages extends VerticalLayout implements RouterLayout {
 	}
 	
 	public void showSendMessage(Long connectorMessageId) {
-		sendMessage.loadPreparedMessage(connectorMessageId);
+		sendMessage.loadPreparedMessage(connectorMessageId, null);
 		sendMessage.setAlignItems(Alignment.START);
 		sendMessagesMenu.setSelectedTab(sendMessageTab);
 	}

@@ -56,12 +56,12 @@ public class VaadingConnectorClientUIServiceClient {
 		return restTemplate.getForObject(url+"/getMessageById?id={id}", DomibusConnectorClientMessage.class, id.toString());
 	}
 
-	public DomibusConnectorClientMessageList getMessagesByBackendMessageId(String backendMessageId) {
-		return restTemplate.getForObject(url+"/getMessagesByBackendMessageId?backendMessageId={id}", DomibusConnectorClientMessageList.class, backendMessageId);
+	public DomibusConnectorClientMessage getMessageByBackendMessageId(String backendMessageId) {
+		return restTemplate.getForObject(url+"/getMessageByBackendMessageId?backendMessageId={id}", DomibusConnectorClientMessage.class, backendMessageId);
 	}
 
-	public DomibusConnectorClientMessageList getMessagesByEbmsId(String ebmsId) {
-		return restTemplate.getForObject(url+"/getMessagesByEbmsMessageId?ebmsMessageId={id}", DomibusConnectorClientMessageList.class, ebmsId);
+	public DomibusConnectorClientMessage getMessageByEbmsId(String ebmsId) {
+		return restTemplate.getForObject(url+"/getMessageByEbmsMessageId?ebmsMessageId={id}", DomibusConnectorClientMessage.class, ebmsId);
 	}
 
 	public DomibusConnectorClientMessageList getMessagesByPeriod(Date fromDate, Date toDate) {
@@ -93,7 +93,21 @@ public class VaadingConnectorClientUIServiceClient {
 		return message;
 	}
 	
+	public boolean uploadFileToMessage(DomibusConnectorClientMessageFile messageFile) {
+		Boolean result = restTemplate.postForObject(url + "/uploadMessageFile", messageFile, Boolean.class);
+		return result.booleanValue();
+	}
+	
+	public boolean deleteFileFromMessage(DomibusConnectorClientMessageFile messageFile) {
+		Boolean result = restTemplate.postForObject(url + "/deleteMessageFile", messageFile, Boolean.class);
+		return result.booleanValue();
+	}
+	
 	public void deleteMessageById(Long id) {
 		restTemplate.getForObject(url+"/deleteMessageById?id={id}", String.class, id.toString());
+	}
+	
+	public String submitStoredMessage(String storageLocation) {
+		return restTemplate.getForObject(url+"/submitClientMessage?storageLocation={storageLocation}", String.class, storageLocation);
 	}
 }

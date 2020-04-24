@@ -133,6 +133,71 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 		File messageFolder = new File(storageLocation);
 		return fileSystemReader.getFileListFromMessageFolder(messageFolder);
 	}
+	
+	@Override
+	public boolean storeFileIntoStorage(String storageLocation, String fileName,
+			DomibusConnectorClientMessageFileType fileType, byte[] content) {
+		try {
+			fileSystemWriter.writeMessageFileToFileSystem(storageLocation, fileName, fileType, content);
+			return true;
+		} catch (DomibusConnectorClientFileSystemException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+	
+	@Override
+	public boolean deleteFileFromStorage(String storageLocation, String fileName, DomibusConnectorClientMessageFileType fileType) {
+		
+		try {
+			fileSystemWriter.deleteMessageFileFromFileSystem(storageLocation, fileName, fileType);
+			return true;
+		} catch (DomibusConnectorClientFileSystemException e) {
+			e.printStackTrace();
+			return false;
+		}
+		
+	}
+	
+	@Override
+	public DomibusConnectorMessageType getStoredMessage(String storageLocation)
+			throws DomibusConnectorClientStorageException {
+		
+		if(storageLocation == null || storageLocation.isEmpty()) {
+			throw new DomibusConnectorClientFileSystemException("Storage location is null or empty! ");
+		}
+		
+		File messageFolder = new File(storageLocation);
+		if(!messageFolder.exists() || !messageFolder.isDirectory()) {
+			throw new DomibusConnectorClientFileSystemException("Storage location is not valid! "+storageLocation);
+		}
+		
+		DomibusConnectorMessageType message = null;
+		try {
+			message = fileSystemReader.readMessageFromFolder(messageFolder);
+		} catch (DomibusConnectorClientFileSystemException e) {
+			LOGGER.error("Exception read message from folder {}", messageFolder.getAbsolutePath(), e);
+			throw new DomibusConnectorClientFileSystemException("Exception read message from folder "+ messageFolder.getAbsolutePath(), e);
+		}
+		
+		return message;
+	}
+	
+	@Override
+	public String updateStoredMessageToSent(String storageLocation) throws DomibusConnectorClientStorageException {
+		if(storageLocation == null || storageLocation.isEmpty()) {
+			throw new DomibusConnectorClientFileSystemException("Storage location is null or empty! ");
+		}
+		
+		File messageFolder = new File(storageLocation);
+		if(!messageFolder.exists() || !messageFolder.isDirectory()) {
+			throw new DomibusConnectorClientFileSystemException("Storage location is not valid! "+storageLocation);
+		}
+		
+		String newStorageLocation = fileSystemWriter.updateMessageAtStorageToSent(storageLocation);
+		return newStorageLocation;
+	}
+
 
 	public File getMessagesDir() {
 		return messagesDir;
@@ -154,6 +219,11 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 		
 		LOGGER.debug("#deleteFromStorage: successfully deleted storageLocation {}", storageLocation);
 	}
+
+	
+
+
+
 
 
 

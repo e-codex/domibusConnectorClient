@@ -220,8 +220,8 @@ public class MessagesList extends VerticalLayout implements AfterNavigationObser
 		searchConversationIdText.clear();
 		fromDate.clear();
 		toDate.clear();
-		DomibusConnectorClientMessageList fullList = messageService.getMessagesByBackendMessageId(searchBackendMessageIdText.getValue());
-		grid.setItems(fullList.getMessages());
+		DomibusConnectorClientMessage message = messageService.getMessageByBackendMessageId(searchBackendMessageIdText.getValue());
+		messagesView.showMessageDetails(message.getId());
 	}
 
 	private void searchByEbmsId() {
@@ -229,8 +229,8 @@ public class MessagesList extends VerticalLayout implements AfterNavigationObser
 		searchConversationIdText.clear();
 		fromDate.clear();
 		toDate.clear();
-		DomibusConnectorClientMessageList fullList = messageService.getMessagesByEbmsId(searchEbmsIdText.getValue());
-		grid.setItems(fullList.getMessages());
+		DomibusConnectorClientMessage message = messageService.getMessageByEbmsId(searchEbmsIdText.getValue());
+		messagesView.showMessageDetails(message.getId());
 	}
 
 	private void searchByPeriod() {

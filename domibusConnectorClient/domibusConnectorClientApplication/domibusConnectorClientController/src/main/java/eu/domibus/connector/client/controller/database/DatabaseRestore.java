@@ -3,6 +3,7 @@ package eu.domibus.connector.client.controller.database;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -21,49 +22,49 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmatio
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 public class DatabaseRestore {
-	
+
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DatabaseRestore.class);
-	
+
 	private DomibusConnectorClientStorage storage;
 	private DomibusConnectorClientPersistenceService persistenceService;
 
 	public DatabaseRestore() {
 		// TODO Auto-generated constructor stub
 	}
-	
+
 	public void restoreDatabaseFromStorage() {
 		LOGGER.debug("#restoreDatabaseFromStorage: enter");
-		
+
 		if(getStorage()!=null) {
 			LOGGER.debug("Storage set!");
 		}
-		
+
 		if(getPersistenceService()!=null) {
 			LOGGER.debug("PersistenceService set!");
 		}
-		
+
 		Map<String, DomibusConnectorMessageType> allStoredMessages = storage.getAllStoredMessages();
-		
+
 		if(allStoredMessages!=null && !allStoredMessages.isEmpty()) {
 			LOGGER.info("Found {} messages in storage to restore.", allStoredMessages.size());
 			allStoredMessages.keySet().forEach(storageLocation -> {
 				DomibusConnectorMessageType message = allStoredMessages.get(storageLocation);
-				
+
 				restoreMessageToDatabase(storageLocation, message);
 			});
 		}
 	}
-	
+
 	public void restoreMessageToDatabase(String storageLocation, DomibusConnectorMessageType message) {
 		LOGGER.debug("#restoreDatabaseFromStorage: enter");
-		
+
 		if(message == null || message.getMessageDetails() == null) {
 			LOGGER.warn("Message from storageLocation {} cannot be restored as no message details are given!", storageLocation);
 		}
-		
+
 		String ebmsId = message.getMessageDetails().getEbmsMessageId();
 		String backendId = message.getMessageDetails().getBackendMessageId();
-		
+
 		if(!StringUtils.isEmpty(ebmsId) && !StringUtils.isEmpty(backendId)) {
 			Optional<PDomibusConnectorClientMessage> finding = persistenceService.getMessageDao().findOneByEbmsMessageIdAndBackendMessageId(ebmsId, backendId);
 			if(finding.isPresent()) {
@@ -73,46 +74,44 @@ public class DatabaseRestore {
 				return;
 			}
 		}
-		
+
 		if(!StringUtils.isEmpty(ebmsId)) {
-			List<PDomibusConnectorClientMessage> findings = persistenceService.getMessageDao().findByEbmsMessageId(ebmsId);
-			if(!CollectionUtils.isEmpty(findings)) {
-				findings.forEach(possibleFinding ->{
-					if(possibleFinding.getStorageInfo().equals(storageLocation)) {
-						LOGGER.info("Found message with ebmsId {} and storageLocation {} in database.", ebmsId, storageLocation);
-						PDomibusConnectorClientMessage preparedDatabaseEntry = prepareDatabaseEntry(possibleFinding, message, storageLocation, PDomibusConnectorClientMessageStatus.RECEIVED);
-						this.persistenceService.mergeClientMessage(preparedDatabaseEntry);
-						return;
-					}
-				});
+			Optional<PDomibusConnectorClientMessage> finding = persistenceService.getMessageDao().findOneByEbmsMessageId(ebmsId);
+			if(finding.isPresent()) {
+				PDomibusConnectorClientMessage possibleFinding = finding.get();
+				if(possibleFinding.getStorageInfo().equals(storageLocation)) {
+					LOGGER.info("Found message with ebmsId {} and storageLocation {} in database.", ebmsId, storageLocation);
+					PDomibusConnectorClientMessage preparedDatabaseEntry = prepareDatabaseEntry(possibleFinding, message, storageLocation, PDomibusConnectorClientMessageStatus.RECEIVED);
+					this.persistenceService.mergeClientMessage(preparedDatabaseEntry);
+					return;
+				}
 			}
 		}
-		
+
 		if(!StringUtils.isEmpty(backendId)) {
-			List<PDomibusConnectorClientMessage> findings = persistenceService.getMessageDao().findByBackendMessageId(backendId);
-			if(!CollectionUtils.isEmpty(findings)) {
-				findings.forEach(possibleFinding ->{
-					if(possibleFinding.getStorageInfo().equals(storageLocation)) {
-						LOGGER.info("Found message with backendId {} and storageLocation {} in database.", backendId, storageLocation);
-						PDomibusConnectorClientMessage preparedDatabaseEntry = prepareDatabaseEntry(possibleFinding, message, storageLocation, PDomibusConnectorClientMessageStatus.PREPARED);
-						this.persistenceService.mergeClientMessage(preparedDatabaseEntry);
-						return;
-					}
-				});
+			Optional<PDomibusConnectorClientMessage> finding = persistenceService.getMessageDao().findOneByBackendMessageId(backendId);
+			if(finding.isPresent()) {
+				PDomibusConnectorClientMessage possibleFinding = finding.get();
+				if(possibleFinding.getStorageInfo().equals(storageLocation)) {
+					LOGGER.info("Found message with backendId {} and storageLocation {} in database.", backendId, storageLocation);
+					PDomibusConnectorClientMessage preparedDatabaseEntry = prepareDatabaseEntry(possibleFinding, message, storageLocation, PDomibusConnectorClientMessageStatus.PREPARED);
+					this.persistenceService.mergeClientMessage(preparedDatabaseEntry);
+					return;
+				}
 			}
 		}
-		
+
 		LOGGER.info("Message from storageLocation {} not in database yet. Creating one!", storageLocation);
-		
+
 		PDomibusConnectorClientMessage preparedDatabaseEntry = prepareDatabaseEntry(new PDomibusConnectorClientMessage(), message, storageLocation, ebmsId!=null?PDomibusConnectorClientMessageStatus.RECEIVED:PDomibusConnectorClientMessageStatus.PREPARED);
-		
+
 		this.persistenceService.getMessageDao().save(preparedDatabaseEntry);
-		
+
 		preparedDatabaseEntry = handleConfirmations(preparedDatabaseEntry, message);
-		
+
 		this.persistenceService.getMessageDao().save(preparedDatabaseEntry);
 	}
-	
+
 	private PDomibusConnectorClientMessage prepareDatabaseEntry(PDomibusConnectorClientMessage pMessage, DomibusConnectorMessageType message, String storageLocation, PDomibusConnectorClientMessageStatus messageStatus) {
 		pMessage.setAction(message.getMessageDetails().getAction()!=null?message.getMessageDetails().getAction().getAction():null);
 		pMessage.setBackendMessageId(message.getMessageDetails().getBackendMessageId());
@@ -137,70 +136,19 @@ public class DatabaseRestore {
 		if(pMessage.getCreated()==null) {
 			pMessage.setCreated(new Date());
 		}
-		
-//		if(!CollectionUtils.isEmpty(message.getMessageConfirmations())) {
-//		List<DomibusConnectorMessageConfirmationType> messageConfirmaitons = new ArrayList<DomibusConnectorMessageConfirmationType>(message.getMessageConfirmations());
-////		Collections.copy(messageConfirmaitons, message.getMessageConfirmations());
-//		if(!CollectionUtils.isEmpty(pMessage.getConfirmations())) {
-//			pMessage.getConfirmations().forEach(confirmation -> {
-//				String type = confirmation.getConfirmationType();
-//				
-//				message.getMessageConfirmations().forEach(msgConf -> {
-//					if(msgConf.getConfirmationType().name().equals(type)) {
-//						switch (msgConf.getConfirmationType()) {
-//						case RETRIEVAL:
-//						case DELIVERY: pMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.CONFIRMED);break;
-//						case NON_DELIVERY:
-//						case SUBMISSION_REJECTION:
-//						case RELAY_REMMD_FAILURE:
-//						case NON_RETRIEVAL:
-//						case RELAY_REMMD_REJECTION: pMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.REJECTED);break;
-//						case RELAY_REMMD_ACCEPTANCE:
-//						case SUBMISSION_ACCEPTANCE: pMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.ACCEPTED);break;
-//						default:
-//							break;
-//						}
-//						if(msgConf.getConfirmationType().equals(DomibusConnectorConfirmationType.DELIVERY)) {
-//							pMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.CONFIRMED);
-//						}
-//						messageConfirmaitons.remove(msgConf);
-//					}
-//				});
-//			});
-//		}
-//		
-//		if(!messageConfirmaitons.isEmpty()) {
-//			messageConfirmaitons.forEach(conf -> {
-//				PDomibusConnectorClientConfirmation clientConf = this.persistenceService.persistNewConfirmation(conf, pMessage);
-//				pMessage.getConfirmations().add(clientConf);
-//				switch (conf.getConfirmationType()) {
-//				case RETRIEVAL:
-//				case DELIVERY: pMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.CONFIRMED);break;
-//				case NON_DELIVERY:
-//				case SUBMISSION_REJECTION:
-//				case RELAY_REMMD_FAILURE:
-//				case NON_RETRIEVAL:
-//				case RELAY_REMMD_REJECTION: pMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.REJECTED);break;
-//				case RELAY_REMMD_ACCEPTANCE:
-//				case SUBMISSION_ACCEPTANCE: pMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.ACCEPTED);break;
-//				default:
-//					break;
-//				}
-//			});
-//		}
-//		}
-		
+
+
 		return pMessage;
 	}
-	
+
 	private PDomibusConnectorClientMessage handleConfirmations(PDomibusConnectorClientMessage pMessage, DomibusConnectorMessageType message) {
 		if(!CollectionUtils.isEmpty(message.getMessageConfirmations())) {
 			List<DomibusConnectorMessageConfirmationType> messageConfirmaitons = new ArrayList<DomibusConnectorMessageConfirmationType>(message.getMessageConfirmations());
-//			Collections.copy(messageConfirmaitons, message.getMessageConfirmations());
+			//			Collections.copy(messageConfirmaitons, message.getMessageConfirmations());
 			if(!CollectionUtils.isEmpty(pMessage.getConfirmations())) {
 				pMessage.getConfirmations().forEach(confirmation -> {
 					String type = confirmation.getConfirmationType();
-					
+
 					message.getMessageConfirmations().forEach(msgConf -> {
 						if(msgConf.getConfirmationType().name().equals(type)) {
 							pMessage.setMessageStatus(confirmationTypeToMessageStatus(msgConf.getConfirmationType(), pMessage.getMessageStatus(), message.getMessageDetails().getEbmsMessageId()));
@@ -209,7 +157,7 @@ public class DatabaseRestore {
 					});
 				});
 			}
-			
+
 			if(!messageConfirmaitons.isEmpty()) {
 				messageConfirmaitons.forEach(conf -> {
 					PDomibusConnectorClientConfirmation clientConf = this.persistenceService.persistNewConfirmation(conf, pMessage);
@@ -217,11 +165,11 @@ public class DatabaseRestore {
 					pMessage.setMessageStatus(confirmationTypeToMessageStatus(conf.getConfirmationType(), pMessage.getMessageStatus(), message.getMessageDetails().getEbmsMessageId()));
 				});
 			}
-			}
-			
-			return pMessage;
+		}
+
+		return pMessage;
 	}
-	
+
 	private PDomibusConnectorClientMessageStatus confirmationTypeToMessageStatus(DomibusConnectorConfirmationType type, PDomibusConnectorClientMessageStatus messageStatus, String ebmsId) {
 		switch (type) {
 		case RETRIEVAL:
@@ -235,10 +183,10 @@ public class DatabaseRestore {
 		case RELAY_REMMD_ACCEPTANCE:
 		case SUBMISSION_ACCEPTANCE: 
 			if(!messageStatus.equals(PDomibusConnectorClientMessageStatus.CONFIRMED)) {
-			if(!StringUtils.isEmpty(ebmsId)) {
-				return PDomibusConnectorClientMessageStatus.RECEIVED;
-			}else
-				return PDomibusConnectorClientMessageStatus.ACCEPTED;
+				if(!StringUtils.isEmpty(ebmsId)) {
+					return PDomibusConnectorClientMessageStatus.RECEIVED;
+				}else
+					return PDomibusConnectorClientMessageStatus.ACCEPTED;
 			}
 		}
 		return messageStatus;

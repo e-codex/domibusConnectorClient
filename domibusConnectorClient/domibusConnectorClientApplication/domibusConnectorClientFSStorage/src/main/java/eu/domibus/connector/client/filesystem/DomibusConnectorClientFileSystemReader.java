@@ -146,7 +146,7 @@ public class DomibusConnectorClientFileSystemReader {
 	}
 
 	public DomibusConnectorMessageType readMessageFromFolder(File messageFolder) throws DomibusConnectorClientFileSystemException {
-		FSMessageDetails messageDetails = loadMessageProperties(messageFolder, this.messageProperties.getFileName());
+		FSMessageDetails messageDetails = DomibusConnectorClientFileSystemUtil.loadMessageProperties(messageFolder, this.messageProperties.getFileName());
 
 //		String backendMessageId = extractBackendMessageId(messageDetails);
 
@@ -192,7 +192,7 @@ public class DomibusConnectorClientFileSystemReader {
 		Map<String, DomibusConnectorClientMessageFileType> files = new HashMap<String, DomibusConnectorClientMessageFileType>();
 		if (messageFolder.exists() && messageFolder.isDirectory() && messageFolder.listFiles().length > 0) {
 			
-			FSMessageDetails messageDetails = loadMessageProperties(messageFolder, this.messageProperties.getFileName());
+			FSMessageDetails messageDetails = DomibusConnectorClientFileSystemUtil.loadMessageProperties(messageFolder, this.messageProperties.getFileName());
 			
 			for (File sub : messageFolder.listFiles()) {
 				
@@ -255,20 +255,6 @@ public class DomibusConnectorClientFileSystemReader {
 		return null;
 	}
 
-	private FSMessageDetails loadMessageProperties(File message, String messagePropertiesFileName) {
-		String pathname = message.getAbsolutePath() + File.separator + messagePropertiesFileName;
-		LOGGER.debug("#loadMessageProperties: Loading message properties from file {}", pathname);
-		File messagePropertiesFile = new File(pathname);
-		if (!messagePropertiesFile.exists()) {
-			LOGGER.error("#loadMessageProperties: Message properties file '" + messagePropertiesFile.getAbsolutePath()
-			+ "' does not exist. Message cannot be processed!");
-			return null;
-		}
-		FSMessageDetails details = new FSMessageDetails();
-		details.loadPropertiesFromFile(messagePropertiesFile);
-
-		return details;
-	}
 
 	private DomibusConnectorMessageType processMessageFolderFiles(File workMessageFolder, FSMessageDetails messageDetails)
 			throws DomibusConnectorClientFileSystemException {

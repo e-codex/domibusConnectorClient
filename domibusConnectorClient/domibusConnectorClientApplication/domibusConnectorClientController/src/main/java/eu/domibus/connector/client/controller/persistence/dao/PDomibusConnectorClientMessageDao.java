@@ -9,16 +9,10 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
-import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessageStatus;
-import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 
 @Repository
 public interface PDomibusConnectorClientMessageDao extends CrudRepository<PDomibusConnectorClientMessage, Long> {
 
-	public List<PDomibusConnectorClientMessage> findByBackendMessageId(String backendId);
-	
-	public List<PDomibusConnectorClientMessage> findByEbmsMessageId(String ebmsMessageId);
-	
 	public List<PDomibusConnectorClientMessage> findByConversationId(String conversationId);
 	
 	@Query("SELECT m FROM PDomibusConnectorClientMessage m WHERE "
@@ -30,5 +24,11 @@ public interface PDomibusConnectorClientMessageDao extends CrudRepository<PDomib
     public List<PDomibusConnectorClientMessage> findUnconfirmed();
 	
 	public Optional<PDomibusConnectorClientMessage> findOneByEbmsMessageIdAndBackendMessageId(String ebmsMessageId, String backendId);
+	
+	public Optional<PDomibusConnectorClientMessage> findOneByStorageInfo(String storageInfo);
+	
+	public Optional<PDomibusConnectorClientMessage> findOneByBackendMessageId(String backendId);
+	
+	public Optional<PDomibusConnectorClientMessage> findOneByEbmsMessageId(String ebmsMessageId);
 	
 }

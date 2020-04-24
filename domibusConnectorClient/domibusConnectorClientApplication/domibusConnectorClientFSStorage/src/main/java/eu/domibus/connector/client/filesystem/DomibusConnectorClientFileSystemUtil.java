@@ -82,5 +82,20 @@ public class DomibusConnectorClientFileSystemUtil {
 						.toString();
 		}
 
+		public static FSMessageDetails loadMessageProperties(File message, String messagePropertiesFileName) {
+			String pathname = message.getAbsolutePath() + File.separator + messagePropertiesFileName;
+			LOGGER.debug("#loadMessageProperties: Loading message properties from file {}", pathname);
+			File messagePropertiesFile = new File(pathname);
+			if (!messagePropertiesFile.exists()) {
+				LOGGER.error("#loadMessageProperties: Message properties file '" + messagePropertiesFile.getAbsolutePath()
+				+ "' does not exist. Message cannot be processed!");
+				return null;
+			}
+			FSMessageDetails details = new FSMessageDetails();
+			details.loadPropertiesFromFile(messagePropertiesFile);
+
+			return details;
+		}
+
 	
 }

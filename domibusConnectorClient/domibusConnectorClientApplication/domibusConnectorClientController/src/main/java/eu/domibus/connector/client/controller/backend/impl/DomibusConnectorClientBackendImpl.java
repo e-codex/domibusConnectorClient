@@ -2,10 +2,12 @@ package eu.domibus.connector.client.controller.backend.impl;
 
 import java.io.File;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
@@ -24,6 +26,7 @@ import eu.domibus.connector.client.controller.persistence.service.IDomibusConnec
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
+import eu.domibus.connector.client.filesystem.DomibusConnectorClientFileSystemException;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorage;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
@@ -76,21 +79,64 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 				clientMessage.setStorageInfo(newMessageLocation);
 				clientMessage.setStorageStatus(DomibusConnectorClientStorageStatus.STORED);
 				
-				try {
-					connectorClient.submitNewMessageToConnector(message);
-					clientMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.SENT);
-				} catch (DomibusConnectorClientException e) {
-					clientMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.FAILED);
-				}
-				
-				persistenceService.mergeClientMessage(clientMessage);
+				submitAndUpdateMessage(message, clientMessage);
 			});
 			return messages;
 		}
 		
 		return null;
 	}
-
+	
+	private void submitAndUpdateMessage(DomibusConnectorMessageType message, PDomibusConnectorClientMessage clientMessage) {
+		try {
+			connectorClient.submitNewMessageToConnector(message);
+			clientMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.SENT);
+			try {
+				String newStorageLocation = storage.updateStoredMessageToSent(clientMessage.getStorageInfo());
+				clientMessage.setStorageInfo(newStorageLocation);
+			} catch (DomibusConnectorClientStorageException e) {
+				e.printStackTrace();
+			}
+			
+		} catch (DomibusConnectorClientException e) {
+			clientMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.FAILED);
+		}
+		
+		persistenceService.mergeClientMessage(clientMessage);
+	}
+	
+	@Override
+	public void submitStoredClientBackendMessage(String storageLocation) throws DomibusConnectorClientBackendException {
+		if(storageLocation == null || storageLocation.isEmpty()) {
+			throw new DomibusConnectorClientBackendException("Storage location is null or empty! ");
+		}
+		
+		DomibusConnectorMessageType message;
+		try {
+			message = storage.getStoredMessage(storageLocation);
+		} catch (DomibusConnectorClientStorageException e) {
+			throw new DomibusConnectorClientBackendException("ClientMessage could not be read from storage! StorageLocation: "+storageLocation);
+		}
+		
+		if(StringUtils.isEmpty(message.getMessageDetails().getBackendMessageId())) {
+			throw new DomibusConnectorClientBackendException("ClientMessage at storageLocation contains no backendMessageId! StorageLocation: "+storageLocation);
+		}
+		
+		PDomibusConnectorClientMessage clientMessage = null;
+		Optional<PDomibusConnectorClientMessage> finding = persistenceService.getMessageDao().findOneByBackendMessageId(message.getMessageDetails().getBackendMessageId());
+		if(finding.isPresent()) {
+			clientMessage = finding.get();
+		}else {
+			clientMessage = this.persistenceService.persistNewMessage(message, PDomibusConnectorClientMessageStatus.PREPARED);
+		}
+		
+		if(clientMessage.getMessageStatus()==null || !clientMessage.getMessageStatus().equals(PDomibusConnectorClientMessageStatus.PREPARED)) {
+			throw new DomibusConnectorClientBackendException("ClientMessage to submit must have messageStatus set as PREPARED! Id: "+clientMessage.getId());
+		}
+		
+		submitAndUpdateMessage(message, clientMessage);
+	}
+	
 	@Override
 	public void deliverNewMessageToClientBackend(DomibusConnectorMessageType message) throws DomibusConnectorClientBackendException {
 		LOGGER.debug("#deliverNewMessageToClientBackend: called");

@@ -2,6 +2,7 @@ package eu.domibus.connector.client.controller.persistence.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -114,9 +115,26 @@ public class DomibusConnectorClientPersistenceService implements IDomibusConnect
 		if(messageDetails!=null) {
 			
 			if(messageDetails.getRefToMessageId()!=null) {
-				List<PDomibusConnectorClientMessage> clientMessages = messageDao.findByEbmsMessageId(messageDetails.getRefToMessageId());
-				if(clientMessages!=null && clientMessages.size()==1) {
-					return clientMessages.get(0);
+				LOGGER.debug("#findOriginalClientMessage: try with refToMessageId {}", messageDetails.getRefToMessageId());
+				Optional<PDomibusConnectorClientMessage> clientMessage = messageDao.findOneByEbmsMessageId(messageDetails.getRefToMessageId());
+				if(clientMessage.isPresent()) {
+					LOGGER.debug("#findOriginalClientMessage: original message found by ebmsId");
+					return clientMessage.get();
+				}else {
+					clientMessage = messageDao.findOneByBackendMessageId(messageDetails.getRefToMessageId());
+					if(clientMessage.isPresent()) {
+						LOGGER.debug("#findOriginalClientMessage: original message found by backendMessageId");
+						return clientMessage.get();
+					}
+				}
+			}
+			
+			if(messageDetails.getBackendMessageId()!=null) {
+				LOGGER.debug("#findOriginalClientMessage: try with backendMessageId {}", messageDetails.getBackendMessageId());
+				Optional<PDomibusConnectorClientMessage> clientMessage = messageDao.findOneByBackendMessageId(messageDetails.getBackendMessageId());
+				if(clientMessage.isPresent()) {
+					LOGGER.debug("#findOriginalClientMessage: original message found by backendMessageId");
+					return clientMessage.get();
 				}
 			}
 		}
