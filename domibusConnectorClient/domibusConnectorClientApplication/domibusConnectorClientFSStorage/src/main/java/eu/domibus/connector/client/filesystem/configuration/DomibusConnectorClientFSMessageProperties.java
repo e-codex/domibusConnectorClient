@@ -11,7 +11,7 @@ public class DomibusConnectorClientFSMessageProperties {
     private String fromPartyId;
     private String originalSender;
     private String finalRecipient;
-    private String nationalMessageId;
+//    private String nationalMessageId;
     private String backendMessageId;
     private String ebmsMessageId;
     private String conversationId;
@@ -75,12 +75,12 @@ public class DomibusConnectorClientFSMessageProperties {
 	public void setFinalRecipient(String finalRecipient) {
 		this.finalRecipient = finalRecipient;
 	}
-	public String getNationalMessageId() {
-		return nationalMessageId;
-	}
-	public void setNationalMessageId(String nationalMessageId) {
-		this.nationalMessageId = nationalMessageId;
-	}
+//	public String getNationalMessageId() {
+//		return nationalMessageId;
+//	}
+//	public void setNationalMessageId(String nationalMessageId) {
+//		this.nationalMessageId = nationalMessageId;
+//	}
 	public String getBackendMessageId() {
 		return backendMessageId;
 	}

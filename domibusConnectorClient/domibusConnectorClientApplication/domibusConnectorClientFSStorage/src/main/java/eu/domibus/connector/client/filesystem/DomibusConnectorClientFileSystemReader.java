@@ -8,11 +8,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 import javax.activation.DataHandler;
@@ -61,18 +59,6 @@ public class DomibusConnectorClientFileSystemReader {
 
 	@NotNull
 	private String messageReadyPostfix;
-
-	@NotNull
-	private String messageSendingPostfix;
-
-	@NotNull
-	private String messageSentPostfix;
-
-	@NotNull
-	private String messageFailedPostfix;
-
-	@NotNull
-	private String messageProcessingPostfix;
 
 	@NotNull
 	private String xmlFileExtension;
@@ -129,20 +115,6 @@ public class DomibusConnectorClientFileSystemReader {
 			}
 		}
 		return messages;
-	}
-
-	public File setMessageSent(File messageFolder) throws DomibusConnectorClientFileSystemException {
-		String messageFolderString = messageFolder.getPath().replaceAll(messageSendingPostfix, "");
-		LOGGER.debug("setting message [{}] as sent with new Path [{}]", messageFolder);
-		messageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(messageFolder, messageFolderString, messageSentPostfix);
-		return messageFolder;
-	}
-
-	public File setMessageFailed(File messageFolder) throws DomibusConnectorClientFileSystemException {
-		String messageFolderString = messageFolder.getPath().replaceAll(messageSendingPostfix, "");
-		LOGGER.debug("setting message [{}] as failed with new Path [{}]", messageFolder);
-		messageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(messageFolder, messageFolderString, messageFailedPostfix);
-		return messageFolder;
 	}
 
 	public DomibusConnectorMessageType readMessageFromFolder(File messageFolder) throws DomibusConnectorClientFileSystemException {
@@ -419,32 +391,28 @@ public class DomibusConnectorClientFileSystemReader {
 				if (CONFIRMATION_NAMES.contains(name)) {
 					return true;
 				}
-				//                DomibusConnectorConfirmationType valueOf = DomibusConnectorConfirmationType.fromValue(name);
-				//				if(valueOf!=null) {
-				//					return true;
-				//				}
 			}
 		}
 		return false;
 	}
 
-	private String extractBackendMessageId(FSMessageDetails messageProperties) {
-		String backendMessageId = null;
-		if (messageProperties != null) {
-			backendMessageId = messageProperties.getMessageDetails().getProperty(this.messageProperties.getBackendMessageId());
-			LOGGER.debug("Found backendMessageId in Properties: {}", backendMessageId);
-		}
-		if (!StringUtils.hasText(backendMessageId)) {
-			backendMessageId = generateBackendMessageId();
-			messageProperties.getMessageDetails().put(this.messageProperties.getBackendMessageId(), backendMessageId);
-			LOGGER.debug("No backendMessageId resolved. Generated " + backendMessageId);
-		}
-		return backendMessageId;
-	}
-	
-	private String generateBackendMessageId() {
-		return UUID.randomUUID().toString() + "@connector-client.eu";
-	}
+//	private String extractBackendMessageId(FSMessageDetails messageProperties) {
+//		String backendMessageId = null;
+//		if (messageProperties != null) {
+//			backendMessageId = messageProperties.getMessageDetails().getProperty(this.messageProperties.getBackendMessageId());
+//			LOGGER.debug("Found backendMessageId in Properties: {}", backendMessageId);
+//		}
+//		if (!StringUtils.hasText(backendMessageId)) {
+//			backendMessageId = generateBackendMessageId();
+//			messageProperties.getMessageDetails().put(this.messageProperties.getBackendMessageId(), backendMessageId);
+//			LOGGER.debug("No backendMessageId resolved. Generated " + backendMessageId);
+//		}
+//		return backendMessageId;
+//	}
+//	
+//	private String generateBackendMessageId() {
+//		return UUID.randomUUID().toString() + "@connector-client.eu";
+//	}
 
 	private DomibusConnectorMessageDetailsType convertMessagePropertiesToMessageDetails(FSMessageDetails properties) {
 
@@ -456,8 +424,6 @@ public class DomibusConnectorClientFileSystemReader {
 		messageDetails.setOriginalSender(properties.getMessageDetails().getProperty(messageProperties.getOriginalSender()));
 		if(!StringUtils.isEmpty(properties.getMessageDetails().getProperty(messageProperties.getBackendMessageId())))
 			messageDetails.setBackendMessageId(properties.getMessageDetails().getProperty(messageProperties.getBackendMessageId()));
-		else
-			messageDetails.setBackendMessageId(properties.getMessageDetails().getProperty(messageProperties.getNationalMessageId()));
 
 
 		String fromPartyId = properties.getMessageDetails().getProperty(messageProperties.getFromPartyId());
@@ -567,37 +533,37 @@ public class DomibusConnectorClientFileSystemReader {
 		this.messageReadyPostfix = messageReadyPostfix;
 	}
 
-	public String getMessageSendingPostfix() {
-		return messageSendingPostfix;
-	}
-
-	public void setMessageSendingPostfix(String messageSendingPostfix) {
-		this.messageSendingPostfix = messageSendingPostfix;
-	}
-
-	public String getMessageSentPostfix() {
-		return messageSentPostfix;
-	}
-
-	public void setMessageSentPostfix(String messageSentPostfix) {
-		this.messageSentPostfix = messageSentPostfix;
-	}
-
-	public String getMessageFailedPostfix() {
-		return messageFailedPostfix;
-	}
-
-	public void setMessageFailedPostfix(String messageFailedPostfix) {
-		this.messageFailedPostfix = messageFailedPostfix;
-	}
-
-	public String getMessageProcessingPostfix() {
-		return messageProcessingPostfix;
-	}
-
-	public void setMessageProcessingPostfix(String messageProcessingPostfix) {
-		this.messageProcessingPostfix = messageProcessingPostfix;
-	}
+//	public String getMessageSendingPostfix() {
+//		return messageSendingPostfix;
+//	}
+//
+//	public void setMessageSendingPostfix(String messageSendingPostfix) {
+//		this.messageSendingPostfix = messageSendingPostfix;
+//	}
+//
+//	public String getMessageSentPostfix() {
+//		return messageSentPostfix;
+//	}
+//
+//	public void setMessageSentPostfix(String messageSentPostfix) {
+//		this.messageSentPostfix = messageSentPostfix;
+//	}
+//
+//	public String getMessageFailedPostfix() {
+//		return messageFailedPostfix;
+//	}
+//
+//	public void setMessageFailedPostfix(String messageFailedPostfix) {
+//		this.messageFailedPostfix = messageFailedPostfix;
+//	}
+//
+//	public String getMessageProcessingPostfix() {
+//		return messageProcessingPostfix;
+//	}
+//
+//	public void setMessageProcessingPostfix(String messageProcessingPostfix) {
+//		this.messageProcessingPostfix = messageProcessingPostfix;
+//	}
 
 	public String getXmlFileExtension() {
 		return xmlFileExtension;
