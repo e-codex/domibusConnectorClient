@@ -1,6 +1,7 @@
 package eu.domibus.connector.client;
 
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
+import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
@@ -45,6 +46,6 @@ public interface DomibusConnectorClientBackend {
 			DomibusConnectorConfirmationType confirmationType, String confirmationAction)
 			throws DomibusConnectorClientBackendException;
 
-	void submitStoredClientBackendMessage(String storageLocation) throws DomibusConnectorClientBackendException;
+	void submitStoredClientBackendMessage(String storageLocation) throws DomibusConnectorClientBackendException, DomibusConnectorClientStorageException, IllegalArgumentException;
 	
 }

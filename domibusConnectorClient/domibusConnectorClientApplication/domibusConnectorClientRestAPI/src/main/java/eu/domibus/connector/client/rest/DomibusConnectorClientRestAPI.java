@@ -36,15 +36,8 @@ public interface DomibusConnectorClientRestAPI {
 	@GetMapping("/getMessagesByPeriod")
 	DomibusConnectorClientMessageList getMessagesByPeriod(@RequestParam @DateTimeFormat(pattern = "dd.MM.yyyy") Date from, @RequestParam @DateTimeFormat(pattern = "dd.MM.yyyy") Date to);
 
-	@GetMapping("/loadContentFromStorage")
-	byte[] loadContentFromStorage(@RequestParam String storageLocation, @RequestParam String contentName);
-
-	@GetMapping("/listContentAtStorage")
-	Map<String, DomibusConnectorClientMessageFileType> listContentAtStorage(@RequestParam String storageLocation);
-	
-//	@PostMapping(
-//			value = "/createNewMessage", consumes = "application/json", produces = "application/json")
-//	DomibusConnectorClientMessage createNewMessage(@RequestBody DomibusConnectorClientMessage newMessage);
+	@GetMapping("/loadFileContentFromStorage")
+	byte[] loadFileContentFromStorage(@RequestParam String storageLocation, @RequestParam String fileName);
 	
 	@PostMapping(
 			value = "/saveMessage", consumes = "application/json", produces = "application/json")
@@ -55,10 +48,10 @@ public interface DomibusConnectorClientRestAPI {
 	Boolean uploadMessageFile(@RequestBody DomibusConnectorClientMessageFile messageFile);
 	
 	@GetMapping("/deleteMessageById")
-	String deleteMessageById(@RequestParam Long id);
+	Boolean deleteMessageById(@RequestParam Long id);
 	
-	@GetMapping("/submitClientMessage")
-	String submitClientMessage(@RequestParam String storageLocation);
+	@GetMapping("/submitStoredClientMessage")
+	Boolean submitStoredClientMessage(@RequestParam String storageLocation);
 
 	@PostMapping(
 			value = "/deleteMessageFile", consumes = "application/json", produces = "application/json")

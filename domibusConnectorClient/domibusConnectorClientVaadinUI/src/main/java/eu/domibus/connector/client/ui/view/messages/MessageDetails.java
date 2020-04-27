@@ -195,7 +195,7 @@ public class MessageDetails extends VerticalLayout implements HasUrlParameter<Lo
 	private Anchor createDownloadButton(boolean enabled, String fileName, String storageLocation) {
 		Label button = new Label(fileName);
 		final StreamResource resource = new StreamResource(fileName,
-				() -> new ByteArrayInputStream(messageService.loadContentFromStorageLocation(storageLocation, fileName)));
+				() -> new ByteArrayInputStream(messageService.loadFileContentFromStorageLocation(storageLocation, fileName)));
 
 		Anchor downloadAnchor = new Anchor();
 		if (enabled) {

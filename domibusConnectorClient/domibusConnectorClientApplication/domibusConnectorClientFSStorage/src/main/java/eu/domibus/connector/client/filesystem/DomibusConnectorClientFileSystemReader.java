@@ -199,7 +199,7 @@ public class DomibusConnectorClientFileSystemReader {
 		return files;
 	}
 	
-	public byte[] loadContentFromMessageFolder(File messageFolder, String fileName) {
+	public byte[] loadFileContentFromMessageFolder(File messageFolder, String fileName) {
 		if (messageFolder.exists() && messageFolder.isDirectory() && messageFolder.listFiles().length > 0) {
 			
 //			FSMessageDetails messageDetails = loadMessageProperties(messageFolder, this.messageProperties.getFileName());
@@ -349,7 +349,7 @@ public class DomibusConnectorClientFileSystemReader {
 		return message;
 	}
 
-	public DomibusConnectorClientStorageStatus checkStorageStatus(String storageLocation) {
+	public DomibusConnectorClientStorageStatus checkStorageStatusOfMessage(String storageLocation) {
 		File storageFile = new File(storageLocation);
 
 		//check if the storageLocation is a directory
@@ -357,17 +357,6 @@ public class DomibusConnectorClientFileSystemReader {
 			return DomibusConnectorClientStorageStatus.STORED;
 		}
 		
-		//check if the storageLocation is an XML file
-		storageFile = new File(storageLocation + xmlFileExtension);
-		if(storageFile!=null && storageFile.exists()) {
-			return DomibusConnectorClientStorageStatus.STORED;
-		}
-		
-		//check if the storageLocation is a PDF file
-		storageFile = new File(storageLocation + pdfFileExtension);
-		if(storageFile!=null && storageFile.exists()) {
-			return DomibusConnectorClientStorageStatus.STORED;
-		}
 
 		//Non of the above, so the storageLocation does not exist anymore
 		return DomibusConnectorClientStorageStatus.DELETED;

@@ -114,7 +114,7 @@ public class ReplyToMessageDialog extends VerticalLayout {
 		if(!selectedFiles.isEmpty()) {
 			files = new ArrayList<DomibusConnectorClientMessageFile>();
 			selectedFiles.forEach(file -> {
-				byte[] fileContent = this.messageService.loadContentFromStorageLocation(originalMessage.getStorageInfo(), file);
+				byte[] fileContent = this.messageService.loadFileContentFromStorageLocation(originalMessage.getStorageInfo(), file);
 				DomibusConnectorClientMessageFile att = new DomibusConnectorClientMessageFile(file, DomibusConnectorClientMessageFileType.BUSINESS_ATTACHMENT, fileContent);
 				files.add(att);
 			});

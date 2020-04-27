@@ -71,18 +71,9 @@ public class DomibusConnectorClientFileSystemWriter {
 	@NotNull
 	private String messageReadyPostfix;
 
-	public void writeConfirmationToFileSystem(DomibusConnectorMessageType confirmationMessage, String storageLocation ) throws DomibusConnectorClientFileSystemException {
+	public void writeConfirmationToFileSystem(DomibusConnectorMessageType confirmationMessage, File messageFolder ) throws DomibusConnectorClientFileSystemException {
 		DomibusConnectorMessageConfirmationType confirmation = confirmationMessage.getMessageConfirmations().get(0);
 		String type = confirmation.getConfirmationType().name();
-
-		if(storageLocation == null || storageLocation.isEmpty()) {
-			throw new DomibusConnectorClientFileSystemException("Storage location to store confirmation of type "+type+" for message "+confirmationMessage.getMessageDetails().getRefToMessageId()+" is null or empty! ");
-		}
-		
-		File messageFolder = new File(storageLocation);
-		if(!messageFolder.exists() || !messageFolder.isDirectory()) {
-			throw new DomibusConnectorClientFileSystemException("Storage location to store confirmation of type "+type+" for message "+confirmationMessage.getMessageDetails().getRefToMessageId()+" is not valid! "+storageLocation);
-		}
 		
 		String path = messageFolder.getAbsolutePath() + File.separator + type + xmlFileExtension;;
 
@@ -97,15 +88,8 @@ public class DomibusConnectorClientFileSystemWriter {
 		}
 	}
 	
-	public void writeMessageFileToFileSystem(String storageLocation, String fileName, DomibusConnectorClientMessageFileType fileType, byte[] fileContent) throws DomibusConnectorClientFileSystemException {
-		if(storageLocation == null || storageLocation.isEmpty()) {
-			throw new DomibusConnectorClientFileSystemException("Storage location to store file to is null or empty! ");
-		}
+	public void writeMessageFileToFileSystem(File messageFolder, String fileName, DomibusConnectorClientMessageFileType fileType, byte[] fileContent) throws DomibusConnectorClientFileSystemException {
 		
-		File messageFolder = new File(storageLocation);
-		if(!messageFolder.exists() || !messageFolder.isDirectory()) {
-			throw new DomibusConnectorClientFileSystemException("Storage location to store file to is not valid! "+storageLocation);
-		}
 		
 		FSMessageDetails messageDetails = DomibusConnectorClientFileSystemUtil.loadMessageProperties(messageFolder, this.messageProperties.getFileName());
 		
@@ -128,15 +112,7 @@ public class DomibusConnectorClientFileSystemWriter {
 		
 	}
 	
-	public void deleteMessageFileFromFileSystem(String storageLocation, String fileName, DomibusConnectorClientMessageFileType fileType) throws DomibusConnectorClientFileSystemException {
-		if(storageLocation == null || storageLocation.isEmpty()) {
-			throw new DomibusConnectorClientFileSystemException("Storage location to store file to is null or empty! ");
-		}
-		
-		File messageFolder = new File(storageLocation);
-		if(!messageFolder.exists() || !messageFolder.isDirectory()) {
-			throw new DomibusConnectorClientFileSystemException("Storage location to store file to is not valid! "+storageLocation);
-		}
+	public void deleteMessageFileFromFileSystem(File messageFolder, String fileName, DomibusConnectorClientMessageFileType fileType) throws DomibusConnectorClientFileSystemException {
 		
 		FSMessageDetails messageDetails = DomibusConnectorClientFileSystemUtil.loadMessageProperties(messageFolder, this.messageProperties.getFileName());
 		
@@ -154,15 +130,7 @@ public class DomibusConnectorClientFileSystemWriter {
 		
 	}
 	
-	public String updateMessageAtStorageToSent(String storageLocation) throws DomibusConnectorClientFileSystemException {
-		if(storageLocation == null || storageLocation.isEmpty()) {
-			throw new DomibusConnectorClientFileSystemException("Storage location to store file to is null or empty! ");
-		}
-		
-		File messageFolder = new File(storageLocation);
-		if(!messageFolder.exists() || !messageFolder.isDirectory()) {
-			throw new DomibusConnectorClientFileSystemException("Storage location to store file to is not valid! "+storageLocation);
-		}
+	public String updateMessageAtStorageToSent(File messageFolder) throws DomibusConnectorClientFileSystemException {
 		
 		FSMessageDetails messageDetails = DomibusConnectorClientFileSystemUtil.loadMessageProperties(messageFolder, this.messageProperties.getFileName());
 		
@@ -287,21 +255,12 @@ public class DomibusConnectorClientFileSystemWriter {
 		return messageFolder.getAbsolutePath();
 	}
 	
-	public void deleteFromStorage(String storageLocation) throws DomibusConnectorClientFileSystemException {
-		
-		if(storageLocation == null || storageLocation.isEmpty()) {
-			throw new DomibusConnectorClientFileSystemException("Storage location to be deleted is null or empty! ");
-		}
-		
-		File messageFolder = new File(storageLocation);
-		if(!messageFolder.exists() || !messageFolder.isDirectory()) {
-			throw new DomibusConnectorClientFileSystemException("Storage location to be deleted is not valid! ");
-		}
+	public void deleteFromStorage(File messageFolder) throws DomibusConnectorClientFileSystemException {
 		
 		try {
 			deleteDirectory(messageFolder);
 		} catch (Exception e) {
-			throw new DomibusConnectorClientFileSystemException("Storage location and/or its contents could not be deleted! ", e);
+			throw new DomibusConnectorClientFileSystemException("Message folder and/or its contents could not be deleted! ", e);
 		}
 		
 		

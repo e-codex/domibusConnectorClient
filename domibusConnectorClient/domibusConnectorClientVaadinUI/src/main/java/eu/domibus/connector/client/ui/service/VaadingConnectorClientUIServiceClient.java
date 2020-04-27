@@ -73,16 +73,16 @@ public class VaadingConnectorClientUIServiceClient {
 		return restTemplate.getForObject(url+"/getMessagesByConversationId?conversationId={id}", DomibusConnectorClientMessageList.class, conversationId);
 	}
 	
-	public byte[] loadContentFromStorageLocation (String storageLocation, String contentName) {
-		ResponseEntity<byte[]> result = restTemplate.exchange(url + "/loadContentFromStorage?storageLocation={storageLocation}&contentName={contentName}", HttpMethod.GET, null, byte[].class,storageLocation, contentName);
+	public byte[] loadFileContentFromStorageLocation (String storageLocation, String fileName) {
+		ResponseEntity<byte[]> result = restTemplate.exchange(url + "/loadContentFromStorage?storageLocation={storageLocation}&fileName={fileName}", HttpMethod.GET, null, byte[].class,storageLocation, fileName);
 		return result.getBody();
 	}
 	
-	public Map<String, DomibusConnectorClientMessageFileType> listContentAtStorage(String storageLocation){
-		ResponseEntity<Map> result = restTemplate.exchange(url + "/listContentAtStorage?storageLocation={storageLocation}", HttpMethod.GET, null, Map.class,storageLocation);
-		return result.getBody();
-	}
-	
+//	public Map<String, DomibusConnectorClientMessageFileType> listContentAtStorage(String storageLocation){
+//		ResponseEntity<Map> result = restTemplate.exchange(url + "/listContentAtStorage?storageLocation={storageLocation}", HttpMethod.GET, null, Map.class,storageLocation);
+//		return result.getBody();
+//	}
+//	
 //	public DomibusConnectorClientMessage createNewMessage(DomibusConnectorClientMessage newMessage) {
 //		newMessage = restTemplate.postForObject(url + "/createNewMessage", newMessage, DomibusConnectorClientMessage.class);
 //		return newMessage;

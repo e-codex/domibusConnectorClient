@@ -31,8 +31,8 @@ public class PDomibusConnectorClientMessage {
     @GeneratedValue(strategy= GenerationType.SEQUENCE, generator = "clientMessageSeqGen")
 	private Long id;
 	
-	@Column(name = "EBMS_MESSAGE_ID", length = 255)
-    private String ebmsMessageId;
+	@Column(name = "EBMS_MESSAGE_ID", length = 255, unique = true)
+	private String ebmsMessageId;
 	
 	@Column(name = "BACKEND_MESSAGE_ID", unique = true, length = 255)
     private String backendMessageId;

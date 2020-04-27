@@ -11,24 +11,32 @@ public interface DomibusConnectorClientStorage {
 
 	Map<String, DomibusConnectorMessageType> getAllStoredMessages();
 	
-	String storeMessage(DomibusConnectorMessageType message) throws DomibusConnectorClientStorageException;
+	String storeMessage(DomibusConnectorMessageType message) 
+			throws DomibusConnectorClientStorageException;
 	
-	void storeConfirmationToMessage(DomibusConnectorMessageType message, String storageLocation) throws DomibusConnectorClientStorageException;
+	void storeConfirmationToMessage(DomibusConnectorMessageType message, String storageLocation) 
+			throws DomibusConnectorClientStorageException, IllegalArgumentException;
 
 	DomibusConnectorClientStorageStatus checkStorageStatus(String storageLocation);
 	
-	byte[] loadContentFromStorageLocation(String storageLocation, String name);
+	byte[] loadFileContentFromStorageLocation(String storageLocation, String name) 
+			throws DomibusConnectorClientStorageException, IllegalArgumentException;
 	
-	Map<String, DomibusConnectorClientMessageFileType> listContentAtStorageLocation(String storageLocation);
+	Map<String, DomibusConnectorClientMessageFileType> listContentAtStorageLocation(String storageLocation) 
+			throws DomibusConnectorClientStorageException, IllegalArgumentException;
 	
-	void deleteFromStorage(String storageLocation) throws DomibusConnectorClientStorageException;
+	DomibusConnectorMessageType getStoredMessage(String storageLocation) 
+			throws DomibusConnectorClientStorageException, IllegalArgumentException;
 	
-	boolean storeFileIntoStorage(String storageLocation, String fileName, DomibusConnectorClientMessageFileType fileType, byte[] content);
-	
-	DomibusConnectorMessageType getStoredMessage(String storageLocation) throws DomibusConnectorClientStorageException;
-	
-	String updateStoredMessageToSent(String storageLocation) throws DomibusConnectorClientStorageException;
+	String updateStoredMessageToSent(String storageLocation) 
+			throws DomibusConnectorClientStorageException, IllegalArgumentException;
 
-	boolean deleteFileFromStorage(String storageLocation, String fileName,
-			DomibusConnectorClientMessageFileType fileType);
+	void storeFileIntoStorage(String storageLocation, String fileName, DomibusConnectorClientMessageFileType fileType, byte[] content) 
+			throws DomibusConnectorClientStorageException, IllegalArgumentException;
+
+	void deleteMessageFromStorage(String storageLocation) 
+			throws DomibusConnectorClientStorageException, IllegalArgumentException;
+
+	void deleteFileFromStorage(String storageLocation, String fileName,	DomibusConnectorClientMessageFileType fileType) 
+			throws DomibusConnectorClientStorageException, IllegalArgumentException;
 }
