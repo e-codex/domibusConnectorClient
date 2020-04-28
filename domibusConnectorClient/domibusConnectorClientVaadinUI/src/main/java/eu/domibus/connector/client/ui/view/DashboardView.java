@@ -3,12 +3,10 @@ package eu.domibus.connector.client.ui.view;
 import org.springframework.stereotype.Component;
 
 import com.vaadin.flow.component.html.Label;
-import com.vaadin.flow.server.PWA;
-import com.vaadin.flow.spring.annotation.UIScope;
-
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
+import com.vaadin.flow.spring.annotation.UIScope;
 
 
 @UIScope

@@ -14,8 +14,8 @@ import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.router.RouterLink;
 import com.vaadin.flow.spring.annotation.UIScope;
 
+import eu.domibus.connector.client.ui.view.configuration.Configuration;
 import eu.domibus.connector.client.ui.view.messages.Messages;
-import eu.domibus.connector.client.ui.view.sendmessage.SendMessages;
 
 @UIScope
 @org.springframework.stereotype.Component
@@ -29,7 +29,7 @@ public class DomibusConnectorClientUIMainView extends AppLayout implements Route
 	Tabs mainMenu = new Tabs();
 	
 	Tab messagesTab;
-	Tab sendMessagesTab;
+	Tab configurationTab;
 
 	public DomibusConnectorClientUIMainView(
     		) {
@@ -43,10 +43,10 @@ public class DomibusConnectorClientUIMainView extends AppLayout implements Route
         messagesTab = new Tab(createRouterLink("Messages", new Icon(VaadinIcon.ENVELOPES), Messages.class));
         messagesTab.setSelected(false);
         
-        sendMessagesTab =new Tab(createRouterLink("Send Messages", new Icon(VaadinIcon.MAILBOX), SendMessages.class));
-        sendMessagesTab.setSelected(false);
+        configurationTab =new Tab(createRouterLink("Configuration", new Icon(VaadinIcon.COGS), Configuration.class));
+        configurationTab.setSelected(false);
         
-        mainMenu.add(messagesTab, sendMessagesTab);
+        mainMenu.add(messagesTab, configurationTab);
         
         mainMenu.setOrientation(Tabs.Orientation.HORIZONTAL);
 		

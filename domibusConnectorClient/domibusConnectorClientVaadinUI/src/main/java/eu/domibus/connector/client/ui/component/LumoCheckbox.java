@@ -4,6 +4,11 @@ import com.vaadin.flow.component.checkbox.Checkbox;
 
 public class LumoCheckbox extends Checkbox {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	{super.getStyle().set("font-family", "-apple-system, BlinkMacSystemFont, \"Roboto\", \"Segoe UI\", Helvetica, Arial, sans-serif, \"Apple Color Emoji\", \"Segoe UI Emoji\", \"Segoe UI Symbol\"");}
 
 	public LumoCheckbox() {

@@ -42,10 +42,27 @@ public interface DomibusConnectorClientBackend {
 	 */
 	public void deliverNewConfirmationToClientBackend(DomibusConnectorMessageType message) throws DomibusConnectorClientBackendException;
 	
+	/**
+	 * This method triggers the connector to generate and send a confirmation.
+	 * 
+	 * @param originalMessage - The original message the confirmation should be triggered for.
+	 * @param confirmationType - The type of confirmation that should be triggered.
+	 * @param confirmationAction - The use-case specific action that is used for transmission of the confirmation
+	 * @throws DomibusConnectorClientBackendException
+	 */
 	void triggerConfirmationForMessage(DomibusConnectorMessageType originalMessage,
 			DomibusConnectorConfirmationType confirmationType, String confirmationAction)
 			throws DomibusConnectorClientBackendException;
 
+	/**
+	 * This method triggers the submission of a prepared and stored message. The message gets completely loaded out of the storage.
+	 * Therefore it is important that the message entirely is stored before triggering this method.
+	 * 
+	 * @param storageLocation - The path in the storage where the message is placed.
+	 * @throws DomibusConnectorClientBackendException
+	 * @throws DomibusConnectorClientStorageException
+	 * @throws IllegalArgumentException
+	 */
 	void submitStoredClientBackendMessage(String storageLocation) throws DomibusConnectorClientBackendException, DomibusConnectorClientStorageException, IllegalArgumentException;
 	
 }

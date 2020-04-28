@@ -11,6 +11,7 @@ import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
@@ -25,6 +26,7 @@ import eu.domibus.connector.client.exception.DomibusConnectorClientBackendExcept
 import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.client.rest.DomibusConnectorClientRestAPI;
 import eu.domibus.connector.client.rest.exception.MessageNotFoundException;
+import eu.domibus.connector.client.rest.exception.ParameterException;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
@@ -37,6 +39,8 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 @RestController
 @RequestMapping("/restservice")
 public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClientRestAPI {
+	
+	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusConnectorClientRestAPIImpl.class);
 
 	@Autowired
 	private IDomibusConnectorClientPersistenceService persistenceService;
@@ -51,7 +55,7 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 	private DomibusConnectorClientBackend connectorClientBackend;
 
 	@Override
-	public DomibusConnectorClientMessageList getAllMessages(){
+	public DomibusConnectorClientMessageList getAllMessages() {
 		Iterable<PDomibusConnectorClientMessage> findAll = persistenceService.getMessageDao().findAll();
 
 		DomibusConnectorClientMessageList messages = mapMessagesFromModel(findAll);
@@ -67,39 +71,43 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 			DomibusConnectorClientMessage message = mapMessageFromModel(msg.get());
 			return message;
 		}else {
-//			throw new ResponseStatusException(
-//					HttpStatus.INTERNAL_SERVER_ERROR, "No message with id in database: "+id);
-			throw new MessageNotFoundException("No message with id in database: "+id);
+			throw new MessageNotFoundException("No message with id found in database: "+id);
 		}
 	}
 
 	@Override
-	public DomibusConnectorClientMessage getMessageByBackendMessageId(String backendMessageId) {
+	public DomibusConnectorClientMessage getMessageByBackendMessageId(String backendMessageId) throws MessageNotFoundException {
 		Optional<PDomibusConnectorClientMessage> msg = persistenceService.getMessageDao().findOneByBackendMessageId(backendMessageId);
 
 		if(msg.isPresent()) {
 			DomibusConnectorClientMessage message = mapMessageFromModel(msg.get());
 			return message;
+		}else {
+			throw new MessageNotFoundException("No message with backendMessageId found in database: "+backendMessageId);
 		}
 
-		return null;
 	}
 
 	@Override
-	public DomibusConnectorClientMessage getMessageByEbmsMessageId(String ebmsMessageId) {
+	public DomibusConnectorClientMessage getMessageByEbmsMessageId(String ebmsMessageId) throws MessageNotFoundException {
 		Optional<PDomibusConnectorClientMessage> msg = persistenceService.getMessageDao().findOneByEbmsMessageId(ebmsMessageId);
 
 		if(msg.isPresent()) {
 			DomibusConnectorClientMessage message = mapMessageFromModel(msg.get());
 			return message;
+		}else {
+			throw new MessageNotFoundException("No message with ebmsMessageId found in database: "+ebmsMessageId);
 		}
 
-		return null;
 	}
 
 	@Override
-	public DomibusConnectorClientMessageList getMessagesByConversationId(String conversationId) {
+	public DomibusConnectorClientMessageList getMessagesByConversationId(String conversationId) throws MessageNotFoundException {
 		List<PDomibusConnectorClientMessage> msg = persistenceService.getMessageDao().findByConversationId(conversationId);
+		
+		if(CollectionUtils.isEmpty(msg)) {
+			throw new MessageNotFoundException("No messages with conversationId found in database: "+conversationId);
+		}
 
 		DomibusConnectorClientMessageList messages = mapMessagesFromModel(msg);
 
@@ -107,33 +115,33 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 	}
 
 	@Override
-	public DomibusConnectorClientMessageList getMessagesByPeriod(Date from, Date to) {
+	public DomibusConnectorClientMessageList getMessagesByPeriod(Date from, Date to) throws MessageNotFoundException {
 		List<PDomibusConnectorClientMessage> msg = persistenceService.getMessageDao().findByPeriod(from, to);
 
+		if(CollectionUtils.isEmpty(msg)) {
+			throw new MessageNotFoundException("No messages found in database using given period ");
+		}
+		
 		DomibusConnectorClientMessageList messages = mapMessagesFromModel(msg);
 
 		return messages;
 	}
 
 	@Override
-	public byte[] loadFileContentFromStorage(String storageLocation, String fileName) {
+	public byte[] loadFileContentFromStorage(String storageLocation, String fileName) throws ParameterException {
 
 		byte[] content = null;
 		try {
 			content = storage.loadFileContentFromStorageLocation(storageLocation, fileName);
-		} catch (DomibusConnectorClientStorageException e) {
-			throw new ResponseStatusException(
-					HttpStatus.SEE_OTHER, "Storage failure: "+e.getMessage(), e);
-		} catch (IllegalArgumentException e) {
-			throw new ResponseStatusException(
-					HttpStatus.BAD_REQUEST, "Parameter failure: "+e.getMessage(), e);
+		} catch (DomibusConnectorClientStorageException | IllegalArgumentException e) {
+			throw new ParameterException("Parameter failure: "+e.getMessage(), e);
 		}
 		return content;
 	}
 
 
 	@Override
-	public DomibusConnectorClientMessage saveMessage(DomibusConnectorClientMessage message) {
+	public DomibusConnectorClientMessage saveMessage(DomibusConnectorClientMessage message) throws ParameterException {
 		if(StringUtils.isEmpty(message.getBackendMessageId())) {
 			String backendMessageId = generateBackendMessageId();
 			message.setBackendMessageId(backendMessageId);
@@ -175,7 +183,7 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 	}
 
 	@Override
-	public Boolean deleteMessageById(Long id) {
+	public Boolean deleteMessageById(Long id) throws ParameterException {
 		Optional<PDomibusConnectorClientMessage> msg = persistenceService.getMessageDao().findById(id);
 
 
@@ -188,8 +196,7 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 					throw new ResponseStatusException(
 							HttpStatus.SEE_OTHER, "Storage failure: "+e.getMessage(), e);
 				} catch (IllegalArgumentException e) {
-					throw new ResponseStatusException(
-							HttpStatus.BAD_REQUEST, "Parameter failure: "+e.getMessage(), e);
+					throw new ParameterException("Parameter failure: "+e.getMessage(), e);
 				}
 			}
 
@@ -200,15 +207,14 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 	}
 
 	@Override
-	public Boolean submitStoredClientMessage(String storageLocation) {
+	public Boolean submitStoredClientMessage(DomibusConnectorClientMessage message) throws ParameterException {
 		try {
-			connectorClientBackend.submitStoredClientBackendMessage(storageLocation);
+			connectorClientBackend.submitStoredClientBackendMessage(message.getStorageInfo());
 		} catch (DomibusConnectorClientBackendException e) {
 			throw new ResponseStatusException(
 					HttpStatus.SEE_OTHER, "Client backend failure", e);
 		} catch (IllegalArgumentException e) {
-			throw new ResponseStatusException(
-					HttpStatus.BAD_REQUEST, "Parameter failure: "+e.getMessage(), e);
+			throw new ParameterException("Parameter failure: "+e.getMessage(), e);
 		} catch (DomibusConnectorClientStorageException e) {
 			throw new ResponseStatusException(
 					HttpStatus.SEE_OTHER, "Storage failure: "+e.getMessage(), e);
@@ -217,7 +223,7 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 	}
 
 	@Override
-	public Boolean uploadMessageFile(DomibusConnectorClientMessageFile messageFile) {
+	public Boolean uploadMessageFile(DomibusConnectorClientMessageFile messageFile) throws ParameterException {
 
 		try {
 			storage.storeFileIntoStorage(messageFile.getStorageLocation(), messageFile.getFileName(), messageFile.getFileType(), messageFile.getFileContent());
@@ -225,27 +231,25 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 			throw new ResponseStatusException(
 					HttpStatus.SEE_OTHER, "Storage failure: "+e.getMessage(), e);
 		} catch (IllegalArgumentException e) {
-			throw new ResponseStatusException(
-					HttpStatus.BAD_REQUEST, "Parameter failure: "+e.getMessage(), e);
+			throw new ParameterException("Parameter failure: "+e.getMessage(), e);
 		}
 		return Boolean.TRUE;
 	}
 
 	@Override
-	public Boolean deleteMessageFile(DomibusConnectorClientMessageFile messageFile) {
+	public Boolean deleteMessageFile(DomibusConnectorClientMessageFile messageFile) throws ParameterException {
 		try {
 			storage.deleteFileFromStorage(messageFile.getStorageLocation(), messageFile.getFileName(), messageFile.getFileType());
 		} catch (DomibusConnectorClientStorageException e) {
 			throw new ResponseStatusException(
 					HttpStatus.SEE_OTHER, "Storage failure: "+e.getMessage(), e);
 		} catch (IllegalArgumentException e) {
-			throw new ResponseStatusException(
-					HttpStatus.BAD_REQUEST, "Parameter failure: "+e.getMessage(), e);
+			throw new ParameterException("Parameter failure: "+e.getMessage(), e);
 		}
 		return Boolean.TRUE;
 	}
 
-	private DomibusConnectorClientMessageList mapMessagesFromModel(Iterable<PDomibusConnectorClientMessage> findAll) {
+	private DomibusConnectorClientMessageList mapMessagesFromModel(Iterable<PDomibusConnectorClientMessage> findAll)  {
 		DomibusConnectorClientMessageList messages = new DomibusConnectorClientMessageList();
 
 		findAll.forEach(message -> {
@@ -273,12 +277,12 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 			Map<String, DomibusConnectorClientMessageFileType> files = null;
 			try {
 				files = storage.listContentAtStorageLocation(message.getStorageInfo());
-			} catch (DomibusConnectorClientStorageException e) {
-				throw new ResponseStatusException(
-						HttpStatus.SEE_OTHER, "Storage failure: "+e.getMessage(), e);
-			} catch (IllegalArgumentException e) {
-				throw new ResponseStatusException(
-						HttpStatus.BAD_REQUEST, "Parameter failure: "+e.getMessage(), e);
+			} catch (DomibusConnectorClientStorageException | IllegalArgumentException e) {
+				DomibusConnectorClientStorageStatus checkStorageStatus = storage.checkStorageStatus(message.getStorageInfo());
+				message.setStorageStatus(checkStorageStatus);
+				persistenceService.mergeClientMessage(message);
+				return msg;
+				
 			}
 			files.entrySet().forEach(file -> {
 				DomibusConnectorClientMessageFile file2 = new DomibusConnectorClientMessageFile(file.getKey(), file.getValue());
@@ -299,7 +303,7 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 		return pMessage;
 	}
 
-	private DomibusConnectorMessageType mapMessageToTransition(DomibusConnectorClientMessage clientMessage) {
+	private DomibusConnectorMessageType mapMessageToTransition(DomibusConnectorClientMessage clientMessage){
 		DomibusConnectorMessageType message = messageBuilder.createNewMessage(
 				clientMessage.getBackendMessageId(), 
 				clientMessage.getEbmsMessageId(), 
@@ -316,12 +320,9 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 				if(fileContent==null) {
 					try {
 						fileContent = storage.loadFileContentFromStorageLocation(clientMessage.getStorageInfo(), file.getFileName());
-					} catch (DomibusConnectorClientStorageException e) {
-						throw new ResponseStatusException(
-								HttpStatus.SEE_OTHER, "Storage failure: "+e.getMessage(), e);
-					} catch (IllegalArgumentException e) {
-						throw new ResponseStatusException(
-								HttpStatus.BAD_REQUEST, "Parameter failure: "+e.getMessage(), e);
+					} catch (DomibusConnectorClientStorageException | IllegalArgumentException e) {
+						LOGGER.error("Exception called storage.loadFileContentFromStorageLocation with storageLocation {} and fileName {}", clientMessage.getStorageInfo(), file.getFileName(), e);
+						
 					}
 				}
 				if(fileContent != null && fileContent.length > 0) {

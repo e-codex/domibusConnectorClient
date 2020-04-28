@@ -1,22 +1,20 @@
 package eu.domibus.connector.client.ui.form;
 
-import java.time.ZoneId;
-import java.util.Date;
-
-import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
-import com.vaadin.flow.data.converter.LocalDateTimeToDateConverter;
-import com.vaadin.flow.data.converter.StringToDateConverter;
-import com.vaadin.flow.function.ValueProvider;
 
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 
 @HtmlImport("styles/shared-styles.html")
 public class DomibusConnectorClientMessageForm extends FormLayout {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private TextField backendMessageId = FormsUtil.getFormattedTextFieldReadOnly();
 	private TextField ebmsMessageId = FormsUtil.getFormattedTextFieldReadOnly();
 	private TextField conversationId = FormsUtil.getFormattedTextFieldReadOnly();

@@ -98,10 +98,11 @@ public class VaadingConnectorClientUIServiceClient {
 	}
 
 	public void deleteMessageById(Long id) {
-		restTemplate.getForObject(url+"/deleteMessageById?id={id}", String.class, id.toString());
+		restTemplate.postForObject(url+"/deleteMessageById", id, Boolean.class);
 	}
 
-	public String submitStoredMessage(String storageLocation) {
-		return restTemplate.getForObject(url+"/submitStoredClientMessage?storageLocation={storageLocation}", String.class, storageLocation);
+	public boolean submitStoredMessage(DomibusConnectorClientMessage message) {
+		Boolean result =  restTemplate.postForObject(url+"/submitStoredClientMessage", message, Boolean.class);
+		return result.booleanValue();
 	}
 }

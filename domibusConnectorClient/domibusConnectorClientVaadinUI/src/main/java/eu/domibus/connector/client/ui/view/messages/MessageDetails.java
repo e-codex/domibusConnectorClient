@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
@@ -162,10 +161,6 @@ public class MessageDetails extends VerticalLayout implements HasUrlParameter<Lo
 		deleteMessageButton.setEnabled(true);
 		replyToMessageButton.setEnabled(messageForm.getConnectorClientMessage()!=null && messageForm.getConnectorClientMessage().getMessageStatus().equals("CONFIRMED"));
 		}
-	}
-	
-	private void onError() {
-		
 	}
 	
 	private void buildMessageFilesArea(DomibusConnectorClientMessage messageByConnectorId) {

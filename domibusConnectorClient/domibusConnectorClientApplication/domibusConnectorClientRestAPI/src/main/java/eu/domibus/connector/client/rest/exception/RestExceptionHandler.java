@@ -21,6 +21,11 @@ extends ResponseEntityExceptionHandler
 			MessageNotFoundException ex) {
 		return buildResponseEntity(ex.getMessage(), HttpStatus.NOT_FOUND);
 	}
+	
+	@ExceptionHandler(ParameterException.class)
+	protected ResponseEntity<Object> handleParameter(ParameterException ex){
+		return buildResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
+	}
 
 	private ResponseEntity<Object> buildResponseEntity(String apiError, HttpStatus status) {
 		return new ResponseEntity<>(apiError, status);

@@ -3,7 +3,6 @@ package eu.domibus.connector.client.ui.view.messages;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import com.vaadin.flow.component.button.Button;
@@ -16,14 +15,17 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
-import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFileList;
 import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.client.ui.component.LumoLabel;
 import eu.domibus.connector.client.ui.service.VaadingConnectorClientUIServiceClient;
-import eu.domibus.connector.client.ui.view.sendmessage.SendMessages;
 
 public class ReplyToMessageDialog extends VerticalLayout {
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	private Messages messagesView;
 	private VaadingConnectorClientUIServiceClient messageService;

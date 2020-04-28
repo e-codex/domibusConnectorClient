@@ -10,6 +10,11 @@ import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 
 public class DynamicMessageForm extends FormLayout{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
 	private TextField backendMessageId = FormsUtil.getFormattedTextField();
 	private TextField ebmsMessageId = FormsUtil.getFormattedTextField();
 	private TextField conversationId = FormsUtil.getFormattedTextField();

@@ -8,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.vaadin.flow.component.button.Button;
-import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
@@ -150,7 +149,7 @@ public class SendMessage  extends VerticalLayout implements HasUrlParameter<Long
 				resultLabel.setText("For message submission a BUSINESS_CONTENT and BUSINESS_DOCUMENT must be present!");
 				resultLabel.getStyle().set("color", "red");
 			}else {
-				this.messageService.submitStoredMessage(messageForm.getConnectorClientMessage().getStorageInfo());
+				this.messageService.submitStoredMessage(messageForm.getConnectorClientMessage());
 				resultLabel.setText("Message successfully submitted!");
 				resultLabel.getStyle().set("color", "green");
 				
