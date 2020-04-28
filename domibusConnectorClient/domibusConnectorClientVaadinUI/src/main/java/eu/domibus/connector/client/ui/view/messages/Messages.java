@@ -1,7 +1,10 @@
 package eu.domibus.connector.client.ui.view.messages;
 
+import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.Component;
+import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.UI;
+import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.Label;
@@ -126,6 +129,27 @@ public class Messages extends VerticalLayout implements RouterLayout, BeforeEnte
 			
 			return diag;
 		
+	}
+	
+	public Dialog getErrorDialog(String header, String message) {
+		Dialog diag = new Dialog();
+		
+		Div headerContent = new Div();
+		Label headerLabel = new Label(header);
+		headerLabel.getStyle().set("font-weight", "bold");
+		headerLabel.getStyle().set("font-style", "italic");
+		headerContent.getStyle().set("text-align", "center");
+		headerContent.getStyle().set("padding", "10px");
+		headerContent.add(headerLabel);
+		diag.add(headerContent);
+
+		Div labelContent = new Div();
+		LumoLabel label = new LumoLabel(message);
+		
+		labelContent.add(label);
+		diag.add(labelContent);
+		
+		return diag;
 	}
 
 	@Override

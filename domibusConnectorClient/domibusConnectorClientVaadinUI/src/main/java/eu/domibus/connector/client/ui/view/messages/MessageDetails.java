@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
@@ -31,6 +32,7 @@ import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.client.ui.component.LumoLabel;
 import eu.domibus.connector.client.ui.form.DomibusConnectorClientMessageForm;
+import eu.domibus.connector.client.ui.service.ConnectorClientServiceClientException;
 import eu.domibus.connector.client.ui.service.VaadingConnectorClientUIServiceClient;
 
 @Component
@@ -134,7 +136,22 @@ public class MessageDetails extends VerticalLayout implements HasUrlParameter<Lo
 	public void loadMessageDetails(Long msgId) {
 		
 		if(msgId!=null) {
-		DomibusConnectorClientMessage msg = messageService.getMessageById(msgId);
+		DomibusConnectorClientMessage msg = null;
+		try {
+			msg = messageService.getMessageById(msgId);
+		} catch (ConnectorClientServiceClientException e) {
+			Dialog diag = messagesView.getErrorDialog("Error retrieve Message from connector client", e.getMessage());
+			Button okButton = new Button("OK");
+			okButton.addClickListener(event -> {
+				messagesView.showMessagesList();
+				diag.close();
+			});
+			
+			diag.add(okButton);
+			
+			diag.open();
+			return;
+		}
 		messageForm.setConnectorClientMessage(msg);
 
 		buildMessageFilesArea(msg);
@@ -145,6 +162,10 @@ public class MessageDetails extends VerticalLayout implements HasUrlParameter<Lo
 		deleteMessageButton.setEnabled(true);
 		replyToMessageButton.setEnabled(messageForm.getConnectorClientMessage()!=null && messageForm.getConnectorClientMessage().getMessageStatus().equals("CONFIRMED"));
 		}
+	}
+	
+	private void onError() {
+		
 	}
 	
 	private void buildMessageFilesArea(DomibusConnectorClientMessage messageByConnectorId) {

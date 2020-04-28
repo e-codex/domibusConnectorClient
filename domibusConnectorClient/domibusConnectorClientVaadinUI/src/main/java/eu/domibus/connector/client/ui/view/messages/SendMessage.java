@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.confirmdialog.ConfirmDialog;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.grid.Grid.Column;
@@ -34,6 +35,7 @@ import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.client.ui.component.LumoLabel;
 import eu.domibus.connector.client.ui.form.DynamicMessageForm;
+import eu.domibus.connector.client.ui.service.ConnectorClientServiceClientException;
 import eu.domibus.connector.client.ui.service.VaadingConnectorClientUIServiceClient;
 
 @Component
@@ -254,7 +256,23 @@ public class SendMessage  extends VerticalLayout implements HasUrlParameter<Long
 	}
 
 	public void loadPreparedMessage(Long connectorMessageId, LumoLabel result) {
-		DomibusConnectorClientMessage messageByConnectorId = messageService.getMessageById(connectorMessageId);
+		DomibusConnectorClientMessage messageByConnectorId = null;
+		try {
+			messageByConnectorId = messageService.getMessageById(connectorMessageId);
+		} catch (ConnectorClientServiceClientException e) {
+			Dialog diag = messagesView.getErrorDialog("Error loading prepared Message from connector client", e.getMessage());
+			Button okButton = new Button("OK");
+			okButton.addClickListener(event -> {
+				messagesView.showMessagesList();
+				diag.close();
+			});
+			
+			diag.add(okButton);
+			
+			diag.open();
+			return;
+			
+		}
 		messageForm.setConnectorClientMessage(messageByConnectorId);
 
 		filesEnabled = messageForm.getConnectorClientMessage()!=null && 

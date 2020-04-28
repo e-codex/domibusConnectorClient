@@ -137,6 +137,7 @@ public class DomibusConnectorClientPersistenceService implements IDomibusConnect
 					return clientMessage.get();
 				}
 			}
+			
 		}
 		
 		return null;

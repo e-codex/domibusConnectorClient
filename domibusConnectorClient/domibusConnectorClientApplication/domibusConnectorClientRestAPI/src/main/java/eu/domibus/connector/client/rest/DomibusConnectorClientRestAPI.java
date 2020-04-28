@@ -1,7 +1,6 @@
 package eu.domibus.connector.client.rest;
 
 import java.util.Date;
-import java.util.Map;
 
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,10 +9,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import eu.domibus.connector.client.rest.exception.MessageNotFoundException;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
-import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 
 @RequestMapping("/restservice")
 public interface DomibusConnectorClientRestAPI {
@@ -22,7 +21,7 @@ public interface DomibusConnectorClientRestAPI {
 	DomibusConnectorClientMessageList getAllMessages();
 
 	@GetMapping("/getMessageById")
-	DomibusConnectorClientMessage getMessageById(@RequestParam Long id);
+	DomibusConnectorClientMessage getMessageById(@RequestParam Long id) throws MessageNotFoundException;
 	
 	@GetMapping("/getMessageByBackendMessageId")
 	DomibusConnectorClientMessage getMessageByBackendMessageId(@RequestParam String backendMessageId);

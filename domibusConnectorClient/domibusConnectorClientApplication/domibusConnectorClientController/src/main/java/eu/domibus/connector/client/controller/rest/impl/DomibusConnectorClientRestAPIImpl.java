@@ -24,6 +24,7 @@ import eu.domibus.connector.client.controller.persistence.service.IDomibusConnec
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.client.rest.DomibusConnectorClientRestAPI;
+import eu.domibus.connector.client.rest.exception.MessageNotFoundException;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
@@ -59,14 +60,17 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 	}
 
 	@Override
-	public DomibusConnectorClientMessage getMessageById(Long id) {
+	public DomibusConnectorClientMessage getMessageById(Long id) throws MessageNotFoundException {
 		Optional<PDomibusConnectorClientMessage> msg = persistenceService.getMessageDao().findById(id);
 
-		if(msg.get() !=null) {
+		if(msg.isPresent()) {
 			DomibusConnectorClientMessage message = mapMessageFromModel(msg.get());
 			return message;
+		}else {
+//			throw new ResponseStatusException(
+//					HttpStatus.INTERNAL_SERVER_ERROR, "No message with id in database: "+id);
+			throw new MessageNotFoundException("No message with id in database: "+id);
 		}
-		return null;
 	}
 
 	@Override

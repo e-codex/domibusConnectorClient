@@ -178,7 +178,7 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 		
 		PDomibusConnectorClientMessage originalClientMessage = persistenceService.findOriginalClientMessage(message);
 		if(originalClientMessage == null) {
-			throw new DomibusConnectorClientBackendException("Original client message with ebmsId "+message.getMessageDetails().getRefToMessageId()+" not found! Confirmation of type "+confirmation.getConfirmationType().name()+" cannot be stored!") ;
+			throw new DomibusConnectorClientBackendException("Original client message with refToMessageId "+message.getMessageDetails().getRefToMessageId()+" not found! Confirmation of type "+confirmation.getConfirmationType().name()+" cannot be stored!") ;
 		}
 		
 		String storageLocation = originalClientMessage.getStorageInfo();
