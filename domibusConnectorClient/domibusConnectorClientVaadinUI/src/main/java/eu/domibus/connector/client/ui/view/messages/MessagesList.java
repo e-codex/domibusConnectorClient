@@ -28,6 +28,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
+import eu.domibus.connector.client.ui.service.ConnectorClientServiceClientException;
 import eu.domibus.connector.client.ui.service.VaadingConnectorClientUIServiceClient;
 
 @Component
@@ -218,7 +219,13 @@ public class MessagesList extends VerticalLayout implements AfterNavigationObser
 		searchConversationIdText.clear();
 		fromDate.clear();
 		toDate.clear();
-		DomibusConnectorClientMessage message = messageService.getMessageByBackendMessageId(searchBackendMessageIdText.getValue());
+		DomibusConnectorClientMessage message = null;
+		try {
+			message = messageService.getMessageByBackendMessageId(searchBackendMessageIdText.getValue());
+		} catch (ConnectorClientServiceClientException e) {
+			openErrorDialog(e.getMessage());
+			return;
+		}
 		messagesView.showMessageDetails(message.getId());
 	}
 
@@ -227,7 +234,13 @@ public class MessagesList extends VerticalLayout implements AfterNavigationObser
 		searchConversationIdText.clear();
 		fromDate.clear();
 		toDate.clear();
-		DomibusConnectorClientMessage message = messageService.getMessageByEbmsId(searchEbmsIdText.getValue());
+		DomibusConnectorClientMessage message = null;
+		try {
+			message = messageService.getMessageByEbmsId(searchEbmsIdText.getValue());
+		} catch (ConnectorClientServiceClientException e) {
+			openErrorDialog(e.getMessage());
+			return;
+		}
 		messagesView.showMessageDetails(message.getId());
 	}
 
@@ -246,7 +259,13 @@ public class MessagesList extends VerticalLayout implements AfterNavigationObser
 		}else {
 			toDate = new Date(toDate.getTime() + TimeUnit.DAYS.toMillis( 1 ));
 		}
-		DomibusConnectorClientMessageList fullList = messageService.getMessagesByPeriod(fromDate, toDate);
+		DomibusConnectorClientMessageList fullList = null;
+		try {
+			fullList = messageService.getMessagesByPeriod(fromDate, toDate);
+		} catch (ConnectorClientServiceClientException e) {
+			openErrorDialog(e.getMessage());
+			return;
+		}
 		grid.setItems(fullList.getMessages());
 	}
 	
@@ -255,8 +274,27 @@ public class MessagesList extends VerticalLayout implements AfterNavigationObser
 		searchBackendMessageIdText.clear();
 		fromDate.clear();
 		toDate.clear();
-		DomibusConnectorClientMessageList fullList = messageService.getMessagesByConversationId(searchConversationIdText.getValue());
+		DomibusConnectorClientMessageList fullList = null;
+		try {
+			fullList = messageService.getMessagesByConversationId(searchConversationIdText.getValue());
+		} catch (ConnectorClientServiceClientException e) {
+			openErrorDialog(e.getMessage());
+			return;
+		}
 		grid.setItems(fullList.getMessages());
+	}
+	
+	private void openErrorDialog(String message) {
+		Dialog diag = messagesView.getErrorDialog("Error retrieve Message from connector client", message);
+		Button okButton = new Button("OK");
+		okButton.addClickListener(event -> {
+//			messagesView.showMessagesList();
+			diag.close();
+		});
+		
+		diag.add(okButton);
+		
+		diag.open();
 	}
 
 	public static Date asDate(LocalDate localDate) {

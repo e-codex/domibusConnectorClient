@@ -60,21 +60,85 @@ public class VaadingConnectorClientUIServiceClient {
 		}
 	}
 
-	public DomibusConnectorClientMessage getMessageByBackendMessageId(String backendMessageId) {
-		return restTemplate.getForObject(url+"/getMessageByBackendMessageId?backendMessageId={id}", DomibusConnectorClientMessage.class, backendMessageId);
+	public DomibusConnectorClientMessage getMessageByBackendMessageId(String backendMessageId) throws ConnectorClientServiceClientException {
+		try {
+			DomibusConnectorClientMessage message = this.client.get()
+					.uri(uriBuilder -> uriBuilder
+							.path("/getMessageByBackendMessageId")
+							.queryParam("backendMessageId", backendMessageId)
+							.build(backendMessageId))
+					.retrieve()
+					.bodyToMono(DomibusConnectorClientMessage.class)
+					.onErrorStop()
+					.block();
+
+
+			return message;
+		}catch(WebClientResponseException e) {
+			throw new ConnectorClientServiceClientException(e.getResponseBodyAsString());
+		}
 	}
 
-	public DomibusConnectorClientMessage getMessageByEbmsId(String ebmsId) {
-		return restTemplate.getForObject(url+"/getMessageByEbmsMessageId?ebmsMessageId={id}", DomibusConnectorClientMessage.class, ebmsId);
+	public DomibusConnectorClientMessage getMessageByEbmsId(String ebmsId) throws ConnectorClientServiceClientException {
+		try {
+			DomibusConnectorClientMessage message = this.client.get()
+					.uri(uriBuilder -> uriBuilder
+							.path("/getMessageByEbmsMessageId")
+							.queryParam("ebmsMessageId", ebmsId)
+							.build(ebmsId))
+					.retrieve()
+					.bodyToMono(DomibusConnectorClientMessage.class)
+					.onErrorStop()
+					.block();
+
+
+			return message;
+		}catch(WebClientResponseException e) {
+			throw new ConnectorClientServiceClientException(e.getResponseBodyAsString());
+		}
 	}
 
-	public DomibusConnectorClientMessageList getMessagesByPeriod(Date fromDate, Date toDate) {
+	public DomibusConnectorClientMessageList getMessagesByPeriod(Date fromDate, Date toDate) throws ConnectorClientServiceClientException {
+		
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
-		return restTemplate.getForObject(url+"/getMessagesByPeriod?from={from}&to={to}", DomibusConnectorClientMessageList.class, sdf.format(fromDate), sdf.format(toDate));
+		try {
+			DomibusConnectorClientMessageList message = this.client.get()
+					.uri(uriBuilder -> uriBuilder
+							.path("/getMessagesByPeriod")
+							.queryParam("from", sdf.format(fromDate))
+							.queryParam("to", sdf.format(toDate))
+							.build(sdf.format(fromDate), sdf.format(toDate)))
+					.retrieve()
+					.bodyToMono(DomibusConnectorClientMessageList.class)
+					.onErrorStop()
+					.block();
+
+
+			return message;
+		}catch(WebClientResponseException e) {
+			throw new ConnectorClientServiceClientException(e.getResponseBodyAsString());
+		}
+//		return restTemplate.getForObject(url+"/getMessagesByPeriod?from={from}&to={to}", DomibusConnectorClientMessageList.class, sdf.format(fromDate), sdf.format(toDate));
 	}
 
-	public DomibusConnectorClientMessageList getMessagesByConversationId(String conversationId) {
-		return restTemplate.getForObject(url+"/getMessagesByConversationId?conversationId={id}", DomibusConnectorClientMessageList.class, conversationId);
+	public DomibusConnectorClientMessageList getMessagesByConversationId(String conversationId) throws ConnectorClientServiceClientException {
+		try {
+			DomibusConnectorClientMessageList message = this.client.get()
+					.uri(uriBuilder -> uriBuilder
+							.path("/getMessagesByConversationId")
+							.queryParam("conversationId", conversationId)
+							.build(conversationId))
+					.retrieve()
+					.bodyToMono(DomibusConnectorClientMessageList.class)
+					.onErrorStop()
+					.block();
+
+
+			return message;
+		}catch(WebClientResponseException e) {
+			throw new ConnectorClientServiceClientException(e.getResponseBodyAsString());
+		}
+//		return restTemplate.getForObject(url+"/getMessagesByConversationId?conversationId={id}", DomibusConnectorClientMessageList.class, conversationId);
 	}
 
 	public byte[] loadFileContentFromStorageLocation (String storageLocation, String fileName) {
