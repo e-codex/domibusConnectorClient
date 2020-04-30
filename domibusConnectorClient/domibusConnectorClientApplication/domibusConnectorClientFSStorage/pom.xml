@@ -14,7 +14,12 @@
 			<version>${project.version}</version>
 		</dependency>
   
-  
+  <dependency>
+			<groupId>eu.ecodex.utils</groupId>
+			<artifactId>spring-property-configuration-validator</artifactId>
+			<version>0.0.16-RELEASE</version>
+		</dependency>
+		
   <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>

@@ -8,7 +8,7 @@ import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
-import eu.domibus.connector.lib.spring.DomibusConnectorDuration;
+import eu.domibus.connector.lib.spring.configuration.types.DomibusConnectorDuration;
 
 @Component
 @ConfigurationProperties(prefix = AutoConfirmMessagesJobConfigurationProperties.PREFIX)

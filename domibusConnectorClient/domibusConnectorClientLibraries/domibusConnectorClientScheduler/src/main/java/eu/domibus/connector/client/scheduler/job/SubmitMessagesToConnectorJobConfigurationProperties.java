@@ -1,8 +1,9 @@
 package eu.domibus.connector.client.scheduler.job;
 
-import eu.domibus.connector.lib.spring.DomibusConnectorDuration;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
+
+import eu.domibus.connector.lib.spring.configuration.types.DomibusConnectorDuration;
 
 @Component
 @ConfigurationProperties(prefix = SubmitMessagesToConnectorJobConfigurationProperties.PREFIX)

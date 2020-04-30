@@ -13,7 +13,6 @@ import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.filesystem.DomibusConnectorClientFSStorage;
 import eu.domibus.connector.client.filesystem.DomibusConnectorClientFSStorageImpl;
-import eu.domibus.connector.client.filesystem.configuration.validation.CheckFolderWriteable;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorage;
 
 @Configuration
@@ -28,7 +27,7 @@ public class DomibusConnectorClientFSStorageConfiguration {
     public static final String ENABLED_PROPERTY_NAME = "enabled";
     
     @NestedConfigurationProperty
-    @CheckFolderWriteable
+//    @CheckFolderWriteable
     private DirectoryConfigurationProperties messages;
     
     @NestedConfigurationProperty

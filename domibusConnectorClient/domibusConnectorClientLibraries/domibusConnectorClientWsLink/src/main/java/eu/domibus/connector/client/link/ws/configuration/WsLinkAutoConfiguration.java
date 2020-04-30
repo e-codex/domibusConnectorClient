@@ -42,13 +42,13 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.ImportResource;
 
+import eu.domibus.connector.client.link.ws.DefaultWsCallbackHandler;
+import eu.domibus.connector.client.link.ws.WsPolicyLoader;
 import eu.domibus.connector.client.link.ws.impl.DomibusConnectorClientDeliveryWsImpl;
 import eu.domibus.connector.client.link.ws.impl.DomibusConnectorClientWSLinkImpl;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 import eu.domibus.connector.lib.spring.configuration.CxfTrustKeyStoreConfigurationProperties;
 import eu.domibus.connector.lib.spring.configuration.StoreConfigurationProperties;
-import eu.domibus.connector.link.common.DefaultWsCallbackHandler;
-import eu.domibus.connector.link.common.WsPolicyLoader;
 import eu.domibus.connector.ws.backend.delivery.webservice.DomibusConnectorBackendDeliveryWSService;
 import eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWSService;
 import eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWebService;
