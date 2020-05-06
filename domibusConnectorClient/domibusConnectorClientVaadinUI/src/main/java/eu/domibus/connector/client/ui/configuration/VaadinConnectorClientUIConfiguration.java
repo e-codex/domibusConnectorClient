@@ -7,7 +7,6 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.client.RestTemplate;
 
 @Configuration
-@PropertySource("classpath:application.properties")
 public class VaadinConnectorClientUIConfiguration {
 
 	public VaadinConnectorClientUIConfiguration() {
