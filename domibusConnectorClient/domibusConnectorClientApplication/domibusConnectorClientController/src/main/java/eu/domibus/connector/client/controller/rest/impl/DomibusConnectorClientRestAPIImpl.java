@@ -26,7 +26,9 @@ import eu.domibus.connector.client.exception.DomibusConnectorClientBackendExcept
 import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.client.rest.DomibusConnectorClientRestAPI;
 import eu.domibus.connector.client.rest.exception.MessageNotFoundException;
+import eu.domibus.connector.client.rest.exception.MessageSubmissionException;
 import eu.domibus.connector.client.rest.exception.ParameterException;
+import eu.domibus.connector.client.rest.exception.StorageException;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
@@ -141,7 +143,8 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 
 
 	@Override
-	public DomibusConnectorClientMessage saveMessage(DomibusConnectorClientMessage message) throws ParameterException {
+	public DomibusConnectorClientMessage saveMessage(DomibusConnectorClientMessage message) throws ParameterException, StorageException {
+		LOGGER.debug("#saveMessage: entered");
 		if(StringUtils.isEmpty(message.getBackendMessageId())) {
 			String backendMessageId = generateBackendMessageId();
 			message.setBackendMessageId(backendMessageId);
@@ -168,8 +171,7 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 		try {
 			storageLocation = storage.storeMessage(msg);
 		} catch (DomibusConnectorClientStorageException e) {
-			throw new ResponseStatusException(
-					HttpStatus.SEE_OTHER, "Storage failure: "+e.getMessage(), e);
+			throw new StorageException("Storage failure: "+e.getMessage(), e);
 		}
 		pMessage.setStorageInfo(storageLocation);
 		pMessage.setStorageStatus(DomibusConnectorClientStorageStatus.STORED);
@@ -183,7 +185,9 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 	}
 
 	@Override
-	public Boolean deleteMessageById(Long id) throws ParameterException {
+	public Boolean deleteMessageById(Long id) throws ParameterException, StorageException {
+		LOGGER.debug("#deleteMessageById: entered with id {}", id.longValue());
+		
 		Optional<PDomibusConnectorClientMessage> msg = persistenceService.getMessageDao().findById(id);
 
 
@@ -193,8 +197,7 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 				try {
 					storage.deleteMessageFromStorage(msg.get().getStorageInfo());
 				} catch (DomibusConnectorClientStorageException e) {
-					throw new ResponseStatusException(
-							HttpStatus.SEE_OTHER, "Storage failure: "+e.getMessage(), e);
+					throw new StorageException("Storage failure: "+e.getMessage(), e);
 				} catch (IllegalArgumentException e) {
 					throw new ParameterException("Parameter failure: "+e.getMessage(), e);
 				}
@@ -207,29 +210,27 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 	}
 
 	@Override
-	public Boolean submitStoredClientMessage(DomibusConnectorClientMessage message) throws ParameterException {
+	public Boolean submitStoredClientMessage(DomibusConnectorClientMessage message) throws ParameterException, StorageException, MessageSubmissionException {
+		LOGGER.debug("#submitStoredClientMessage: entered with storageLocation {}", message.getStorageInfo());
 		try {
 			connectorClientBackend.submitStoredClientBackendMessage(message.getStorageInfo());
 		} catch (DomibusConnectorClientBackendException e) {
-			throw new ResponseStatusException(
-					HttpStatus.SEE_OTHER, "Client backend failure", e);
+			throw new MessageSubmissionException("Client backend failure: "+ e.getMessage(), e);
 		} catch (IllegalArgumentException e) {
 			throw new ParameterException("Parameter failure: "+e.getMessage(), e);
 		} catch (DomibusConnectorClientStorageException e) {
-			throw new ResponseStatusException(
-					HttpStatus.SEE_OTHER, "Storage failure: "+e.getMessage(), e);
+			throw new StorageException("Storage failure: "+e.getMessage(), e);
 		}
 		return Boolean.TRUE;
 	}
 
 	@Override
-	public Boolean uploadMessageFile(DomibusConnectorClientMessageFile messageFile) throws ParameterException {
-
+	public Boolean uploadMessageFile(DomibusConnectorClientMessageFile messageFile) throws ParameterException, StorageException {
+		LOGGER.debug("#uploadMessageFile: entered with fileName {} and storageLocation {}", messageFile.getFileName(), messageFile.getStorageLocation());
 		try {
 			storage.storeFileIntoStorage(messageFile.getStorageLocation(), messageFile.getFileName(), messageFile.getFileType(), messageFile.getFileContent());
 		} catch (DomibusConnectorClientStorageException e) {
-			throw new ResponseStatusException(
-					HttpStatus.SEE_OTHER, "Storage failure: "+e.getMessage(), e);
+			throw new StorageException("Storage failure: "+e.getMessage(), e);
 		} catch (IllegalArgumentException e) {
 			throw new ParameterException("Parameter failure: "+e.getMessage(), e);
 		}
@@ -237,12 +238,12 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 	}
 
 	@Override
-	public Boolean deleteMessageFile(DomibusConnectorClientMessageFile messageFile) throws ParameterException {
+	public Boolean deleteMessageFile(DomibusConnectorClientMessageFile messageFile) throws ParameterException, StorageException {
+		LOGGER.debug("#deleteMessageFile: entered with fileName {} and storageLocation {}", messageFile.getFileName(), messageFile.getStorageLocation());
 		try {
 			storage.deleteFileFromStorage(messageFile.getStorageLocation(), messageFile.getFileName(), messageFile.getFileType());
 		} catch (DomibusConnectorClientStorageException e) {
-			throw new ResponseStatusException(
-					HttpStatus.SEE_OTHER, "Storage failure: "+e.getMessage(), e);
+			throw new StorageException("Storage failure: "+e.getMessage(), e);
 		} catch (IllegalArgumentException e) {
 			throw new ParameterException("Parameter failure: "+e.getMessage(), e);
 		}

@@ -4,26 +4,22 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
+import reactor.core.publisher.Mono;
 
 @Controller
-public class VaadingConnectorClientUIServiceClient {
+public class VaadingConnectorClientUIServiceClient
+{
 
 	@Autowired
-	private RestTemplate restTemplate;
-
-	WebClient client = WebClient.create("http://localhost:8080/restservice");
-
-	private String url = "http://localhost:8080/restservice";
+	private WebClient client;
 
 	public DomibusConnectorClientMessageList getAllMessages() {
 
@@ -99,7 +95,7 @@ public class VaadingConnectorClientUIServiceClient {
 	}
 
 	public DomibusConnectorClientMessageList getMessagesByPeriod(Date fromDate, Date toDate) throws ConnectorClientServiceClientException {
-		
+
 		SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
 		try {
 			DomibusConnectorClientMessageList message = this.client.get()
@@ -118,7 +114,6 @@ public class VaadingConnectorClientUIServiceClient {
 		}catch(WebClientResponseException e) {
 			throw new ConnectorClientServiceClientException(e.getResponseBodyAsString());
 		}
-//		return restTemplate.getForObject(url+"/getMessagesByPeriod?from={from}&to={to}", DomibusConnectorClientMessageList.class, sdf.format(fromDate), sdf.format(toDate));
 	}
 
 	public DomibusConnectorClientMessageList getMessagesByConversationId(String conversationId) throws ConnectorClientServiceClientException {
@@ -138,35 +133,74 @@ public class VaadingConnectorClientUIServiceClient {
 		}catch(WebClientResponseException e) {
 			throw new ConnectorClientServiceClientException(e.getResponseBodyAsString());
 		}
-//		return restTemplate.getForObject(url+"/getMessagesByConversationId?conversationId={id}", DomibusConnectorClientMessageList.class, conversationId);
 	}
 
 	public byte[] loadFileContentFromStorageLocation (String storageLocation, String fileName) {
-		ResponseEntity<byte[]> result = restTemplate.exchange(url + "/loadFileContentFromStorage?storageLocation={storageLocation}&fileName={fileName}", HttpMethod.GET, null, byte[].class,storageLocation, fileName);
-		return result.getBody();
+		Mono<byte[]> result = this.client.get()
+				.uri(uriBuilder -> uriBuilder
+						.path("/loadFileContentFromStorage")
+						.queryParam("storageLocation", storageLocation)
+						.queryParam("fileName", fileName)
+						.build(storageLocation, fileName))
+				.exchange()
+				.flatMap(response -> response.bodyToMono(ByteArrayResource.class))
+				.map(ByteArrayResource::getByteArray);
+		return result.block();
 	}
 
 	public DomibusConnectorClientMessage saveMessage(DomibusConnectorClientMessage message) {
-		message = restTemplate.postForObject(url + "/saveMessage", message, DomibusConnectorClientMessage.class);
-		return message;
+		Mono<DomibusConnectorClientMessage> bodyToMono = this.client.post()
+				.uri("/saveMessage")
+				.body(Mono.just(message), DomibusConnectorClientMessage.class)
+				.retrieve()
+				.bodyToMono(DomibusConnectorClientMessage.class);
+		return bodyToMono.block();
 	}
 
 	public boolean uploadFileToMessage(DomibusConnectorClientMessageFile messageFile) {
-		Boolean result = restTemplate.postForObject(url + "/uploadMessageFile", messageFile, Boolean.class);
-		return result.booleanValue();
+		Mono<Boolean> bodyToMono = this.client.post()
+				.uri("/uploadMessageFile")
+				.body(Mono.just(messageFile), DomibusConnectorClientMessageFile.class)
+				.retrieve()
+				.bodyToMono(Boolean.class);
+		return bodyToMono.block();
 	}
 
 	public boolean deleteFileFromMessage(DomibusConnectorClientMessageFile messageFile) {
-		Boolean result = restTemplate.postForObject(url + "/deleteMessageFile", messageFile, Boolean.class);
-		return result.booleanValue();
+		Mono<Boolean> bodyToMono = this.client.post()
+				.uri("/deleteMessageFile")
+				.body(Mono.just(messageFile), DomibusConnectorClientMessageFile.class)
+				.retrieve()
+				.bodyToMono(Boolean.class);
+		return bodyToMono.block();
 	}
 
-	public void deleteMessageById(Long id) {
-		restTemplate.postForObject(url+"/deleteMessageById", id, Boolean.class);
+	public void deleteMessageById(Long id) throws ConnectorClientServiceClientException {
+		
+		try{
+			Mono<Boolean> bodyToMono = this.client.post()
+				.uri("/deleteMessageById")
+				.body(Mono.just(id), Long.class)
+				.retrieve()
+				.bodyToMono(Boolean.class);
+		bodyToMono.block();
+		}catch(WebClientResponseException e) {
+			throw new ConnectorClientServiceClientException(e.getResponseBodyAsString());
+		}
 	}
 
-	public boolean submitStoredMessage(DomibusConnectorClientMessage message) {
-		Boolean result =  restTemplate.postForObject(url+"/submitStoredClientMessage", message, Boolean.class);
-		return result.booleanValue();
+	public boolean submitStoredMessage(DomibusConnectorClientMessage message) throws ConnectorClientServiceClientException {
+		try {
+			Mono<Boolean> bodyToMono = this.client.post()
+					.uri("/submitStoredClientMessage")
+					.body(Mono.just(message), DomibusConnectorClientMessage.class)
+					.retrieve()
+					.bodyToMono(Boolean.class)
+					.onErrorStop();
+			return bodyToMono.block();
+		}catch(WebClientResponseException e) {
+			throw new ConnectorClientServiceClientException(e.getResponseBodyAsString());
+		}
 	}
+
 }

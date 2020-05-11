@@ -55,6 +55,8 @@ public class MessageDetails extends VerticalLayout implements HasUrlParameter<Lo
 	Button refreshButton;
 	Button deleteMessageButton;
 	
+	Div resultArea;
+	
 	Messages messagesView;
 	
 	public MessageDetails(@Autowired VaadingConnectorClientUIServiceClient messageService, @Autowired Messages messagesView) {
@@ -66,7 +68,7 @@ public class MessageDetails extends VerticalLayout implements HasUrlParameter<Lo
 		refreshButton = new Button(new Icon(VaadinIcon.REFRESH));
 		refreshButton.setText("Refresh");
 		refreshButton.addClickListener(e -> {
-			loadMessageDetails(messageForm.getConnectorClientMessage().getId());
+			loadMessageDetails(messageForm.getConnectorClientMessage().getId(), null);
 		});
 		refreshButton.setEnabled(false);
 		
@@ -76,7 +78,15 @@ public class MessageDetails extends VerticalLayout implements HasUrlParameter<Lo
 			Dialog deleteMessageDialog = this.messagesView.getDeleteMessageDialog();
 			Button delButton = new Button("Delete Message");
 			delButton.addClickListener(e1 -> {
-				this.messageService.deleteMessageById(messageForm.getConnectorClientMessage().getId());
+				try {
+					this.messageService.deleteMessageById(messageForm.getConnectorClientMessage().getId());
+				} catch (ConnectorClientServiceClientException e2) {
+					LumoLabel resultLabel = new LumoLabel();
+						resultLabel.setText("Delete message failed: "+e2.getMessage());
+						resultLabel.getStyle().set("color", "red");
+						loadMessageDetails(messageForm.getConnectorClientMessage().getId(), resultLabel);
+					
+				}
 				deleteMessageDialog.close();
 				clearMessageDetails();
 				this.messagesView.showMessagesList();
@@ -96,7 +106,14 @@ public class MessageDetails extends VerticalLayout implements HasUrlParameter<Lo
 				);
 		buttons.setWidth("100vw");
 		add(buttons);
-
+		
+		resultArea = new Div();
+		
+//		resultLabel = new LumoLabel();
+//		resultArea.add(resultLabel);
+		
+		add(resultArea);
+		
 		VerticalLayout messageDetailsArea = new VerticalLayout(); 
 		messageForm.getStyle().set("margin-top","25px");
 
@@ -132,7 +149,7 @@ public class MessageDetails extends VerticalLayout implements HasUrlParameter<Lo
 	}
 
 
-	public void loadMessageDetails(Long msgId) {
+	public void loadMessageDetails(Long msgId, LumoLabel result) {
 		
 		if(msgId!=null) {
 		DomibusConnectorClientMessage msg = null;
@@ -160,6 +177,16 @@ public class MessageDetails extends VerticalLayout implements HasUrlParameter<Lo
 		refreshButton.setEnabled(true);
 		deleteMessageButton.setEnabled(true);
 		replyToMessageButton.setEnabled(messageForm.getConnectorClientMessage()!=null && messageForm.getConnectorClientMessage().getMessageStatus().equals("CONFIRMED"));
+		
+		if(result !=null) {
+			resultArea.removeAll();
+			resultArea.add(result);
+			resultArea.setVisible(true);
+		}else {
+			resultArea.removeAll();
+			resultArea.setVisible(false);
+		}
+		
 		}
 	}
 	
@@ -276,7 +303,7 @@ public class MessageDetails extends VerticalLayout implements HasUrlParameter<Lo
 	  public void setParameter(BeforeEvent event
 	    , @OptionalParameter Long parameter) {
 	    if(parameter!=null) {
-	    	loadMessageDetails(parameter);
+	    	loadMessageDetails(parameter, null);
 	    }else {
 	    	clearMessageDetails();
 	    }

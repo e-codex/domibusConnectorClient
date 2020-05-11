@@ -189,15 +189,37 @@
 <!--                 -->
 <!--                </executions>-->
 <!--            </plugin>-->
-            <plugin>
+           <!--  <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <!-- Clean build and startup time for Vaadin apps sometimes may exceed
-                     the default Spring Boot's 30sec timeout.  -->
+                Clean build and startup time for Vaadin apps sometimes may exceed
+                     the default Spring Boot's 30sec timeout. 
                 <configuration>
                     <wait>500</wait>
                     <maxAttempts>240</maxAttempts>
                 </configuration>
+            </plugin> -->
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>eu.domibus.connector.client.ui.VaadinConnectorClientStarter</mainClass>
+                    <!-- alternative fix for xml loading/resolving problem -->
+<!--                    <requiresUnpack>-->
+<!--                        <dependency>-->
+<!--                            <groupId>eu.domibus.connector</groupId>-->
+<!--                            <artifactId>domibusConnectorAPI</artifactId>-->
+<!--                        </dependency>-->
+<!--                    </requiresUnpack>-->
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>build-info</goal>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>com.vaadin</groupId>

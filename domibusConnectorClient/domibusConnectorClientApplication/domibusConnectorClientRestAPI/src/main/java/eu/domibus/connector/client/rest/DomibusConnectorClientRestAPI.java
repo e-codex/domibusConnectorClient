@@ -10,7 +10,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import eu.domibus.connector.client.rest.exception.MessageNotFoundException;
+import eu.domibus.connector.client.rest.exception.MessageSubmissionException;
 import eu.domibus.connector.client.rest.exception.ParameterException;
+import eu.domibus.connector.client.rest.exception.StorageException;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
@@ -41,23 +43,23 @@ public interface DomibusConnectorClientRestAPI {
 	
 	@PostMapping(
 			value = "/saveMessage", consumes = "application/json", produces = "application/json")
-	DomibusConnectorClientMessage saveMessage(@RequestBody DomibusConnectorClientMessage message) throws ParameterException;
+	DomibusConnectorClientMessage saveMessage(@RequestBody DomibusConnectorClientMessage message) throws ParameterException, StorageException;
 	
 	@PostMapping(
 			value = "/uploadMessageFile", consumes = "application/json", produces = "application/json")
-	Boolean uploadMessageFile(@RequestBody DomibusConnectorClientMessageFile messageFile) throws ParameterException;
+	Boolean uploadMessageFile(@RequestBody DomibusConnectorClientMessageFile messageFile) throws ParameterException, StorageException;
 	
 	@PostMapping(
 			value = "/deleteMessageById", consumes = "application/json", produces = "application/json")
-	Boolean deleteMessageById(@RequestBody Long id) throws ParameterException;
+	Boolean deleteMessageById(@RequestBody Long id) throws ParameterException, StorageException;
 	
 	@PostMapping(
 			value = "/submitStoredClientMessage", consumes = "application/json", produces = "application/json")
-	Boolean submitStoredClientMessage(@RequestBody DomibusConnectorClientMessage message) throws ParameterException;
+	Boolean submitStoredClientMessage(@RequestBody DomibusConnectorClientMessage message) throws ParameterException, StorageException, MessageSubmissionException;
 
 	@PostMapping(
 			value = "/deleteMessageFile", consumes = "application/json", produces = "application/json")
-	Boolean deleteMessageFile(@RequestBody DomibusConnectorClientMessageFile messageFile) throws ParameterException;
+	Boolean deleteMessageFile(@RequestBody DomibusConnectorClientMessageFile messageFile) throws ParameterException, StorageException;
 
 	
 

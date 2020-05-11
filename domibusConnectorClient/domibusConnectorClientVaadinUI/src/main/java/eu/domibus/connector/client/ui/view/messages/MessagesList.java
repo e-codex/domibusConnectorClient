@@ -28,6 +28,7 @@ import com.vaadin.flow.spring.annotation.UIScope;
 
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
+import eu.domibus.connector.client.ui.component.LumoLabel;
 import eu.domibus.connector.client.ui.service.ConnectorClientServiceClientException;
 import eu.domibus.connector.client.ui.service.VaadingConnectorClientUIServiceClient;
 
@@ -422,7 +423,16 @@ public class MessagesList extends VerticalLayout implements AfterNavigationObser
 			Dialog deleteMessageDialog = this.messagesView.getDeleteMessageDialog();
 			Button delButton = new Button("Delete Message");
 			delButton.addClickListener(e1 -> {
-				this.messageService.deleteMessageById(l);
+				try {
+					this.messageService.deleteMessageById(l);
+				} catch (ConnectorClientServiceClientException e2) {
+					Dialog errorDiag = new Dialog();
+					LumoLabel resultLabel = new LumoLabel();
+					resultLabel.setText("Delete message failed: "+e2.getMessage());
+					resultLabel.getStyle().set("color", "red");
+					errorDiag.add(resultLabel);
+					errorDiag.open();
+				}
 				deleteMessageDialog.close();
 				reloadList();
 			});

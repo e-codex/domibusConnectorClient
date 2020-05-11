@@ -26,6 +26,16 @@ extends ResponseEntityExceptionHandler
 	protected ResponseEntity<Object> handleParameter(ParameterException ex){
 		return buildResponseEntity(ex.getMessage(), HttpStatus.BAD_REQUEST);
 	}
+	
+	@ExceptionHandler(StorageException.class)
+	protected ResponseEntity<Object> handleStorage(StorageException ex){
+		return buildResponseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
+	
+	@ExceptionHandler(MessageSubmissionException.class)
+	protected ResponseEntity<Object> handleMessageSubmission(MessageSubmissionException ex){
+		return buildResponseEntity(ex.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+	}
 
 	private ResponseEntity<Object> buildResponseEntity(String apiError, HttpStatus status) {
 		return new ResponseEntity<>(apiError, status);

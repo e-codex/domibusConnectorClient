@@ -57,6 +57,8 @@ public class SendMessage  extends VerticalLayout implements HasUrlParameter<Long
 	private VerticalLayout messageFilesArea = new VerticalLayout();
 	
 	boolean filesEnabled = false;
+	boolean saveEnabled = false;
+	Button saveBtn;
 	Button uploadFileButton;
 	Button submitMessageButton;
 	
@@ -81,7 +83,7 @@ public class SendMessage  extends VerticalLayout implements HasUrlParameter<Long
 		messageDetailsArea.setWidth("500px");
 		add(messageDetailsArea);
 		
-		Button saveBtn = new Button(new Icon(VaadinIcon.EDIT));
+		saveBtn = new Button(new Icon(VaadinIcon.EDIT));
 		saveBtn.setText("Save new Message");
 		saveBtn.addClickListener(e -> {
 			BinderValidationStatus<DomibusConnectorClientMessage> validationStatus = messageForm.getBinder().validate();
@@ -99,6 +101,7 @@ public class SendMessage  extends VerticalLayout implements HasUrlParameter<Long
 				loadPreparedMessage(messageForm.getConnectorClientMessage().getId(), result);
 			}
 		});
+		saveBtn.setEnabled(saveEnabled);
 		
 		uploadFileButton = new Button(new Icon(VaadinIcon.UPLOAD));
 		uploadFileButton.setText("Add File to message");
@@ -149,9 +152,14 @@ public class SendMessage  extends VerticalLayout implements HasUrlParameter<Long
 				resultLabel.setText("For message submission a BUSINESS_CONTENT and BUSINESS_DOCUMENT must be present!");
 				resultLabel.getStyle().set("color", "red");
 			}else {
-				this.messageService.submitStoredMessage(messageForm.getConnectorClientMessage());
-				resultLabel.setText("Message successfully submitted!");
-				resultLabel.getStyle().set("color", "green");
+				try {
+					this.messageService.submitStoredMessage(messageForm.getConnectorClientMessage());
+					resultLabel.setText("Message successfully submitted!");
+					resultLabel.getStyle().set("color", "green");
+				} catch (ConnectorClientServiceClientException e1) {
+					resultLabel.setText("Exception thrown at connector client: "+e1.getMessage());
+					resultLabel.getStyle().set("color", "red");
+				}
 				
 			}
 			loadPreparedMessage(messageForm.getConnectorClientMessage().getId(), resultLabel);
@@ -201,6 +209,7 @@ public class SendMessage  extends VerticalLayout implements HasUrlParameter<Long
 	
 	private Button getDeleteFileLink(DomibusConnectorClientMessageFile file) {
 		Button deleteFileButton = new Button(new Icon(VaadinIcon.ERASER));
+		deleteFileButton.setEnabled(saveEnabled);
 		deleteFileButton.addClickListener(e -> {
 			Dialog deleteMessageDialog = new Dialog();
 			
@@ -279,8 +288,11 @@ public class SendMessage  extends VerticalLayout implements HasUrlParameter<Long
 				!messageForm.getConnectorClientMessage().getStorageInfo().isEmpty() && 
 				messageForm.getConnectorClientMessage().getStorageStatus().equals(DomibusConnectorClientStorageStatus.STORED.name());
 		
-		uploadFileButton.setEnabled(filesEnabled);
-		submitMessageButton.setEnabled(filesEnabled);
+		saveEnabled = messageForm.getConnectorClientMessage().getMessageStatus().equals("PREPARED");
+		
+		saveBtn.setEnabled(saveEnabled);
+		uploadFileButton.setEnabled(filesEnabled && saveEnabled);
+		submitMessageButton.setEnabled(filesEnabled && saveEnabled);
 		
 		buildMessageFilesArea(messageByConnectorId);
 

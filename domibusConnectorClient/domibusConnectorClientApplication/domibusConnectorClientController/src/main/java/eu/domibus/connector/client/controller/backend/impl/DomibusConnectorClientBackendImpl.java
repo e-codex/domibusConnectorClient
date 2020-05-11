@@ -97,6 +97,7 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 			
 		} catch (DomibusConnectorClientException e) {
 			clientMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.FAILED);
+			persistenceService.mergeClientMessage(clientMessage);
 			throw new DomibusConnectorClientBackendException("Exception submitting message through domibusConnectorClientLibrary!",e);
 		}
 
