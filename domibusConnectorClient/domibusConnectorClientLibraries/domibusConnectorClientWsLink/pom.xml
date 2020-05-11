@@ -16,7 +16,7 @@
 
 		<dependency>
 			<groupId>eu.domibus.connector-client</groupId>
-			<artifactId>domibusConnectorClientApi</artifactId>
+			<artifactId>domibusConnectorClientAPI</artifactId>
 			<version>${project.version}</version>
 			<scope>compile</scope>
 		</dependency>

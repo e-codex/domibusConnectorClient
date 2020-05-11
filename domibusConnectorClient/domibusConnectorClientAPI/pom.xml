@@ -9,7 +9,7 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>domibusConnectorClientApi</artifactId>
+    <artifactId>domibusConnectorClientAPI</artifactId>
 
     <description>Contains packages to define internal connector-client apis</description>
 
