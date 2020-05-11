@@ -147,15 +147,19 @@
 	</dependencyManagement>
 
 	<distributionManagement>
-		<repository>
-			<id>${releases-repo.id}</id>
-			<url>${releases-repo.url}</url>
-		</repository>
-		<snapshotRepository>
-			<id>${ecodex-snapshots-repo.id}</id>
-			<url>${ecodex-snapshots-repo.url}</url>
-		</snapshotRepository>
-	</distributionManagement>
+        <repository>
+            <id>${ecodex-releases-repo.id}</id>
+            <url>${ecodex-releases-repo.url}</url>
+        </repository>
+        <snapshotRepository>
+            <id>${ecodex-snapshots-repo.id}</id>
+            <url>${ecodex-snapshots-repo.url}</url>
+        </snapshotRepository>
+        <site>
+            <id>${project.artifactId}-site</id>
+            <url>http://www.ecodex.eu/connector-site</url>
+        </site>
+    </distributionManagement>
 
 	<scm>
 		<developerConnection>scm:git:https://secure.e-codex.eu/gitblit/r/Me-CODEX/domibusConnectorClient.git
