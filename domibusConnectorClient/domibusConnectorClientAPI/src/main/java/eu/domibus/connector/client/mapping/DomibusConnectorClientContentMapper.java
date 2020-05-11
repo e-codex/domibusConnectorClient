@@ -27,7 +27,7 @@ public interface DomibusConnectorClientContentMapper {
      * 
      * @return The {@link DomibusConnectorMessageType} with the mapped businessContent inside the {@link DomibusConnectorMessageContentType}.
      *            
-     * @throws {@link DomibusConnectorClientContentMapperException}
+     * @throws DomibusConnectorClientContentMapperException
      */
     public DomibusConnectorMessageType mapInboundBusinessContent(DomibusConnectorMessageType message) throws DomibusConnectorClientContentMapperException;
 
@@ -44,7 +44,7 @@ public interface DomibusConnectorClientContentMapper {
      * 
      * @return The {@link DomibusConnectorMessageType} with the mapped businessContent inside the {@link DomibusConnectorMessageContentType}.
      *            
-     * @throws {@link DomibusConnectorClientContentMapperException}
+     * @throws DomibusConnectorClientContentMapperException
      */
     public DomibusConnectorMessageType mapOutboundBusinessContent(DomibusConnectorMessageType message) throws DomibusConnectorClientContentMapperException;
 

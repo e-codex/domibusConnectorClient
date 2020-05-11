@@ -1,17 +1,11 @@
 package eu.domibus.connector.client;
 
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
-import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 
 /**
  * This is the interface containing methods to be implemented when the domibusConnectorClientLibrary is used. 
- * 
- * If the implementing application is intended to recieve messages actively (due to configuration) and provides the necessary
- * web service container to run the {@link DomibusConnectorClientDeliveryWSLink} web service, additionally the interface 
- * {@link DomibusConnectorDeliveryClient} needs to be implemented. In that case, the method {@link #requestNewMessagesFromConnector()}
- * does not have to be implemented (method should be left empty).
  * 
  * @author Bernhard Rieder
  *
@@ -31,7 +25,7 @@ public interface DomibusConnectorClient {
 	
 	/**
 	 * Requests all new messages that are provided by the domibusConnector's backend. Before returning the received messages, all messages
-	 * are mapped calling the configured implementation of {@link DomibusConnectorClientContentMapper}. If no content mapper is configured, the default
+	 * are mapped calling the configured implementation of {@link eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapper}. If no content mapper is configured, the default
 	 * content mapper is called.
 	 * 
 	 * @return The {@link DomibusConnectorMessagesType} containing the new messages.
