@@ -1,0 +1,33 @@
+<assembly>
+	<id>UI</id>
+	<formats>
+		<format>zip</format>
+		<format>dir</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+
+		<!-- ==================== Copying file structure ================= -->
+		<fileSet>
+			<directory>${project.basedir}/src/main/resources/ui
+			</directory>
+			<outputDirectory>
+			</outputDirectory>
+		</fileSet>
+
+		<!-- ==================== Copying domibusConnectorClientVaadinUI library ================= -->
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientVaadinUI/target/
+			</directory>
+			<outputDirectory>/bin
+			</outputDirectory>
+			<includes>
+				<include>*.jar</include>
+			</includes>
+			<excludes>
+				<exclude>*-sources.jar</exclude>
+			</excludes>
+		</fileSet>
+
+	</fileSets>
+</assembly>

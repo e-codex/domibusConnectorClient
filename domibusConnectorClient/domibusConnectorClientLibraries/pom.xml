@@ -10,10 +10,9 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>pom</packaging>
     <modules>
-        <!-- <module>domibusConnectorClient35Library</module> -->
+        <module>domibusConnectorClientWsLink</module>
         <module>domibusConnectorClientLibrary</module>
         <module>domibusConnectorClientScheduler</module>
-        <module>domibusConnectorClientWsLink</module>
     </modules>
 
     <artifactId>domibusConnectorClientLibraries</artifactId>

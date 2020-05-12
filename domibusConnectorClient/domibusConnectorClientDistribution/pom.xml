@@ -16,8 +16,9 @@
                 <version>2.4</version>
                 <configuration>
                     <descriptors>
-                        <descriptor>src/main/assembly/assemblyClientLibrary.xml</descriptor>
-                        <descriptor>src/main/assembly/assemblyStandaloneClient.xml</descriptor>
+                        <descriptor>src/main/assembly/assemblyClientLibraries.xml</descriptor>
+                        <descriptor>src/main/assembly/assemblyClientApplication.xml</descriptor>
+                        <descriptor>src/main/assembly/assemblyClientUI.xml</descriptor>
                     </descriptors>
                 </configuration>
                 <executions>

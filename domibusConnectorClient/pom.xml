@@ -22,10 +22,10 @@
 
 	<modules>
 		<module>domibusConnectorClientAPI</module>
-		<module>domibusConnectorClientDistribution</module>
-		<module>domibusConnectorClientVaadinUI</module>
 		<module>domibusConnectorClientLibraries</module>
 		<module>domibusConnectorClientApplication</module>
+		<module>domibusConnectorClientVaadinUI</module>
+		<module>domibusConnectorClientDistribution</module>
 	</modules>
 
 
@@ -147,19 +147,19 @@
 	</dependencyManagement>
 
 	<distributionManagement>
-        <repository>
-            <id>${ecodex-releases-repo.id}</id>
-            <url>${ecodex-releases-repo.url}</url>
-        </repository>
-        <snapshotRepository>
-            <id>${ecodex-snapshots-repo.id}</id>
-            <url>${ecodex-snapshots-repo.url}</url>
-        </snapshotRepository>
-        <site>
-            <id>${project.artifactId}-site</id>
-            <url>http://www.ecodex.eu/connector-site</url>
-        </site>
-    </distributionManagement>
+		<repository>
+			<id>${ecodex-releases-repo.id}</id>
+			<url>${ecodex-releases-repo.url}</url>
+		</repository>
+		<snapshotRepository>
+			<id>${ecodex-snapshots-repo.id}</id>
+			<url>${ecodex-snapshots-repo.url}</url>
+		</snapshotRepository>
+		<site>
+			<id>${project.artifactId}-site</id>
+			<url>http://www.ecodex.eu/connector-site</url>
+		</site>
+	</distributionManagement>
 
 	<scm>
 		<developerConnection>scm:git:https://secure.e-codex.eu/gitblit/r/Me-CODEX/domibusConnectorClient.git
@@ -252,6 +252,16 @@
 					<artifactId>maven-compiler-plugin</artifactId>
 					<version>3.8.1</version>
 				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-source-plugin</artifactId>
+					<version>3.2.0</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-dependency-plugin</artifactId>
+					<version>3.1.2</version>
+				</plugin>
 			</plugins>
 		</pluginManagement>
 
@@ -290,8 +300,8 @@
 						</goals>
 						<configuration>
 							<rules>
-								<dependencyConvergence/>
-								<banDuplicatePomDependencyVersions/>
+								<dependencyConvergence />
+								<banDuplicatePomDependencyVersions />
 							</rules>
 						</configuration>
 					</execution>

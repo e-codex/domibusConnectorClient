@@ -1,0 +1,177 @@
+<assembly>
+	<id>Libraries</id>
+	<formats>
+		<format>zip</format>
+		<format>dir</format>
+	</formats>
+	<includeBaseDirectory>false</includeBaseDirectory>
+	<fileSets>
+		
+		<!-- ==================== Copying libraries ================= -->
+		
+		<!-- ==================== domibusConnectorAPI ================= -->
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientAPI/target/lib/
+			</directory>
+			<outputDirectory>/libraries/domibusConnectorAPI
+			</outputDirectory>
+			<includes>
+				<include>domibusConnectorAPI*.jar</include>
+			</includes>
+		</fileSet>
+		
+		<!-- ==================== domibusConnectorClientAPI ================= -->
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientAPI/target/
+			</directory>
+			<outputDirectory>/libraries/domibusConnectorClientAPI
+			</outputDirectory>
+			<includes>
+				<include>*.jar</include>
+			</includes>
+			<excludes>
+				<exclude>*-sources.jar</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientAPI/
+			</directory>
+			<outputDirectory>/libraries/domibusConnectorClientAPI
+			</outputDirectory>
+			<includes>
+				<include>pom.xml</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientAPI/target/
+			</directory>
+			<outputDirectory>/libraries/domibusConnectorClientAPI
+			</outputDirectory>
+			<includes>
+				<include>*-sources.jar</include>
+			</includes>
+		</fileSet>
+		
+		<!-- ==================== domibusConnectorClientLibrary ================= -->
+		
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibrary/target/
+			</directory>
+			<outputDirectory>/libraries/domibusConnectorClientLibrary
+			</outputDirectory>
+			<includes>
+				<include>*.jar</include>
+			</includes>
+			<excludes>
+				<exclude>*-sources.jar</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibrary/
+			</directory>
+			<outputDirectory>/libraries/domibusConnectorClientLibrary
+			</outputDirectory>
+			<includes>
+				<include>pom.xml</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibrary/target/
+			</directory>
+			<outputDirectory>/libraries/domibusConnectorClientLibrary
+			</outputDirectory>
+			<includes>
+				<include>*-sources.jar</include>
+			</includes>
+		</fileSet>
+		
+		<!-- ==================== domibusConnectorClientScheduler ================= -->
+		
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientScheduler/target/
+			</directory>
+			<outputDirectory>/libraries/domibusConnectorClientScheduler
+			</outputDirectory>
+			<includes>
+				<include>*.jar</include>
+			</includes>
+			<excludes>
+				<exclude>*-sources.jar</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientScheduler/
+			</directory>
+			<outputDirectory>/libraries/domibusConnectorClientScheduler
+			</outputDirectory>
+			<includes>
+				<include>pom.xml</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientScheduler/target/
+			</directory>
+			<outputDirectory>/libraries/domibusConnectorClientScheduler
+			</outputDirectory>
+			<includes>
+				<include>*-sources.jar</include>
+			</includes>
+		</fileSet>
+		
+		<!-- ==================== domibusConnectorClientWSLink ================= -->
+		
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientWSLink/target/
+			</directory>
+			<outputDirectory>/libraries/domibusConnectorClientWSLink
+			</outputDirectory>
+			<includes>
+				<include>*.jar</include>
+			</includes>
+			<excludes>
+				<exclude>*-sources.jar</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientWSLink/
+			</directory>
+			<outputDirectory>/libraries/domibusConnectorClientWSLink
+			</outputDirectory>
+			<includes>
+				<include>pom.xml</include>
+			</includes>
+		</fileSet>
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientWSLink/target/
+			</directory>
+			<outputDirectory>/libraries/domibusConnectorClientWSLink
+			</outputDirectory>
+			<includes>
+				<include>*-sources.jar</include>
+			</includes>
+		</fileSet>
+		
+		
+		<!-- ==================== Copying properties ================= -->
+		<fileSet>
+			<directory>${project.basedir}/src/main/resources/libraries/properties
+			</directory>
+			<outputDirectory>/documentation/properties
+			</outputDirectory>
+		</fileSet>
+		
+		<fileSet>
+			<directory>${project.basedir}/src/main/resources/libraries/documentation
+			</directory>
+			<outputDirectory>/documentation
+			</outputDirectory>
+			<includes>
+				<include>*.pdf</include>
+			</includes>
+		</fileSet>
+
+		
+	</fileSets>
+
+
+</assembly>
