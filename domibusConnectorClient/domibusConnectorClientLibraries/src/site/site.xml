@@ -18,10 +18,10 @@
         </links>
 
         <breadcrumbs>
-            <item name="domibusConnectorClient" href="./index.html" />
+            <item name="domibusConnectorClient-Libraries" href="./index.html" />
         </breadcrumbs>
 
-        <menu name="domibusConnectorClient">
+        <menu name="domibusConnectorClientLibraries">
             <item name="Overview" href="index.html"/>
             <!-- <item name="Changelog" href="changelog.html"/>
             <item name="Architecture" href="architecture_overview.html"/>

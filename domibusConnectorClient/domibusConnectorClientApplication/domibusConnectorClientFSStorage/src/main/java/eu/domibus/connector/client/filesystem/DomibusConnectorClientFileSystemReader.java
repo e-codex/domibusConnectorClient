@@ -69,8 +69,13 @@ public class DomibusConnectorClientFileSystemReader {
 	@NotNull
 	private String pkcs7FileExtension;
 
+	/**
+	 * Testdescription
+	 * 
+	 * 
+	 */
 	@NotNull
-	private String attachmentIdPrefix;
+	private String attachmentIdPrefix = "test";
 
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusConnectorClientFileSystemReader.class);
 

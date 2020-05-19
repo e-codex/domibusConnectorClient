@@ -1,21 +1,149 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <groupId>eu.domibus.connector-client</groupId>
-    	<artifactId>domibusConnectorClient</artifactId>
-    	<version>4.2.0-SNAPSHOT</version>
-    </parent>
-    <modelVersion>4.0.0</modelVersion>
-    <packaging>pom</packaging>
-    <modules>
-        <module>domibusConnectorClientWsLink</module>
-        <module>domibusConnectorClientLibrary</module>
-        <module>domibusConnectorClientScheduler</module>
-    </modules>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<parent>
+		<groupId>eu.domibus.connector-client</groupId>
+		<artifactId>domibusConnectorClient</artifactId>
+		<version>4.2.0-SNAPSHOT</version>
+	</parent>
+	<modelVersion>4.0.0</modelVersion>
+	<packaging>pom</packaging>
+	<modules>
+		<module>domibusConnectorClientWsLink</module>
+		<module>domibusConnectorClientLibrary</module>
+		<module>domibusConnectorClientScheduler</module>
+	</modules>
 
-    <artifactId>domibusConnectorClientLibraries</artifactId>
+	<artifactId>domibusConnectorClientLibraries</artifactId>
+	
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>domibusConnectorClientAPI</artifactId>
+			<version>${project.version}</version>
+		<!-- 	 <classifier>doc</classifier>
+        <type>zip</type> -->
+		</dependency>
+	</dependencies>
 
+ <build>
+    <plugins>
+    	<plugin>
+        <artifactId>maven-source-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>bundle-sources</id>
+            <phase>package</phase>
+            <goals>
+              <!-- produce source artifact for main project sources -->
+              <goal>jar-no-fork</goal>
+              
+              <!-- produce source artifact for project test sources -->
+              <goal>test-jar-no-fork</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <id>javadoc-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>jar</goal>
+            </goals>
+            <configuration>
+              <!-- switch on dependency-driven aggregation -->
+              <includeDependencySources>true</includeDependencySources>
+              <dependencySourceIncludes>
+              	<dependencySourceInclude>eu.domibus.connector-client.domibusConnectorClientAPI</dependencySourceInclude>
+              </dependencySourceIncludes>
+            <!--   <dependencySourceExcludes>
+                exclude ONLY commons-cli artifacts
+                <dependencySourceExclude>commons-cli:*</dependencySourceExclude>
+              </dependencySourceExcludes> -->
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
+  </build>
 
+	<reporting>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.6</version>
+				<reportSets>
+					<reportSet>
+						<reports><!-- select reports -->
+							<report>index</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<!-- by default, id = "default" -->
+						<reports>
+							<!-- select non-aggregate reports -->
+							<report>javadoc</report>
+							<!-- <report>test-javadoc</report> -->
+							
+						</reports>
+					</reportSet>
+					<reportSet>
+						<!-- aggregate reportSet, to define in poms having modules -->
+						<id>aggregate</id>
+						<!-- don't run aggregate in child modules -->
+						<reports>
+							<report>aggregate</report>
+						</reports>
+						<!-- <inherited>false</inherited> -->
+					</reportSet>
+				</reportSets>
+				<configuration>
+					<!-- fix error javax.interceptor.InterceptorBinding not found -->
+					<additionalDependencies>
+						<additionalDependency>
+							<groupId>javax.interceptor</groupId>
+							<artifactId>javax.interceptor-api</artifactId>
+							<version>1.2.2</version>
+						</additionalDependency>
+					</additionalDependencies>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>eu.ecodex.connector.utils.property-reporting</groupId>
+				<artifactId>spring-properties-reporting-plugin</artifactId>
+				<reportSets>
+					<!-- <reportSet> <id>default</id> <reports> <report>spring-properties-report</report> 
+						</reports> </reportSet> -->
+					<reportSet>
+						<id>aggregate</id>
+						<reports>
+							<report>aggregate</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+				<configuration>
+					<linkJavadoc>true</linkJavadoc>
+					<includedDependencies>
+						<includedDependency>
+							<groupId>^org.springframework</groupId>
+						</includedDependency>
+						<includedDependency>
+							<groupId>^eu.domibus</groupId>
+						</includedDependency>
+					</includedDependencies>
+				</configuration>
+			</plugin>
+		</plugins>
+	</reporting>
 </project>
