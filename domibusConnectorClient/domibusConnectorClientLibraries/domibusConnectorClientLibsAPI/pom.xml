@@ -1,19 +1,14 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<parent>
-		<artifactId>domibusConnectorClient</artifactId>
-		<groupId>eu.domibus.connector-client</groupId>
-		<version>4.2.0-SNAPSHOT</version>
-	</parent>
-	<modelVersion>4.0.0</modelVersion>
-
-	<artifactId>domibusConnectorClientAPI</artifactId>
-
-	<description>Contains packages to define internal connector-client apis</description>
-
-
-	<dependencies>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
+    <groupId>eu.domibus.connector-client</groupId>
+    <artifactId>domibusConnectorClientLibraries</artifactId>
+    <version>4.2.0-SNAPSHOT</version>
+  </parent>
+  <artifactId>domibusConnectorClientLibsAPI</artifactId>
+  
+  
+  <dependencies>
 		<dependency>
 			<groupId>eu.domibus.connector</groupId>
 			<artifactId>domibusConnectorAPI</artifactId>
@@ -26,7 +21,7 @@
 		</dependency>
 
 	</dependencies>
-
+	
 	<build>
 		<plugins>
 			<plugin>
@@ -42,7 +37,7 @@
 					</execution>
 				</executions>
 			</plugin>
-			<plugin>
+			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-dependency-plugin</artifactId>
 				<executions>
@@ -60,11 +55,12 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin> -->
 			<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
             </plugin>
 		</plugins>
 	</build>
+	
 </project>

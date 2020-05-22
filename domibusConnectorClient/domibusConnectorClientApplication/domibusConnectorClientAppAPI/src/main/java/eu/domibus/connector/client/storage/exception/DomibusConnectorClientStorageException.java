@@ -1,4 +1,4 @@
-package eu.domibus.connector.client.exception;
+package eu.domibus.connector.client.storage.exception;
 
 public class DomibusConnectorClientStorageException extends Exception {
 

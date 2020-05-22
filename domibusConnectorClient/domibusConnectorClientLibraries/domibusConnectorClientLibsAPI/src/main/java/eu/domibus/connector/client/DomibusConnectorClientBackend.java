@@ -1,7 +1,6 @@
 package eu.domibus.connector.client;
 
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
-import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
@@ -54,15 +53,5 @@ public interface DomibusConnectorClientBackend {
 			DomibusConnectorConfirmationType confirmationType, String confirmationAction)
 			throws DomibusConnectorClientBackendException;
 
-	/**
-	 * This method triggers the submission of a prepared and stored message. The message gets completely loaded out of the storage.
-	 * Therefore it is important that the message entirely is stored before triggering this method.
-	 * 
-	 * @param storageLocation - The path in the storage where the message is placed.
-	 * @throws DomibusConnectorClientBackendException
-	 * @throws DomibusConnectorClientStorageException
-	 * @throws IllegalArgumentException
-	 */
-	void submitStoredClientBackendMessage(String storageLocation) throws DomibusConnectorClientBackendException, DomibusConnectorClientStorageException, IllegalArgumentException;
 	
 }

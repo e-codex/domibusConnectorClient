@@ -6,12 +6,17 @@
 		<artifactId>domibusConnectorClient</artifactId>
 		<version>4.2.0-SNAPSHOT</version>
 	</parent>
+	<name>domibusConnectorClient-Libraries</name>
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>pom</packaging>
+	
+	<description>Provides libraries developers may use for their application to handle submission/retrieval of messages to/from the domibusConnector.</description>
+	
 	<modules>
 		<module>domibusConnectorClientWsLink</module>
 		<module>domibusConnectorClientLibrary</module>
 		<module>domibusConnectorClientScheduler</module>
+		<module>domibusConnectorClientLibsAPI</module>
 	</modules>
 
 	<artifactId>domibusConnectorClientLibraries</artifactId>
@@ -44,7 +49,7 @@
           </execution>
         </executions>
       </plugin>
-      <plugin>
+    <!--   <plugin>
         <artifactId>maven-javadoc-plugin</artifactId>
         <version>3.2.0</version>
         <executions>
@@ -52,22 +57,21 @@
             <id>javadoc-jar</id>
             <phase>package</phase>
             <goals>
-              <goal>jar</goal>
+              <goal>resource-bundle</goal>
             </goals>
             <configuration>
-              <!-- switch on dependency-driven aggregation -->
+              switch on dependency-driven aggregation
               <includeDependencySources>true</includeDependencySources>
               <dependencySourceIncludes>
-              	<dependencySourceInclude>eu.domibus.connector-client.domibusConnectorClientAPI</dependencySourceInclude>
+              	<dependencySourceInclude>eu.domibus.connector-client:*</dependencySourceInclude>
               </dependencySourceIncludes>
-            <!--   <dependencySourceExcludes>
-                exclude ONLY commons-cli artifacts
-                <dependencySourceExclude>commons-cli:*</dependencySourceExclude>
-              </dependencySourceExcludes> -->
+              <dependencySourceExcludes>
+                <dependencySourceExclude>org.springboot*</dependencySourceExclude>
+              </dependencySourceExcludes>
             </configuration>
           </execution>
         </executions>
-      </plugin>
+      </plugin> -->
     </plugins>
   </build>
 
@@ -100,7 +104,7 @@
 					</reportSet>
 					<reportSet>
 						<!-- aggregate reportSet, to define in poms having modules -->
-						<id>aggregate</id>
+						<id>aggregate-javadoc</id>
 						<!-- don't run aggregate in child modules -->
 						<reports>
 							<report>aggregate</report>
@@ -117,6 +121,10 @@
 							<version>1.2.2</version>
 						</additionalDependency>
 					</additionalDependencies>
+					<includeDependencySources>true</includeDependencySources>
+              <dependencySourceIncludes>
+              	<dependencySourceInclude>eu.domibus.connector-client:*</dependencySourceInclude>
+              </dependencySourceIncludes>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -126,7 +134,7 @@
 					<!-- <reportSet> <id>default</id> <reports> <report>spring-properties-report</report> 
 						</reports> </reportSet> -->
 					<reportSet>
-						<id>aggregate</id>
+						<id>aggregate-properties</id>
 						<reports>
 							<report>aggregate</report>
 						</reports>

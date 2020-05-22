@@ -21,7 +21,7 @@
 	</properties>
 
 	<modules>
-		<module>domibusConnectorClientAPI</module>
+		<!-- <module>domibusConnectorClientAPI</module> -->
 		<module>domibusConnectorClientLibraries</module>
 		<module>domibusConnectorClientApplication</module>
 		<module>domibusConnectorClientVaadinUI</module>
@@ -301,12 +301,43 @@
 			<plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
+                <configuration>
+                    <!-- disable generateReports if you don't want to include the built-in reports -->
+                    <generateReports>true</generateReports>
+                    <generateSitemap>true</generateSitemap>
+                    <relativizeDecorationLinks>false</relativizeDecorationLinks>
+                    <locales>en</locales>
+                    <inputEncoding>UTF-8</inputEncoding>
+                    <outputEncoding>UTF-8</outputEncoding>
+                   <!--  <asciidoc>
+                        optional site-wide AsciiDoc attributes
+                        <attributes>
+                            <icons>font</icons>
+                            <source-highlighter>coderay</source-highlighter>
+                            <coderay-css>style</coderay-css>
+                            <toclevels>2</toclevels>
+                        </attributes>
+                        <templateDirs>
+                            <dir>src/site/slim-templates</dir>
+                        </templateDirs>
+                    </asciidoc> -->
+                </configuration>
                 <dependencies>
                     <dependency>
                         <groupId>org.asciidoctor</groupId>
                         <artifactId>asciidoctor-maven-plugin</artifactId>
-                        <version>1.5.6</version>
+                        <version>2.0.0-RC.1</version>
                     </dependency>
+					<!-- <dependency>
+						<groupId>org.jruby</groupId>
+						<artifactId>jruby-complete</artifactId>
+						<version>9.2.7.0</version>
+					</dependency>
+					<dependency>
+						<groupId>org.asciidoctor</groupId>
+						<artifactId>asciidoctorj</artifactId>
+						<version>2.0.0</version>
+					</dependency> -->
                 </dependencies>
             </plugin>
 			

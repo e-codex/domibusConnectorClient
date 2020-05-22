@@ -14,7 +14,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.DomibusConnectorClient;
-import eu.domibus.connector.client.DomibusConnectorClientBackend;
+import eu.domibus.connector.client.DomibusConnectorClientAppBackend;
 import eu.domibus.connector.client.DomibusConnectorClientMessageBuilder;
 import eu.domibus.connector.client.controller.configuration.DefaultConfirmationAction;
 import eu.domibus.connector.client.controller.configuration.DomibusConnectorClientControllerConfig;
@@ -24,9 +24,9 @@ import eu.domibus.connector.client.controller.persistence.model.PDomibusConnecto
 import eu.domibus.connector.client.controller.persistence.service.IDomibusConnectorClientPersistenceService;
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
-import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorage;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
+import eu.domibus.connector.client.storage.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
@@ -37,7 +37,7 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 @PropertySource("classpath:/connector-client-controller-default.properties")
 @Validated
 @Valid
-public class DomibusConnectorClientBackendImpl implements DomibusConnectorClientBackend{
+public class DomibusConnectorClientBackendImpl implements DomibusConnectorClientAppBackend{
 	
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusConnectorClientBackendImpl.class);
 	

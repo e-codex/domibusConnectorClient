@@ -7,9 +7,9 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
+import eu.domibus.connector.client.storage.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 

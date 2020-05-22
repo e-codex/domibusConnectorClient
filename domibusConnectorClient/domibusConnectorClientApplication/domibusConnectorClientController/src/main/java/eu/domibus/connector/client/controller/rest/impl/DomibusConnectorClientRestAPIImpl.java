@@ -10,20 +10,17 @@ import java.util.UUID;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.util.CollectionUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
-import eu.domibus.connector.client.DomibusConnectorClientBackend;
+import eu.domibus.connector.client.DomibusConnectorClientAppBackend;
 import eu.domibus.connector.client.DomibusConnectorClientMessageBuilder;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessageStatus;
 import eu.domibus.connector.client.controller.persistence.service.IDomibusConnectorClientPersistenceService;
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
-import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.client.rest.DomibusConnectorClientRestAPI;
 import eu.domibus.connector.client.rest.exception.MessageNotFoundException;
 import eu.domibus.connector.client.rest.exception.MessageSubmissionException;
@@ -36,6 +33,7 @@ import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
 import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorage;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
+import eu.domibus.connector.client.storage.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 @RestController
@@ -54,7 +52,7 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 	private DomibusConnectorClientMessageBuilder messageBuilder;
 
 	@Autowired
-	private DomibusConnectorClientBackend connectorClientBackend;
+	private DomibusConnectorClientAppBackend connectorClientBackend;
 
 	@Override
 	public DomibusConnectorClientMessageList getAllMessages() {

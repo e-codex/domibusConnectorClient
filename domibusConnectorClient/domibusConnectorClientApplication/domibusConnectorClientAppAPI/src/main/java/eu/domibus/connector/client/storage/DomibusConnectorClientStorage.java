@@ -2,7 +2,7 @@ package eu.domibus.connector.client.storage;
 
 import java.util.Map;
 
-import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
+import eu.domibus.connector.client.storage.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 /**

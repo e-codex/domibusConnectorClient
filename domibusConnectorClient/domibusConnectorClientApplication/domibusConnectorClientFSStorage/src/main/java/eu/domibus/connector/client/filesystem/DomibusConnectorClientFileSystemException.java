@@ -1,6 +1,6 @@
 package eu.domibus.connector.client.filesystem;
 
-import eu.domibus.connector.client.exception.DomibusConnectorClientStorageException;
+import eu.domibus.connector.client.storage.exception.DomibusConnectorClientStorageException;
 
 public class DomibusConnectorClientFileSystemException extends DomibusConnectorClientStorageException {
 

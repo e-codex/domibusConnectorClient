@@ -10,7 +10,7 @@
   <dependencies>
   	<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>domibusConnectorClientAPI</artifactId>
+			<artifactId>domibusConnectorClientAppAPI</artifactId>
 			<version>${project.version}</version>
 		</dependency>
   
