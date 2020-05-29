@@ -11,7 +11,7 @@
 		
 		<!-- ==================== domibusConnectorAPI ================= -->
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientAPI/target/lib/
+			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibsAPI/target/lib/
 			</directory>
 			<outputDirectory>/libraries/domibusConnectorAPI
 			</outputDirectory>
@@ -20,37 +20,26 @@
 			</includes>
 		</fileSet>
 		
-		<!-- ==================== domibusConnectorClientAPI ================= -->
+		<!-- ==================== domibusConnectorClientLibsAPI ================= -->
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientAPI/target/
+			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibsAPI/target/
 			</directory>
-			<outputDirectory>/libraries/domibusConnectorClientAPI
+			<outputDirectory>/libraries/domibusConnectorClientLibsAPI
 			</outputDirectory>
 			<includes>
 				<include>*.jar</include>
 			</includes>
-			<excludes>
-				<exclude>*-sources.jar</exclude>
-			</excludes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientAPI/
+			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibsAPI/
 			</directory>
-			<outputDirectory>/libraries/domibusConnectorClientAPI
+			<outputDirectory>/libraries/domibusConnectorClientLibsAPI
 			</outputDirectory>
 			<includes>
 				<include>pom.xml</include>
 			</includes>
 		</fileSet>
-		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientAPI/target/
-			</directory>
-			<outputDirectory>/libraries/domibusConnectorClientAPI
-			</outputDirectory>
-			<includes>
-				<include>*-sources.jar</include>
-			</includes>
-		</fileSet>
+		
 		
 		<!-- ==================== domibusConnectorClientLibrary ================= -->
 		
@@ -62,9 +51,6 @@
 			<includes>
 				<include>*.jar</include>
 			</includes>
-			<excludes>
-				<exclude>*-sources.jar</exclude>
-			</excludes>
 		</fileSet>
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibrary/
@@ -75,15 +61,7 @@
 				<include>pom.xml</include>
 			</includes>
 		</fileSet>
-		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibrary/target/
-			</directory>
-			<outputDirectory>/libraries/domibusConnectorClientLibrary
-			</outputDirectory>
-			<includes>
-				<include>*-sources.jar</include>
-			</includes>
-		</fileSet>
+		
 		
 		<!-- ==================== domibusConnectorClientScheduler ================= -->
 		
@@ -95,9 +73,6 @@
 			<includes>
 				<include>*.jar</include>
 			</includes>
-			<excludes>
-				<exclude>*-sources.jar</exclude>
-			</excludes>
 		</fileSet>
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientScheduler/
@@ -106,15 +81,6 @@
 			</outputDirectory>
 			<includes>
 				<include>pom.xml</include>
-			</includes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientScheduler/target/
-			</directory>
-			<outputDirectory>/libraries/domibusConnectorClientScheduler
-			</outputDirectory>
-			<includes>
-				<include>*-sources.jar</include>
 			</includes>
 		</fileSet>
 		
@@ -128,9 +94,6 @@
 			<includes>
 				<include>*.jar</include>
 			</includes>
-			<excludes>
-				<exclude>*-sources.jar</exclude>
-			</excludes>
 		</fileSet>
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientWSLink/
@@ -141,36 +104,15 @@
 				<include>pom.xml</include>
 			</includes>
 		</fileSet>
-		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientWSLink/target/
-			</directory>
-			<outputDirectory>/libraries/domibusConnectorClientWSLink
-			</outputDirectory>
-			<includes>
-				<include>*-sources.jar</include>
-			</includes>
-		</fileSet>
 		
-		
-		<!-- ==================== Copying properties ================= -->
+		<!-- ==================== Copying site documentation ================= -->
 		<fileSet>
-			<directory>${project.basedir}/src/main/resources/libraries/properties
+			<directory>${project.basedir}/../domibusConnectorClientLibraries/target/site
 			</directory>
-			<outputDirectory>/documentation/properties
+			<outputDirectory>/documentation/site
 			</outputDirectory>
 		</fileSet>
-		
-		<fileSet>
-			<directory>${project.basedir}/src/main/resources/libraries/documentation
-			</directory>
-			<outputDirectory>/documentation
-			</outputDirectory>
-			<includes>
-				<include>*.pdf</include>
-			</includes>
-		</fileSet>
-
-		
+			
 	</fileSets>
 
 
