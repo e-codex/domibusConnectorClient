@@ -18,6 +18,7 @@
 		<spring.cloud.version>2.2.2.RELEASE</spring.cloud.version>
 		<h2.version>1.4.200</h2.version>
 		<swagger.version>1.5.12</swagger.version>
+		<ecodex.utils.version>0.0.17-SNAPSHOT</ecodex.utils.version>
 	</properties>
 
 	<modules>
@@ -43,14 +44,14 @@
 			<dependency>
 				<groupId>eu.ecodex.utils</groupId>
 				<artifactId>ecodex-dependencies</artifactId>
-				<version>0.0.16-RELEASE</version>
+				<version>${ecodex.utils.version}</version>
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
 			<dependency>
 				<groupId>eu.ecodex.utils</groupId>
 				<artifactId>spring-property-configuration-validator</artifactId>
-				<version>0.0.16-RELEASE</version>
+				<version>${ecodex.utils.version}</version>
 			</dependency>
 
 			<dependency>
@@ -273,7 +274,7 @@
 				 <plugin>
                     <groupId>eu.ecodex.connector.utils.property-reporting</groupId>
                     <artifactId>spring-properties-reporting-plugin</artifactId>
-                    <version>0.9.2-RELEASE</version>
+                    <version>0.9.3-SNAPSHOT</version>
                 </plugin>
 			</plugins>
 		</pluginManagement>

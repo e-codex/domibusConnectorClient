@@ -23,6 +23,11 @@ public class GetMessagesFromConnectorJobConfigurationProperties {
     @NotNull
     private DomibusConnectorDuration repeatInterval;
 
+    /**
+     * Boolean as String value. May be "true" or "false". 
+     * Enables the timer-triggered job to get messages from the domibusConnector via pull mode.
+     * Obsolete, if push mode is enabled.
+     */
     private boolean enabled;
 
     public DomibusConnectorDuration getRepeatInterval() {

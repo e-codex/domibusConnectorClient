@@ -128,10 +128,35 @@
 					</execution>
 				</executions>
 			</plugin>
+	<!-- 		<plugin>
+        <artifactId>maven-javadoc-plugin</artifactId>
+        <version>3.2.0</version>
+        <executions>
+          <execution>
+            <id>javadoc-jar</id>
+            <phase>package</phase>
+            <goals>
+              <goal>resource-bundle</goal>
+            </goals>
+            <configuration>
+              <includeDependencySources>true</includeDependencySources>
+              <dependencySourceIncludes>
+              	<dependencySourceInclude>eu.ecodex.utils:*</dependencySourceInclude>
+              </dependencySourceIncludes>
+              <dependencySourceIncludes>
+              	<dependencySourceInclude>eu.domibus.connector:*</dependencySourceInclude>
+              </dependencySourceIncludes>
+              <dependencySourceExcludes>
+                <dependencySourceExclude>org.springboot*</dependencySourceExclude>
+              </dependencySourceExcludes>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin> -->
 		</plugins>
 	</build>
 	
-	<reporting>
+	<!-- <reporting>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
@@ -139,7 +164,7 @@
 				<version>2.6</version>
 				<reportSets>
 					<reportSet>
-						<reports><!-- select reports -->
+						<reports>select reports
 							<report>index</report>
 						</reports>
 					</reportSet>
@@ -150,26 +175,26 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<reportSets>
 					<reportSet>
-						<!-- by default, id = "default" -->
+						by default, id = "default"
 						<reports>
-							<!-- select non-aggregate reports -->
+							select non-aggregate reports
 							<report>javadoc</report>
-							<!-- <report>test-javadoc</report> -->
+							<report>test-javadoc</report>
 							
 						</reports>
 					</reportSet>
 					<reportSet>
-						<!-- aggregate reportSet, to define in poms having modules -->
+						aggregate reportSet, to define in poms having modules
 						<id>aggregate</id>
-						<!-- don't run aggregate in child modules -->
+						don't run aggregate in child modules
 						<reports>
 							<report>aggregate</report>
 						</reports>
-						<!-- <inherited>false</inherited> -->
+						<inherited>false</inherited>
 					</reportSet>
 				</reportSets>
 				<configuration>
-					<!-- fix error javax.interceptor.InterceptorBinding not found -->
+					fix error javax.interceptor.InterceptorBinding not found
 					<additionalDependencies>
 						<additionalDependency>
 							<groupId>javax.interceptor</groupId>
@@ -189,12 +214,12 @@
 							<report>spring-properties-report</report> 
 						</reports> 
 					</reportSet>
-					<!-- <reportSet>
+					<reportSet>
 						<id>aggregate</id>
 						<reports>
 							<report>aggregate</report>
 						</reports>
-					</reportSet> -->
+					</reportSet>
 				</reportSets>
 				<configuration>
 					<linkJavadoc>true</linkJavadoc>
@@ -205,9 +230,12 @@
 						<includedDependency>
 							<groupId>^eu.domibus</groupId>
 						</includedDependency>
+						<includedDependency>
+							<groupId>^eu.ecodex.utils</groupId>
+						</includedDependency>
 					</includedDependencies>
 				</configuration>
 			</plugin>
 		</plugins>
-	</reporting>
+	</reporting> -->
 </project>
