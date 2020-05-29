@@ -9,9 +9,9 @@
 	<name>domibusConnectorClient-Libraries</name>
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>pom</packaging>
-	
+
 	<description>Provides libraries developers may use for their application to handle submission/retrieval of messages to/from the domibusConnector.</description>
-	
+
 	<modules>
 		<module>domibusConnectorClientWsLink</module>
 		<module>domibusConnectorClientLibrary</module>
@@ -20,20 +20,11 @@
 	</modules>
 
 	<artifactId>domibusConnectorClientLibraries</artifactId>
-	
-	<!-- <dependencies>
+
+
+
+	<dependencies>
 		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>domibusConnectorClientAPI</artifactId>
-			<version>${project.version}</version>
-			 <classifier>doc</classifier>
-        <type>zip</type>
-		</dependency>
-	</dependencies>
- -->
- 
- <dependencies>
- 	<dependency>
 			<groupId>eu.domibus.connector</groupId>
 			<artifactId>domibusConnectorAPI</artifactId>
 			<exclusions>
@@ -43,57 +34,67 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
-			<dependency>
+		<dependency>
 			<groupId>eu.ecodex.utils</groupId>
 			<artifactId>spring-property-configuration-validator</artifactId>
 		</dependency>
- </dependencies>
- 
- <build>
-    <plugins>
-    	<plugin>
-        <artifactId>maven-source-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>bundle-sources</id>
-            <phase>package</phase>
-            <goals>
-              <!-- produce source artifact for main project sources -->
-              <goal>jar-no-fork</goal>
-              
-              <!-- produce source artifact for project test sources -->
-              <goal>test-jar-no-fork</goal>
-            </goals>
-          </execution>
-        </executions>
-      </plugin>
-    <!--   <plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.2.0</version>
-        <executions>
-          <execution>
-            <id>javadoc-jar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>resource-bundle</goal>
-            </goals>
-            <configuration>
-              <includeDependencySources>true</includeDependencySources>
-              <dependencySourceIncludes>
-              	<dependencySourceInclude>eu.ecodex.utils:*</dependencySourceInclude>
-              </dependencySourceIncludes>
-              <dependencySourceIncludes>
-              	<dependencySourceInclude>eu.domibus.connector:*</dependencySourceInclude>
-              </dependencySourceIncludes>
-              <dependencySourceExcludes>
-                <dependencySourceExclude>org.springboot*</dependencySourceExclude>
-              </dependencySourceExcludes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin> -->
-    </plugins>
-  </build>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<artifactId>maven-source-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<phase>verify</phase>
+						<goals>
+							<goal>jar-no-fork</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-dependency-plugin</artifactId>
+				 <executions>
+                <execution>
+                    <goals>
+                        <goal>sources</goal>
+                        <goal>resolve</goal>
+                    </goals>
+                    <configuration>
+                    	<classifier>javadoc</classifier>
+                    	<includeGroupIds>eu.domibus.connector,eu.ecodex.utils</includeGroupIds>
+                    </configuration>
+                </execution>
+            </executions>
+			
+			</plugin>
+			<plugin>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<version>3.2.0</version>
+				<executions>
+					<execution>
+						<id>javadoc-jar</id>
+						<phase>package</phase>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+						<configuration>
+							<includeDependencySources>true</includeDependencySources>
+							<dependencySourceIncludes>
+								<dependencySourceInclude>eu.ecodex.utils:*</dependencySourceInclude>
+								<dependencySourceInclude>eu.domibus.connector:*</dependencySourceInclude>
+							</dependencySourceIncludes>
+							<dependencySourceExcludes>
+								<dependencySourceExclude>org.springboot*</dependencySourceExclude>
+							</dependencySourceExcludes>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 
 	<reporting>
 		<plugins>
@@ -113,13 +114,11 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<reportSets>
-					<reportSet>
+					<!-- <reportSet>
 						<reports>
 							<report>javadoc</report>
-							<report>test-javadoc</report>
-							
 						</reports>
-					</reportSet>
+					</reportSet> -->
 					<reportSet>
 						<id>aggregate-javadoc</id>
 						<reports>
@@ -137,12 +136,10 @@
 						</additionalDependency>
 					</additionalDependencies>
 					<includeDependencySources>true</includeDependencySources>
-              <dependencySourceIncludes>
-              	<dependencySourceInclude>eu.domibus.connector:*</dependencySourceInclude>
-              </dependencySourceIncludes>
-              <dependencySourceIncludes>
-              	<dependencySourceInclude>eu.ecodex.utils:*</dependencySourceInclude>
-              </dependencySourceIncludes>
+					<dependencySourceIncludes>
+						<dependencySourceInclude>eu.domibus.connector:*</dependencySourceInclude>
+						<dependencySourceInclude>eu.ecodex.utils:*</dependencySourceInclude>
+					</dependencySourceIncludes>
 				</configuration>
 			</plugin>
 			<plugin>
