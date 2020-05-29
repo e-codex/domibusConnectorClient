@@ -21,16 +21,34 @@
 
 	<artifactId>domibusConnectorClientLibraries</artifactId>
 	
-	<dependencies>
+	<!-- <dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>domibusConnectorClientAPI</artifactId>
 			<version>${project.version}</version>
-		<!-- 	 <classifier>doc</classifier>
-        <type>zip</type> -->
+			 <classifier>doc</classifier>
+        <type>zip</type>
 		</dependency>
 	</dependencies>
-
+ -->
+ 
+ <dependencies>
+ 	<dependency>
+			<groupId>eu.domibus.connector</groupId>
+			<artifactId>domibusConnectorAPI</artifactId>
+			<exclusions>
+				<exclusion>
+					<groupId>commons-io</groupId>
+					<artifactId>commons-io</artifactId>
+				</exclusion>
+			</exclusions>
+		</dependency>
+			<dependency>
+			<groupId>eu.ecodex.utils</groupId>
+			<artifactId>spring-property-configuration-validator</artifactId>
+		</dependency>
+ </dependencies>
+ 
  <build>
     <plugins>
     	<plugin>
@@ -60,10 +78,12 @@
               <goal>resource-bundle</goal>
             </goals>
             <configuration>
-              switch on dependency-driven aggregation
               <includeDependencySources>true</includeDependencySources>
               <dependencySourceIncludes>
-              	<dependencySourceInclude>eu.domibus.connector-client:*</dependencySourceInclude>
+              	<dependencySourceInclude>eu.ecodex.utils:*</dependencySourceInclude>
+              </dependencySourceIncludes>
+              <dependencySourceIncludes>
+              	<dependencySourceInclude>eu.domibus.connector:*</dependencySourceInclude>
               </dependencySourceIncludes>
               <dependencySourceExcludes>
                 <dependencySourceExclude>org.springboot*</dependencySourceExclude>
@@ -94,26 +114,21 @@
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<reportSets>
 					<reportSet>
-						<!-- by default, id = "default" -->
 						<reports>
-							<!-- select non-aggregate reports -->
 							<report>javadoc</report>
-							<!-- <report>test-javadoc</report> -->
+							<report>test-javadoc</report>
 							
 						</reports>
 					</reportSet>
 					<reportSet>
-						<!-- aggregate reportSet, to define in poms having modules -->
 						<id>aggregate-javadoc</id>
-						<!-- don't run aggregate in child modules -->
 						<reports>
 							<report>aggregate</report>
 						</reports>
-						<!-- <inherited>false</inherited> -->
+						<inherited>false</inherited>
 					</reportSet>
 				</reportSets>
 				<configuration>
-					<!-- fix error javax.interceptor.InterceptorBinding not found -->
 					<additionalDependencies>
 						<additionalDependency>
 							<groupId>javax.interceptor</groupId>
@@ -123,7 +138,10 @@
 					</additionalDependencies>
 					<includeDependencySources>true</includeDependencySources>
               <dependencySourceIncludes>
-              	<dependencySourceInclude>eu.domibus.connector-client:*</dependencySourceInclude>
+              	<dependencySourceInclude>eu.domibus.connector:*</dependencySourceInclude>
+              </dependencySourceIncludes>
+              <dependencySourceIncludes>
+              	<dependencySourceInclude>eu.ecodex.utils:*</dependencySourceInclude>
               </dependencySourceIncludes>
 				</configuration>
 			</plugin>
@@ -148,6 +166,9 @@
 						</includedDependency>
 						<includedDependency>
 							<groupId>^eu.domibus</groupId>
+						</includedDependency>
+						<includedDependency>
+							<groupId>^eu.ecodex.utils</groupId>
 						</includedDependency>
 					</includedDependencies>
 				</configuration>

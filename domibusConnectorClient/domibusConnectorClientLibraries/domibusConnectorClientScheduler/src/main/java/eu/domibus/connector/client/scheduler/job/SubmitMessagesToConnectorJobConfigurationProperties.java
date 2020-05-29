@@ -13,6 +13,10 @@ public class SubmitMessagesToConnectorJobConfigurationProperties {
 
     private DomibusConnectorDuration repeatInterval;
 
+    /**
+     * Boolean as String value. May be "true" or "false". 
+     * Enables the timer-triggered job to search for new messages to submit via the DomibusConnectorBackendClient.
+     */
     private boolean enabled;
 
     public DomibusConnectorDuration getRepeatInterval() {

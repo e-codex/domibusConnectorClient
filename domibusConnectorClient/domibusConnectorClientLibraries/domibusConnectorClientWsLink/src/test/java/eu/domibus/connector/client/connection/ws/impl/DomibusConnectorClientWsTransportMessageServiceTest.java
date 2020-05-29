@@ -3,7 +3,7 @@ package eu.domibus.connector.client.connection.ws.impl;
 
 /**
  *
- * @author Stephan Spindler <stephan.spindler@extern.brz.gv.at>
+ * @author Stephan Spindler 
  */
 public class DomibusConnectorClientWsTransportMessageServiceTest {
 

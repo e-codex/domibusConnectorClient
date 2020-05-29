@@ -28,19 +28,39 @@ public class ConnectorLinkWSProperties {
     public static final String ENABLED_PROPERTY_NAME = "enabled";
     public static final String PUSH_ENABLED_PROPERTY_NAME = "pushEnabled";
 
-    private String pushEnabled;
+    /**
+     * Boolean as String value. May be "true" or "false". 
+     * If left empty "false" is assumed.
+     * Indicates if the client should offer a webservice for the domibusConnector to push messages to the client.
+     * If set, the client libraries should run in a web container, or the client application in standalone mode.
+     */
+    private boolean pushEnabled;
 
-    private String enabled;
+    /**
+     * Boolean as String value. May be "true" or "false". 
+     * If left empty "true" is assumed.
+     * Indicates if the client starts the webservice-client for the domibusConnector's backend webservice.
+     */
+    private boolean enabled;
 
+    /**
+     * The URL of the domibusConnector. More specific the DomibusConnectorBackendWebService address.
+     */
     @NotNull
     private String connectorAddress;
 
-    @NotNull
     /**
-     * Adress of the push webservice
+     * Adress of the push webservice. 
+     * Relativ path of the webservice the client offers for the domibusConnector in case the push mode is enabled.
      */
+    @NotNull
     private String publishAddress = "/domibusConnectorDeliveryWebservice";
 
+    
+    /**
+     * Definition xml of the webservice-security. 
+     * By default the library offers the file "wsdl/backend.policy.xml" on the classpath that matches the settings used by the domibusConnector.
+     */
     private Resource wsPolicy = new ClassPathResource("wsdl/backend.policy.xml");
 
     @NestedConfigurationProperty
@@ -51,19 +71,19 @@ public class ConnectorLinkWSProperties {
 //    private KeyAndKeyStoreAndTrustStoreConfigurationProperties tls;
 
 
-    public String getEnabled() {
+    public boolean getEnabled() {
         return enabled;
     }
 
-    public void setEnabled(String enabled) {
+    public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
 
-    public String getPushEnabled() {
+    public boolean getPushEnabled() {
         return pushEnabled;
     }
 
-    public void setPushEnabled(String pushEnabled) {
+    public void setPushEnabled(boolean pushEnabled) {
         this.pushEnabled = pushEnabled;
     }
 
@@ -99,6 +119,11 @@ public class ConnectorLinkWSProperties {
         this.cxf = cxf;
     }
 
+    /**
+     * Maps the configured properties for key-/truststore and keys to the crypto Properties
+     *  also see https://ws.apache.org/wss4j/config.html
+     * @return the wss Properties
+     */
     public Properties getWssProperties() {
         Properties p = mapCertAndStoreConfigPropertiesToMerlinProperties();
         LOGGER.debug("getSignatureProperties() are: [{}]", p);

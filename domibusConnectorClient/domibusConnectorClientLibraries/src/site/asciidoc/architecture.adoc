@@ -15,7 +15,7 @@ image::images/domibusConnectorClient-Libraries-overview.png[domibusConnectorClie
 Libraries included in the package:
 
 * domibusConnectorAPI
-* domibusConnectorClientAPI
+* domibusConnectorClientLibsAPI
 * domibusConnectorClientWSLink
 * domibusConnectorClientLibrary
 * domibusConnectorClientScheduler
@@ -26,9 +26,10 @@ Libraries included in the package:
 This library is provided by the domibusConnector. It includes the definition of the services the domibusConnector provides and serves.
 An XSD describing the transition model of the message structure the domibusConnector expects is also included as well as Java classes generated from the XSD. 
 
-=== domibusConnectorClientAPI
+=== domibusConnectorClientLibsAPI
 
-Over the whole domibusConnectorClient a common API defines interfaces that are used of the modules (libraries) to communicate with each other. Those interfaces can be implemented by developers if the libraries are used. Some must be implemented. Most interfaces have default a implementation to support the developer in the beginning. The interfaces are well described in the javadoc of this package.
+==== Description
+Over the whole domibusConnectorClientLibraries, a common API defines interfaces that are used of the modules (libraries) to communicate with each other. Those interfaces can be implemented/overridden by developers in case the libraries are used. Some *_must_* be implemented. Most interfaces have a default implementation to support the developer in the beginning. All interfaces are well described in the link:apidocs/index.html[API docs,window=_tab] of this package.
 This overview picture above as well as all architecture images only contain the interfaces that are used within the environment that is pictured.
 
 === domibusConnectorClientWSLink
@@ -38,10 +39,21 @@ Diagram: domibusConnectorClientWSLink
 [link=images/domibusConnectorClientWSLink.png,window=_tab]
 image::images/domibusConnectorClientWSLink.png[domibusConnectorClientWSLink,300,200]
 
+==== Description
 This library controls the communication between the client and the domibusConnector.
-It builds the webservice client for the domibusConnectorBackendWebService and, if configured, the domibusConnectorBackendDeliveryWebService.
+It builds the webservice client for the domibusConnectorBackendWebService. 
+
+If configured properly it also builds the domibusConnectorBackendDeliveryWebService as a push service. In that case, the domibusConnector can directly push messages to the client and the time-triggered job to receive messages from the connector is obsolete.
+
+____
+
+Important: If the push mode is enabled and the client is configured to receive messages from the connector directly, then the client also needs to be configured properly using that mode within the configuration of the domibusConnector!
+
+____
+
 Furthermore, it loads the keystore and builds the ws-security for the webservices.
-The properties required, their description and default values (if implemented) are decribed in "Project Documentation -> Project Reports -> Spring Properties" with pre-fix "connector-client.connector-link.ws".
+
+The properties required, their description and default values (if implemented) for this library are decribed in the link:aggregated-spring-properties.html[Spring Properties] menu of this page with pre-fix "connector-client.connector-link.ws". 
 
 === domibusConnectorClientLibrary
 
@@ -50,29 +62,36 @@ Diagram: domibusConnectorClientLibrary
 [link=images/domibusConnectorClientLibrary.png,window=_tab]
 image::images/domibusConnectorClientLibrary.png[domibusConnectorClientLibrary,300,200]
 
+==== Description
+The domibusConnectorClientLibrary is the main library of the package. 
+To use this library, also the *domibusConnectorClientWSLink* needs to be on the classpath.
 
-The domibusConnectorClientLibrary is the main library of the package. It contains default implementations for most external interfaces:
-
-* DomibusConnectorClientMessageBuilderImpl 
-** Implements the DomibusConnectorClientMessageBuilder interface. 
+==== Contained implementations
+* *DomibusConnectorClientMessageBuilderImpl* 
+** Implements  link:apidocs/eu/domibus/connector/client/DomibusConnectorClientMessageBuilder.html[*DomibusConnectorClientMessageBuilder*,window=_tab] 
 ** Helps to create transition messages.
-* DomibusConnectorClientContentMapperDefaultImpl
-** Implements the DomibusConnectorClientContentMapper. 
+* *DomibusConnectorClientContentMapperDefaultImpl*
+** Implements link:apidocs/eu/domibus/connector/client/DomibusConnectorClientContentMapper.html[*DomibusConnectorClientContentMapper*,window="_tab"] 
 ** If no mapping of business content is required, this default implementation is sufficient. It validates if the business content of a message is set.
-* DomibusConnectorClientImpl 
-** Implements the DomibusConnectorClient interface.
-** 
+* *DomibusConnectorClientImpl* 
+** Implements link:apidocs/eu/domibus/connector/client/DomibusConnectorClient.html[*DomibusConnectorClient*,window="_tab"]
+** Main implementation class of this library. Calls the domibusConnectorClientWSLink library to receive messages from the domibusConnector and submits messages to the domibusConnector. 
+* *DomibusConnectorDeliveryClientImpl*
+** Implements link:apidocs/eu/domibus/connector/client/DomibusConnectorDeliveryClient.html[*DomibusConnectorDeliveryClient*,window="_tab"]
+** If push mode is enabled and configured properly this implementation class routes messages received from the domibusConnector via push to the DomibusConnectorClientBackend. 
 
+=== domibusConnectorClientScheduler
 
-____
+Diagram: domibusConnectorClientScheduler
+[#img-domibusConnectorClientScheduler]
+[link=images/domibusConnectorClientScheduler.png,window=_tab]
+image::images/domibusConnectorClientScheduler.png[domibusConnectorClientScheduler,300,200]
 
-Note: The evidence is generated by the connector but the generation of some evidences must be triggered
-by the business application.
+==== Description
+This library is an extension to the domibusConnectorClientLibrary. 
+It manages time-triggered jobs to receive/submit messages from/to the domibusConnector.
 
-____
+==== Contained time-triggered jobs
+*GetMessagesFromConnectorJob* triggers every configurable time period to call the domibusConnector for new messages that have not been delivered yet. The messages are then routed to the *DomibusConnectorClientBackend*. The properties required, their description and default values (if implemented) for this library are decribed in the link:aggregated-spring-properties.html[Spring Properties] menu of this page with pre-fix "connector-client.scheduler.get-messages-from-connector-job".
 
-Part of this package is also a export of the connector architecture created within
-enterprise architect. You can access the documentation if you open the
-documentation folder within the domibusConnectorDistribution package
-or here link:../architecture/index.html[architecture].
-
+*SubmitMessagesToConnectorJob* triggers every configurable time period to call the *DomibusConnectorClientBackend* for new messages on the backend of the client to submit them to the domibusConnector. To work properly, the *DomibusConnectorClientBackend* interface *_must_* be implemented. The properties required, their description and default values (if implemented) for this library are decribed in the link:aggregated-spring-properties.html[Spring Properties] menu of this page with pre-fix "connector-client.scheduler.submit-messages-to-connector-job".
