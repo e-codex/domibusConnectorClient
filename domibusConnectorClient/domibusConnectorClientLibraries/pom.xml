@@ -21,15 +21,15 @@
 
 	<artifactId>domibusConnectorClientLibraries</artifactId>
 	
-	<dependencies>
+	<!-- <dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>domibusConnectorClientAPI</artifactId>
 			<version>${project.version}</version>
-		<!-- 	 <classifier>doc</classifier>
-        <type>zip</type> -->
+			 <classifier>doc</classifier>
+        <type>zip</type>
 		</dependency>
-	</dependencies>
+	</dependencies> -->
 
  <build>
     <plugins>
