@@ -114,11 +114,6 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<reportSets>
-					<!-- <reportSet>
-						<reports>
-							<report>javadoc</report>
-						</reports>
-					</reportSet> -->
 					<reportSet>
 						<id>aggregate-javadoc</id>
 						<reports>
@@ -146,8 +141,6 @@
 				<groupId>eu.ecodex.connector.utils.property-reporting</groupId>
 				<artifactId>spring-properties-reporting-plugin</artifactId>
 				<reportSets>
-					<!-- <reportSet> <id>default</id> <reports> <report>spring-properties-report</report> 
-						</reports> </reportSet> -->
 					<reportSet>
 						<id>aggregate-properties</id>
 						<reports>
