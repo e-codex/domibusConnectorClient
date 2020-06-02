@@ -5,7 +5,8 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 
 /**
- * This is the interface containing methods to be implemented when the domibusConnectorClientLibrary is used. 
+ * This is the interface containing methods to be implemented when the domibusConnectorClientLibrary is used. It is
+ * the main link between the domibusConnectorClientWSLink and the domibusConnectorClientBackend.
  * 
  * @author Bernhard Rieder
  *
@@ -17,7 +18,7 @@ public interface DomibusConnectorClient {
 	 * 
 	 * @param message - The {@link DomibusConnectorMessageType} object containing the message information. 
 	 * 					May be built using the {@link DomibusConnectorClientMessageBuilder}.
-	 * @throws DomibusConnectorClientException
+	 * @throws DomibusConnectorClientException if the submission fails
 	 */
 	public void submitNewMessageToConnector (
 			DomibusConnectorMessageType message) throws DomibusConnectorClientException;
@@ -29,7 +30,7 @@ public interface DomibusConnectorClient {
 	 * content mapper is called.
 	 * 
 	 * @return The {@link DomibusConnectorMessagesType} containing the new messages.
-	 * @throws DomibusConnectorClientException
+	 * @throws DomibusConnectorClientException if the fetching of new messages from the connector fails
 	 */
 	public DomibusConnectorMessagesType requestNewMessagesFromConnector () throws DomibusConnectorClientException;
 	
@@ -38,7 +39,7 @@ public interface DomibusConnectorClient {
 	 * 
 	 * @param confirmationMessage - The message that contains the details and confirmationType that should be submitted. Can be generated 
 	 * 								at the backend side using the {@link DomibusConnectorClientMessageBuilder}.
-	 * @throws DomibusConnectorClientException
+	 * @throws DomibusConnectorClientException if the triggering of the confirmation fails
 	 */
 	void triggerConfirmationForMessage(DomibusConnectorMessageType confirmationMessage)
 			throws DomibusConnectorClientException;

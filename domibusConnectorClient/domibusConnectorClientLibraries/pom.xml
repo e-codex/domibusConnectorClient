@@ -13,7 +13,7 @@
 	<description>Provides libraries developers may use for their application to handle submission/retrieval of messages to/from the domibusConnector.</description>
 
 	<modules>
-		<module>domibusConnectorClientWsLink</module>
+		<module>domibusConnectorClientWSLink</module>
 		<module>domibusConnectorClientLibrary</module>
 		<module>domibusConnectorClientScheduler</module>
 		<module>domibusConnectorClientLibsAPI</module>
