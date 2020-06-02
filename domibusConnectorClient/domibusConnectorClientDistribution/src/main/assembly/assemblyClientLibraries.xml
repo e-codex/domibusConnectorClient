@@ -29,9 +29,6 @@
 			<includes>
 				<include>*.jar</include>
 			</includes>
-			<excludes>
-				<exclude>*test-sources.jar</exclude>
-			</excludes>
 		</fileSet>
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibsAPI/
@@ -42,7 +39,7 @@
 				<include>pom.xml</include>
 			</includes>
 		</fileSet>
-	
+		
 		
 		<!-- ==================== domibusConnectorClientLibrary ================= -->
 		
@@ -54,9 +51,6 @@
 			<includes>
 				<include>*.jar</include>
 			</includes>
-			<excludes>
-				<exclude>*test-sources.jar</exclude>
-			</excludes>
 		</fileSet>
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibrary/
@@ -67,7 +61,7 @@
 				<include>pom.xml</include>
 			</includes>
 		</fileSet>
-
+		
 		
 		<!-- ==================== domibusConnectorClientScheduler ================= -->
 		
@@ -79,9 +73,6 @@
 			<includes>
 				<include>*.jar</include>
 			</includes>
-			<excludes>
-				<exclude>*test-sources.jar</exclude>
-			</excludes>
 		</fileSet>
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientScheduler/
@@ -92,7 +83,7 @@
 				<include>pom.xml</include>
 			</includes>
 		</fileSet>
-	
+		
 		<!-- ==================== domibusConnectorClientWSLink ================= -->
 		
 		<fileSet>
@@ -103,9 +94,6 @@
 			<includes>
 				<include>*.jar</include>
 			</includes>
-			<excludes>
-				<exclude>*test-sources.jar</exclude>
-			</excludes>
 		</fileSet>
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientWSLink/
@@ -117,8 +105,6 @@
 			</includes>
 		</fileSet>
 		
-		
-		
 		<!-- ==================== Copying site documentation ================= -->
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/target/site
@@ -126,18 +112,7 @@
 			<outputDirectory>/documentation/site
 			</outputDirectory>
 		</fileSet>
-		
-	<!-- 	<fileSet>
-			<directory>${project.basedir}/src/main/resources/libraries/documentation
-			</directory>
-			<outputDirectory>/documentation
-			</outputDirectory>
-			<includes>
-				<include>*.pdf</include>
-			</includes>
-		</fileSet> -->
-
-		
+			
 	</fileSets>
 
 

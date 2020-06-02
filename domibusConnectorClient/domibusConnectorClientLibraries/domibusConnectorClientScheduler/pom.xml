@@ -45,31 +45,7 @@
 					</execution>
 				</executions>
 			</plugin>
-				<plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.2.0</version>
-        <executions>
-          <execution>
-            <id>javadoc-jar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>resource-bundle</goal>
-            </goals>
-            <configuration>
-              <includeDependencySources>true</includeDependencySources>
-              <dependencySourceIncludes>
-              	<dependencySourceInclude>eu.ecodex.utils:*</dependencySourceInclude>
-              </dependencySourceIncludes>
-              <dependencySourceIncludes>
-              	<dependencySourceInclude>eu.domibus.connector:*</dependencySourceInclude>
-              </dependencySourceIncludes>
-              <dependencySourceExcludes>
-                <dependencySourceExclude>org.springboot*</dependencySourceExclude>
-              </dependencySourceExcludes>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+
 		</plugins>
 	</build>
 </project>

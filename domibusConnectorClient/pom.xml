@@ -12,7 +12,7 @@
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<connector-server.version>4.2.0-RELEASE</connector-server.version>
+		<connector-server.version>4.2.1</connector-server.version>
 		<org.apache.cxf.version>3.3.6</org.apache.cxf.version>
 		<org.springframework.boot.version>2.2.6.RELEASE</org.springframework.boot.version>
 		<spring.cloud.version>2.2.2.RELEASE</spring.cloud.version>
@@ -67,17 +67,17 @@
 				<type>pom</type>
 			</dependency>
 
-			<dependency>
+			<!-- <dependency>
 				<groupId>eu.domibus.connector</groupId>
 				<artifactId>domibusConnectorAPIlib</artifactId>
 				<version>${connector-server.version}</version>
-			</dependency>
+			</dependency> -->
 			<dependency>
 				<groupId>eu.domibus.connector</groupId>
 				<artifactId>domibusConnectorAPI</artifactId>
 				<version>${connector-server.version}</version>
 			</dependency>
-			<dependency>
+			<!-- <dependency>
 				<groupId>eu.domibus.connector</groupId>
 				<artifactId>domibusConnectorControllerLIB</artifactId>
 				<version>${connector-server.version}</version>
@@ -86,7 +86,7 @@
 				<groupId>eu.domibus.connector</groupId>
 				<artifactId>domibusConnectorLinkCommon</artifactId>
 				<version>${connector-server.version}</version>
-			</dependency>
+			</dependency> -->
 			<dependency>
 				<groupId>eu.domibus.connector-client</groupId>
 				<artifactId>domibusConnectorClientLibrary</artifactId>
@@ -274,7 +274,7 @@
 				 <plugin>
                     <groupId>eu.ecodex.connector.utils.property-reporting</groupId>
                     <artifactId>spring-properties-reporting-plugin</artifactId>
-                    <version>0.9.3-SNAPSHOT</version>
+                    <version>0.9.2-RELEASE</version>
                 </plugin>
 			</plugins>
 		</pluginManagement>
@@ -310,18 +310,6 @@
                     <locales>en</locales>
                     <inputEncoding>UTF-8</inputEncoding>
                     <outputEncoding>UTF-8</outputEncoding>
-                   <!--  <asciidoc>
-                        optional site-wide AsciiDoc attributes
-                        <attributes>
-                            <icons>font</icons>
-                            <source-highlighter>coderay</source-highlighter>
-                            <coderay-css>style</coderay-css>
-                            <toclevels>2</toclevels>
-                        </attributes>
-                        <templateDirs>
-                            <dir>src/site/slim-templates</dir>
-                        </templateDirs>
-                    </asciidoc> -->
                 </configuration>
                 <dependencies>
                     <dependency>
@@ -329,17 +317,7 @@
                         <artifactId>asciidoctor-maven-plugin</artifactId>
                         <version>2.0.0-RC.1</version>
                     </dependency>
-					<!-- <dependency>
-						<groupId>org.jruby</groupId>
-						<artifactId>jruby-complete</artifactId>
-						<version>9.2.7.0</version>
-					</dependency>
-					<dependency>
-						<groupId>org.asciidoctor</groupId>
-						<artifactId>asciidoctorj</artifactId>
-						<version>2.0.0</version>
-					</dependency> -->
-                </dependencies>
+				</dependencies>
             </plugin>
 			
 			
@@ -363,111 +341,77 @@
 				</executions>
 			</plugin>
 			
-			<plugin>
-        <artifactId>maven-javadoc-plugin</artifactId>
-        <version>3.2.0</version>
-        <executions>
-          <execution>
-            <id>javadoc-jar</id>
-            <phase>package</phase>
-            <goals>
-              <goal>jar</goal>
-            </goals>
-            <configuration>
-              <!-- switch on dependency-driven aggregation -->
-              <includeDependencySources>true</includeDependencySources>
-              <dependencySourceIncludes>
-              	<dependencySourceInclude>eu.domibus.connector.domibusConnectorAPI</dependencySourceInclude>
-              </dependencySourceIncludes>
-            <!--   <dependencySourceExcludes>
-                exclude ONLY commons-cli artifacts
-                <dependencySourceExclude>commons-cli:*</dependencySourceExclude>
-              </dependencySourceExcludes> -->
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-
 		</plugins>
 	</build>
 	
 	<reporting>
-	<plugins>
-	<plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-project-info-reports-plugin</artifactId>
-        <version>2.6</version>
-        <reportSets>
-          <reportSet>
-            <reports><!-- select reports -->
-              <report>index</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-      </plugin>
-	<plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <reportSets>
-                    <reportSet>
-                        <!-- by default, id = "default" -->
-                        <reports>
-                            <!-- select non-aggregate reports -->
-                            <report>javadoc</report>
-                            <!-- <report>test-javadoc</report> -->
-                        </reports>
-                    </reportSet>
-                    <reportSet>
-                        <!-- aggregate reportSet, to define in poms having modules -->
-                        <id>aggregate</id>
-                        <!-- don't run aggregate in child modules -->
-                        <reports>
-                            <report>aggregate</report>
-                        </reports>
-                        <inherited>false</inherited>
-                    </reportSet>
-                </reportSets>
-                <configuration>
-                    <!-- fix error javax.interceptor.InterceptorBinding not found -->
-                    <additionalDependencies>
-                        <additionalDependency>
-                            <groupId>javax.interceptor</groupId>
-                            <artifactId>javax.interceptor-api</artifactId>
-                            <version>1.2.2</version>
-                        </additionalDependency>
-                    </additionalDependencies>
-                </configuration>
-            </plugin>
-	 <plugin>
-                <groupId>eu.ecodex.connector.utils.property-reporting</groupId>
-                <artifactId>spring-properties-reporting-plugin</artifactId>
-                <reportSets>
-                   <!--  <reportSet>
-                        <id>default</id>
-                        <reports>
-                            <report>spring-properties-report</report>
-                        </reports>
-                    </reportSet> -->
-                    <reportSet>
-                        <id>aggregate</id>
-                        <reports>
-                            <report>aggregate</report>
-                        </reports>
-                    </reportSet>
-                </reportSets>
-                <configuration>
-                    <linkJavadoc>true</linkJavadoc>
-                    <includedDependencies>
-                        <includedDependency>
-                            <groupId>^org.springframework</groupId>
-                        </includedDependency>
-                        <includedDependency>
-                            <groupId>^eu.domibus</groupId>
-                        </includedDependency>
-                    </includedDependencies>
-                </configuration>
-            </plugin>
-	</plugins>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-project-info-reports-plugin</artifactId>
+				<version>2.6</version>
+				<reportSets>
+					<reportSet>
+						<reports><!-- select reports -->
+							<report>index</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-javadoc-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<id>aggregate-javadoc</id>
+						<reports>
+							<report>aggregate</report>
+						</reports>
+						<inherited>false</inherited>
+					</reportSet>
+				</reportSets>
+				<configuration>
+					<additionalDependencies>
+						<additionalDependency>
+							<groupId>javax.interceptor</groupId>
+							<artifactId>javax.interceptor-api</artifactId>
+							<version>1.2.2</version>
+						</additionalDependency>
+					</additionalDependencies>
+					<includeDependencySources>true</includeDependencySources>
+					<dependencySourceIncludes>
+						<dependencySourceInclude>eu.domibus.connector:*</dependencySourceInclude>
+						<dependencySourceInclude>eu.ecodex.utils:*</dependencySourceInclude>
+					</dependencySourceIncludes>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>eu.ecodex.connector.utils.property-reporting</groupId>
+				<artifactId>spring-properties-reporting-plugin</artifactId>
+				<reportSets>
+					<reportSet>
+						<id>aggregate-properties</id>
+						<reports>
+							<report>aggregate</report>
+						</reports>
+					</reportSet>
+				</reportSets>
+				<configuration>
+					<linkJavadoc>true</linkJavadoc>
+					<includedDependencies>
+						<includedDependency>
+							<groupId>^org.springframework</groupId>
+						</includedDependency>
+						<includedDependency>
+							<groupId>^eu.domibus</groupId>
+						</includedDependency>
+						<includedDependency>
+							<groupId>^eu.ecodex.utils</groupId>
+						</includedDependency>
+					</includedDependencies>
+				</configuration>
+			</plugin>
+		</plugins>
 	</reporting>
-
+	
 </project>
