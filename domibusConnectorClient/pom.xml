@@ -22,7 +22,6 @@
 	</properties>
 
 	<modules>
-		<!-- <module>domibusConnectorClientAPI</module> -->
 		<module>domibusConnectorClientLibraries</module>
 		<module>domibusConnectorClientApplication</module>
 		<module>domibusConnectorClientVaadinUI</module>
@@ -66,27 +65,11 @@
 				<scope>import</scope>
 				<type>pom</type>
 			</dependency>
-
-			<!-- <dependency>
-				<groupId>eu.domibus.connector</groupId>
-				<artifactId>domibusConnectorAPIlib</artifactId>
-				<version>${connector-server.version}</version>
-			</dependency> -->
 			<dependency>
 				<groupId>eu.domibus.connector</groupId>
 				<artifactId>domibusConnectorAPI</artifactId>
 				<version>${connector-server.version}</version>
 			</dependency>
-			<!-- <dependency>
-				<groupId>eu.domibus.connector</groupId>
-				<artifactId>domibusConnectorControllerLIB</artifactId>
-				<version>${connector-server.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>eu.domibus.connector</groupId>
-				<artifactId>domibusConnectorLinkCommon</artifactId>
-				<version>${connector-server.version}</version>
-			</dependency> -->
 			<dependency>
 				<groupId>eu.domibus.connector-client</groupId>
 				<artifactId>domibusConnectorClientLibrary</artifactId>
