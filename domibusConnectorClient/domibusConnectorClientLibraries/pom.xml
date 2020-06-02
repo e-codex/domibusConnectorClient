@@ -20,11 +20,10 @@
 	</modules>
 
 	<artifactId>domibusConnectorClientLibraries</artifactId>
-
-
-
-	<dependencies>
-		<dependency>
+	
+ 
+ <dependencies>
+ 	<dependency>
 			<groupId>eu.domibus.connector</groupId>
 			<artifactId>domibusConnectorAPI</artifactId>
 			<exclusions>
