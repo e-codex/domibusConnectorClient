@@ -10,27 +10,13 @@ image::images/domibusConnectorClient-Libraries-PackageContent.png[domibusConnect
 === site documentation
 Since this site is shown, the site documentation is already openend. It is the web-based documentation of the documentation for the libraries contained.
 
-=== general description of the libraries content
+=== general description of the libraries subfolder contents
 Each libraries subfolder contains the following files:
 
-* *_"*.jar"_*         - it is the actual library that needs to be used when integrated and implemented into an application
-* *_"*-sources.jar"_* - the jar archive that contains the sources for this library. This is for developers that understand the java code that the library is written in. Could also be used for debug purpose.
-* *_"*-javadoc.jar"_* - contains the API documentation (javadoc) of the library. This apidoc is merged to the apidocs of this site documentation.
-* *_"pom.xml"_*       - this is the project definition file of the library. Details on the pom.xml and its contents can be found in the documentation of *Apache Maven*.
+* *_.jar_*         - it is the actual library that needs to be used when integrated and implemented into an application
+* *_-sources.jar_* - the jar archive that contains the sources for this library. This is for developers that understand the java code that the library is written in. Could also be used for debug purpose.
+* *_-javadoc.jar_* - contains the API documentation (javadoc) of the library. This apidoc is merged to the apidocs of this site documentation.
+* *_pom.xml_*       - this is the project definition file of the library. Details on the pom.xml and its contents can be found in the documentation of *Apache Maven*.
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
->>>>>>> .theirs
+=== libraries subfolder
+The description of the libraries, their purpose and usage can be found in the link:architecture.html[architecture documentation].
