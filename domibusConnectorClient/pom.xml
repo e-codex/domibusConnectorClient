@@ -18,7 +18,7 @@
 		<spring.cloud.version>2.2.2.RELEASE</spring.cloud.version>
 		<h2.version>1.4.200</h2.version>
 		<swagger.version>1.5.12</swagger.version>
-		<ecodex.utils.version>0.0.17-SNAPSHOT</ecodex.utils.version>
+		<ecodex.utils.version>0.0.16-RELEASE</ecodex.utils.version>
 	</properties>
 
 	<modules>
