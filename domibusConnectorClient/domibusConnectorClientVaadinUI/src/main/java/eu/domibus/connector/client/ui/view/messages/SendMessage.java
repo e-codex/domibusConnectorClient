@@ -57,7 +57,7 @@ public class SendMessage  extends VerticalLayout implements HasUrlParameter<Long
 	private VerticalLayout messageFilesArea = new VerticalLayout();
 	
 	boolean filesEnabled = false;
-	boolean saveEnabled = false;
+	boolean saveEnabled = true;
 	Button saveBtn;
 	Button uploadFileButton;
 	Button submitMessageButton;
