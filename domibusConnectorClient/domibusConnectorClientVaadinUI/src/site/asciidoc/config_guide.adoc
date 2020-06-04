@@ -1,0 +1,21 @@
+= Configuring the domibusConnectorClient-UI
+
+If the startup-script remains as distributed, the standard properties file *config/connector-client-UI.properties* will be used.
+
+The standard file distributed contains the following lines:
+
+* connector-client-rest-url=http://<url>:<port>/restservice
+* server.port=8081
+* org.springframework.boot.logging.LoggingSystem=Log4J2
+* logging.config=./config/log4j2.xml
+
+Only the first 2 of them need to be configured if the logging shall remain as distributed and pre-set:
+
+=== connector-client-rest-url
+
+This property defines the URL of the REST webservice the domibusConnectorClient-Application provides. An example could be http://localhost:8080/restservice. The URL depends on where the domibusConnectorClient-Application is installed and runs. The relative path */restservice* is configured within the domibusConnectorClient-Application.
+
+=== server.port
+
+This property defines on which port the domibusConnectorClient-UI shall run. The configured port must be unused by other applications. The port defined here affects the way the UI can be reached from client browsers.
+ 

@@ -366,6 +366,7 @@
 						<dependencySourceInclude>eu.domibus.connector:*</dependencySourceInclude>
 						<dependencySourceInclude>eu.ecodex.utils:*</dependencySourceInclude>
 					</dependencySourceIncludes>
+					<excludePackageNames>eu.domibus.connector.client.ui*</excludePackageNames>
 				</configuration>
 			</plugin>
 			<plugin>
@@ -392,6 +393,7 @@
 							<groupId>^eu.ecodex.utils</groupId>
 						</includedDependency>
 					</includedDependencies>
+					
 				</configuration>
 			</plugin>
 		</plugins>

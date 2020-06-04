@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="domibusConnectorClient-UI">
+
+    <skin>
+        <groupId>org.apache.maven.skins</groupId>
+        <artifactId>maven-fluido-skin</artifactId>
+        <version>1.8</version>
+    </skin>
+    <custom>
+        <fluidoSkin>
+            <topBarEnabled>true</topBarEnabled>
+            <sideBarEnabled>false</sideBarEnabled>
+        </fluidoSkin>
+    </custom>
+    
+     <bannerLeft>
+    <name>e-Codex</name>
+    <src>images/logo_ecodex_0.png</src>
+   <width>100px</width>
+   <height>100px</height>
+    <href>https://www.e-codex.eu/</href>
+  </bannerLeft>
+ 
+  <bannerRight>
+    <src>images/europa-logo.jpg</src>
+      <width>50px</width>
+   <height>50px</height>
+  </bannerRight>
+    
+    <body>
+    
+        <menu name="domibusConnectorClient-UI">
+            <item name="Overview" href="index.html"/>
+        </menu>
+        <menu name="Installation/Configuration">
+            <item name="Installation Guide" href="install_guide.html"/>
+            <item name="Configuration Guide" href="config_guide.html"/>
+        </menu>
+     
+        <footer/>
+
+    </body>
+</project>
