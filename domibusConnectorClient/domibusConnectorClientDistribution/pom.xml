@@ -30,10 +30,11 @@
 								<descriptor>src/main/assembly/assemblyClientLibraries.xml</descriptor>
 								<descriptor>src/main/assembly/assemblyClientApplication.xml</descriptor>
 								<descriptor>src/main/assembly/assemblyClientUI.xml</descriptor>
+								<descriptor>src/main/assembly/assemblyClientDocumentation.xml</descriptor>
 							</descriptors>
 						</configuration>
 					</execution>
-					<execution>
+<!-- 					<execution>
 						<id>create-documentation-package</id>
 						<phase>deploy</phase>
 						<goals>
@@ -44,10 +45,9 @@
 								<descriptor>src/main/assembly/assemblyClientLibraries.xml</descriptor>
 								<descriptor>src/main/assembly/assemblyClientApplication.xml</descriptor>
 								<descriptor>src/main/assembly/assemblyClientUI.xml</descriptor>
-								<descriptor>src/main/assembly/assemblyClientDocumentation.xml</descriptor>
 							</descriptors>
 						</configuration>
-					</execution>
+					</execution> -->
 				</executions>
 			</plugin>
 		</plugins>

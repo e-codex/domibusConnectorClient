@@ -6,6 +6,17 @@
 	</formats>
 	<includeBaseDirectory>false</includeBaseDirectory>
 	<fileSets>
+	
+		<!-- ==================== Copying README ================= -->
+		<fileSet>
+			<directory>${project.basedir}/src/main/resources/documentation
+			</directory>
+			<outputDirectory>
+			</outputDirectory>
+			<includes>
+				<include>README.txt</include>
+			</includes>
+		</fileSet>
 		
 		<!-- ==================== Copying site documentation ================= -->
 		<fileSet>
@@ -16,4 +27,5 @@
 		</fileSet>
 
 	</fileSets>
+	
 </assembly>
