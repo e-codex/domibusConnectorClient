@@ -13,7 +13,7 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibsAPI/target/lib/
 			</directory>
-			<outputDirectory>/libraries/domibusConnectorAPI
+			<outputDirectory>libraries/domibusConnectorAPI
 			</outputDirectory>
 			<includes>
 				<include>domibusConnectorAPI*.jar</include>
@@ -24,7 +24,7 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibsAPI/target/
 			</directory>
-			<outputDirectory>/libraries/domibusConnectorClientLibsAPI
+			<outputDirectory>libraries/domibusConnectorClientLibsAPI
 			</outputDirectory>
 			<includes>
 				<include>*.jar</include>
@@ -33,7 +33,7 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibsAPI/
 			</directory>
-			<outputDirectory>/libraries/domibusConnectorClientLibsAPI
+			<outputDirectory>libraries/domibusConnectorClientLibsAPI
 			</outputDirectory>
 			<includes>
 				<include>pom.xml</include>
@@ -46,7 +46,7 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibrary/target/
 			</directory>
-			<outputDirectory>/libraries/domibusConnectorClientLibrary
+			<outputDirectory>libraries/domibusConnectorClientLibrary
 			</outputDirectory>
 			<includes>
 				<include>*.jar</include>
@@ -55,7 +55,7 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibrary/
 			</directory>
-			<outputDirectory>/libraries/domibusConnectorClientLibrary
+			<outputDirectory>libraries/domibusConnectorClientLibrary
 			</outputDirectory>
 			<includes>
 				<include>pom.xml</include>
@@ -68,7 +68,7 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientScheduler/target/
 			</directory>
-			<outputDirectory>/libraries/domibusConnectorClientScheduler
+			<outputDirectory>libraries/domibusConnectorClientScheduler
 			</outputDirectory>
 			<includes>
 				<include>*.jar</include>
@@ -77,7 +77,7 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientScheduler/
 			</directory>
-			<outputDirectory>/libraries/domibusConnectorClientScheduler
+			<outputDirectory>libraries/domibusConnectorClientScheduler
 			</outputDirectory>
 			<includes>
 				<include>pom.xml</include>
@@ -89,7 +89,7 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientWSLink/target/
 			</directory>
-			<outputDirectory>/libraries/domibusConnectorClientWSLink
+			<outputDirectory>libraries/domibusConnectorClientWSLink
 			</outputDirectory>
 			<includes>
 				<include>*.jar</include>
@@ -98,7 +98,7 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientWSLink/
 			</directory>
-			<outputDirectory>/libraries/domibusConnectorClientWSLink
+			<outputDirectory>libraries/domibusConnectorClientWSLink
 			</outputDirectory>
 			<includes>
 				<include>pom.xml</include>
@@ -107,9 +107,9 @@
 		
 		<!-- ==================== Copying site documentation ================= -->
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientLibraries/target/site
+			<directory>${project.basedir}/../domibusConnectorClientLibraries/target/staging
 			</directory>
-			<outputDirectory>/documentation/site
+			<outputDirectory>documentation/site
 			</outputDirectory>
 		</fileSet>
 			

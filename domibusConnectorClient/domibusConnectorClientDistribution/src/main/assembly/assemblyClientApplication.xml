@@ -20,7 +20,7 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientApplication/domibusConnectorClientStarter/target/
 			</directory>
-			<outputDirectory>/bin
+			<outputDirectory>bin
 			</outputDirectory>
 			<includes>
 				<include>*.jar</include>
@@ -32,9 +32,9 @@
 		
 		<!-- ==================== Copying site documentation ================= -->
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientApplication/target/site/
+			<directory>${project.basedir}/../domibusConnectorClientApplication/target/staging/
 			</directory>
-			<outputDirectory>/documentation/site
+			<outputDirectory>documentation/site
 			</outputDirectory>
 		</fileSet>
 

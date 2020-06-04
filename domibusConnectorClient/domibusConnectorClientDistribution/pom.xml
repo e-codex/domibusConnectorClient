@@ -13,12 +13,12 @@
         <plugins>
             <plugin>
                 <artifactId>maven-assembly-plugin</artifactId>
-                <version>2.4</version>
                 <configuration>
                     <descriptors>
                         <descriptor>src/main/assembly/assemblyClientLibraries.xml</descriptor>
                         <descriptor>src/main/assembly/assemblyClientApplication.xml</descriptor>
                         <descriptor>src/main/assembly/assemblyClientUI.xml</descriptor>
+                        <descriptor>src/main/assembly/assemblyClientDocumentation.xml</descriptor>
                     </descriptors>
                 </configuration>
                 <executions>

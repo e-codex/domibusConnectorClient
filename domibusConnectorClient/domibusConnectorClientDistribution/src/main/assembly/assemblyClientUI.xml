@@ -19,7 +19,7 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientVaadinUI/target/
 			</directory>
-			<outputDirectory>/bin
+			<outputDirectory>bin
 			</outputDirectory>
 			<includes>
 				<include>*.jar</include>
@@ -34,7 +34,7 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientVaadinUI/target/site/
 			</directory>
-			<outputDirectory>/documentation/site
+			<outputDirectory>documentation/site
 			</outputDirectory>
 		</fileSet>
 
