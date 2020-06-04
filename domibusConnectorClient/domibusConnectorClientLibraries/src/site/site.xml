@@ -38,7 +38,12 @@
     	<menu name="Package Content">
             <item name="Package description of ${project.name}" href="packagecontent.html" />
         </menu>
-        <menu ref="reports"/>
+        <menu name="Javadoc">
+        	<item name="Aggregated apidocs of ${project.name}" href="apidocs/index.html" />
+        </menu>
+        <menu name="Configuration">
+        	<item name="Aggregated Properties used in ${project.name}" href="aggregated-spring-properties.html" />
+        </menu>
 
         <footer/>
 

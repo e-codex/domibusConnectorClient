@@ -19,7 +19,7 @@
 		<fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientVaadinUI/target/
 			</directory>
-			<outputDirectory>/bin
+			<outputDirectory>bin
 			</outputDirectory>
 			<includes>
 				<include>*.jar</include>
@@ -28,6 +28,14 @@
 				<exclude>*-sources.jar</exclude>
 				<exclude>*-javadoc.jar</exclude>
 			</excludes>
+		</fileSet>
+		
+		<!-- ==================== Copying site documentation ================= -->
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientVaadinUI/target/site/
+			</directory>
+			<outputDirectory>documentation/site
+			</outputDirectory>
 		</fileSet>
 
 	</fileSets>
