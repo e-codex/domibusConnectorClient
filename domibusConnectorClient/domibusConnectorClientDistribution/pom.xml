@@ -1,37 +1,56 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>eu.domibus.connector-client</groupId>
-    <artifactId>domibusConnectorClient</artifactId>
-    <version>4.2.0-SNAPSHOT</version>
-  </parent>
-  <artifactId>domibusConnectorClientDistribution</artifactId>
-  
- 
-    <build>
-        <finalName>domibusConnectorClient</finalName>
-        <plugins>
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <configuration>
-                    <descriptors>
-                        <descriptor>src/main/assembly/assemblyClientLibraries.xml</descriptor>
-                        <descriptor>src/main/assembly/assemblyClientApplication.xml</descriptor>
-                        <descriptor>src/main/assembly/assemblyClientUI.xml</descriptor>
-                        <descriptor>src/main/assembly/assemblyClientDocumentation.xml</descriptor>
-                    </descriptors>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>create-distribution-package</id>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-        </plugins>
-    </build>
-    <packaging>pom</packaging>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>eu.domibus.connector-client</groupId>
+		<artifactId>domibusConnectorClient</artifactId>
+		<version>4.2.0-SNAPSHOT</version>
+	</parent>
+	<artifactId>domibusConnectorClientDistribution</artifactId>
+
+
+	<build>
+		<finalName>domibusConnectorClient</finalName>
+		<plugins>
+			<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<!-- <configuration> <descriptors> <descriptor>src/main/assembly/assemblyClientLibraries.xml</descriptor> 
+					<descriptor>src/main/assembly/assemblyClientApplication.xml</descriptor> 
+					<descriptor>src/main/assembly/assemblyClientUI.xml</descriptor> <descriptor>src/main/assembly/assemblyClientDocumentation.xml</descriptor> 
+					</descriptors> </configuration> -->
+				<executions>
+					<execution>
+						<id>create-distribution-package</id>
+						<phase>package</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/assembly/assemblyClientLibraries.xml</descriptor>
+								<descriptor>src/main/assembly/assemblyClientApplication.xml</descriptor>
+								<descriptor>src/main/assembly/assemblyClientUI.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+					<execution>
+						<id>create-documentation-package</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>single</goal>
+						</goals>
+						<configuration>
+							<descriptors>
+								<descriptor>src/main/assembly/assemblyClientLibraries.xml</descriptor>
+								<descriptor>src/main/assembly/assemblyClientApplication.xml</descriptor>
+								<descriptor>src/main/assembly/assemblyClientUI.xml</descriptor>
+								<descriptor>src/main/assembly/assemblyClientDocumentation.xml</descriptor>
+							</descriptors>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+	<packaging>pom</packaging>
 </project>
