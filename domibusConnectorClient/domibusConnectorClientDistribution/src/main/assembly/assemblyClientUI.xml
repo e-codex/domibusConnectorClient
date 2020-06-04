@@ -29,6 +29,14 @@
 				<exclude>*-javadoc.jar</exclude>
 			</excludes>
 		</fileSet>
+		
+		<!-- ==================== Copying site documentation ================= -->
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientVaadinUI/target/site/
+			</directory>
+			<outputDirectory>/documentation/site
+			</outputDirectory>
+		</fileSet>
 
 	</fileSets>
 </assembly>

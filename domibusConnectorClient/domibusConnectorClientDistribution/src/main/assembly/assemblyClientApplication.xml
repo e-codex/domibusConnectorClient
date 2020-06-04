@@ -29,6 +29,14 @@
 				<exclude>*-sources.jar</exclude>
 			</excludes>
 		</fileSet>
+		
+		<!-- ==================== Copying site documentation ================= -->
+		<fileSet>
+			<directory>${project.basedir}/../domibusConnectorClientApplication/target/site/
+			</directory>
+			<outputDirectory>/documentation/site
+			</outputDirectory>
+		</fileSet>
 
 	</fileSets>
 </assembly>
