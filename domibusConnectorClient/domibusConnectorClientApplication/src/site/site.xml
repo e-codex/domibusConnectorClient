@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project name="domibusConnectorClientApplication">
+<project name="domibusConnectorClient-Application">
 
 	<skin>
 		<groupId>org.apache.maven.skins</groupId>
@@ -29,22 +29,23 @@
 
 	<body>
 
-		<menu name="domibusConnectorClient-Application">
-			<item name="Overview" href="index.html" />
-		</menu>
-		<menu name="Installation/Configuration">
-			<item name="Installation Guide" href="install_guide.html" />
-			<item name="Configuration Guide" href="config_guide.html" />
-			<item name="Certificates/Keys Required" href="certs_keys.html" />
-		</menu>
-		<!-- <menu ref="modules"/> -->
 		<menu name="Architecture">
 			<item name="Architecture of ${project.name}" href="architecture.html" />
 		</menu>
 		<menu name="Package Content">
 			<item name="Package description of ${project.name}" href="packagecontent.html" />
 		</menu>
-		<menu ref="reports" />
+		<menu name="Javadoc">
+			<item name="Aggregated apidocs of ${project.name}" href="apidocs/index.html" />
+		</menu>
+		<menu name="Configuration">
+			<item name="Aggregated Properties used in ${project.name}" href="aggregated-spring-properties.html" />
+		</menu>
+		<menu name="Installation/Configuration">
+			<item name="Installation Guide" href="install_guide.html" />
+			<item name="Configuration Guide" href="config_guide.html" />
+			<item name="Certificates/Keys Required" href="certs_keys.html" />
+		</menu>
 
 		<footer />
 

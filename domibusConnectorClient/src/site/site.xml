@@ -36,20 +36,15 @@
 			<item name="domibusConnectorClient" href="./index.html" />
 		</breadcrumbs>
 
-		<!-- <menu name="domibusConnectorClient"> <item name="Overview" href="index.html"/> 
-			</menu> -->
+		<menu name="Architecture">
+			<item name="Architecture of ${project.name}" href="architecture.html" />
+		</menu>
 
 		<menu name="Distributions">
 			<item name="domibusConnectorClient-Application" href="domibusConnectorClientApplication/index.html" />
 			<item name="domibusConnectorClient-UI" href="domibusConnectorClientVaadinUI/index.html" />
 			<item name="domibusConnectorClient-Libraries" href="domibusConnectorClientLibraries/index.html" />
 		</menu>
-
-		<menu name="Architecture">
-			<item name="Architecture of ${project.name}" href="architecture.html" />
-		</menu>
-
-		<!-- <menu ref="reports"/> -->
 
 		<footer />
 
