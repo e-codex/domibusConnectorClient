@@ -1,97 +1,73 @@
-The libraries distributed here are for further developments within a custom application.
-They are NOT designed to run independently, but only to support implementers of a custom backend application to manage the message structure of the domibusConnectorAPI and to connect to the domibusConnector to submit or receive messages. 
-
-
-image:images/domibusConnectorClient-Libraries_deployment.png[placement of the libraries of the domibusConnectorClient]
-
 == Architecture Overview
 
-Diagram: domibusConnectorClient-Libraries overview
-[#img-domibusConnectorClientLibraries]
-[link=images/domibusConnectorClient-Libraries-overview.png,window=_tab]
-image::images/domibusConnectorClient-Libraries-overview.png[domibusConnectorClientLibraries,300,200]
+Diagram: domibusConnectorClientApplication overview
+[#img-domibusConnectorClientApplication]
+[link=images/domibusConnectorClientApplication.png,window=_tab]
+image::images/domibusConnectorClientApplication.png[domibusConnectorClientApplication,300,200]
 
 
-Libraries included in the package:
+The domibusConnectorClient-Application consists of the following modules:
 
-* domibusConnectorAPI
-* domibusConnectorClientLibsAPI
-* domibusConnectorClientWSLink
-* domibusConnectorClientLibrary
-* domibusConnectorClientScheduler
+* domibusConnectorClientAppAPI
+* domibusConnectorClientController
+* domibusConnectorClientFSStorage
+* domibusConnectorClientRestAPI
+* domibusConnectorClientStarter
+
+Additionally, the domibusConnectorClient-Application uses the libraries that are contained in the domibusConnectorClient-Libraries package.
 
 
-=== domibusConnectorAPI
-
-This library is provided by the domibusConnector. It includes the definition of the services the domibusConnector provides and serves.
-An XSD describing the transition model of the message structure the domibusConnector expects is also included as well as Java classes generated from the XSD. 
-
-=== domibusConnectorClientLibsAPI
+=== domibusConnectorClientAppAPI
 
 ==== Description
-Over the whole domibusConnectorClientLibraries, a common API defines interfaces that are used of the modules (libraries) to communicate with each other. Those interfaces can be implemented/overridden by developers in case the libraries are used. Some *_must_* be implemented. Most interfaces have a default implementation to support the developer in the beginning. All interfaces are well described in the link:apidocs/index.html[API docs,window=_tab] of this package.
+Over the whole domibusConnectorClient-Application, a common API defines interfaces that are used by the modules to communicate with each other. Those interfaces can be implemented/overridden by developers in case some modules are replaced by customized ones. An example is that some implementer does not want to use the domibusConnectorClientFSStorage to store messages in a file system, but has some other storage solution that should be used. All interfaces are well described in the link:apidocs/index.html[API docs,window=_tab] of this package.
 This overview picture above as well as all architecture images only contain the interfaces that are used within the environment that is pictured.
 
-=== domibusConnectorClientWSLink
+=== domibusConnectorClientController
 
-Diagram: domibusConnectorClientWSLink
-[#img-domibusConnectorClientWSLink]
-[link=images/domibusConnectorClientWSLink.png,window=_tab]
-image::images/domibusConnectorClientWSLink.png[domibusConnectorClientWSLink,300,200]
-
-==== Description
-This library controls the communication between the client and the domibusConnector.
-It builds the webservice client for the domibusConnectorBackendWebService. 
-
-If configured properly it also builds the domibusConnectorBackendDeliveryWebService as a push service. In that case, the domibusConnector can directly push messages to the client and the time-triggered job to receive messages from the connector is obsolete.
-
-____
-
-Important: If the push mode is enabled and the client is configured to receive messages from the connector directly, then the client also needs to be configured properly using that mode within the configuration of the domibusConnector!
-
-____
-
-Furthermore, it loads the keystore and builds the ws-security for the webservices.
-
-The properties required, their description and default values (if implemented) for this library are decribed in the link:aggregated-spring-properties.html[Spring Properties] menu of this page with pre-fix "connector-client.connector-link.ws". 
-
-=== domibusConnectorClientLibrary
-
-Diagram: domibusConnectorClientLibrary
-[#img-domibusConnectorClientLibrary]
-[link=images/domibusConnectorClientLibrary.png,window=_tab]
-image::images/domibusConnectorClientLibrary.png[domibusConnectorClientLibrary,300,200]
+Diagram: domibusConnectorClientController
+[#img-domibusConnectorClientController]
+[link=images/domibusConnectorClientController.png,window=_tab]
+image::images/domibusConnectorClientController.png[domibusConnectorClientController,300,200]
 
 ==== Description
-The domibusConnectorClientLibrary is the main library of the package. 
-To use this library, also the *domibusConnectorClientWSLink* needs to be on the classpath.
+The controller is the module that knows all the other modules. The main features of the controller are:
 
-==== Contained implementations
-* *DomibusConnectorClientMessageBuilderImpl* 
-** Implements  link:apidocs/eu/domibus/connector/client/DomibusConnectorClientMessageBuilder.html[*DomibusConnectorClientMessageBuilder*,window=_tab] 
-** Helps to create transition messages.
-* *DomibusConnectorClientContentMapperDefaultImpl*
-** Implements link:apidocs/eu/domibus/connector/client/DomibusConnectorClientContentMapper.html[*DomibusConnectorClientContentMapper*,window="_tab"] 
-** If no mapping of business content is required, this default implementation is sufficient. It validates if the business content of a message is set.
-* *DomibusConnectorClientImpl* 
-** Implements link:apidocs/eu/domibus/connector/client/DomibusConnectorClient.html[*DomibusConnectorClient*,window="_tab"]
-** Main implementation class of this library. Calls the domibusConnectorClientWSLink library to receive messages from the domibusConnector and submits messages to the domibusConnector. 
-* *DomibusConnectorDeliveryClientImpl*
-** Implements link:apidocs/eu/domibus/connector/client/DomibusConnectorDeliveryClient.html[*DomibusConnectorDeliveryClient*,window="_tab"]
-** If push mode is enabled and configured properly this implementation class routes messages received from the domibusConnector via push to the DomibusConnectorClientBackend. 
+* It loads the embedded database used by the domibusConnectorClient and holds the model of this database. This database is stored in a file that can be configured.
+* It controls the usage of the domibusConnectorClient libraries used to communicate with the domibusConnector.
+* The controller communicates with the storage module.
+* The default implementation of the REST service provided by the domibusConnectorClientRestAPI is also part of the controller.
+* There are 2 additional timer jobs within the controller:
+** AutoConfirmMessagesJob queries the database if messages that have been received have not been confirmed yet. For the resulting messages the job triggers the domibusConnector to produce and send such a confirmation.
+** UpdateStorageStatusJob validates if messages that are stored in the database of the domibusConnectorClient still exist in the storage by consulting the storage module and updates the storage status of messages within the database.
+* Triggered by configuration, the controller at startup provides a service that restores the domibusConnectorClient database if the database file is lost or damaged with information provided by the storage module.
 
-=== domibusConnectorClientScheduler
+=== domibusConnectorClientFSStorage
 
-Diagram: domibusConnectorClientScheduler
-[#img-domibusConnectorClientScheduler]
-[link=images/domibusConnectorClientScheduler.png,window=_tab]
-image::images/domibusConnectorClientScheduler.png[domibusConnectorClientScheduler,300,200]
+Diagram: domibusConnectorClientFSStorage
+[#img-domibusConnectorClientFSStorage]
+[link=images/domibusConnectorClientFSStorage.png,window=_tab]
+image::images/domibusConnectorClientFSStorage.png[domibusConnectorClientFSStorage,300,200]
 
 ==== Description
-This library is an extension to the domibusConnectorClientLibrary. 
-It manages time-triggered jobs to receive/submit messages from/to the domibusConnector.
+This standard storage module provided by the domibusConnectorClient-Application stores and reads messages and their files from a filesystem. To be able to do so, the module has many default injected properties that can be overridden in the property configuration. 
 
-==== Contained time-triggered jobs
-*GetMessagesFromConnectorJob* triggers every configurable time period to call the domibusConnector for new messages that have not been delivered yet. The messages are then routed to the *DomibusConnectorClientBackend*. The properties required, their description and default values (if implemented) for this library are decribed in the link:aggregated-spring-properties.html[Spring Properties] menu of this page with pre-fix "connector-client.scheduler.get-messages-from-connector-job".
+=== domibusConnectorClientRestAPI
 
-*SubmitMessagesToConnectorJob* triggers every configurable time period to call the *DomibusConnectorClientBackend* for new messages on the backend of the client to submit them to the domibusConnector. To work properly, the *DomibusConnectorClientBackend* interface *_must_* be implemented. The properties required, their description and default values (if implemented) for this library are decribed in the link:aggregated-spring-properties.html[Spring Properties] menu of this page with pre-fix "connector-client.scheduler.submit-messages-to-connector-job".
+Diagram: domibusConnectorClientRestAPI
+[#img-domibusConnectorClientRestAPI]
+[link=images/domibusConnectorClientRestAPI.png,window=_tab]
+image::images/domibusConnectorClientRestAPI.png[domibusConnectorClientRestAPI,300,200]
+
+==== Description
+The REST API of the domibusConnectorClient-Application allows other applications to use functionalities of the client. It also provides the interface the domibusConnectorClient-UI uses. That way, implementers can develop their own user interface for the domibusConnectorClient. A prominent example is the Central Testing Platform (CTP) of e-CODEX.
+
+=== domibusConnectorClientStarter
+
+Diagram: domibusConnectorClientStarter
+[#img-domibusConnectorClientStarter]
+[link=images/domibusConnectorClientStarter.png,window=_tab]
+image::images/domibusConnectorClientStarter.png[domibusConnectorClientStarter,300,200]
+
+==== Description
+The domibusConnectorClientStarter is just a module to start the spring boot application context and set the properties file.
