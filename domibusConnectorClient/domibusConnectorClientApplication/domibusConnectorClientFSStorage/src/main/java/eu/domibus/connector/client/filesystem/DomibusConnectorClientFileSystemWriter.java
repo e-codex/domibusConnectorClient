@@ -20,14 +20,13 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSMessageProperties;
-import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSStorageConfiguration;
+import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSProperties;
 import eu.domibus.connector.client.filesystem.message.FSMessageDetails;
 import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureMimeType;
@@ -39,43 +38,26 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 @Component
-@ConfigurationProperties(prefix = DomibusConnectorClientFSStorageConfiguration.PREFIX)
-@PropertySource("classpath:/connector-client-fs-storage-default.properties")
+//@ConfigurationProperties(prefix = DomibusConnectorClientFSStorageConfiguration.PREFIX)
+//@PropertySource("classpath:/connector-client-fs-storage-default.properties")
 @Validated
 @Valid
 public class DomibusConnectorClientFileSystemWriter {
 
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusConnectorClientFileSystemWriter.class);
 
-	@NotNull
+	@Autowired
 	private DomibusConnectorClientFSMessageProperties messageProperties;
-
-	@NotNull
-	private String pdfFileExtension;
-
-	@NotNull
-	private String xmlFileExtension;
-
-	@NotNull
-	private String pkcs7FileExtension;
-
-	@NotNull
-	private String defaultPdfFileName;
-
-	@NotNull
-	private String defaultXmlFileName;
-
-	@NotNull
-	private String defaultDetachedSignatureFileName;
 	
-	@NotNull
-	private String messageReadyPostfix;
+	@Autowired
+	private DomibusConnectorClientFSProperties properties;
+
 
 	public void writeConfirmationToFileSystem(DomibusConnectorMessageType confirmationMessage, File messageFolder ) throws DomibusConnectorClientFileSystemException {
 		DomibusConnectorMessageConfirmationType confirmation = confirmationMessage.getMessageConfirmations().get(0);
 		String type = confirmation.getConfirmationType().name();
 		
-		String path = messageFolder.getAbsolutePath() + File.separator + type + xmlFileExtension;;
+		String path = messageFolder.getAbsolutePath() + File.separator + type + properties.getXmlFileExtension();;
 
 		LOGGER.debug("Create confirmation file {}", path);
 		File evidenceXml = new File(path);
@@ -139,8 +121,8 @@ public class DomibusConnectorClientFileSystemWriter {
 		File messagePropertiesFile = new File(messageFolder, this.messageProperties.getFileName());
 		DomibusConnectorClientFileSystemUtil.storeMessagePropertiesToFile(messageDetails, messagePropertiesFile);
 		
-		if(messageFolder.getAbsolutePath().endsWith(messageReadyPostfix)) {
-			String newFolderName = messageFolder.getAbsolutePath().substring(0, messageFolder.getAbsolutePath().length() - messageReadyPostfix.length());
+		if(messageFolder.getAbsolutePath().endsWith(properties.getMessageReadyPostfix())) {
+			String newFolderName = messageFolder.getAbsolutePath().substring(0, messageFolder.getAbsolutePath().length() - properties.getMessageReadyPostfix().length());
 			File newMessageFolder = new File(newFolderName);
 			messageFolder.renameTo(newMessageFolder);
 			return newFolderName;
@@ -175,8 +157,8 @@ public class DomibusConnectorClientFileSystemWriter {
 				if (StringUtils.hasText(messageContent.getDocument().getDocumentName())) {
 					fileName = messageContent.getDocument().getDocumentName();
 				} else {
-					fileName = action != null ? action + "." + pdfFileExtension
-							: defaultPdfFileName;
+					fileName = action != null ? action + "." + properties.getPdfFileExtension()
+							: properties.getDefaultPdfFileName();
 
 				}
 				msgProps.getMessageDetails().put(messageProperties.getContentPdfFileName(), fileName);
@@ -194,14 +176,14 @@ public class DomibusConnectorClientFileSystemWriter {
 					String fileName2 = null;
 					if (StringUtils.hasText(detachedSignature.getDetachedSignatureName())
 							&& !detachedSignature.getDetachedSignatureName().equals(
-									defaultDetachedSignatureFileName)) {
+									properties.getDefaultDetachedSignatureFileName())) {
 						fileName2 = detachedSignature.getDetachedSignatureName();
 					} else {
-						fileName2 = defaultDetachedSignatureFileName;
+						fileName2 = properties.getDefaultDetachedSignatureFileName();
 						if (detachedSignature.getMimeType().equals(DomibusConnectorDetachedSignatureMimeType.XML))
-							fileName2 += xmlFileExtension;
+							fileName2 += properties.getXmlFileExtension();
 						else if (detachedSignature.getMimeType().equals(DomibusConnectorDetachedSignatureMimeType.PKCS_7))
-							fileName2 += pkcs7FileExtension;
+							fileName2 += properties.getPkcs7FileExtension();
 
 					}
 					msgProps.getMessageDetails().put(messageProperties.getDetachedSignatureFileName(), fileName2);
@@ -214,8 +196,8 @@ public class DomibusConnectorClientFileSystemWriter {
 				}
 			}
 			if (messageContent.getXmlContent() != null){
-				String fileName = action != null ? action + xmlFileExtension
-						: defaultXmlFileName;
+				String fileName = action != null ? action + properties.getXmlFileExtension()
+						: properties.getDefaultXmlFileName();
 				try {
 					byte[] content = sourceToByteArray(messageContent.getXmlContent());
 					msgProps.getMessageDetails().put(messageProperties.getContentXmlFileName(),fileName);
@@ -242,7 +224,7 @@ public class DomibusConnectorClientFileSystemWriter {
 		if (message.getMessageConfirmations() != null) {
 			for (DomibusConnectorMessageConfirmationType confirmation : message.getMessageConfirmations()) {
 				String fileName = confirmation.getConfirmationType().name()
-						+ xmlFileExtension;
+						+ properties.getXmlFileExtension();
 				try {
 					byte[] confirmationBytes = sourceToByteArray(confirmation.getConfirmation());
 					createFile(messageFolder, fileName, confirmationBytes);
@@ -392,69 +374,15 @@ public class DomibusConnectorClientFileSystemWriter {
 		return messageFolder;
 	}
 
-	public DomibusConnectorClientFSMessageProperties getMessageProperties() {
-		return messageProperties;
-	}
+//	public DomibusConnectorClientFSMessageProperties getMessageProperties() {
+//		return messageProperties;
+//	}
+//
+//	public void setMessageProperties(DomibusConnectorClientFSMessageProperties messageProperties) {
+//		this.messageProperties = messageProperties;
+//	}
 
-	public void setMessageProperties(DomibusConnectorClientFSMessageProperties messageProperties) {
-		this.messageProperties = messageProperties;
-	}
-
-	public String getPdfFileExtension() {
-		return pdfFileExtension;
-	}
-
-	public void setPdfFileExtension(String pdfFileExtension) {
-		this.pdfFileExtension = pdfFileExtension;
-	}
-
-	public String getXmlFileExtension() {
-		return xmlFileExtension;
-	}
-
-	public void setXmlFileExtension(String xmlFileExtension) {
-		this.xmlFileExtension = xmlFileExtension;
-	}
-
-	public String getPkcs7FileExtension() {
-		return pkcs7FileExtension;
-	}
-
-	public void setPkcs7FileExtension(String pkcs7FileExtension) {
-		this.pkcs7FileExtension = pkcs7FileExtension;
-	}
-
-	public String getDefaultPdfFileName() {
-		return defaultPdfFileName;
-	}
-
-	public void setDefaultPdfFileName(String defaultPdfFileName) {
-		this.defaultPdfFileName = defaultPdfFileName;
-	}
-
-	public String getDefaultXmlFileName() {
-		return defaultXmlFileName;
-	}
-
-	public void setDefaultXmlFileName(String defaultXmlFileName) {
-		this.defaultXmlFileName = defaultXmlFileName;
-	}
-
-	public String getDefaultDetachedSignatureFileName() {
-		return defaultDetachedSignatureFileName;
-	}
-
-	public void setDefaultDetachedSignatureFileName(String defaultDetachedSignatureFileName) {
-		this.defaultDetachedSignatureFileName = defaultDetachedSignatureFileName;
-	}
-
-	public String getMessageReadyPostfix() {
-		return messageReadyPostfix;
-	}
-
-	public void setMessageReadyPostfix(String messageReadyPostfix) {
-		this.messageReadyPostfix = messageReadyPostfix;
-	}
+	
 
 
 

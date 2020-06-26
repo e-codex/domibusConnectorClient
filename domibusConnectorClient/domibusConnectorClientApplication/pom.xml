@@ -130,11 +130,14 @@
 				<configuration>
 					<linkJavadoc>true</linkJavadoc>
 					<includedDependencies>
-						<includedDependency>
+						<!-- <includedDependency>
 							<groupId>^org.springframework</groupId>
-						</includedDependency>
-						<includedDependency>
+						</includedDependency> -->
+						<!-- <includedDependency>
 							<groupId>^eu.domibus</groupId>
+						</includedDependency> -->
+						<includedDependency>
+							<groupId>eu.domibus.connector-client</groupId>
 						</includedDependency>
 						<includedDependency>
 							<groupId>^eu.ecodex.utils</groupId>

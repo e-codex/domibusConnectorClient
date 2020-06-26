@@ -1,25 +1,59 @@
 package eu.domibus.connector.client.filesystem.configuration;
 
-public class DomibusConnectorClientFSMessageProperties {
+import javax.validation.Valid;
+import javax.validation.constraints.NotEmpty;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.context.annotation.PropertySource;
+import org.springframework.stereotype.Component;
+import org.springframework.validation.annotation.Validated;
+
+@Component
+@ConditionalOnProperty(prefix=DomibusConnectorClientFSStorageConfiguration.PREFIX, name=DomibusConnectorClientFSStorageConfiguration.ENABLED_PROPERTY_NAME, havingValue="true")
+@ConfigurationProperties(prefix = DomibusConnectorClientFSMessageProperties.PREFIX)
+@PropertySource("classpath:/connector-client-fs-storage-default.properties")
+@Validated
+@Valid
+public class DomibusConnectorClientFSMessageProperties {
+	
+	public static final String PREFIX = "connector-client.storage.filesystem.message-properties";
+
+	@NotEmpty
 	private String fileName;
-    private String service;
-    private String action;
-    private String toPartyRole;
-    private String toPartyId;
-    private String fromPartyRole;
-    private String fromPartyId;
-    private String originalSender;
-    private String finalRecipient;
+	@NotEmpty
+	private String service;
+	@NotEmpty
+	private String action;
+	@NotEmpty
+	private String toPartyRole;
+	@NotEmpty
+	private String toPartyId;
+	@NotEmpty
+	private String fromPartyRole;
+	@NotEmpty
+	private String fromPartyId;
+	@NotEmpty
+	private String originalSender;
+	@NotEmpty
+	private String finalRecipient;
 //    private String nationalMessageId;
-    private String backendMessageId;
-    private String ebmsMessageId;
-    private String conversationId;
-    private String contentPdfFileName;
-    private String contentXmlFileName;
-    private String detachedSignatureFileName;
-    private String messageReceivedDatetime;
-    private String messageSentDatetime;
+	@NotEmpty
+	private String backendMessageId;
+	@NotEmpty
+	private String ebmsMessageId;
+	@NotEmpty
+	private String conversationId;
+	@NotEmpty
+	private String contentPdfFileName;
+	@NotEmpty
+	private String contentXmlFileName;
+	@NotEmpty
+	private String detachedSignatureFileName;
+	@NotEmpty
+	private String messageReceivedDatetime;
+	@NotEmpty
+	private String messageSentDatetime;
     
 	public String getFileName() {
 		return fileName;

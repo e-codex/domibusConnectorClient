@@ -17,20 +17,18 @@ import javax.activation.DataHandler;
 import javax.activation.DataSource;
 import javax.activation.MimetypesFileTypeMap;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import javax.xml.transform.Source;
 import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.lang.ArrayUtils;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSMessageProperties;
-import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSStorageConfiguration;
+import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSProperties;
 import eu.domibus.connector.client.filesystem.message.FSMessageDetails;
 import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
@@ -48,45 +46,29 @@ import eu.domibus.connector.domain.transition.DomibusConnectorPartyType;
 import eu.domibus.connector.domain.transition.DomibusConnectorServiceType;
 
 @Component
-@ConfigurationProperties(prefix = DomibusConnectorClientFSStorageConfiguration.PREFIX)
-@PropertySource("classpath:/connector-client-fs-storage-default.properties")
+//@ConfigurationProperties(prefix = DomibusConnectorClientFSStorageConfiguration.PREFIX)
+//@PropertySource("classpath:/connector-client-fs-storage-default.properties")
 @Validated
 @Valid
 public class DomibusConnectorClientFileSystemReader {
 
-	@NotNull
+	@Autowired
 	private DomibusConnectorClientFSMessageProperties messageProperties;
 
-	@NotNull
-	private String messageReadyPostfix;
+	@Autowired
+	private DomibusConnectorClientFSProperties properties;
 
-	@NotNull
-	private String xmlFileExtension;
 	
-	@NotNull
-	private String pdfFileExtension;
-
-	@NotNull
-	private String pkcs7FileExtension;
-
-	/**
-	 * Testdescription
-	 * 
-	 * 
-	 */
-	@NotNull
-	private String attachmentIdPrefix = "test";
-
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusConnectorClientFileSystemReader.class);
 
 	public List<File> readUnsentMessages(File outgoingMessagesDir){
-		LOGGER.debug("#readUnsentMessages: Searching for folders with ending {}", messageReadyPostfix);
+		LOGGER.debug("#readUnsentMessages: Searching for folders with ending {}", properties.getMessageReadyPostfix());
 		List<File> messagesUnsent = new ArrayList<File>();
 
 		if (outgoingMessagesDir.listFiles().length > 0) {
 			for (File sub : outgoingMessagesDir.listFiles()) {
 				if (sub.isDirectory()
-						&& sub.getName().endsWith(messageReadyPostfix)) {
+						&& sub.getName().endsWith(properties.getMessageReadyPostfix())) {
 					messagesUnsent.add(sub);
 				}
 			}
@@ -276,10 +258,10 @@ public class DomibusConnectorClientFileSystemReader {
 						DomibusConnectorDetachedSignatureType det = new DomibusConnectorDetachedSignatureType();
 						det.setDetachedSignature(fileToByteArray(sub));
 						det.setDetachedSignatureName(sub.getName());
-						if (sub.getName().endsWith(xmlFileExtension)) {
+						if (sub.getName().endsWith(properties.getXmlFileExtension())) {
 							det.setMimeType(DomibusConnectorDetachedSignatureMimeType.XML);
 						} else if (sub.getName()
-								.endsWith(pkcs7FileExtension)) {
+								.endsWith(properties.getPkcs7FileExtension())) {
 							det.setMimeType(DomibusConnectorDetachedSignatureMimeType.PKCS_7);
 						} else {
 							det.setMimeType(DomibusConnectorDetachedSignatureMimeType.BINARY);
@@ -316,7 +298,7 @@ public class DomibusConnectorClientFileSystemReader {
 						throw new DomibusConnectorClientFileSystemException(
 								"Exception loading attachment into byte array from file " + sub.getName());
 					}
-					String attachmentId = attachmentIdPrefix + attachmentCount;
+					String attachmentId = properties.getAttachmentIdPrefix() + attachmentCount;
 
 					if(!ArrayUtils.isEmpty(attachmentData)){
 						try {
@@ -511,21 +493,13 @@ public class DomibusConnectorClientFileSystemReader {
 	}
 
 
-	public DomibusConnectorClientFSMessageProperties getMessageProperties() {
-		return messageProperties;
-	}
-
-	public void setMessageProperties(DomibusConnectorClientFSMessageProperties messageProperties) {
-		this.messageProperties = messageProperties;
-	}
-
-	public String getMessageReadyPostfix() {
-		return messageReadyPostfix;
-	}
-
-	public void setMessageReadyPostfix(String messageReadyPostfix) {
-		this.messageReadyPostfix = messageReadyPostfix;
-	}
+//	public DomibusConnectorClientFSMessageProperties getMessageProperties() {
+//		return messageProperties;
+//	}
+//
+//	public void setMessageProperties(DomibusConnectorClientFSMessageProperties messageProperties) {
+//		this.messageProperties = messageProperties;
+//	}
 
 //	public String getMessageSendingPostfix() {
 //		return messageSendingPostfix;
@@ -559,36 +533,36 @@ public class DomibusConnectorClientFileSystemReader {
 //		this.messageProcessingPostfix = messageProcessingPostfix;
 //	}
 
-	public String getXmlFileExtension() {
-		return xmlFileExtension;
-	}
-
-	public void setXmlFileExtension(String xmlFileExtension) {
-		this.xmlFileExtension = xmlFileExtension;
-	}
-
-	public String getPdfFileExtension() {
-		return pdfFileExtension;
-	}
-
-	public void setPdfFileExtension(String pdfFileExtension) {
-		this.pdfFileExtension = pdfFileExtension;
-	}
-
-	public String getPkcs7FileExtension() {
-		return pkcs7FileExtension;
-	}
-
-	public void setPkcs7FileExtension(String pkcs7FileExtension) {
-		this.pkcs7FileExtension = pkcs7FileExtension;
-	}
-
-	public String getAttachmentIdPrefix() {
-		return attachmentIdPrefix;
-	}
-
-	public void setAttachmentIdPrefix(String attachmentIdPrefix) {
-		this.attachmentIdPrefix = attachmentIdPrefix;
-	}
+//	public String getXmlFileExtension() {
+//		return xmlFileExtension;
+//	}
+//
+//	public void setXmlFileExtension(String xmlFileExtension) {
+//		this.xmlFileExtension = xmlFileExtension;
+//	}
+//
+//	public String getPdfFileExtension() {
+//		return pdfFileExtension;
+//	}
+//
+//	public void setPdfFileExtension(String pdfFileExtension) {
+//		this.pdfFileExtension = pdfFileExtension;
+//	}
+//
+//	public String getPkcs7FileExtension() {
+//		return pkcs7FileExtension;
+//	}
+//
+//	public void setPkcs7FileExtension(String pkcs7FileExtension) {
+//		this.pkcs7FileExtension = pkcs7FileExtension;
+//	}
+//
+//	public String getAttachmentIdPrefix() {
+//		return attachmentIdPrefix;
+//	}
+//
+//	public void setAttachmentIdPrefix(String attachmentIdPrefix) {
+//		this.attachmentIdPrefix = attachmentIdPrefix;
+//	}
 
 }

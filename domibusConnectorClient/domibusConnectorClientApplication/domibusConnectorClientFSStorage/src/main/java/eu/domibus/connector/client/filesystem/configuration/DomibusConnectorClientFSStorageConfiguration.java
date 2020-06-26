@@ -27,12 +27,16 @@ public class DomibusConnectorClientFSStorageConfiguration {
     public static final String ENABLED_PROPERTY_NAME = "enabled";
     
     @NestedConfigurationProperty
-//    @CheckFolderWriteable
+    @NotNull
     private DirectoryConfigurationProperties messages;
     
-    @NestedConfigurationProperty
-    @NotNull
-    private DomibusConnectorClientFSMessageProperties messageProperties;
+//    @NestedConfigurationProperty
+//    @NotNull
+//    private DomibusConnectorClientFSMessageProperties messageProperties;
+//    
+//    @NestedConfigurationProperty
+//    @NotNull
+//    private DomibusConnectorClientFSProperties properties;
 
 	public DomibusConnectorClientFSStorageConfiguration() {
 		// TODO Auto-generated constructor stub
@@ -56,12 +60,20 @@ public class DomibusConnectorClientFSStorageConfiguration {
 		this.messages = messages;
 	}
 
-	public DomibusConnectorClientFSMessageProperties getMessageProperties() {
-		return messageProperties;
-	}
-
-	public void setMessageProperties(DomibusConnectorClientFSMessageProperties messageProperties) {
-		this.messageProperties = messageProperties;
-	}
+//	public DomibusConnectorClientFSMessageProperties getMessageProperties() {
+//		return messageProperties;
+//	}
+//
+//	public void setMessageProperties(DomibusConnectorClientFSMessageProperties messageProperties) {
+//		this.messageProperties = messageProperties;
+//	}
+//
+//	public DomibusConnectorClientFSProperties getProperties() {
+//		return properties;
+//	}
+//
+//	public void setProperties(DomibusConnectorClientFSProperties properties) {
+//		this.properties = properties;
+//	}
 
 }

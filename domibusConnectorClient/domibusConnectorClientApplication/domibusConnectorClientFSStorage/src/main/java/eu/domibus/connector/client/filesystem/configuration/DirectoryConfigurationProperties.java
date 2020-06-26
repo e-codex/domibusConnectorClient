@@ -2,8 +2,11 @@ package eu.domibus.connector.client.filesystem.configuration;
 
 import java.nio.file.Path;
 
+import eu.domibus.connector.lib.spring.configuration.validation.CheckFolderWriteable;
+
 public class DirectoryConfigurationProperties {
 
+	@CheckFolderWriteable
 	private Path path;
 	private boolean createIfNonExistent;
 	
