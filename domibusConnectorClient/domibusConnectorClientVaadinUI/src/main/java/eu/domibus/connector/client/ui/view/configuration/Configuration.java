@@ -9,6 +9,7 @@ import com.vaadin.flow.router.RoutePrefix;
 import com.vaadin.flow.router.RouterLayout;
 import com.vaadin.flow.spring.annotation.UIScope;
 
+import eu.domibus.connector.client.ui.component.LumoLabel;
 import eu.domibus.connector.client.ui.view.DomibusConnectorClientUIMainView;
 
 @UIScope
@@ -28,7 +29,9 @@ public class Configuration extends VerticalLayout implements RouterLayout, Befor
 	public static final String ROUTE_PREFIX = "configuration";
 	
 	public Configuration() {
-		// TODO Auto-generated constructor stub
+		LumoLabel notYet = new LumoLabel("Not implemented yet!");
+		
+		add(notYet);
 	}
 
 	@Override
