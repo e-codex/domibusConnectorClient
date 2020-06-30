@@ -107,7 +107,7 @@
 		
 		<!-- ==================== Copying site documentation ================= -->
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientLibraries/target/staging
+			<directory>${project.basedir}/../domibusConnectorClientLibraries/target/site
 			</directory>
 			<outputDirectory>documentation/site
 			</outputDirectory>

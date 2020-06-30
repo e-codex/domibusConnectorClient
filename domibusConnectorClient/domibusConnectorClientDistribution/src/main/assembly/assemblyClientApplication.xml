@@ -32,7 +32,7 @@
 		
 		<!-- ==================== Copying site documentation ================= -->
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientApplication/target/staging/
+			<directory>${project.basedir}/../domibusConnectorClientApplication/target/site/
 			</directory>
 			<outputDirectory>documentation/site
 			</outputDirectory>

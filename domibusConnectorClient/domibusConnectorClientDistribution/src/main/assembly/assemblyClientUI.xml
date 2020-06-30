@@ -31,12 +31,12 @@
 		</fileSet>
 		
 		<!-- ==================== Copying site documentation ================= -->
-		<fileSet>
+		<!-- <fileSet>
 			<directory>${project.basedir}/../domibusConnectorClientVaadinUI/target/site/
 			</directory>
 			<outputDirectory>documentation/site
 			</outputDirectory>
-		</fileSet>
+		</fileSet> -->
 
 	</fileSets>
 </assembly>
