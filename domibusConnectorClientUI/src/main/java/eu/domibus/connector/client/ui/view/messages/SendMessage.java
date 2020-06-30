@@ -51,8 +51,11 @@ public class SendMessage  extends VerticalLayout implements HasUrlParameter<Long
 
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(SendMessage.class);
 
+	@Autowired
 	private VaadingConnectorClientUIServiceClient messageService;
+	@Autowired
 	private Messages messagesView;
+	
 	private DynamicMessageForm messageForm = new DynamicMessageForm();
 	private VerticalLayout messageFilesArea = new VerticalLayout();
 	
@@ -65,14 +68,8 @@ public class SendMessage  extends VerticalLayout implements HasUrlParameter<Long
 	Div resultArea;
 	Label resultLabel;
 	
-	public void setMessagesView(Messages messagesView) {
-		this.messagesView = messagesView;
-	}
-	
-	public SendMessage(@Autowired VaadingConnectorClientUIServiceClient messageService, @Autowired Messages messagesView) {
+	public SendMessage() {
 		
-		this.messageService = messageService;
-		setMessagesView(messagesView);
 		this.messagesView.setSendMessageView(this);
 		
 		VerticalLayout messageDetailsArea = new VerticalLayout(); 

@@ -24,7 +24,7 @@
 	<modules>
 		<module>domibusConnectorClientLibraries</module>
 		<module>domibusConnectorClientApplication</module>
-		<module>domibusConnectorClientVaadinUI</module>
+		<!-- <module>domibusConnectorClientVaadinUI</module> -->
 		<module>domibusConnectorClientDistribution</module>
 	</modules>
 

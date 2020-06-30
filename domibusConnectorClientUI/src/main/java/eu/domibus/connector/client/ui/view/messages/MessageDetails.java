@@ -46,7 +46,13 @@ public class MessageDetails extends VerticalLayout implements HasUrlParameter<Lo
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	private VaadingConnectorClientUIServiceClient messageService;
+	
+	@Autowired
+	Messages messagesView;
+	
+	@Autowired
+	VaadingConnectorClientUIServiceClient messageService;
+
 	private DomibusConnectorClientMessageForm messageForm = new DomibusConnectorClientMessageForm();
 	private VerticalLayout messageEvidencesArea = new VerticalLayout(); 
 	private VerticalLayout messageFilesArea = new VerticalLayout();
@@ -57,12 +63,9 @@ public class MessageDetails extends VerticalLayout implements HasUrlParameter<Lo
 	
 	Div resultArea;
 	
-	Messages messagesView;
 	
-	public MessageDetails(@Autowired VaadingConnectorClientUIServiceClient messageService, @Autowired Messages messagesView) {
+	public MessageDetails() {
 
-		this.messageService = messageService;
-		this.messagesView = messagesView;
 		this.messagesView.setMessageDetailsView(this);
 	
 		refreshButton = new Button(new Icon(VaadinIcon.REFRESH));

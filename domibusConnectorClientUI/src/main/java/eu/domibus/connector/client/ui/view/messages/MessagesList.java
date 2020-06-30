@@ -42,10 +42,13 @@ public class MessagesList extends VerticalLayout implements AfterNavigationObser
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	@Autowired
+	private Messages messagesView;
+	@Autowired
+	private VaadingConnectorClientUIServiceClient messageService;
+	
 	private Grid<DomibusConnectorClientMessage> grid;
 	private List<DomibusConnectorClientMessage> fullList = null;
-	private Messages messagesView;
-	private VaadingConnectorClientUIServiceClient messageService;
 	
 	TextField searchEbmsIdText = new TextField();
 	TextField searchBackendMessageIdText = new TextField();
@@ -60,14 +63,7 @@ public class MessagesList extends VerticalLayout implements AfterNavigationObser
 	TextField serviceFilterText = new TextField();
 	TextField actionFilterText = new TextField();
 	
-	
-	public void setMessagesView(Messages messagesView) {
-		this.messagesView = messagesView;
-	}
-
-	public MessagesList(@Autowired VaadingConnectorClientUIServiceClient messageService, @Autowired Messages messagesView) {
-		this.messageService = messageService;
-		setMessagesView(messagesView);
+	public MessagesList() {
 		this.messagesView.setMessagesListView(this);
 		
 		fullList = messageService.getAllMessages().getMessages();

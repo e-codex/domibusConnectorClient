@@ -1,14 +1,11 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<parent>
-		<groupId>eu.domibus.connector-client</groupId>
-		<artifactId>domibusConnectorClient</artifactId>
-		<version>4.2.0-SNAPSHOT</version>
-	</parent>
-	<artifactId>domibusConnectorClientVaadinUI</artifactId>
+	<groupId>eu.domibus.connector-client</groupId>
+	<artifactId>domibusConnectorClientUI</artifactId>
+	<version>4.2.0-SNAPSHOT</version>
 	<description>
-		This is the module that holds the user interface distributed with the domibusConnectorClient.
+		This is the module that holds the user interface for the domibusConnectorClient-Application.
 		Only reduced documentation included in this site.
 		It is planned to develop an online help for user support.
 	</description>
@@ -20,7 +17,7 @@
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
 		<vaadin.version>14.1.17</vaadin.version>
-
+		<org.springframework.boot.version>2.2.6.RELEASE</org.springframework.boot.version>
 		<drivers.dir>${project.basedir}/drivers</drivers.dir>
 		<drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
 	</properties>
@@ -47,11 +44,13 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
+			<version>${org.springframework.boot.version}</version>
 		</dependency>
 
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
+			<version>${org.springframework.boot.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.projectreactor</groupId>
@@ -72,13 +71,14 @@
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
+			<version>2.10.0</version>
 		</dependency>
 
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
-		</dependency>
+		</dependency> -->
 		<!-- <dependency> <groupId>${project.groupId}</groupId> <artifactId>domibusConnectorClientStarter</artifactId> 
 			<version>${project.version}</version> <exclusions> <exclusion> <groupId>commons-io</groupId> 
 			<artifactId>commons-io</artifactId> </exclusion> </exclusions> </dependency> -->
@@ -136,6 +136,7 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
+			<version>${org.springframework.boot.version}</version>
 			<optional>true</optional>
 		</dependency>
 		<dependency>
@@ -189,16 +190,10 @@
 					</execution>
 				</executions>
 			</plugin>
-		<!-- 	<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<skip>true</skip>
-					<skipDeploy>true</skipDeploy>
-				</configuration>
-			</plugin> -->
-			<plugin>
+			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-site-plugin</artifactId> 
+				<version>3.1</version> <configuration> <skip>true</skip> <skipDeploy>true</skipDeploy> 
+				</configuration> </plugin> -->
+			<!-- <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-javadoc-plugin</artifactId>
 				<executions>
@@ -214,7 +209,7 @@
 						</configuration>
 					</execution>
 				</executions>
-			</plugin>
+			</plugin> -->
 		</plugins>
 	</build>
 
