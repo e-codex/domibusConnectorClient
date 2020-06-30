@@ -38,7 +38,7 @@
 			<artifactId>domibusConnectorClientLibsAPI</artifactId>
 			<version>${project.version}</version>
 		</dependency>
-		<dependency>
+		<!-- <dependency>
 			<groupId>${project.groupId}</groupId>
 			<artifactId>domibusConnectorClientLibrary</artifactId>
 			<version>${project.version}</version>
@@ -52,7 +52,7 @@
 			<groupId>${project.groupId}</groupId>
 			<artifactId>domibusConnectorClientWSLink</artifactId>
 			<version>${project.version}</version>
-		</dependency>
+		</dependency> -->
 	</dependencies>
 
 	<build>
