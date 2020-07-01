@@ -95,7 +95,13 @@
                     </execution>
                 </executions>
             </plugin>
-        </plugins>
+            	<plugin>
+				<artifactId>maven-assembly-plugin</artifactId>
+				<configuration>
+					<skipAssembly>true</skipAssembly>
+				</configuration>
+			</plugin>
+	    </plugins>
     </build>
 
 </project>

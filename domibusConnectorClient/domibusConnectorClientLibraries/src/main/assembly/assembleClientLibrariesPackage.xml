@@ -11,7 +11,7 @@
 		
 		<!-- ==================== domibusConnectorAPI ================= -->
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibsAPI/target/lib/
+			<directory>${project.basedir}/domibusConnectorClientLibsAPI/target/lib/
 			</directory>
 			<outputDirectory>libraries/domibusConnectorAPI
 			</outputDirectory>
@@ -22,7 +22,7 @@
 		
 		<!-- ==================== domibusConnectorClientLibsAPI ================= -->
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibsAPI/target/
+			<directory>${project.basedir}/domibusConnectorClientLibsAPI/target/
 			</directory>
 			<outputDirectory>libraries/domibusConnectorClientLibsAPI
 			</outputDirectory>
@@ -31,7 +31,7 @@
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibsAPI/
+			<directory>${project.basedir}/domibusConnectorClientLibsAPI/
 			</directory>
 			<outputDirectory>libraries/domibusConnectorClientLibsAPI
 			</outputDirectory>
@@ -44,7 +44,7 @@
 		<!-- ==================== domibusConnectorClientLibrary ================= -->
 		
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibrary/target/
+			<directory>${project.basedir}/domibusConnectorClientLibrary/target/
 			</directory>
 			<outputDirectory>libraries/domibusConnectorClientLibrary
 			</outputDirectory>
@@ -53,7 +53,7 @@
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientLibrary/
+			<directory>${project.basedir}/domibusConnectorClientLibrary/
 			</directory>
 			<outputDirectory>libraries/domibusConnectorClientLibrary
 			</outputDirectory>
@@ -66,7 +66,7 @@
 		<!-- ==================== domibusConnectorClientScheduler ================= -->
 		
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientScheduler/target/
+			<directory>${project.basedir}/domibusConnectorClientScheduler/target/
 			</directory>
 			<outputDirectory>libraries/domibusConnectorClientScheduler
 			</outputDirectory>
@@ -75,7 +75,7 @@
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientScheduler/
+			<directory>${project.basedir}/domibusConnectorClientScheduler/
 			</directory>
 			<outputDirectory>libraries/domibusConnectorClientScheduler
 			</outputDirectory>
@@ -87,7 +87,7 @@
 		<!-- ==================== domibusConnectorClientWSLink ================= -->
 		
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientWSLink/target/
+			<directory>${project.basedir}/domibusConnectorClientWSLink/target/
 			</directory>
 			<outputDirectory>libraries/domibusConnectorClientWSLink
 			</outputDirectory>
@@ -96,7 +96,7 @@
 			</includes>
 		</fileSet>
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientLibraries/domibusConnectorClientWSLink/
+			<directory>${project.basedir}/domibusConnectorClientWSLink/
 			</directory>
 			<outputDirectory>libraries/domibusConnectorClientWSLink
 			</outputDirectory>
@@ -107,9 +107,17 @@
 		
 		<!-- ==================== Copying site documentation ================= -->
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientLibraries/target/site
+			<directory>${project.basedir}/target/site
 			</directory>
 			<outputDirectory>documentation/site
+			</outputDirectory>
+		</fileSet>
+		
+		<!-- ==================== Copying example properties ================= -->
+		<fileSet>
+			<directory>${project.basedir}/src/main/resources/libraries/properties
+			</directory>
+			<outputDirectory>documentation/properties
 			</outputDirectory>
 		</fileSet>
 			

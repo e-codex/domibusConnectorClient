@@ -13,12 +13,14 @@
 			</directory>
 			<outputDirectory>
 			</outputDirectory>
-
+			<excludes>
+				<exclude>*.pdf</exclude>
+			</excludes>
 		</fileSet>
 
 		<!-- ==================== Copying domibusConnectorClientStarter library ================= -->
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientApplication/domibusConnectorClientStarter/target/
+			<directory>${project.basedir}/domibusConnectorClientStarter/target/
 			</directory>
 			<outputDirectory>bin
 			</outputDirectory>
@@ -27,12 +29,13 @@
 			</includes>
 			<excludes>
 				<exclude>*-sources.jar</exclude>
+				<exclude>*-javadoc.jar</exclude>
 			</excludes>
 		</fileSet>
 		
 		<!-- ==================== Copying site documentation ================= -->
 		<fileSet>
-			<directory>${project.basedir}/../domibusConnectorClientApplication/target/site/
+			<directory>${project.basedir}/target/site/
 			</directory>
 			<outputDirectory>documentation/site
 			</outputDirectory>
