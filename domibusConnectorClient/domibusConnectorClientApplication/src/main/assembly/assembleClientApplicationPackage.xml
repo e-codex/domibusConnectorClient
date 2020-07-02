@@ -13,33 +13,53 @@
 			</directory>
 			<outputDirectory>
 			</outputDirectory>
+		</fileSet>
+		<fileSet>
+			<directory>.</directory>
+			<outputDirectory>logs</outputDirectory>
 			<excludes>
-				<exclude>*.pdf</exclude>
+				<exclude>*/**</exclude>
 			</excludes>
 		</fileSet>
-
-		<!-- ==================== Copying domibusConnectorClientStarter library ================= -->
 		<fileSet>
-			<directory>${project.basedir}/domibusConnectorClientStarter/target/
-			</directory>
-			<outputDirectory>bin
-			</outputDirectory>
-			<includes>
-				<include>*.jar</include>
-			</includes>
+			<directory>.</directory>
+			<outputDirectory>database</outputDirectory>
 			<excludes>
-				<exclude>*-sources.jar</exclude>
-				<exclude>*-javadoc.jar</exclude>
+				<exclude>*/**</exclude>
 			</excludes>
 		</fileSet>
-		
-		<!-- ==================== Copying site documentation ================= -->
 		<fileSet>
-			<directory>${project.basedir}/target/site/
-			</directory>
-			<outputDirectory>documentation/site
-			</outputDirectory>
+			<directory>.</directory>
+			<outputDirectory>messages</outputDirectory>
+			<excludes>
+				<exclude>*/**</exclude>
+			</excludes>
 		</fileSet>
-
 	</fileSets>
+
+	<!-- ==================== Copying domibusConnectorClientStarter library 
+		================= -->
+	<fileSet>
+		<directory>${project.basedir}/domibusConnectorClientStarter/target/
+		</directory>
+		<outputDirectory>bin
+		</outputDirectory>
+		<includes>
+			<include>*.jar</include>
+		</includes>
+		<excludes>
+			<exclude>*-sources.jar</exclude>
+			<exclude>*-javadoc.jar</exclude>
+		</excludes>
+	</fileSet>
+
+	<!-- ==================== Copying site documentation ================= -->
+	<fileSet>
+		<directory>${project.basedir}/target/site/
+		</directory>
+		<outputDirectory>documentation/site
+		</outputDirectory>
+	</fileSet>
+
+</fileSets>
 </assembly>
