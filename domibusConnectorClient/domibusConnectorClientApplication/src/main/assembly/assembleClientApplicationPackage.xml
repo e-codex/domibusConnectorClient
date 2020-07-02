@@ -25,6 +25,8 @@
 			<directory>.</directory>
 			<outputDirectory>database</outputDirectory>
 			<excludes>
+				<exclude>*.pdf</exclude>
+				<exclude>*.sh</exclude>
 				<exclude>*/**</exclude>
 			</excludes>
 		</fileSet>
@@ -36,7 +38,18 @@
 			</excludes>
 		</fileSet>
 
-		<!-- ==================== Copying domibusConnectorClientStarter library 
+		<fileSet>
+			<directory>${project.basedir}/src/main/resources/application
+			</directory>
+			<outputDirectory>
+			</outputDirectory>
+			<fileMode>777</fileMode>
+			<includes>
+				<include>*.sh</include>
+			</includes>
+		</fileSet>
+
+		<!-- ==================== Copying domibusConnectorClientStarter library
 			================= -->
 		<fileSet>
 			<directory>${project.basedir}/domibusConnectorClientStarter/target/
