@@ -35,31 +35,30 @@
 				<exclude>*/**</exclude>
 			</excludes>
 		</fileSet>
+
+		<!-- ==================== Copying domibusConnectorClientStarter library 
+			================= -->
+		<fileSet>
+			<directory>${project.basedir}/domibusConnectorClientStarter/target/
+			</directory>
+			<outputDirectory>bin
+			</outputDirectory>
+			<includes>
+				<include>*.jar</include>
+			</includes>
+			<excludes>
+				<exclude>*-sources.jar</exclude>
+				<exclude>*-javadoc.jar</exclude>
+			</excludes>
+		</fileSet>
+
+		<!-- ==================== Copying site documentation ================= -->
+		<fileSet>
+			<directory>${project.basedir}/target/site/
+			</directory>
+			<outputDirectory>documentation/site
+			</outputDirectory>
+		</fileSet>
+
 	</fileSets>
-
-	<!-- ==================== Copying domibusConnectorClientStarter library 
-		================= -->
-	<fileSet>
-		<directory>${project.basedir}/domibusConnectorClientStarter/target/
-		</directory>
-		<outputDirectory>bin
-		</outputDirectory>
-		<includes>
-			<include>*.jar</include>
-		</includes>
-		<excludes>
-			<exclude>*-sources.jar</exclude>
-			<exclude>*-javadoc.jar</exclude>
-		</excludes>
-	</fileSet>
-
-	<!-- ==================== Copying site documentation ================= -->
-	<fileSet>
-		<directory>${project.basedir}/target/site/
-		</directory>
-		<outputDirectory>documentation/site
-		</outputDirectory>
-	</fileSet>
-
-</fileSets>
 </assembly>
