@@ -139,3 +139,5 @@ local.properties
 .classpath
 .project
 /domibusConnectorClient/domibusConnectorClientScheduler/*.classpath
+/domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientStarter/messages
+/domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientStarter/database

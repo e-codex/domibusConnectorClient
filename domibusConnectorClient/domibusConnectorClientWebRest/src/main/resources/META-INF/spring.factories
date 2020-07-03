@@ -1,1 +1,0 @@
-#org.springframework.cloud.bootstrap.BootstrapConfiguration=eu.domibus.connector.spring.propertyloader.FileBackedUpdateAblePropertySourceConfigurer

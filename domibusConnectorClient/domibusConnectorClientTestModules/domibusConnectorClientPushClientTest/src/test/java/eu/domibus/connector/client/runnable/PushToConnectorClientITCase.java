@@ -36,7 +36,7 @@ public class PushToConnectorClientITCase {
     public static void beforeClass() {
 
         String[] args = new String[] {"-properties", "./target/test-classes/testclient.properties", "--server.port=0", "-web"};
-        CONNECTOR_CLIENT_APPLICATION_CONTEXT = DomibusConnector.createApplicationContext(args);
+        CONNECTOR_CLIENT_APPLICATION_CONTEXT = DomibusConnector.runSpringApplication(args);
     }
 
 
