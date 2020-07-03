@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>domibusConnectorClient</artifactId>
+        <groupId>eu.domibus.connector-client</groupId>
+        <version>4.0.3</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>eu.domibus.connector-client</groupId>
+    <artifactId>domibusConnectorClientWebRestAngularUI</artifactId>
+
+
+    <build>
+        <plugins>
+
+        </plugins>
+    </build>
+
+
+    <profiles>
+        <profile>
+            <id>build-ui</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.github.eirslett</groupId>
+                        <artifactId>frontend-maven-plugin</artifactId>
+                        <version>1.6</version>
+                        <configuration>
+                            <nodeVersion>v8.11.2</nodeVersion>
+                            <!-- optional: with node version greater than 4.0.0 will use npm provided by node distribution -->
+                            <!--<npmVersion>2.15.9</npmVersion>-->
+                            <workingDirectory>client</workingDirectory>
+                        </configuration>
+
+                        <executions>
+                            <execution>
+                                <id>install node and npm</id>
+                                <goals>
+                                    <goal>install-node-and-npm</goal>
+                                </goals>
+                            </execution>
+
+                            <execution>
+                                <id>npm install</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>--strict-ssl=false install</arguments>
+                                </configuration>
+                            </execution>
+
+                            <execution>
+                                <id>prod</id>
+                                <goals>
+                                    <goal>npm</goal>
+                                </goals>
+                                <configuration>
+                                    <arguments>--strict-ssl=false run-script build-prod</arguments>
+                                </configuration>
+                                <phase>generate-resources</phase>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-clean-plugin</artifactId>
+                        <configuration>
+                            <verbose>true</verbose>
+                            <filesets>
+                                <fileset>
+                                    <directory>client/dist</directory>
+                                </fileset>
+                            </filesets>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+</project>
