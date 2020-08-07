@@ -7,8 +7,10 @@ import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -18,10 +20,12 @@ import eu.domibus.connector.client.DomibusConnectorClientAppBackend;
 import eu.domibus.connector.client.DomibusConnectorClientMessageBuilder;
 import eu.domibus.connector.client.controller.configuration.DefaultConfirmationAction;
 import eu.domibus.connector.client.controller.configuration.DomibusConnectorClientControllerConfig;
+import eu.domibus.connector.client.controller.configuration.DomibusConnectorClientRestClientConfig;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessageStatus;
 import eu.domibus.connector.client.controller.persistence.service.IDomibusConnectorClientPersistenceService;
+import eu.domibus.connector.client.controller.rest.impl.DomibusConnectorClientDeliveryRestClient;
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorage;
@@ -56,6 +60,11 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 	@Autowired
 	@NotNull
     private DomibusConnectorClientMessageBuilder messageBuilder;
+	
+	@Autowired
+//	@Nullable
+	private DomibusConnectorClientDeliveryRestClient deliveryRestClient;
+	
 	
 	  @NotNull
 	    private DefaultConfirmationAction confirmationDefaultAction;
@@ -167,6 +176,20 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 		clientMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.RECEIVED);
 		persistenceService.mergeClientMessage(clientMessage);
 		LOGGER.debug("#deliverNewMessageToClientBackend: merged delivered message with storageLocation and storageStatus into database");
+		
+		if(deliveryRestClient!=null) {
+			LOGGER.info("Delivery Rest Client to Backend is there... message will be delivered!");
+			
+			try {
+				deliveryRestClient.deliverNewMessageFromConnectorClientToBackend(message);
+				clientMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.DELIVERED);
+			} catch (Exception e) {
+				LOGGER.error("Delivery to client backend via Rest service failed! ", e);
+				clientMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.DELIVERY_FAILED);
+			}
+			
+			persistenceService.mergeClientMessage(clientMessage);
+		}
 	}
 
 	@Override
@@ -218,6 +241,18 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 //			originalClientMessage.setUpdated(new Date());
 			persistenceService.mergeClientMessage(originalClientMessage);
 			LOGGER.debug("#deliverNewConfirmationToClientBackend: confirmation persisted into database and merged with original message.");
+			
+		}
+		
+		if(deliveryRestClient!=null) {
+			LOGGER.info("Delivery Rest Client to Backend is there... confirmation will be delivered!");
+			
+			try {
+				deliveryRestClient.deliverNewConfirmationFromConnectorClientToBackend(message);
+			} catch (Exception e) {
+				LOGGER.error("Delivery to client backend via Rest service failed! ", e);
+			}
+			
 		}
 	}
 

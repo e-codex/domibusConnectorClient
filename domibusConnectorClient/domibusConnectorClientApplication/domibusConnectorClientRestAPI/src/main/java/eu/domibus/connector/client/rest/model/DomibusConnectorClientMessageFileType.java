@@ -1,7 +1,7 @@
-package eu.domibus.connector.client.storage;
+package eu.domibus.connector.client.rest.model;
 
 /**
- * This enumeration states the different types of files that may be stored for a message in the client's storage.
+ * This enumeration states the different types of files for a message.
  * 
  * @author riederb
  *

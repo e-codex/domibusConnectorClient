@@ -29,8 +29,9 @@ import eu.domibus.connector.client.rest.exception.StorageException;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
+import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFileType;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
-import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
+import eu.domibus.connector.client.storage.DomibusConnectorClientStorageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorage;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.client.storage.exception.DomibusConnectorClientStorageException;
@@ -226,7 +227,8 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 	public Boolean uploadMessageFile(DomibusConnectorClientMessageFile messageFile) throws ParameterException, StorageException {
 		LOGGER.debug("#uploadMessageFile: entered with fileName {} and storageLocation {}", messageFile.getFileName(), messageFile.getStorageLocation());
 		try {
-			storage.storeFileIntoStorage(messageFile.getStorageLocation(), messageFile.getFileName(), messageFile.getFileType(), messageFile.getFileContent());
+			DomibusConnectorClientStorageFileType fileType = DomibusConnectorClientStorageFileType.valueOf(messageFile.getFileType().name());
+			storage.storeFileIntoStorage(messageFile.getStorageLocation(), messageFile.getFileName(), fileType, messageFile.getFileContent());
 		} catch (DomibusConnectorClientStorageException e) {
 			throw new StorageException("Storage failure: "+e.getMessage(), e);
 		} catch (IllegalArgumentException e) {
@@ -239,7 +241,8 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 	public Boolean deleteMessageFile(DomibusConnectorClientMessageFile messageFile) throws ParameterException, StorageException {
 		LOGGER.debug("#deleteMessageFile: entered with fileName {} and storageLocation {}", messageFile.getFileName(), messageFile.getStorageLocation());
 		try {
-			storage.deleteFileFromStorage(messageFile.getStorageLocation(), messageFile.getFileName(), messageFile.getFileType());
+			DomibusConnectorClientStorageFileType fileType = DomibusConnectorClientStorageFileType.valueOf(messageFile.getFileType().name());
+			storage.deleteFileFromStorage(messageFile.getStorageLocation(), messageFile.getFileName(), fileType);
 		} catch (DomibusConnectorClientStorageException e) {
 			throw new StorageException("Storage failure: "+e.getMessage(), e);
 		} catch (IllegalArgumentException e) {
@@ -273,7 +276,7 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 		msg.setMessageStatus(message.getMessageStatus().name());
 
 		if(filesReadable(message)) {
-			Map<String, DomibusConnectorClientMessageFileType> files = null;
+			Map<String, DomibusConnectorClientStorageFileType> files = null;
 			try {
 				files = storage.listContentAtStorageLocation(message.getStorageInfo());
 			} catch (DomibusConnectorClientStorageException | IllegalArgumentException e) {
@@ -284,7 +287,8 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 				
 			}
 			files.entrySet().forEach(file -> {
-				DomibusConnectorClientMessageFile file2 = new DomibusConnectorClientMessageFile(file.getKey(), file.getValue());
+				DomibusConnectorClientMessageFileType fileType = DomibusConnectorClientMessageFileType.valueOf(file.getValue().name());
+				DomibusConnectorClientMessageFile file2 = new DomibusConnectorClientMessageFile(file.getKey(), fileType);
 				file2.setStorageLocation(message.getStorageInfo());
 				msg.getFiles().add(file2);
 			});
@@ -325,9 +329,9 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 					}
 				}
 				if(fileContent != null && fileContent.length > 0) {
-					if(file.getFileType().equals(DomibusConnectorClientMessageFileType.BUSINESS_CONTENT)) {
+					if(file.getFileType().equals(DomibusConnectorClientStorageFileType.BUSINESS_CONTENT)) {
 						messageBuilder.addBusinessContentXMLAsBinary(message, fileContent);
-					}else if(file.getFileType().equals(DomibusConnectorClientMessageFileType.BUSINESS_DOCUMENT)) {
+					}else if(file.getFileType().equals(DomibusConnectorClientStorageFileType.BUSINESS_DOCUMENT)) {
 						messageBuilder.addBusinessDocumentAsBinary(message, fileContent, file.getFileName());
 					}else {
 						messageBuilder.addBusinessAttachmentAsBinaryToMessage(message, file.getFileName(), fileContent, file.getFileName(), null, file.getFileName());

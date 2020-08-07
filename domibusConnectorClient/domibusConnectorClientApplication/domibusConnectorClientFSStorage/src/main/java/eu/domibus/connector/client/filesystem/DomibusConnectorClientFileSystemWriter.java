@@ -28,7 +28,7 @@ import org.springframework.validation.annotation.Validated;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSMessageProperties;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSProperties;
 import eu.domibus.connector.client.filesystem.message.FSMessageDetails;
-import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
+import eu.domibus.connector.client.storage.DomibusConnectorClientStorageFileType;
 import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureMimeType;
 import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageAttachmentType;
@@ -70,7 +70,7 @@ public class DomibusConnectorClientFileSystemWriter {
 		}
 	}
 	
-	public void writeMessageFileToFileSystem(File messageFolder, String fileName, DomibusConnectorClientMessageFileType fileType, byte[] fileContent) throws DomibusConnectorClientFileSystemException {
+	public void writeMessageFileToFileSystem(File messageFolder, String fileName, DomibusConnectorClientStorageFileType fileType, byte[] fileContent) throws DomibusConnectorClientFileSystemException {
 		
 		
 		FSMessageDetails messageDetails = DomibusConnectorClientFileSystemUtil.loadMessageProperties(messageFolder, this.messageProperties.getFileName());
@@ -94,7 +94,7 @@ public class DomibusConnectorClientFileSystemWriter {
 		
 	}
 	
-	public void deleteMessageFileFromFileSystem(File messageFolder, String fileName, DomibusConnectorClientMessageFileType fileType) throws DomibusConnectorClientFileSystemException {
+	public void deleteMessageFileFromFileSystem(File messageFolder, String fileName, DomibusConnectorClientStorageFileType fileType) throws DomibusConnectorClientFileSystemException {
 		
 		FSMessageDetails messageDetails = DomibusConnectorClientFileSystemUtil.loadMessageProperties(messageFolder, this.messageProperties.getFileName());
 		
