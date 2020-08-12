@@ -15,7 +15,7 @@ set "CURRENT_DIR=%cd%"
 
 set "CONNECTOR_CLIENT_BASE_PATH=%CURRENT_DIR%"
 
-set "CLASSPATH=%CURRENT_DIR%\bin\*"
+set "CLASSPATH=%CURRENT_DIR%\bin\*;%CURRENT_DIR%\lib\*"
 echo %CLASSPATH%
 
 title "DomibusConnectorClient"
