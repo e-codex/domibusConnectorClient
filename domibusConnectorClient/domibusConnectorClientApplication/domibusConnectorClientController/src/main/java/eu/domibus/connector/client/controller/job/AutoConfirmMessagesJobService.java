@@ -47,7 +47,7 @@ public class AutoConfirmMessagesJobService {
 		LocalDateTime startTime = LocalDateTime.now();
 		LOGGER.debug("AutoConfirmMessagesJobService started");
 		
-		List<PDomibusConnectorClientMessage> unconfirmedMessages = persistenceService.getMessageDao().findUnconfirmed();
+		List<PDomibusConnectorClientMessage> unconfirmedMessages = persistenceService.getMessageDao().findReceived();
 
 		unconfirmedMessages.forEach(message -> {
 			DomibusConnectorConfirmationType type = null;

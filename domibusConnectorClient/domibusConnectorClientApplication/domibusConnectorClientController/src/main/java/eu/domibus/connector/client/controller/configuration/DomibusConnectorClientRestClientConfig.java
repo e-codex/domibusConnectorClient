@@ -16,13 +16,16 @@ import eu.domibus.connector.client.controller.rest.impl.DomibusConnectorClientDe
 @EnableConfigurationProperties
 @ConfigurationProperties(prefix = DomibusConnectorClientRestClientConfig.PREFIX)
 @PropertySource("classpath:/connector-client-controller-default.properties")
-@ConditionalOnProperty(prefix = DomibusConnectorClientRestClientConfig.PREFIX, value = "enabled", havingValue = "true")
+//@ConditionalOnProperty(prefix = DomibusConnectorClientRestClientConfig.PREFIX, value = "enabled", havingValue = "true")
 public class DomibusConnectorClientRestClientConfig {
 	
 	public static final String PREFIX = DomibusConnectorClientControllerConfig.PREFIX + ".delivery-rest-client";
 	
 	@NotNull
 	private String url;
+	
+	@NotNull
+	private boolean enabled;
 	
 	@NotNull
 	private String deliverNewMessageMethodUrl;
@@ -45,6 +48,8 @@ public class DomibusConnectorClientRestClientConfig {
 	
 	@Bean
 	public DomibusConnectorClientDeliveryRestClient deliveryRestClient() {
+		if(!enabled)
+			return null;
 		DomibusConnectorClientDeliveryRestClient restClient = new DomibusConnectorClientDeliveryRestClient();
 		restClient.setDeliveryRestClient(webClient(WebClient.builder()));
 		restClient.setDeliverNewConfirmationMethodUrl(deliverNewConfirmationMethodUrl);

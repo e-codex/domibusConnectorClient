@@ -69,7 +69,7 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
     private DomibusConnectorClientMessageBuilder messageBuilder;
 	
 	@Autowired
-//	@Nullable
+	@Nullable
 	private DomibusConnectorClientDeliveryRestClient deliveryRestClient;
 	
 	

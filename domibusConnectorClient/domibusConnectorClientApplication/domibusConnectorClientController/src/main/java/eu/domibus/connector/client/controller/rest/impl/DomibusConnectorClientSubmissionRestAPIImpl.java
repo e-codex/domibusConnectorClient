@@ -12,12 +12,14 @@ import eu.domibus.connector.client.DomibusConnectorClientMessageBuilder;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessageStatus;
 import eu.domibus.connector.client.controller.persistence.service.IDomibusConnectorClientPersistenceService;
+import eu.domibus.connector.client.controller.rest.util.DomibusConnectorClientRestUtil;
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.rest.DomibusConnectorClientSubmissionRestAPI;
 import eu.domibus.connector.client.rest.exception.MessageNotFoundException;
 import eu.domibus.connector.client.rest.exception.MessageSubmissionException;
 import eu.domibus.connector.client.rest.exception.ParameterException;
 import eu.domibus.connector.client.rest.exception.StorageException;
+import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorage;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.client.storage.exception.DomibusConnectorClientStorageException;
@@ -42,10 +44,15 @@ public class DomibusConnectorClientSubmissionRestAPIImpl implements DomibusConne
 	@Autowired
 	@NotNull
     private DomibusConnectorClientMessageBuilder messageBuilder;
+	
+	@Autowired
+	private DomibusConnectorClientRestUtil util;
 
 	
 	@Override
-	public Boolean submitNewMessageFromBackendToConnectorClient(DomibusConnectorMessageType message) throws MessageSubmissionException, StorageException, ParameterException {
+	public Boolean submitNewMessageFromBackendToConnectorClient(DomibusConnectorClientMessage clientMessage) throws MessageSubmissionException, StorageException, ParameterException {
+		
+		DomibusConnectorMessageType message = util.mapMessageToTransition(clientMessage);
 		
 		//persist the message into the connector client database...
 		PDomibusConnectorClientMessage pMessage = persistenceService.persistNewMessage(message, PDomibusConnectorClientMessageStatus.PREPARED);
@@ -81,8 +88,10 @@ public class DomibusConnectorClientSubmissionRestAPIImpl implements DomibusConne
 
 
 	@Override
-	public Boolean triggerConfirmationAtConnectorClient(DomibusConnectorMessageType message)
+	public Boolean triggerConfirmationAtConnectorClient(DomibusConnectorClientMessage clientMessage)
 			throws MessageSubmissionException, ParameterException, MessageNotFoundException {
+		
+		DomibusConnectorMessageType message = util.mapMessageToTransition(clientMessage);
 		
 		if(message == null || message.getMessageDetails() == null) {
 			throw new ParameterException("Message structure not valid! No message details contained!");
