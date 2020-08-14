@@ -3,7 +3,11 @@ package eu.domibus.connector.client.controller.rest.impl;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonAutoDetect.Visibility;
+
 import eu.domibus.connector.client.rest.DomibusConnectorClientDeliveryRestClientAPI;
+import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import reactor.core.publisher.Mono;
 
@@ -19,11 +23,11 @@ public class DomibusConnectorClientDeliveryRestClient implements DomibusConnecto
 	
 
 	@Override
-	public void deliverNewMessageFromConnectorClientToBackend(DomibusConnectorMessageType newMessage) throws Exception {
+	public void deliverNewMessageFromConnectorClientToBackend(DomibusConnectorClientMessage msg) throws Exception {
 		try{
 			Mono<Boolean> bodyToMono = this.deliveryRestClient.post()
 				.uri(deliverNewMessageMethodUrl)
-				.body(Mono.just(newMessage), DomibusConnectorMessageType.class)
+				.body(Mono.just(msg), DomibusConnectorClientMessage.class)
 				.retrieve()
 				.bodyToMono(Boolean.class);
 		bodyToMono.block();
