@@ -21,7 +21,12 @@ public interface PDomibusConnectorClientMessageDao extends CrudRepository<PDomib
 	
 	@Query("SELECT m FROM PDomibusConnectorClientMessage m WHERE "
 			+ "m.messageStatus='RECEIVED'")
-    public List<PDomibusConnectorClientMessage> findUnconfirmed();
+    public List<PDomibusConnectorClientMessage> findReceived();
+	
+	@Query("SELECT m FROM PDomibusConnectorClientMessage m WHERE "
+			+ "m.messageStatus='REJECTED' or m.messageStatus='CONFIRMED'")
+    public List<PDomibusConnectorClientMessage> findRejectedConfirmed();
+	
 	
 	public Optional<PDomibusConnectorClientMessage> findOneByEbmsMessageIdAndBackendMessageId(String ebmsMessageId, String backendId);
 	

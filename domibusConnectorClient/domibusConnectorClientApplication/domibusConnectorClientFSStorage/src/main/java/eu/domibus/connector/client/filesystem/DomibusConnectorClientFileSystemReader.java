@@ -30,7 +30,7 @@ import org.springframework.validation.annotation.Validated;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSMessageProperties;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSProperties;
 import eu.domibus.connector.client.filesystem.message.FSMessageDetails;
-import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
+import eu.domibus.connector.client.storage.DomibusConnectorClientStorageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.domain.transition.DomibusConnectorActionType;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
@@ -147,8 +147,8 @@ public class DomibusConnectorClientFileSystemReader {
 		return null;
 	}
 	
-	public Map<String, DomibusConnectorClientMessageFileType> getFileListFromMessageFolder(File messageFolder){
-		Map<String, DomibusConnectorClientMessageFileType> files = new HashMap<String, DomibusConnectorClientMessageFileType>();
+	public Map<String, DomibusConnectorClientStorageFileType> getFileListFromMessageFolder(File messageFolder){
+		Map<String, DomibusConnectorClientStorageFileType> files = new HashMap<String, DomibusConnectorClientStorageFileType>();
 		if (messageFolder.exists() && messageFolder.isDirectory() && messageFolder.listFiles().length > 0) {
 			
 			FSMessageDetails messageDetails = DomibusConnectorClientFileSystemUtil.loadMessageProperties(messageFolder, this.messageProperties.getFileName());
@@ -161,23 +161,23 @@ public class DomibusConnectorClientFileSystemReader {
 
 					if (isFile(sub.getName(),messageDetails.getMessageDetails().getProperty(messageProperties.getContentXmlFileName()))) {
 						LOGGER.debug("Found content xml file with name {}", sub.getName());
-						files.put(sub.getName(), DomibusConnectorClientMessageFileType.BUSINESS_CONTENT);
+						files.put(sub.getName(), DomibusConnectorClientStorageFileType.BUSINESS_CONTENT);
 						continue;
 					} else if (isFile(sub.getName(),messageDetails.getMessageDetails().getProperty(messageProperties.getContentPdfFileName()))) {
 						LOGGER.debug("Found content pdf file with name {}", sub.getName());
-						files.put(sub.getName(), DomibusConnectorClientMessageFileType.BUSINESS_DOCUMENT);
+						files.put(sub.getName(), DomibusConnectorClientStorageFileType.BUSINESS_DOCUMENT);
 						continue;
 					} else if (isFile(sub.getName(),messageDetails.getMessageDetails().getProperty(messageProperties.getDetachedSignatureFileName()))) {
 						LOGGER.debug("Found detached signature file with name {}", sub.getName());
-						files.put(sub.getName(), DomibusConnectorClientMessageFileType.DETACHED_SIGNATURE);
+						files.put(sub.getName(), DomibusConnectorClientStorageFileType.DETACHED_SIGNATURE);
 						continue;
 					} else if (isConfirmation(sub.getName())) {
 						LOGGER.debug("Found confirmation file {}", sub.getName());
-						files.put(sub.getName(), DomibusConnectorClientMessageFileType.CONFIRMATION);
+						files.put(sub.getName(), DomibusConnectorClientStorageFileType.CONFIRMATION);
 						continue;
 					} else {
 						LOGGER.debug("Found attachment file {}", sub.getName());
-						files.put(sub.getName(), DomibusConnectorClientMessageFileType.BUSINESS_ATTACHMENT);
+						files.put(sub.getName(), DomibusConnectorClientStorageFileType.BUSINESS_ATTACHMENT);
 					}
 				}
 			}

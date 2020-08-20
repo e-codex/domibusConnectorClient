@@ -1,14 +1,26 @@
 package eu.domibus.connector.client.controller.backend.impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
@@ -18,13 +30,20 @@ import eu.domibus.connector.client.DomibusConnectorClientAppBackend;
 import eu.domibus.connector.client.DomibusConnectorClientMessageBuilder;
 import eu.domibus.connector.client.controller.configuration.DefaultConfirmationAction;
 import eu.domibus.connector.client.controller.configuration.DomibusConnectorClientControllerConfig;
+import eu.domibus.connector.client.controller.configuration.DomibusConnectorClientRestClientConfig;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessageStatus;
 import eu.domibus.connector.client.controller.persistence.service.IDomibusConnectorClientPersistenceService;
+import eu.domibus.connector.client.controller.rest.impl.DomibusConnectorClientDeliveryRestClient;
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
+import eu.domibus.connector.client.rest.model.DomibusConnectorClientConfirmation;
+import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
+import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
+import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorage;
+import eu.domibus.connector.client.storage.DomibusConnectorClientStorageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.client.storage.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
@@ -56,6 +75,11 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 	@Autowired
 	@NotNull
     private DomibusConnectorClientMessageBuilder messageBuilder;
+	
+	@Autowired
+	@Nullable
+	private DomibusConnectorClientDeliveryRestClient deliveryRestClient;
+	
 	
 	  @NotNull
 	    private DefaultConfirmationAction confirmationDefaultAction;
@@ -167,6 +191,48 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 		clientMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.RECEIVED);
 		persistenceService.mergeClientMessage(clientMessage);
 		LOGGER.debug("#deliverNewMessageToClientBackend: merged delivered message with storageLocation and storageStatus into database");
+		
+		if(deliveryRestClient!=null) {
+			LOGGER.info("Delivery Rest Client to Backend is there... message will be delivered!");
+			
+			DomibusConnectorClientMessage msg = new DomibusConnectorClientMessage();
+			Set<PDomibusConnectorClientConfirmation> confirmations = clientMessage.getConfirmations();
+			confirmations.forEach(confirmation -> {
+				DomibusConnectorClientConfirmation evidence = new DomibusConnectorClientConfirmation();
+				BeanUtils.copyProperties(confirmation, evidence);
+				//			evidence.setStorageStatus(confirmation.getStorageStatus().name());
+				msg.getEvidences().add(evidence);
+			});
+			BeanUtils.copyProperties(clientMessage, msg);
+			msg.setStorageStatus(clientMessage.getStorageStatus().name());
+			msg.setMessageStatus(clientMessage.getMessageStatus().name());
+			
+			if(filesReadable(clientMessage)) {
+				Map<String, DomibusConnectorClientStorageFileType> files = null;
+				try {
+					files = storage.listContentAtStorageLocation(clientMessage.getStorageInfo());
+				} catch (DomibusConnectorClientStorageException | IllegalArgumentException e) {
+					DomibusConnectorClientStorageStatus checkStorageStatus = storage.checkStorageStatus(clientMessage.getStorageInfo());
+					clientMessage.setStorageStatus(checkStorageStatus);
+					persistenceService.mergeClientMessage(clientMessage);
+					
+				}
+				files.entrySet().forEach(file -> {
+					DomibusConnectorClientMessageFileType fileType = DomibusConnectorClientMessageFileType.valueOf(file.getValue().name());
+					DomibusConnectorClientMessageFile file2 = new DomibusConnectorClientMessageFile(file.getKey(), fileType);
+					msg.getFiles().add(file2);
+				});
+			}
+			try {
+				deliveryRestClient.deliverNewMessageFromConnectorClientToBackend(msg);
+				clientMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.DELIVERED_BACKEND);
+			} catch (Exception e) {
+				LOGGER.error("Delivery to client backend via Rest service failed! ", e);
+				clientMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.DELIVERY_FAILED);
+			}
+			
+			persistenceService.mergeClientMessage(clientMessage);
+		}
 	}
 
 	@Override
@@ -218,6 +284,42 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 //			originalClientMessage.setUpdated(new Date());
 			persistenceService.mergeClientMessage(originalClientMessage);
 			LOGGER.debug("#deliverNewConfirmationToClientBackend: confirmation persisted into database and merged with original message.");
+			
+		}
+		
+		if(deliveryRestClient!=null) {
+			LOGGER.info("Delivery Rest Client to Backend is there... confirmation will be delivered!");
+			
+			//Building domibusConnectorClient message with the confirmation and the original backendMessageId
+			DomibusConnectorClientMessage clientMessage = new DomibusConnectorClientMessage();
+			clientMessage.setBackendMessageId(originalClientMessage.getBackendMessageId());
+			
+			DomibusConnectorClientConfirmation conf = new DomibusConnectorClientConfirmation();
+			byte[] confirmationBytes = null;
+//			try {
+			try {
+			 Transformer transformer = TransformerFactory.newInstance().newTransformer();
+	            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+	            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+	            ByteArrayOutputStream output = new ByteArrayOutputStream();
+	            StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
+					transformer.transform(confirmation.getConfirmation(), xmlOutput);
+	            confirmationBytes =  output.toByteArray();
+			} catch (TransformerException e1) {
+				LOGGER.error("Exception transforming source of confirmation to bytes!",e1);
+			}
+			 
+			conf.setConfirmation(confirmationBytes);
+			conf.setConfirmationType(confirmation.getConfirmationType().name());
+			
+			clientMessage.getEvidences().add(conf);
+			
+			try {
+				deliveryRestClient.deliverNewConfirmationFromConnectorClientToBackend(clientMessage);
+			} catch (Exception e) {
+				LOGGER.error("Delivery to client backend via Rest service failed! ", e);
+			}
+			
 		}
 	}
 
@@ -254,6 +356,10 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 		}
 		
 		
+	}
+	
+	private boolean filesReadable(PDomibusConnectorClientMessage message) {
+		return message!=null && message.getStorageInfo()!=null && !message.getStorageInfo().isEmpty() && message.getStorageStatus().equals(DomibusConnectorClientStorageStatus.STORED);
 	}
 
 	public DefaultConfirmationAction getConfirmationDefaultAction() {
