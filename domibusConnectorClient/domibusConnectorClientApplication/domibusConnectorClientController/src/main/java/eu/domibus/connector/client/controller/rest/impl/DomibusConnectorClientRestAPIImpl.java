@@ -63,7 +63,7 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 		Optional<PDomibusConnectorClientMessage> msg = persistenceService.getMessageDao().findById(id);
 
 		if(msg.isPresent()) {
-			DomibusConnectorClientMessage message = util.mapMessageFromModel(msg.get(), true);
+			DomibusConnectorClientMessage message = util.mapMessageFromModel(msg.get(), false);
 			return message;
 		}else {
 			throw new MessageNotFoundException("No message with id found in database: "+id);
@@ -75,7 +75,7 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 		Optional<PDomibusConnectorClientMessage> msg = persistenceService.getMessageDao().findOneByBackendMessageId(backendMessageId);
 
 		if(msg.isPresent()) {
-			DomibusConnectorClientMessage message = util.mapMessageFromModel(msg.get(), true);
+			DomibusConnectorClientMessage message = util.mapMessageFromModel(msg.get(), false);
 			return message;
 		}else {
 			throw new MessageNotFoundException("No message with backendMessageId found in database: "+backendMessageId);
@@ -88,7 +88,7 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 		Optional<PDomibusConnectorClientMessage> msg = persistenceService.getMessageDao().findOneByEbmsMessageId(ebmsMessageId);
 
 		if(msg.isPresent()) {
-			DomibusConnectorClientMessage message = util.mapMessageFromModel(msg.get(), true);
+			DomibusConnectorClientMessage message = util.mapMessageFromModel(msg.get(), false);
 			return message;
 		}else {
 			throw new MessageNotFoundException("No message with ebmsMessageId found in database: "+ebmsMessageId);
