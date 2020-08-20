@@ -37,7 +37,7 @@ public class DomibusConnectorClientDeliveryRestClient implements DomibusConnecto
 	}
 
 	@Override
-	public void deliverNewConfirmationFromConnectorClientToBackend(DomibusConnectorMessageType newMessage) throws Exception {
+	public void deliverNewConfirmationFromConnectorClientToBackend(DomibusConnectorClientMessage newMessage) throws Exception {
 		try{
 			Mono<Boolean> bodyToMono = this.deliveryRestClient.post()
 				.uri(deliverNewConfirmationMethodUrl)

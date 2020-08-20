@@ -12,8 +12,12 @@ import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
  * @author riederb
  *
  */
-@RequestMapping("/messagerestservice")
+@RequestMapping(DomibusConnectorClientMessageRestAPI.MESSAGERESTSERVICE_PATH)
 public interface DomibusConnectorClientMessageRestAPI {
+
+	public static final String MESSAGERESTSERVICE_PATH = "/messagerestservice";
+	public static final String REQUEST_REJECTED_OR_CONFIRMED_MESSAGES_FROM_CONNECTOR_CLIENT = "/requestRejectedOrConfirmedMessagesFromConnectorClient";
+	public static final String REQUEST_NEW_MESSAGES_FROM_CONNECTOR_CLIENT = "/requestNewMessagesFromConnectorClient";
 
 	/**
 	 * This method returns all messages that have been successfully received and processed by the domibusConnectorClient.
@@ -22,7 +26,7 @@ public interface DomibusConnectorClientMessageRestAPI {
 	 *  
 	 * @return all messages with status RECEIVED.
 	 */
-	@GetMapping("/requestNewMessagesFromConnectorClient")
+	@GetMapping(REQUEST_NEW_MESSAGES_FROM_CONNECTOR_CLIENT)
 	DomibusConnectorClientMessageList requestNewMessagesFromConnectorClient();
 	
 	/**
@@ -31,6 +35,6 @@ public interface DomibusConnectorClientMessageRestAPI {
 	 * 
 	 * @return all messages with their confirmations with the status REJECTED or CONFIRMED.
 	 */
-	@GetMapping("/requestRejectedOrConfirmedMessagesFromConnectorClient")
+	@GetMapping(REQUEST_REJECTED_OR_CONFIRMED_MESSAGES_FROM_CONNECTOR_CLIENT)
 	DomibusConnectorClientMessageList requestRejectedOrConfirmedMessagesFromConnectorClient();
 }

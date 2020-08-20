@@ -24,10 +24,11 @@ import eu.domibus.connector.client.storage.DomibusConnectorClientStorage;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.client.storage.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 @RestController
-@RequestMapping("/submissionrestservice")
+@RequestMapping(DomibusConnectorClientSubmissionRestAPI.SUBMISSIONRESTSERVICE_PATH)
 public class DomibusConnectorClientSubmissionRestAPIImpl implements DomibusConnectorClientSubmissionRestAPI {
 
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(DomibusConnectorClientRestAPIImpl.class);
@@ -88,23 +89,31 @@ public class DomibusConnectorClientSubmissionRestAPIImpl implements DomibusConne
 
 
 	@Override
-	public Boolean triggerConfirmationAtConnectorClient(DomibusConnectorClientMessage clientMessage)
+	public Boolean triggerConfirmationAtConnectorClient(String refToMessageId, String confirmationType)
 			throws MessageSubmissionException, ParameterException, MessageNotFoundException {
 		
-		DomibusConnectorMessageType message = util.mapMessageToTransition(clientMessage);
+		DomibusConnectorMessageType message = new DomibusConnectorMessageType();
+		message.setMessageDetails(new DomibusConnectorMessageDetailsType());
+		message.getMessageDetails().setRefToMessageId(refToMessageId);
 		
-		if(message == null || message.getMessageDetails() == null) {
-			throw new ParameterException("Message structure not valid! No message details contained!");
-		}
-		
-		if(StringUtils.isEmpty(message.getMessageDetails().getRefToMessageId())) {
-			throw new ParameterException("RefToMessageId must not be null or empty!");
-		}
-		
-		if(message.getMessageConfirmations()==null || message.getMessageConfirmations().isEmpty()) {
-			throw new ParameterException("Message structure not valid! No confirmationType contained!");
-		}
-		
+//		PDomibusConnectorClientMessage pMessage = persistenceService.findOriginalClientMessage(msg);
+//		
+//		DomibusConnectorClientMessage clientMessage = util.mapMessageFromModel(pMessage);
+//		
+//		DomibusConnectorMessageType message = util.mapMessageToTransition(clientMessage);
+//		
+//		if(message == null || message.getMessageDetails() == null) {
+//			throw new ParameterException("Message structure not valid! No message details contained!");
+//		}
+//		
+//		if(StringUtils.isEmpty(message.getMessageDetails().getRefToMessageId())) {
+//			throw new ParameterException("RefToMessageId must not be null or empty!");
+//		}
+//		
+//		if(message.getMessageConfirmations()==null || message.getMessageConfirmations().isEmpty()) {
+//			throw new ParameterException("Message structure not valid! No confirmationType contained!");
+//		}
+//		
 		//find original message...
 		PDomibusConnectorClientMessage originalClientMessage = persistenceService.findOriginalClientMessage(message);
 		
@@ -128,12 +137,12 @@ public class DomibusConnectorClientSubmissionRestAPIImpl implements DomibusConne
 				originalClientMessage.getFinalRecipient(), 
 				originalClientMessage.getOriginalSender());
 		
-		//extract confirmation type
-		DomibusConnectorConfirmationType confirmationType = message.getMessageConfirmations().get(0).getConfirmationType();
+//		//extract confirmation type
+		DomibusConnectorConfirmationType confType = DomibusConnectorConfirmationType.valueOf(confirmationType);
 		
 		
 		try {
-			connectorClientBackend.triggerConfirmationForMessage(originalMessage, confirmationType, null);
+			connectorClientBackend.triggerConfirmationForMessage(originalMessage, confType, null);
 		} catch (DomibusConnectorClientBackendException e) {
 			throw new MessageSubmissionException("Client backend failure: "+ e.getMessage(), e);
 		}

@@ -1,11 +1,19 @@
 package eu.domibus.connector.client.controller.backend.impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -282,8 +290,32 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 		if(deliveryRestClient!=null) {
 			LOGGER.info("Delivery Rest Client to Backend is there... confirmation will be delivered!");
 			
+			//Building domibusConnectorClient message with the confirmation and the original backendMessageId
+			DomibusConnectorClientMessage clientMessage = new DomibusConnectorClientMessage();
+			clientMessage.setBackendMessageId(originalClientMessage.getBackendMessageId());
+			
+			DomibusConnectorClientConfirmation conf = new DomibusConnectorClientConfirmation();
+			byte[] confirmationBytes = null;
+//			try {
 			try {
-				deliveryRestClient.deliverNewConfirmationFromConnectorClientToBackend(message);
+			 Transformer transformer = TransformerFactory.newInstance().newTransformer();
+	            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+	            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+	            ByteArrayOutputStream output = new ByteArrayOutputStream();
+	            StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
+					transformer.transform(confirmation.getConfirmation(), xmlOutput);
+	            confirmationBytes =  output.toByteArray();
+			} catch (TransformerException e1) {
+				LOGGER.error("Exception transforming source of confirmation to bytes!",e1);
+			}
+			 
+			conf.setConfirmation(confirmationBytes);
+			conf.setConfirmationType(confirmation.getConfirmationType().name());
+			
+			clientMessage.getEvidences().add(conf);
+			
+			try {
+				deliveryRestClient.deliverNewConfirmationFromConnectorClientToBackend(clientMessage);
 			} catch (Exception e) {
 				LOGGER.error("Delivery to client backend via Rest service failed! ", e);
 			}

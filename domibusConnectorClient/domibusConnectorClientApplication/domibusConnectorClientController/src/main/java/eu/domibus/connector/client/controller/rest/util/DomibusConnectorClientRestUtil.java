@@ -40,20 +40,30 @@ public class DomibusConnectorClientRestUtil {
 
 	
 	
-	public DomibusConnectorClientMessage mapMessageFromModel(PDomibusConnectorClientMessage message) {
+	public DomibusConnectorClientMessage mapMessageFromModel(PDomibusConnectorClientMessage message, boolean loadFileContents) {
 		DomibusConnectorClientMessage msg = new DomibusConnectorClientMessage();
-		Set<PDomibusConnectorClientConfirmation> confirmations = message.getConfirmations();
-		confirmations.forEach(confirmation -> {
-			DomibusConnectorClientConfirmation evidence = new DomibusConnectorClientConfirmation();
-			BeanUtils.copyProperties(confirmation, evidence);
-			//			evidence.setStorageStatus(confirmation.getStorageStatus().name());
-			msg.getEvidences().add(evidence);
-		});
 		BeanUtils.copyProperties(message, msg);
 		msg.setStorageStatus(message.getStorageStatus().name());
 		msg.setMessageStatus(message.getMessageStatus().name());
 
 		if(filesReadable(message)) {
+			Set<PDomibusConnectorClientConfirmation> confirmations = message.getConfirmations();
+			confirmations.forEach(confirmation -> {
+				DomibusConnectorClientConfirmation evidence = new DomibusConnectorClientConfirmation();
+				BeanUtils.copyProperties(confirmation, evidence);
+				//			evidence.setStorageStatus(confirmation.getStorageStatus().name());
+				if(loadFileContents) {
+					try {
+						byte[] content = storage.loadFileContentFromStorageLocation(message.getStorageInfo(), confirmation.getConfirmationType()+".xml");
+						evidence.setConfirmation(content);
+					} catch (IllegalArgumentException | DomibusConnectorClientStorageException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+				msg.getEvidences().add(evidence);
+			});
+
 			Map<String, DomibusConnectorClientStorageFileType> files = null;
 			try {
 				files = storage.listContentAtStorageLocation(message.getStorageInfo());
@@ -68,6 +78,15 @@ public class DomibusConnectorClientRestUtil {
 				DomibusConnectorClientMessageFileType fileType = DomibusConnectorClientMessageFileType.valueOf(file.getValue().name());
 				DomibusConnectorClientMessageFile file2 = new DomibusConnectorClientMessageFile(file.getKey(), fileType);
 				file2.setStorageLocation(message.getStorageInfo());
+				if(loadFileContents) {
+				try {
+					byte[] fileContent = storage.loadFileContentFromStorageLocation(message.getStorageInfo(), file.getKey());
+					file2.setFileContent(fileContent);
+				} catch (IllegalArgumentException | DomibusConnectorClientStorageException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+				}
 				msg.getFiles().add(file2);
 			});
 		}
@@ -131,11 +150,11 @@ public class DomibusConnectorClientRestUtil {
 		return message;
 	}
 	
-	public DomibusConnectorClientMessageList mapMessagesFromModel(Iterable<PDomibusConnectorClientMessage> findAll)  {
+	public DomibusConnectorClientMessageList mapMessagesFromModel(Iterable<PDomibusConnectorClientMessage> findAll, boolean loadFileContents)  {
 		DomibusConnectorClientMessageList messages = new DomibusConnectorClientMessageList();
 
 		findAll.forEach(message -> {
-			DomibusConnectorClientMessage msg = mapMessageFromModel(message);
+			DomibusConnectorClientMessage msg = mapMessageFromModel(message, loadFileContents);
 			messages.getMessages().add(msg);
 		});
 
