@@ -11,7 +11,7 @@
     <java.version>1.8</java.version>
   </properties>
   <dependencies>
-   <!--  <dependency>
+    <!--  <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>domibusConnectorClientAppAPI</artifactId>
       <version>${project.version}</version>
