@@ -80,7 +80,7 @@ public interface DomibusConnectorClientStorage {
 	 * @throws DomibusConnectorClientStorageException
 	 * @throws IllegalArgumentException
 	 */
-	Map<String, DomibusConnectorClientMessageFileType> listContentAtStorageLocation(String storageLocation) 
+	Map<String, DomibusConnectorClientStorageFileType> listContentAtStorageLocation(String storageLocation) 
 			throws DomibusConnectorClientStorageException, IllegalArgumentException;
 	
 	/**
@@ -116,7 +116,7 @@ public interface DomibusConnectorClientStorage {
 	 * @throws DomibusConnectorClientStorageException
 	 * @throws IllegalArgumentException
 	 */
-	void storeFileIntoStorage(String storageLocation, String fileName, DomibusConnectorClientMessageFileType fileType, byte[] content) 
+	void storeFileIntoStorage(String storageLocation, String fileName, DomibusConnectorClientStorageFileType fileType, byte[] content) 
 			throws DomibusConnectorClientStorageException, IllegalArgumentException;
 
 	/**
@@ -138,6 +138,6 @@ public interface DomibusConnectorClientStorage {
 	 * @throws DomibusConnectorClientStorageException
 	 * @throws IllegalArgumentException
 	 */
-	void deleteFileFromStorage(String storageLocation, String fileName,	DomibusConnectorClientMessageFileType fileType) 
+	void deleteFileFromStorage(String storageLocation, String fileName,	DomibusConnectorClientStorageFileType fileType) 
 			throws DomibusConnectorClientStorageException, IllegalArgumentException;
 }

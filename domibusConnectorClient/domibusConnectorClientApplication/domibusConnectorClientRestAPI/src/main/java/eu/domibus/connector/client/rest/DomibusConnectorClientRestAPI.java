@@ -24,8 +24,10 @@ import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
  * @author riederb
  *
  */
-@RequestMapping("/restservice")
+@RequestMapping(DomibusConnectorClientRestAPI.RESTSERVICE_PATH)
 public interface DomibusConnectorClientRestAPI {
+
+	public static final String RESTSERVICE_PATH = "/restservice";
 
 	/**
 	 * Method to receive all messages stored in the database of the domibusConnectorClient-Application.

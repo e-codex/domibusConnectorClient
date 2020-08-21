@@ -18,7 +18,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
+import eu.domibus.connector.client.storage.DomibusConnectorClientStorageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 
 @Entity
