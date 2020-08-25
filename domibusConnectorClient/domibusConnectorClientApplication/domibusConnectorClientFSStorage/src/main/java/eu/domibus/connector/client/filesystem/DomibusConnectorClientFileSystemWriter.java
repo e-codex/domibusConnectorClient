@@ -344,6 +344,7 @@ public class DomibusConnectorClientFileSystemWriter {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 			StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
 			transformer.transform(xmlInput, xmlOutput);
