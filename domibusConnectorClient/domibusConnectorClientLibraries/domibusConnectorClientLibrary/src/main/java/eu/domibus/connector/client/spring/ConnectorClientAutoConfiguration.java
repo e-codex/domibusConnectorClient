@@ -20,8 +20,8 @@ import eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapperDe
  * @author {@literal Stephan Spindler <stephan.spindler@extern.brz.gv.at> }
  */
 @Configuration
-@ConfigurationProperties(prefix = ConnectorClientAutoConfiguration.PREFIX)
-@PropertySource("classpath:/connector-client-library-default.properties")
+//@ConfigurationProperties(prefix = ConnectorClientAutoConfiguration.PREFIX)
+//@PropertySource("classpath:/connector-client-library-default.properties")
 @Validated
 @Valid
 public class ConnectorClientAutoConfiguration {

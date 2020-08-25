@@ -8,16 +8,19 @@ import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.DomibusConnectorClient;
-import eu.domibus.connector.client.DomibusConnectorClientMessageBuilder;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.link.DomibusConnectorClientLink;
 import eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapper;
 import eu.domibus.connector.client.mapping.exception.DomibusConnectorClientContentMapperException;
+import eu.domibus.connector.client.schema.validation.DomibusConnectorClientSchemaValidator;
+import eu.domibus.connector.client.schema.validation.SeverityLevel;
+import eu.domibus.connector.client.schema.validation.ValidationResult;
 import eu.domibus.connector.client.spring.ConnectorClientAutoConfiguration;
 import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
@@ -40,13 +43,25 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
     private DomibusConnectorClientLink clientService;
     
     @Autowired
-    private DomibusConnectorClientMessageBuilder messageBuilder;
+    @Nullable
+    private DomibusConnectorClientSchemaValidator schemaValidator;
+    
+    @Autowired
+    @Nullable
+    private SeverityLevel schemaValidationMaxSeverityLevel;
     
 	
 	@Override
 	public void submitNewMessageToConnector(DomibusConnectorMessageType message) throws DomibusConnectorClientException {
 		 	MDC.put("backendmessageid", message.getMessageDetails().getBackendMessageId());
 	        DomibsConnectorAcknowledgementType domibusConnectorAckType = new DomibsConnectorAcknowledgementType();
+	        
+	        if(schemaValidator!=null) {
+	        	ValidationResult result = schemaValidator.validateBusinessContentBeforeMapping(message);
+	        	checkSchemaValidationResult(result);
+	        	
+	        }
+	        
 	        try {
 	            contentMapper.mapOutboundBusinessContent(message);
 	            domibusConnectorAckType.setResult(true); //when no exception is thrown message is assumed processed successfully!
@@ -71,6 +86,16 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 	            MDC.remove("backendmessageid");
 	            throw new DomibusConnectorClientException("The received acknowledgement for message with backend message ID "+message.getMessageDetails().getBackendMessageId()+" is negative!");
 	        }
+	}
+
+	private void checkSchemaValidationResult(ValidationResult result) throws DomibusConnectorClientException {
+		if(schemaValidationMaxSeverityLevel!=null && !result.isOkay()) {
+			switch(schemaValidationMaxSeverityLevel) {
+			case FATAL_ERROR: if(result.isFatal())throw new DomibusConnectorClientException("");
+			case ERROR:if(result.isFatal()||result.isError())throw new DomibusConnectorClientException("");
+			case WARNING:if(result.isFatal()||result.isError()||result.isWarning())throw new DomibusConnectorClientException("");
+			}
+		}
 	}
 
 	@Override
