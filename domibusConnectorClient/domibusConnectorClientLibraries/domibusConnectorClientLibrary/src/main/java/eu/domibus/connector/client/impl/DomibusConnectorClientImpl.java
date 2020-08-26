@@ -33,14 +33,15 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 @Validated
 @Valid
 public class DomibusConnectorClientImpl implements DomibusConnectorClient {
-	
+
 	private static final Logger LOGGER = LogManager.getLogger(DomibusConnectorClientImpl.class);
 
-    @Autowired
-    private DomibusConnectorClientContentMapper contentMapper;
+	@Autowired
+	@Nullable
+	private DomibusConnectorClientContentMapper contentMapper;
 
-    @Autowired
-    private DomibusConnectorClientLink clientService;
+	@Autowired
+	private DomibusConnectorClientLink clientService;
     
     @Autowired
     @Nullable
@@ -54,7 +55,7 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 	@Override
 	public void submitNewMessageToConnector(DomibusConnectorMessageType message) throws DomibusConnectorClientException {
 		 	MDC.put("backendmessageid", message.getMessageDetails().getBackendMessageId());
-	        DomibsConnectorAcknowledgementType domibusConnectorAckType = new DomibsConnectorAcknowledgementType();
+	        DomibsConnectorAcknowledgementType domibusConnectorAckType = null;
 	        
 	        if(schemaValidator!=null) {
 	        	ValidationResult result = schemaValidator.validateBusinessContentBeforeMapping(message);
@@ -62,18 +63,23 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 	        	
 	        }
 	        
+			if(contentMapper!=null) {
+				LOGGER.debug("Instance of DomibusConnectorContentMapper found in context!");
+				try {
+					contentMapper.mapOutboundBusinessContent(message);
+				} catch (DomibusConnectorClientContentMapperException e) {
+					LOGGER.error("Exception while mapping outbound message: ", e);
+					MDC.remove("backendmessageid");
+					throw new DomibusConnectorClientException(e);
+				}
+			}
+	        
 	        try {
-	            contentMapper.mapOutboundBusinessContent(message);
-	            domibusConnectorAckType.setResult(true); //when no exception is thrown message is assumed processed successfully!
 	            domibusConnectorAckType = clientService.submitMessageToConnector(message);
 	        } catch (DomibusConnectorClientException e) {
 	            LOGGER.error("Exception submitting message to connector: ", e);
 	            MDC.remove("backendmessageid");
 	            throw e;
-	        } catch (DomibusConnectorClientContentMapperException e) {
-	            LOGGER.error("Exception while mapping outbound message: ", e);
-	            MDC.remove("backendmessageid");
-	            throw new DomibusConnectorClientException(e);
 	        }
 	        
 	        if(domibusConnectorAckType == null) {
@@ -86,6 +92,7 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 	            MDC.remove("backendmessageid");
 	            throw new DomibusConnectorClientException("The received acknowledgement for message with backend message ID "+message.getMessageDetails().getBackendMessageId()+" is negative!");
 	        }
+
 	}
 
 	private void checkSchemaValidationResult(ValidationResult result) throws DomibusConnectorClientException {
@@ -107,60 +114,61 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 			LOGGER.error("Exception occurred requesting new messages from connector!");
 			throw e;
 		}
-		
+
 		if (messages!=null && !CollectionUtils.isEmpty(messages.getMessages())) {
-            LOGGER.debug("{} new messages from connector to transport to client...", messages.getMessages().size());
-            messages.getMessages().stream().forEach( message -> {
-            	if(message.getMessageContent()!=null) {
-                try {
-                	contentMapper.mapInboundBusinessContent(message);
-                } catch (DomibusConnectorClientContentMapperException e) {
-					LOGGER.error("Exception while mapping inbound message with ebmsId {}: ", message.getMessageDetails().getEbmsMessageId(), e);
-					e.printStackTrace();
+			LOGGER.debug("{} new messages from connector to transport to client...", messages.getMessages().size());
+			messages.getMessages().stream().forEach( message -> {
+				if(message.getMessageContent()!=null && contentMapper!=null) {
+					LOGGER.debug("Instance of DomibusConnectorContentMapper found in context!");
+					try {
+						contentMapper.mapInboundBusinessContent(message);
+					} catch (DomibusConnectorClientContentMapperException e) {
+						LOGGER.error("Exception while mapping inbound message with ebmsId {}: ", message.getMessageDetails().getEbmsMessageId(), e);
+						e.printStackTrace();
+					}
 				}
-            	}
-            });
-//        }else {
-//        	throw new DomibusConnectorClientException("The received DomibusConnectorMessagesType from the connector is either null, or its containing collection is null or empty!");
-        }
-		
+			});
+			//        }else {
+			//        	throw new DomibusConnectorClientException("The received DomibusConnectorMessagesType from the connector is either null, or its containing collection is null or empty!");
+		}
+
 		return messages;
 	}
 
 	@Override
 	public void triggerConfirmationForMessage(DomibusConnectorMessageType confirmationMessage) throws DomibusConnectorClientException {
-		
+
 		String refToMessageId = confirmationMessage.getMessageDetails()!=null?confirmationMessage.getMessageDetails().getRefToMessageId():null;
-		
+
 		if(confirmationMessage.getMessageDetails()==null || refToMessageId==null || refToMessageId.isEmpty()) {
 			throw new DomibusConnectorClientException("The field [refToMessageId] in the messageDetails of the confirmationMessage must not be null! It must contain the ebmsId of the originalMessage that should be confirmed!");
 		}
-		
+
 		if(confirmationMessage.getMessageConfirmations()==null || confirmationMessage.getMessageConfirmations().get(0) == null || confirmationMessage.getMessageConfirmations().get(0).getConfirmationType()==null) {
 			throw new DomibusConnectorClientException("The confirmationMessage must contain one messageConfirmation. This messageConfirmation must contain the confirmationType that should be generated and submitted by the connector!");
 		}
 		DomibusConnectorConfirmationType confirmationType = confirmationMessage.getMessageConfirmations().get(0).getConfirmationType();
-		
+
 		DomibsConnectorAcknowledgementType domibusConnectorAckType = new DomibsConnectorAcknowledgementType();
-        try {
-        	LOGGER.debug("Submitting confirmation message with refToMessageId {} and confirmationType {} to connector.", refToMessageId, confirmationType.name());
-            domibusConnectorAckType.setResult(true); //when no exception is thrown message is assumed processed successfully!
-            domibusConnectorAckType = clientService.submitMessageToConnector(confirmationMessage);
-        } catch (DomibusConnectorClientException e) {
-            LOGGER.error("Exception submitting confirmation message to connector: ", e);
-            throw e;
-        } 
-        
-        if(domibusConnectorAckType == null) {
-        	LOGGER.error("The received acknowledgement for confirmation message with originalEbmsId {} and confirmationType {} is null! ");
-            throw new DomibusConnectorClientException("The received acknowledgement for confirmation message with originalEbmsId "+refToMessageId+" and confirmationType "+confirmationType.name()+" is null!");
-        }
-        if(!domibusConnectorAckType.isResult()) {
-        	LOGGER.error("The received acknowledgement for confirmation message with originalEbmsId {} and confirmationType {} is negative! \n"
-        			+ "ResultMessage: "+domibusConnectorAckType.getResultMessage(), refToMessageId, confirmationType.name());
-            throw new DomibusConnectorClientException("The received acknowledgement for confirmation message with originalEbmsId "+refToMessageId+" and confirmationType "+confirmationType.name()+" is negative! \n"
-            		+ "ResultMessage: "+domibusConnectorAckType.getResultMessage());
-        }
+		try {
+			LOGGER.debug("Submitting confirmation message with refToMessageId {} and confirmationType {} to connector.", refToMessageId, confirmationType.name());
+			domibusConnectorAckType.setResult(true); //when no exception is thrown message is assumed processed successfully!
+			domibusConnectorAckType = clientService.submitMessageToConnector(confirmationMessage);
+		} catch (DomibusConnectorClientException e) {
+			LOGGER.error("Exception submitting confirmation message to connector: ", e);
+			throw e;
+		} 
+
+		if(domibusConnectorAckType == null) {
+			LOGGER.error("The received acknowledgement for confirmation message with originalEbmsId {} and confirmationType {} is null! ");
+			throw new DomibusConnectorClientException("The received acknowledgement for confirmation message with originalEbmsId "+refToMessageId+" and confirmationType "+confirmationType.name()+" is null!");
+		}
+		if(!domibusConnectorAckType.isResult()) {
+			LOGGER.error("The received acknowledgement for confirmation message with originalEbmsId {} and confirmationType {} is negative! \n"
+					+ "ResultMessage: "+domibusConnectorAckType.getResultMessage(), refToMessageId, confirmationType.name());
+			throw new DomibusConnectorClientException("The received acknowledgement for confirmation message with originalEbmsId "+refToMessageId+" and confirmationType "+confirmationType.name()+" is negative! \n"
+					+ "ResultMessage: "+domibusConnectorAckType.getResultMessage());
+		}
 	}
 
 }

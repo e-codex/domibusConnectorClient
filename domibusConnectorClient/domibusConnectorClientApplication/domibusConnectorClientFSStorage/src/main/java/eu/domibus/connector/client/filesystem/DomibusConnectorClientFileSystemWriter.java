@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -348,8 +349,9 @@ public class DomibusConnectorClientFileSystemWriter {
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 			StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
 			transformer.transform(xmlInput, xmlOutput);
-			return output.toByteArray();
-		} catch (IllegalArgumentException | TransformerException e) {
+			byte[] result = output.toByteArray();
+			return new String(result, "UTF-8").getBytes("UTF-8");
+		} catch (IllegalArgumentException | TransformerException | UnsupportedEncodingException e) {
 			throw new DomibusConnectorClientFileSystemException("Exception occured during transforming xml into byte[]", e);
 		}
 	}
