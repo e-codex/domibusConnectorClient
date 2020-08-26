@@ -14,7 +14,7 @@ public class DomibusConnectorClientContentMapperDefaultImpl implements DomibusCo
     @Override
     public DomibusConnectorMessageType mapInboundBusinessContent(DomibusConnectorMessageType message) throws DomibusConnectorClientContentMapperException {
     	LOGGER.debug("#mapInboundBusinessContent: Default Mapper called - validating businessContent");
-    	DomibusConnectorClientContentMapperUtil.validateBusinessContent(message);
+//    	DomibusConnectorClientContentMapperUtil.validateBusinessContent(message);
     	
     	LOGGER.debug("#mapInboundBusinessContent: Default Mapper called - doing nothing");
         // Default implementation does nothing!
@@ -25,7 +25,7 @@ public class DomibusConnectorClientContentMapperDefaultImpl implements DomibusCo
     @Override
     public DomibusConnectorMessageType mapOutboundBusinessContent(DomibusConnectorMessageType message) throws DomibusConnectorClientContentMapperException {
     	LOGGER.debug("#mapOutboundBusinessContent: Default Mapper called - validating businessContent");
-    	DomibusConnectorClientContentMapperUtil.validateBusinessContent(message);
+//    	DomibusConnectorClientContentMapperUtil.validateBusinessContent(message);
     	
     	// Default implementation does nothing!
         LOGGER.debug("#mapOutboundBusinessContent: Default Mapper called - doing nothing");
