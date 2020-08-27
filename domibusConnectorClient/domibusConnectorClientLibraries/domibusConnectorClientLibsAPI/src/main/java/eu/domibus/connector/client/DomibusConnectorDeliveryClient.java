@@ -20,6 +20,7 @@ public interface DomibusConnectorDeliveryClient {
 	 * This method must be implemented if the client is set up in push/push mode.
 	 * All new business messages delivered by the domibusConnector will be delivered to the client side using this method.
 	 * The message contains a {@link DomibusConnectorMessageDetailsType} and a {@link DomibusConnectorMessageContentType} at least.
+	 * Before delivered, the {@link eu.domibus.connector.client.DomibusConnectorClientMessageHandler} is called.
 	 * 
 	 * @param message - The business message delivered by the domibusConnector.
 	 * @throws DomibusConnectorClientException 

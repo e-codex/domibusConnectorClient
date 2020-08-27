@@ -13,7 +13,6 @@ import eu.domibus.connector.client.DomibusConnectorClient;
 import eu.domibus.connector.client.DomibusConnectorClientBackend;
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
-import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 
@@ -31,7 +30,7 @@ public class SubmitMessagesToConnectorJobService {
 	private DomibusConnectorClient connectorClient;
     
    
-    public void checkClientBackendForNewMessagesAndSubmitThemToConnector() throws ImplementationMissingException {
+    public void checkClientBackendForNewMessagesAndSubmitThemToConnector() {
         LocalDateTime startTime = LocalDateTime.now();
         LOGGER.debug("SubmitMessagesToConnectorJob started");
 

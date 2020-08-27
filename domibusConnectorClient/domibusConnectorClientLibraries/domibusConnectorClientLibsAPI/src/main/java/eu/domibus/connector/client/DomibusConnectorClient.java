@@ -15,10 +15,7 @@ public interface DomibusConnectorClient {
 	
 	/**
 	 * This message submits a new message from the client to the connector.
-	 * Before submitting a message, the implementation of {@link eu.domibus.connector.client.schema.validation.DCCBeforeMappingSchemaValidator} is called if present.
-	 * Then, the message is mapped calling the implementation of {@link eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapper} if present. 
-	 * Last, the message gets again validated with an implementation of {@link eu.domibus.connector.client.schema.validation.DCCAfterMappingSchemaValidator} is called if present.
-	 * 
+	 * Before submitted, the {@link eu.domibus.connector.client.DomibusConnectorClientMessageHandler} is called.
 	 * 
 	 * @param message - The {@link DomibusConnectorMessageType} object containing the message information. 
 	 * 					May be built using the {@link DomibusConnectorClientMessageBuilder}.
@@ -30,9 +27,7 @@ public interface DomibusConnectorClient {
 	
 	/**
 	 * Requests all new messages that are provided by the domibusConnector's backend. 
-	 * Before returning a message, the implementation of {@link eu.domibus.connector.client.schema.validation.DCCBeforeMappingSchemaValidator} is called if present.
-	 * Then, the message is mapped calling the implementation of {@link eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapper} if present. 
-	 * Last, the message gets again validated with an implementation of {@link eu.domibus.connector.client.schema.validation.DCCAfterMappingSchemaValidator} is called if present.
+	 * Before delivered, the {@link eu.domibus.connector.client.DomibusConnectorClientMessageHandler} is called for each message received.
 	 * 
 	 * @return The {@link DomibusConnectorMessagesType} containing the new messages.
 	 * @throws DomibusConnectorClientException if the fetching of new messages from the connector fails

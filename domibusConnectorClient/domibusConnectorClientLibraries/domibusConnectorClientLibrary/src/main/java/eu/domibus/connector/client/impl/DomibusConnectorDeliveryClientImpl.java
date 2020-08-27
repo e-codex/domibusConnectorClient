@@ -3,17 +3,16 @@ package eu.domibus.connector.client.impl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import eu.domibus.connector.client.DomibusConnectorClientBackend;
+import eu.domibus.connector.client.DomibusConnectorClientMessageHandler;
+import eu.domibus.connector.client.DomibusConnectorClientMessageHandler.Direction;
 import eu.domibus.connector.client.DomibusConnectorDeliveryClient;
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.link.ws.configuration.ConnectorLinkWSProperties;
-import eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapper;
-import eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapperException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 @Component
@@ -24,7 +23,7 @@ public class DomibusConnectorDeliveryClientImpl implements DomibusConnectorDeliv
 	private static final Logger LOGGER = LogManager.getLogger(DomibusConnectorDeliveryClientImpl.class);
 	
 	@Autowired
-    private DomibusConnectorClientContentMapper contentMapper;
+	private DomibusConnectorClientMessageHandler messageHandler;
 	
 	@Autowired
     private DomibusConnectorClientBackend clientBackend;
@@ -37,12 +36,7 @@ public class DomibusConnectorDeliveryClientImpl implements DomibusConnectorDeliv
 	public void receiveDeliveredMessageFromConnector(DomibusConnectorMessageType message)
 			throws DomibusConnectorClientException {
 		LOGGER.info("#receiveDeliveredMessageFromConnector: received new message from connector via push.");
-		try {
-        	contentMapper.mapInboundBusinessContent(message);
-        } catch (DomibusConnectorClientContentMapperException e) {
-			LOGGER.error("Exception while mapping inbound message with ebmsId {}: ", message.getMessageDetails().getEbmsMessageId(), e);
-			throw new DomibusConnectorClientException(e);
-		}
+		messageHandler.prepareMessage(message, Direction.INBOUND);
 		
 		try {
 			clientBackend.deliverNewMessageToClientBackend(message);
