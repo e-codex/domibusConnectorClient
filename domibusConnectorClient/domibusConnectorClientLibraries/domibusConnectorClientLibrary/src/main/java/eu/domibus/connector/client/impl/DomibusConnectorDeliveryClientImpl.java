@@ -13,7 +13,7 @@ import eu.domibus.connector.client.exception.DomibusConnectorClientBackendExcept
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.link.ws.configuration.ConnectorLinkWSProperties;
 import eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapper;
-import eu.domibus.connector.client.mapping.exception.DomibusConnectorClientContentMapperException;
+import eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapperException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 @Component

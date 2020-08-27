@@ -1,4 +1,4 @@
-package eu.domibus.connector.client.mapping.exception;
+package eu.domibus.connector.client.mapping;
 
 public class DomibusConnectorClientContentMapperException extends Exception {
 

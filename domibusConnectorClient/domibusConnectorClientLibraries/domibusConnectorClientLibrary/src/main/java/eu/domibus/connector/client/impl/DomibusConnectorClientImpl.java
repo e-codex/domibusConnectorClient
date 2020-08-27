@@ -17,7 +17,12 @@ import eu.domibus.connector.client.DomibusConnectorClient;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.link.DomibusConnectorClientLink;
 import eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapper;
-import eu.domibus.connector.client.mapping.exception.DomibusConnectorClientContentMapperException;
+import eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapperException;
+import eu.domibus.connector.client.schema.validation.DCCSchemaValidationException;
+import eu.domibus.connector.client.schema.validation.DCCAfterMappingSchemaValidator;
+import eu.domibus.connector.client.schema.validation.DCCBeforeMappingSchemaValidator;
+import eu.domibus.connector.client.schema.validation.SeverityLevel;
+import eu.domibus.connector.client.schema.validation.ValidationResult;
 import eu.domibus.connector.client.spring.ConnectorClientAutoConfiguration;
 import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
@@ -36,51 +41,52 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 	@Autowired
 	@Nullable
 	private DomibusConnectorClientContentMapper contentMapper;
-
-	@Autowired
-	private DomibusConnectorClientLink clientService;
-
-	//    @Autowired
-	//    private DomibusConnectorClientMessageBuilder messageBuilder;
-
-
+    
+    @Autowired
+    @Nullable
+    private DCCBeforeMappingSchemaValidator beforeMappingSchemaValidator;
+    
+    @Autowired
+    @Nullable
+    private DCCAfterMappingSchemaValidator afterMappingSchemaValidator;
+    
+    @Autowired
+    @Nullable
+    private SeverityLevel schemaValidationMaxSeverityLevel;
+    
+    @Autowired
+    private DomibusConnectorClientLink clientService;
+    
+    private enum Direction{INBOUND,OUTBOUND};
+	
 	@Override
 	public void submitNewMessageToConnector(DomibusConnectorMessageType message) throws DomibusConnectorClientException {
-		MDC.put("backendmessageid", message.getMessageDetails().getBackendMessageId());
-		//	        DomibsConnectorAcknowledgementType domibusConnectorAckType = new DomibsConnectorAcknowledgementType();
+		 	MDC.put("backendmessageid", message.getMessageDetails().getBackendMessageId());
+	        DomibsConnectorAcknowledgementType domibusConnectorAckType = null;
+	        
+	       prepareMessage(message, Direction.OUTBOUND);
+	        
+	        try {
+	            domibusConnectorAckType = clientService.submitMessageToConnector(message);
+	        } catch (DomibusConnectorClientException e) {
+	            LOGGER.error("Exception submitting message to connector: ", e);
+	            MDC.remove("backendmessageid");
+	            throw e;
+	        }
+	        
+	        if(domibusConnectorAckType == null) {
+	        	LOGGER.error("The received acknowledgement for message with backend message ID {} is null! ", message.getMessageDetails().getBackendMessageId());
+	            MDC.remove("backendmessageid");
+	            throw new DomibusConnectorClientException("The received acknowledgement for message with backend message ID "+message.getMessageDetails().getBackendMessageId()+" is null!");
+	        }
+	        if(!domibusConnectorAckType.isResult()) {
+	        	LOGGER.error("The received acknowledgement for message with backend message ID {} is negative! {} ", message.getMessageDetails().getBackendMessageId(), domibusConnectorAckType.getResultMessage());
+	            MDC.remove("backendmessageid");
+	            throw new DomibusConnectorClientException("The received acknowledgement for message with backend message ID "+message.getMessageDetails().getBackendMessageId()+" is negative!");
+	        }
 
-		DomibsConnectorAcknowledgementType domibusConnectorAckType = null;
-		if(contentMapper!=null) {
-			LOGGER.debug("Instance of DomibusConnectorContentMapper found in context!");
-			try {
-				contentMapper.mapOutboundBusinessContent(message);
-			} catch (DomibusConnectorClientContentMapperException e) {
-				LOGGER.error("Exception while mapping outbound message: ", e);
-				MDC.remove("backendmessageid");
-				throw new DomibusConnectorClientException(e);
-			}
-		}
-
-		try {
-			//	            domibusConnectorAckType.setResult(true); //when no exception is thrown message is assumed processed successfully!
-			domibusConnectorAckType = clientService.submitMessageToConnector(message);
-		} catch (DomibusConnectorClientException e) {
-			LOGGER.error("Exception submitting message to connector: ", e);
-			MDC.remove("backendmessageid");
-			throw e;
-		}
-
-		if(domibusConnectorAckType == null) {
-			LOGGER.error("The received acknowledgement for message with backend message ID {} is null! ", message.getMessageDetails().getBackendMessageId());
-			MDC.remove("backendmessageid");
-			throw new DomibusConnectorClientException("The received acknowledgement for message with backend message ID "+message.getMessageDetails().getBackendMessageId()+" is null!");
-		}
-		if(!domibusConnectorAckType.isResult()) {
-			LOGGER.error("The received acknowledgement for message with backend message ID {} is negative! {} ", message.getMessageDetails().getBackendMessageId(), domibusConnectorAckType.getResultMessage());
-			MDC.remove("backendmessageid");
-			throw new DomibusConnectorClientException("The received acknowledgement for message with backend message ID "+message.getMessageDetails().getBackendMessageId()+" is negative!");
-		}
 	}
+
 
 	@Override
 	public DomibusConnectorMessagesType requestNewMessagesFromConnector() throws DomibusConnectorClientException {
@@ -92,24 +98,25 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 			throw e;
 		}
 
+		DomibusConnectorMessagesType mappedMessages = new DomibusConnectorMessagesType();
+		
 		if (messages!=null && !CollectionUtils.isEmpty(messages.getMessages())) {
 			LOGGER.debug("{} new messages from connector to transport to client...", messages.getMessages().size());
-			messages.getMessages().stream().forEach( message -> {
-				if(message.getMessageContent()!=null && contentMapper!=null) {
-					LOGGER.debug("Instance of DomibusConnectorContentMapper found in context!");
+			for(DomibusConnectorMessageType message:messages.getMessages()) {
+				if(message.getMessageContent()!=null) {
 					try {
-						contentMapper.mapInboundBusinessContent(message);
-					} catch (DomibusConnectorClientContentMapperException e) {
-						LOGGER.error("Exception while mapping inbound message with ebmsId {}: ", message.getMessageDetails().getEbmsMessageId(), e);
-						e.printStackTrace();
+						prepareMessage(message, Direction.INBOUND);
+					} catch (DomibusConnectorClientException e1) {
+						LOGGER.error(e1);
+						e1.printStackTrace();
+						continue;
 					}
+					mappedMessages.getMessages().add(message);
 				}
-			});
-			//        }else {
-			//        	throw new DomibusConnectorClientException("The received DomibusConnectorMessagesType from the connector is either null, or its containing collection is null or empty!");
+			}
 		}
 
-		return messages;
+		return mappedMessages;
 	}
 
 	@Override
@@ -148,4 +155,83 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 		}
 	}
 
+	private void prepareMessage(DomibusConnectorMessageType message, Direction direction) throws DomibusConnectorClientException {
+		 if(beforeMappingSchemaValidator!=null) {
+	        	LOGGER.debug("Instance of DCCBeforeMappingSchemaValidator found in context!");
+	        	ValidationResult result = beforeMappingSchemaValidator.validateBusinessContentBeforeMapping(message);
+	        	result.printValidationResults(LOGGER);
+	        	try {
+					checkSchemaValidationResult(result);
+				} catch (DCCSchemaValidationException e) {
+					throw new DomibusConnectorClientException("Schema Validation before mapping has results of max severity level "+schemaValidationMaxSeverityLevel.name()+" or higher! ",e);
+					
+				}
+	        }else {
+	        	LOGGER.debug("No instance of DCCBeforeMappingSchemaValidator found in context!");
+	        }
+	        
+			if(contentMapper!=null) {
+				LOGGER.debug("Instance of DomibusConnectorContentMapper found in context!");
+				switch(direction) {
+				case INBOUND:
+					try {
+						contentMapper.mapInboundBusinessContent(message);
+					} catch (DomibusConnectorClientContentMapperException e) {
+						throw new DomibusConnectorClientException("Exception while mapping inbound message with ebmsId: "+ message.getMessageDetails().getEbmsMessageId(),e);
+					}
+					break;
+				case OUTBOUND:
+					try {
+						contentMapper.mapOutboundBusinessContent(message);
+					} catch (DomibusConnectorClientContentMapperException e) {
+						throw new DomibusConnectorClientException("Exception while mapping outbound message!",e);
+					}
+					break;
+					
+				}
+			}else {
+	        	LOGGER.debug("No instance of DomibusConnectorContentMapper found in context!");
+			}
+			
+			if(afterMappingSchemaValidator!=null) {
+	        	LOGGER.debug("Instance of DCCAfterMappingSchemaValidator found in context!");
+	        	ValidationResult result = afterMappingSchemaValidator.validateBusinessContentAfterMapping(message);
+	        	result.printValidationResults(LOGGER);
+	        	try {
+					checkSchemaValidationResult(result);
+				} catch (DCCSchemaValidationException e) {
+					throw new DomibusConnectorClientException("Schema Validation after mapping has results of max severity level "+schemaValidationMaxSeverityLevel.name()+" or higher! ",e);
+					
+				}
+			}else {
+	        	LOGGER.debug("No instance of DCCAfterMappingSchemaValidator found in context!");
+	        }
+	}
+	
+	private void checkSchemaValidationResult(ValidationResult result) throws DCCSchemaValidationException {
+		LOGGER.debug("Checking schema validation results against maxSeverityLevel {}", schemaValidationMaxSeverityLevel);
+		if(schemaValidationMaxSeverityLevel!=null && !result.isOkay()) {
+			switch(schemaValidationMaxSeverityLevel) {
+			case FATAL_ERROR: 
+				if(result.isFatal())
+					throw new DCCSchemaValidationException("ValidationResult contains results of severity level "+SeverityLevel.FATAL_ERROR.name()+" or higher!") ;
+			case ERROR:
+				if(result.isFatal()||result.isError())
+					throw new DCCSchemaValidationException("ValidationResult contains results of severity level "+SeverityLevel.ERROR.name()+" or higher!");
+			case WARNING:
+				if(result.isFatal()||result.isError()||result.isWarning())
+					throw new DCCSchemaValidationException("ValidationResult contains results of severity level "+SeverityLevel.WARNING.name()+" or higher!");
+			}
+		}
+	}
+
+
+	public SeverityLevel getSchemaValidationMaxSeverityLevel() {
+		return schemaValidationMaxSeverityLevel;
+	}
+
+
+	public void setSchemaValidationMaxSeverityLevel(SeverityLevel schemaValidationMaxSeverityLevel) {
+		this.schemaValidationMaxSeverityLevel = schemaValidationMaxSeverityLevel;
+	}
 }
