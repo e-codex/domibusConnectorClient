@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -28,7 +29,7 @@ import org.springframework.validation.annotation.Validated;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSMessageProperties;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSProperties;
 import eu.domibus.connector.client.filesystem.message.FSMessageDetails;
-import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
+import eu.domibus.connector.client.storage.DomibusConnectorClientStorageFileType;
 import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureMimeType;
 import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageAttachmentType;
@@ -70,7 +71,7 @@ public class DomibusConnectorClientFileSystemWriter {
 		}
 	}
 	
-	public void writeMessageFileToFileSystem(File messageFolder, String fileName, DomibusConnectorClientMessageFileType fileType, byte[] fileContent) throws DomibusConnectorClientFileSystemException {
+	public void writeMessageFileToFileSystem(File messageFolder, String fileName, DomibusConnectorClientStorageFileType fileType, byte[] fileContent) throws DomibusConnectorClientFileSystemException {
 		
 		
 		FSMessageDetails messageDetails = DomibusConnectorClientFileSystemUtil.loadMessageProperties(messageFolder, this.messageProperties.getFileName());
@@ -94,7 +95,7 @@ public class DomibusConnectorClientFileSystemWriter {
 		
 	}
 	
-	public void deleteMessageFileFromFileSystem(File messageFolder, String fileName, DomibusConnectorClientMessageFileType fileType) throws DomibusConnectorClientFileSystemException {
+	public void deleteMessageFileFromFileSystem(File messageFolder, String fileName, DomibusConnectorClientStorageFileType fileType) throws DomibusConnectorClientFileSystemException {
 		
 		FSMessageDetails messageDetails = DomibusConnectorClientFileSystemUtil.loadMessageProperties(messageFolder, this.messageProperties.getFileName());
 		
@@ -344,11 +345,13 @@ public class DomibusConnectorClientFileSystemWriter {
 			Transformer transformer = TransformerFactory.newInstance().newTransformer();
 			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
 			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 			StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
 			transformer.transform(xmlInput, xmlOutput);
-			return output.toByteArray();
-		} catch (IllegalArgumentException | TransformerException e) {
+			byte[] result = output.toByteArray();
+			return new String(result, "UTF-8").getBytes("UTF-8");
+		} catch (IllegalArgumentException | TransformerException | UnsupportedEncodingException e) {
 			throw new DomibusConnectorClientFileSystemException("Exception occured during transforming xml into byte[]", e);
 		}
 	}

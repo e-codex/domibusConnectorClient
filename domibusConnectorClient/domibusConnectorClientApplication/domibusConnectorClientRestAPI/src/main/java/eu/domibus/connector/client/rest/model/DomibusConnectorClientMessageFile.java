@@ -1,6 +1,5 @@
 package eu.domibus.connector.client.rest.model;
 
-import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
 
 public class DomibusConnectorClientMessageFile {
 

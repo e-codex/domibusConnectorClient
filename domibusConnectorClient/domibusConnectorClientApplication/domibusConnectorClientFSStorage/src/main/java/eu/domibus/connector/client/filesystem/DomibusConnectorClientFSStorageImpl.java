@@ -7,7 +7,7 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import eu.domibus.connector.client.storage.DomibusConnectorClientMessageFileType;
+import eu.domibus.connector.client.storage.DomibusConnectorClientStorageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.client.storage.exception.DomibusConnectorClientStorageException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
@@ -133,7 +133,7 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 	}
 
 	@Override
-	public Map<String, DomibusConnectorClientMessageFileType> listContentAtStorageLocation(String storageLocation) throws DomibusConnectorClientStorageException, IllegalArgumentException {
+	public Map<String, DomibusConnectorClientStorageFileType> listContentAtStorageLocation(String storageLocation) throws DomibusConnectorClientStorageException, IllegalArgumentException {
 		LOGGER.debug("#listContentAtStorageLocation: list content at storageLocation {}", storageLocation);
 		File messageFolder = checkStorageLocationAndMessageFolder(storageLocation);
 		
@@ -142,7 +142,7 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 	
 	@Override
 	public void storeFileIntoStorage(String storageLocation, String fileName,
-			DomibusConnectorClientMessageFileType fileType, byte[] content) throws DomibusConnectorClientStorageException, IllegalArgumentException {
+			DomibusConnectorClientStorageFileType fileType, byte[] content) throws DomibusConnectorClientStorageException, IllegalArgumentException {
 		LOGGER.debug("#storeFileIntoStorage: store file {} of type {} into storageLocation {}", fileName, fileType.name(), storageLocation);
 		File messageFolder = checkStorageLocationAndMessageFolder(storageLocation);
 		
@@ -154,7 +154,7 @@ public class DomibusConnectorClientFSStorageImpl implements DomibusConnectorClie
 	}
 	
 	@Override
-	public void deleteFileFromStorage(String storageLocation, String fileName, DomibusConnectorClientMessageFileType fileType) throws DomibusConnectorClientStorageException, IllegalArgumentException {
+	public void deleteFileFromStorage(String storageLocation, String fileName, DomibusConnectorClientStorageFileType fileType) throws DomibusConnectorClientStorageException, IllegalArgumentException {
 		LOGGER.debug("#deleteFileFromStorage: delete file {} of type {} from storageLocation{}", fileName, fileType.name(), storageLocation);
 		File messageFolder = checkStorageLocationAndMessageFolder(storageLocation);
 		
