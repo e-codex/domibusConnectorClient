@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
-import eu.domibus.connector.client.exception.ImplementationMissingException;
 import eu.domibus.connector.client.scheduler.configuration.DomibusConnectorClientSchedulerAutoConfiguration;
 
 @EnableConfigurationProperties
@@ -34,12 +33,7 @@ public class SubmitMessagesToConnectorJobConfiguration implements Job {
 	@Override
 	public void execute(JobExecutionContext context) throws JobExecutionException {
 		LOGGER.debug("Running SubmitMessagesToConnectorJob");
-		try {
-			submitMessagesToConnectorJob.checkClientBackendForNewMessagesAndSubmitThemToConnector();
-		} catch (ImplementationMissingException e) {
-			LOGGER.error("Exception occured while loading job SubmitMessagesToConnectorJob:", e);
-			throw new JobExecutionException(e);
-		}
+		submitMessagesToConnectorJob.checkClientBackendForNewMessagesAndSubmitThemToConnector();
 	}
 
 	@Bean(name = "submitMessagesToConnectorJob")

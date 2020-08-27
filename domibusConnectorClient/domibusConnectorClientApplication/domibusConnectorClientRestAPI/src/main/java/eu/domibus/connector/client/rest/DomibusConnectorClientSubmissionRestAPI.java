@@ -22,8 +22,17 @@ import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 @RequestMapping(DomibusConnectorClientSubmissionRestAPI.SUBMISSIONRESTSERVICE_PATH)
 public interface DomibusConnectorClientSubmissionRestAPI {
 
+	/**
+	 * This static String is the relative path where this REST service can be reached. 
+	 */
 	public static final String SUBMISSIONRESTSERVICE_PATH = "/submissionrestservice";
+	/**
+	 * This static String is the relative path where this method of this REST service can be reached.
+	 */
 	public static final String TRIGGER_CONFIRMATION_AT_CONNECTOR_CLIENT = "/triggerConfirmationAtConnectorClient";
+	/**
+	 * This static String is the relative path where this method of this REST service can be reached.
+	 */
 	public static final String SUBMIT_NEW_MESSAGE_FROM_BACKEND_TO_CONNECTOR_CLIENT = "/submitNewMessageFromBackendToConnectorClient";
 
 	/**

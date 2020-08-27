@@ -25,14 +25,19 @@
 			<directory>.</directory>
 			<outputDirectory>database</outputDirectory>
 			<excludes>
-				<exclude>*.pdf</exclude>
-				<exclude>*.sh</exclude>
 				<exclude>*/**</exclude>
 			</excludes>
 		</fileSet>
 		<fileSet>
 			<directory>.</directory>
 			<outputDirectory>messages</outputDirectory>
+			<excludes>
+				<exclude>*/**</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>.</directory>
+			<outputDirectory>lib</outputDirectory>
 			<excludes>
 				<exclude>*/**</exclude>
 			</excludes>

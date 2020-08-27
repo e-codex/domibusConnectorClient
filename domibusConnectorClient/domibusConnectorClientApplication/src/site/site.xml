@@ -32,20 +32,17 @@
 		<menu name="Architecture">
 			<item name="Architecture of ${project.name}" href="architecture.html" />
 		</menu>
-		<!-- <menu name="Package Content">
+		<menu name="Package Content">
 			<item name="Package description of ${project.name}" href="packagecontent.html" />
-		</menu> -->
+		</menu>
 		<menu name="Javadoc">
 			<item name="Aggregated apidocs of ${project.name}" href="apidocs/index.html" />
 		</menu>
 		<menu name="Configuration">
-			<item name="Aggregated Properties used in ${project.name}" href="aggregated-spring-properties.html" />
-		</menu>
-		<!-- <menu name="Installation/Configuration">
-			<item name="Installation Guide" href="install_guide.html" />
-			<item name="Configuration Guide" href="config_guide.html" />
+			<item name="Guide to configure the application" href="config_guide.html" />
 			<item name="Certificates/Keys Required" href="certs_keys.html" />
-		</menu> -->
+		</menu>
+		
 
 		<footer />
 

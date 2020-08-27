@@ -1,5 +1,12 @@
 package eu.domibus.connector.client.schema.validation;
 
+/**
+ * If the schema validation returns result other than okay, a single result per happening must be instantiated.
+ * Collected single results must be put into a {@link eu.domibus.connector.client.schema.validation.ValidationResult} object.
+ * 
+ * @author riederb
+ *
+ */
 public class SingleValidationResult {
 
     private final SeverityLevel level;

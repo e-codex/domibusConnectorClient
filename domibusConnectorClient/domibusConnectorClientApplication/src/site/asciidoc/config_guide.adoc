@@ -1,0 +1,2 @@
+== Configuration guilde for the domibusConnectorClient
+

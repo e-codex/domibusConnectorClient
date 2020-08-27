@@ -4,7 +4,7 @@
   <parent>
     <groupId>eu.domibus.connector-client</groupId>
     <artifactId>domibusConnectorClientLibraries</artifactId>
-    <version>4.2.1-SNAPSHOT</version>
+    <version>4.2.0-RC2</version>
   </parent>
   <artifactId>domibusConnectorClientScheduler</artifactId>
   <dependencies>
