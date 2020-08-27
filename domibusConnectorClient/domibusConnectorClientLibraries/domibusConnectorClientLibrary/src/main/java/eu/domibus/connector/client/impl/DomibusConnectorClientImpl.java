@@ -30,8 +30,8 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 
 @Component
-//@ConfigurationProperties(prefix = ConnectorClientAutoConfiguration.PREFIX)
-//@PropertySource("classpath:/connector-client-library-default.properties")
+@ConfigurationProperties(prefix = ConnectorClientAutoConfiguration.PREFIX)
+@PropertySource("classpath:/connector-client-library-default.properties")
 @Validated
 @Valid
 public class DomibusConnectorClientImpl implements DomibusConnectorClient {
@@ -98,6 +98,8 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 			throw e;
 		}
 
+		DomibusConnectorMessagesType mappedMessages = new DomibusConnectorMessagesType();
+		
 		if (messages!=null && !CollectionUtils.isEmpty(messages.getMessages())) {
 			LOGGER.debug("{} new messages from connector to transport to client...", messages.getMessages().size());
 			for(DomibusConnectorMessageType message:messages.getMessages()) {
@@ -106,13 +108,15 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 						prepareMessage(message, Direction.INBOUND);
 					} catch (DomibusConnectorClientException e1) {
 						LOGGER.error(e1);
+						e1.printStackTrace();
 						continue;
 					}
+					mappedMessages.getMessages().add(message);
 				}
 			}
 		}
 
-		return messages;
+		return mappedMessages;
 	}
 
 	@Override
@@ -205,12 +209,29 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 	}
 	
 	private void checkSchemaValidationResult(ValidationResult result) throws DCCSchemaValidationException {
+		LOGGER.debug("Checking schema validation results against maxSeverityLevel {}", schemaValidationMaxSeverityLevel);
 		if(schemaValidationMaxSeverityLevel!=null && !result.isOkay()) {
 			switch(schemaValidationMaxSeverityLevel) {
-			case FATAL_ERROR: if(result.isFatal())throw new DCCSchemaValidationException("ValidationResult contains results of severity level "+SeverityLevel.FATAL_ERROR.name()+" or higher!") ;
-			case ERROR:if(result.isFatal()||result.isError())throw new DCCSchemaValidationException("ValidationResult contains results of severity level "+SeverityLevel.ERROR.name()+" or higher!");
-			case WARNING:if(result.isFatal()||result.isError()||result.isWarning())throw new DCCSchemaValidationException("ValidationResult contains results of severity level "+SeverityLevel.WARNING.name()+" or higher!");
+			case FATAL_ERROR: 
+				if(result.isFatal())
+					throw new DCCSchemaValidationException("ValidationResult contains results of severity level "+SeverityLevel.FATAL_ERROR.name()+" or higher!") ;
+			case ERROR:
+				if(result.isFatal()||result.isError())
+					throw new DCCSchemaValidationException("ValidationResult contains results of severity level "+SeverityLevel.ERROR.name()+" or higher!");
+			case WARNING:
+				if(result.isFatal()||result.isError()||result.isWarning())
+					throw new DCCSchemaValidationException("ValidationResult contains results of severity level "+SeverityLevel.WARNING.name()+" or higher!");
 			}
 		}
+	}
+
+
+	public SeverityLevel getSchemaValidationMaxSeverityLevel() {
+		return schemaValidationMaxSeverityLevel;
+	}
+
+
+	public void setSchemaValidationMaxSeverityLevel(SeverityLevel schemaValidationMaxSeverityLevel) {
+		this.schemaValidationMaxSeverityLevel = schemaValidationMaxSeverityLevel;
 	}
 }

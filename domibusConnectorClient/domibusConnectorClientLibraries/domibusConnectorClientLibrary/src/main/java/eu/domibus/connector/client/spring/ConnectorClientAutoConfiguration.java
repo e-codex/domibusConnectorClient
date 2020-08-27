@@ -3,7 +3,6 @@ package eu.domibus.connector.client.spring;
 
 import javax.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
@@ -23,6 +22,14 @@ import eu.domibus.connector.client.schema.validation.SeverityLevel;
 @Valid
 public class ConnectorClientAutoConfiguration {
 
+	public SeverityLevel getSchemaValidationMaxSeverityLevel() {
+		return schemaValidationMaxSeverityLevel;
+	}
+
+	public void setSchemaValidationMaxSeverityLevel(SeverityLevel schemaValidationMaxSeverityLevel) {
+		this.schemaValidationMaxSeverityLevel = schemaValidationMaxSeverityLevel;
+	}
+
 	public static final String PREFIX = "connector-client.library";
 	
 	@Nullable
@@ -40,8 +47,5 @@ public class ConnectorClientAutoConfiguration {
 //    	return new DomibusConnectorClientContentMapperDefaultImpl();
 //    }
 
-	
-
-    
 
 }
