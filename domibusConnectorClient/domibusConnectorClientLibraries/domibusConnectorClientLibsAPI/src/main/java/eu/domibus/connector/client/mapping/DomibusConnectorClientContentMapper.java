@@ -6,7 +6,7 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 /**
  * Interface with methods to map the businessContent of a {@link DomibusConnectorMessageType} message. 
  * The businessContent is placed inside the {@link DomibusConnectorMessageContentType} of a message.
- * Inheritance must be configured.
+ * If implemented and the implementation is on the classpath, then it will be instantiated automatically.
  * 
  * @author riederb
  * 

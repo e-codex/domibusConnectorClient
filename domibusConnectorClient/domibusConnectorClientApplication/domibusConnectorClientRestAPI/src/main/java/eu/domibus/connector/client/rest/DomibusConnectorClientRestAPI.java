@@ -27,6 +27,9 @@ import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
 @RequestMapping(DomibusConnectorClientRestAPI.RESTSERVICE_PATH)
 public interface DomibusConnectorClientRestAPI {
 
+	/**
+	 * This static String is the relative path where this REST service can be reached. 
+	 */
 	public static final String RESTSERVICE_PATH = "/restservice";
 
 	/**

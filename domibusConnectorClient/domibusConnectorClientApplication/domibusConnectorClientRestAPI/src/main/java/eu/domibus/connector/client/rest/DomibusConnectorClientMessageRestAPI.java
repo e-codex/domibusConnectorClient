@@ -15,8 +15,17 @@ import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
 @RequestMapping(DomibusConnectorClientMessageRestAPI.MESSAGERESTSERVICE_PATH)
 public interface DomibusConnectorClientMessageRestAPI {
 
+	/**
+	 * This static String is the relative path where this REST service can be reached. 
+	 */
 	public static final String MESSAGERESTSERVICE_PATH = "/messagerestservice";
+	/**
+	 * This static String is the relative path where this method of this REST service can be reached.
+	 */
 	public static final String REQUEST_REJECTED_OR_CONFIRMED_MESSAGES_FROM_CONNECTOR_CLIENT = "/requestRejectedOrConfirmedMessagesFromConnectorClient";
+	/**
+	 * This static String is the relative path where this method of this REST service can be reached.
+	 */
 	public static final String REQUEST_NEW_MESSAGES_FROM_CONNECTOR_CLIENT = "/requestNewMessagesFromConnectorClient";
 
 	/**
