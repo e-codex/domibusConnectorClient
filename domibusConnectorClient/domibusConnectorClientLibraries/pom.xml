@@ -133,7 +133,7 @@
           <excludePackageNames>eu.domibus.connector.client.ui*</excludePackageNames>
         </configuration>
       </plugin>
-      <plugin>
+     <!--  <plugin>
         <groupId>eu.ecodex.connector.utils.property-reporting</groupId>
         <artifactId>spring-properties-reporting-plugin</artifactId>
         <reportSets>
@@ -158,7 +158,7 @@
             </includedDependency>
           </includedDependencies>
         </configuration>
-      </plugin>
+      </plugin> -->
     </plugins>
   </reporting>
 </project>

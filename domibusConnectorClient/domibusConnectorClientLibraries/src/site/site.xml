@@ -39,7 +39,7 @@
 			<item name="Aggregated apidocs of ${project.name}" href="apidocs/index.html" />
 		</menu>
 		<menu name="Configuration">
-			<item name="Aggregated Properties used in ${project.name}" href="aggregated-spring-properties.html" />
+			<item name="Configuration Properties used in ${project.name}" href="configuration.html" />
 		</menu>
 
 		<footer />
