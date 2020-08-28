@@ -70,9 +70,9 @@ To use this library, also the *domibusConnectorClientWSLink* needs to be on the 
 * *DomibusConnectorClientMessageBuilderImpl* 
 ** Implements  link:apidocs/eu/domibus/connector/client/DomibusConnectorClientMessageBuilder.html[*DomibusConnectorClientMessageBuilder*,window=_tab] 
 ** Helps to create transition messages.
-* *DomibusConnectorClientContentMapperDefaultImpl*
-** Implements link:apidocs/eu/domibus/connector/client/DomibusConnectorClientContentMapper.html[*DomibusConnectorClientContentMapper*,window="_tab"] 
-** If no mapping of business content is required, this default implementation is sufficient. It validates if the business content of a message is set.
+* *DomibusConnectorClientMessageHandlerImpl*
+** Implements link:apidocs/eu/domibus/connector/client/DomibusConnectorClientMessageHandler.html[*DomibusConnectorClientMessageHandler*,window="_tab"] 
+** Prepares a message's business content XML. Depending on the direction of the message, it calls international/local schema validator, content mapper and local/international schema validator.
 * *DomibusConnectorClientImpl* 
 ** Implements link:apidocs/eu/domibus/connector/client/DomibusConnectorClient.html[*DomibusConnectorClient*,window="_tab"]
 ** Main implementation class of this library. Calls the domibusConnectorClientWSLink library to receive messages from the domibusConnector and submits messages to the domibusConnector. 

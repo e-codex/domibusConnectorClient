@@ -42,7 +42,6 @@
 
 		<menu name="Distributions">
 			<item name="domibusConnectorClient-Application" href="domibusConnectorClientApplication/index.html" />
-			<item name="domibusConnectorClient-UI" href="domibusConnectorClientVaadinUI/index.html" />
 			<item name="domibusConnectorClient-Libraries" href="domibusConnectorClientLibraries/index.html" />
 		</menu>
 

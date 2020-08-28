@@ -1,3 +1,11 @@
+== Configuration properties of the domibusConnectorClient-Libraries
+
+If the libraries contributed in this package are integrated into an application, the following configuration properties need to be available within the application context.
+If default values are set, those are also set as values for the properties described.
+Some properties described only have placeholders set as values:
+
+[source,properties]
+----
 
 ############# domibusConnectorClientWSLink ##############
 
@@ -5,10 +13,10 @@
 connector-client.connector-link.ws.connectorAddress=http://<url>:<port>/<contextpath>
 
 #Name of the alias of the key that the domibusConnectorClient shall encrypt messages to the connector with
-connector-client.connector-link.ws.cxf.encryptAlias=connector
+connector-client.connector-link.ws.cxf.encryptAlias=
 
 #boolean property to indicate wether the domibusConnector can push messages to the client.
-connector-client.connector-link.ws.pushEnabled=true
+connector-client.connector-link.ws.pushEnabled=false
 
 #properties to configure the keystore. Must contain the private key the client uses to sign/decrypt messages
 connector-client.connector-link.ws.cxf.keyStore.path=file:<full path to the keystore>
@@ -21,6 +29,13 @@ connector-client.connector-link.ws.cxf.trustStore.path=file:<full path to the tr
 connector-client.connector-link.ws.cxf.trustStore.password=
 
 
+############# domibusConnectorClientLibrary ##############
+
+#If the interfaces for schema validation are implemented, this property defines at which state of result the message should be declined.
+#Possible values are FATAL_ERROR, ERROR, WARNING
+connector-client.library.schemaValidationMaxSeverityLevel=
+
+
 ############# domibusConnectorClientScheduler ##############
 
 #properties to configure the time-triggered job to get messages from the domibusConnector. Not necessary if client is configured as pushEnabled.
@@ -31,3 +46,5 @@ connector-client.scheduler.get-messages-from-connector-job.repeatInterval=30s
 connector-client.scheduler.submit-messages-to-connector-job.enabled=false
 connector-client.scheduler.submit-messages-to-connector-job.repeatInterval=30s
 
+
+----

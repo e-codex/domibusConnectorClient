@@ -38,9 +38,10 @@
 		<menu name="Javadoc">
 			<item name="Aggregated apidocs of ${project.name}" href="apidocs/index.html" />
 		</menu>
-		<menu name="Configuration">
+		<menu name="Configuration/Installation">
 			<item name="Guide to configure the application" href="config_guide.html" />
 			<item name="Certificates/Keys Required" href="certs_keys.html" />
+			<item name="Guide to install the application" href="install_guide.html" />
 		</menu>
 		
 

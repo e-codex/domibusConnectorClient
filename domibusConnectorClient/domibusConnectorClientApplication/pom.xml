@@ -35,21 +35,7 @@
       <artifactId>domibusConnectorClientLibsAPI</artifactId>
       <version>${project.version}</version>
     </dependency>
-    <!-- <dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>domibusConnectorClientLibrary</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>domibusConnectorClientScheduler</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>domibusConnectorClientWSLink</artifactId>
-			<version>${project.version}</version>
-		</dependency> -->
+ 
   </dependencies>
   <build>
     <plugins>
@@ -127,35 +113,7 @@
           <excludePackageNames>eu.domibus.connector.client.ui*</excludePackageNames>
         </configuration>
       </plugin>
-      <plugin>
-        <groupId>eu.ecodex.connector.utils.property-reporting</groupId>
-        <artifactId>spring-properties-reporting-plugin</artifactId>
-        <reportSets>
-          <reportSet>
-            <id>aggregate-properties</id>
-            <reports>
-              <report>aggregate</report>
-            </reports>
-          </reportSet>
-        </reportSets>
-        <configuration>
-          <linkJavadoc>true</linkJavadoc>
-          <includedDependencies>
-            <!-- <includedDependency>
-							<groupId>^org.springframework</groupId>
-						</includedDependency> -->
-            <!-- <includedDependency>
-							<groupId>^eu.domibus</groupId>
-						</includedDependency> -->
-            <includedDependency>
-              <groupId>eu.domibus.connector-client</groupId>
-            </includedDependency>
-            <includedDependency>
-              <groupId>^eu.ecodex.utils</groupId>
-            </includedDependency>
-          </includedDependencies>
-        </configuration>
-      </plugin>
+    
     </plugins>
   </reporting>
 </project>

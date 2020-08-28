@@ -36,7 +36,7 @@ The controller is the module that knows all the other modules. The main features
 * It loads the embedded database used by the domibusConnectorClient and holds the model of this database. This database is stored in a file that can be configured.
 * It controls the usage of the domibusConnectorClient libraries used to communicate with the domibusConnector.
 * The controller communicates with the storage module.
-* The default implementation of the REST service provided by the domibusConnectorClientRestAPI is also part of the controller.
+* The default implementation of the REST services provided by the domibusConnectorClientRestAPI is also part of the controller.
 * There are 2 additional timer jobs within the controller:
 ** AutoConfirmMessagesJob queries the database if messages that have been received have not been confirmed yet. For the resulting messages the job triggers the domibusConnector to produce and send such a confirmation.
 ** UpdateStorageStatusJob validates if messages that are stored in the database of the domibusConnectorClient still exist in the storage by consulting the storage module and updates the storage status of messages within the database.
@@ -60,7 +60,14 @@ Diagram: domibusConnectorClientRestAPI
 image::images/domibusConnectorClientRestAPI.png[domibusConnectorClientRestAPI,300,200]
 
 ==== Description
-The REST API of the domibusConnectorClient-Application allows other applications to use functionalities of the client. It also provides the interface the domibusConnectorClient-UI uses. That way, implementers can develop their own user interface for the domibusConnectorClient. A prominent example is the Central Testing Platform (CTP) of e-CODEX.
+* *DomibusConnectorClientRestAPI* 
+** Allows other applications to use functionalities of the client. It also provides the interface the domibusConnectorClient-UI uses. That way, implementers can develop their own user interface for the domibusConnectorClient. A prominent example is the Central Testing Platform (CTP) of e-CODEX.
+* *DomibusConnectorClientMessageRestAPI* 
+** Interface provided as a REST service to let backend applications pull messages and confirmations from the domibusConnectorClient-Application.
+* *DomibusConnectorClientSubmissionRestAPI* 
+** Interface provided as a REST service to let backend applications push messages or trigger confirmations to the domibusConnectorClient-Application.
+* *DomibusConnectorDeliveryRestClientAPI* 
+** Interface implemented as a REST client. If a backend application provides a REST service that implements the methods of this interface, the domibusConnectorClient-Application can push new messages and confirmations towards this REST service. Requires additional configuration properties described in the link:config_guide.html[configuration guide].
 
 === domibusConnectorClientStarter
 
