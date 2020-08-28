@@ -4,8 +4,8 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 /**
  * Interface that may be implemented to validate a messages' business content against a schema.
- * Is extended by {@link eu.domibus.connector.client.schema.DCCInternationalSchemaValidator} and 
- * {@link eu.domibus.connector.client.schema.DCCLocalSchemaValidator}
+ * Is extended by {@link eu.domibus.connector.client.schema.validation.DCCInternationalSchemaValidator} and 
+ * {@link eu.domibus.connector.client.schema.validation.DCCLocalSchemaValidator}
  * 
  * @author riederb
  *
