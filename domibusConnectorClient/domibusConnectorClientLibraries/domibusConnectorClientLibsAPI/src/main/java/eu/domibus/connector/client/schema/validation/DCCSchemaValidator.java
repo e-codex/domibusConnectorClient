@@ -4,19 +4,20 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 /**
  * Interface that may be implemented to validate a messages' business content against a schema.
- * If an implementation is present, it is called when a message is submitted or received before the content mapping takes place.
+ * Is extended by {@link eu.domibus.connector.client.schema.validation.DCCInternationalSchemaValidator} and 
+ * {@link eu.domibus.connector.client.schema.validation.DCCLocalSchemaValidator}
  * 
  * @author riederb
  *
  */
-public interface DCCBeforeMappingSchemaValidator {
-	
+public interface DCCSchemaValidator {
+
 	/**
-	 * Method to validate the business content XML before the mapping takes place.
+	 * Method to validate the business content XML.
 	 * 
 	 * @param message - The message object holding the business content XML at message/MessageContent/contentXML
 	 * 
 	 * @return a ValidationResult holding single results.
 	 */
-	ValidationResult validateBusinessContentBeforeMapping(DomibusConnectorMessageType message);
+	ValidationResult validateBusinessContentXML(DomibusConnectorMessageType message);
 }
