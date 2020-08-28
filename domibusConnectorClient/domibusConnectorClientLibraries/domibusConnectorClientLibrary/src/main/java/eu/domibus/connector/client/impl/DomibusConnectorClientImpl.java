@@ -9,7 +9,6 @@ import org.springframework.util.CollectionUtils;
 
 import eu.domibus.connector.client.DomibusConnectorClient;
 import eu.domibus.connector.client.DomibusConnectorClientMessageHandler;
-import eu.domibus.connector.client.DomibusConnectorClientMessageHandler.Direction;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.link.DomibusConnectorClientLink;
 import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
@@ -34,7 +33,7 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 		 	MDC.put("backendmessageid", message.getMessageDetails().getBackendMessageId());
 	        DomibsConnectorAcknowledgementType domibusConnectorAckType = null;
 	        
-	       messageHandler.prepareMessage(message, Direction.OUTBOUND);
+	       messageHandler.prepareOutboundMessage(message);
 	        
 	        try {
 	            domibusConnectorAckType = clientService.submitMessageToConnector(message);
@@ -75,7 +74,7 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 			for(DomibusConnectorMessageType message:messages.getMessages()) {
 				if(message.getMessageContent()!=null) {
 					try {
-						messageHandler.prepareMessage(message, Direction.INBOUND);
+						messageHandler.prepareInboundMessage(message);
 					} catch (DomibusConnectorClientException e1) {
 						LOGGER.error(e1);
 						e1.printStackTrace();

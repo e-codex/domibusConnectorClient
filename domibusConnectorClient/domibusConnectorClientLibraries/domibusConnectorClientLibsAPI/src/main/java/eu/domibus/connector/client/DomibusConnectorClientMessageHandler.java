@@ -11,24 +11,29 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
  */
 public interface DomibusConnectorClientMessageHandler {
 
-	/**
-	 * Indicates wether a message is INBOUND (delivered from domibusConnector) or OUTBOUND (to be submitted to domibusConnector).
-	 * @author riederb
-	 *
-	 */
-	public enum Direction{INBOUND,OUTBOUND};
 	
 	/**
-	 * Method to prepare a messages' business content XML to be submitted or delivered.
-	 * First, the implementation of {@link eu.domibus.connector.client.schema.validation.DCCBeforeMappingSchemaValidator} is called if present.
+	 * Method to prepare a messages' business content XML to be delivered to the backend.
+	 * First, the implementation of {@link eu.domibus.connector.client.schema.validation.DCCInternationalSchemaValidator} is called if present.
 	 * Then, the message is mapped calling the implementation of {@link eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapper} if present. 
-	 * Last, the message gets again validated with an implementation of {@link eu.domibus.connector.client.schema.validation.DCCAfterMappingSchemaValidator} if present.
+	 * Last, the message gets again validated with an implementation of {@link eu.domibus.connector.client.schema.validation.DCCLocalSchemaValidator} if present.
 	 * 
-	 * @param message
-	 * @param direction
+	 * @param message - The message object holding the business content XML at message/MessageContent/contentXML
 	 * @throws DomibusConnectorClientException
 	 */
-	void prepareMessage(DomibusConnectorMessageType message, Direction direction)
+	void prepareInboundMessage(DomibusConnectorMessageType message)
+			throws DomibusConnectorClientException;
+	
+	/**
+	 * Method to prepare a messages' business content XML to be submitted to the domibusConnector.
+	 * First, the implementation of {@link eu.domibus.connector.client.schema.validation.DCCInternationalSchemaValidator} is called if present.
+	 * Then, the message is mapped calling the implementation of {@link eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapper} if present. 
+	 * Last, the message gets again validated with an implementation of {@link eu.domibus.connector.client.schema.validation.DCCLocalSchemaValidator} if present.
+	 * 
+	 * @param message - The message object holding the business content XML at message/MessageContent/contentXML
+	 * @throws DomibusConnectorClientException
+	 */
+	void prepareOutboundMessage(DomibusConnectorMessageType message)
 			throws DomibusConnectorClientException;
 
 }

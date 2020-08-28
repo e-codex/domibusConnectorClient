@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import eu.domibus.connector.client.DomibusConnectorClientBackend;
 import eu.domibus.connector.client.DomibusConnectorClientMessageHandler;
-import eu.domibus.connector.client.DomibusConnectorClientMessageHandler.Direction;
 import eu.domibus.connector.client.DomibusConnectorDeliveryClient;
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
@@ -36,7 +35,7 @@ public class DomibusConnectorDeliveryClientImpl implements DomibusConnectorDeliv
 	public void receiveDeliveredMessageFromConnector(DomibusConnectorMessageType message)
 			throws DomibusConnectorClientException {
 		LOGGER.info("#receiveDeliveredMessageFromConnector: received new message from connector via push.");
-		messageHandler.prepareMessage(message, Direction.INBOUND);
+		messageHandler.prepareInboundMessage(message);
 		
 		try {
 			clientBackend.deliverNewMessageToClientBackend(message);
