@@ -35,7 +35,6 @@
       <artifactId>domibusConnectorClientLibsAPI</artifactId>
       <version>${project.version}</version>
     </dependency>
- 
   </dependencies>
   <build>
     <plugins>
@@ -113,7 +112,6 @@
           <excludePackageNames>eu.domibus.connector.client.ui*</excludePackageNames>
         </configuration>
       </plugin>
-    
     </plugins>
   </reporting>
 </project>
