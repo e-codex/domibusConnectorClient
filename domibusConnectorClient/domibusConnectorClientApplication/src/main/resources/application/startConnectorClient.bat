@@ -15,13 +15,13 @@ set "CURRENT_DIR=%cd%"
 
 set "CONNECTOR_CLIENT_BASE_PATH=%CURRENT_DIR%"
 
-set "CLASSPATH=%CURRENT_DIR%\bin\*;%CURRENT_DIR%\lib\*"
+set "CLASSPATH=%CURRENT_DIR%\bin\*"
 echo %CLASSPATH%
 
 title "DomibusConnectorClient"
 
 
 @echo on
-"%JAVA_HOME%\bin\java" -cp "%CLASSPATH%" -Dconnector-client.properties="config\connector-client.properties" "org.springframework.boot.loader.PropertiesLauncher" 
+"%JAVA_HOME%\bin\java" -Dloader.path=%CURRENT_DIR%\lib -cp "%CLASSPATH%" -Dconnector-client.properties="config\connector-client.properties" "org.springframework.boot.loader.PropertiesLauncher" 
 pause
 :end
