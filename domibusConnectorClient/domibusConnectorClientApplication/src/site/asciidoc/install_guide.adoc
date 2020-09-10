@@ -70,7 +70,7 @@ The domibusConnectorClient-Application can be connected to its corresponding dom
 * push/pull mode means that the domibusConnectorClient pushed messages to the domibusConnector, but new messages need to be pulled from the domibusConnector.
 
 ==== Push/push mode
-To be able to have a push/push communication with the domibusConnector, the domibusConnectorClient must provide a SOAP service implementing the link:apidocs/eu/domibus/connector/ws/backend/delivery/webservice/DomibusConnectorBackendDeliveryWebService.html[*DomibusConnectorClientMessageRestAPI*,window="_tab"] interface. If configure properly, the domibusConnectorClient does this automatically.
+To be able to have a push/push communication with the domibusConnector, the domibusConnectorClient must provide a SOAP service implementing the link:apidocs/eu/domibus/connector/ws/backend/delivery/webservice/DomibusConnectorBackendDeliveryWebService.html[*DomibusConnectorBackendDeliveryWebService*,window="_tab"] interface. If configure properly, the domibusConnectorClient does this automatically.
 
 The following steps need to be done:
 
