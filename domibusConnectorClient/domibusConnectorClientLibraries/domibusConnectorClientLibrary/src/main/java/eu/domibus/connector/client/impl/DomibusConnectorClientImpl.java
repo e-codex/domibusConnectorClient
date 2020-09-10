@@ -80,8 +80,8 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 						e1.printStackTrace();
 						continue;
 					}
-					mappedMessages.getMessages().add(message);
 				}
+				mappedMessages.getMessages().add(message);
 			}
 		}
 
