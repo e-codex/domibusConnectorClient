@@ -63,6 +63,54 @@ CREATE SEQUENCE IF NOT EXISTS CLIENT_CONFIRMATION_SEQ start with 100 increment b
 
 If this is not possible as the target DBMS does not support features of the script (like sequences), adapt the script and execute it BEFORE the first startup.
 
+=== Push/push vs push/pull mode
+The domibusConnectorClient-Application can be connected to its corresponding domibusConnector in two ways:
+
+* push/push mode means that the domibusConnectorClient pushed messages to the domibusConnector and the domibusConnector can push messages directly to the domibusConnectorClient.
+* push/pull mode means that the domibusConnectorClient pushed messages to the domibusConnector, but new messages need to be pulled from the domibusConnector.
+
+==== Push/push mode
+To be able to have a push/push communication with the domibusConnector, the domibusConnectorClient must provide a SOAP service implementing the link:apidocs/eu/domibus/connector/ws/backend/delivery/webservice/DomibusConnectorBackendDeliveryWebService.html[*DomibusConnectorClientMessageRestAPI*,window="_tab"] interface. If configure properly, the domibusConnectorClient does this automatically.
+
+The following steps need to be done:
+
+Enable push in properties:
+[source,properties]
+----
+connector-client.connector-link.ws.pushEnabled=true
+----
+
+Disable timer job to pull messages from the connector:
+[source,properties]
+----
+connector-client.scheduler.get-messages-from-connector-job.enabled=false
+----
+
+When starting the client, the DomibusConnectorDeliveryWebService will be provided by CXF. The exact address including context that you have to configure on the domibusConnector backend can be seen at:
+[source,properties]
+----
+http:// <url>:<port>/services
+----
+
+Be aware, that you have to configure the domibusConnectorClient also as a push backend at the domibusConnector.
+
+==== Push/pull mode
+If you want the domibusConnectorClient to pull messages from the domibusConnector, please configure the following:
+
+Disable push in properties:
+[source,properties]
+----
+connector-client.connector-link.ws.pushEnabled=false
+----
+
+Enable timer job to pull messages from the connector:
+[source,properties]
+----
+connector-client.scheduler.get-messages-from-connector-job.enabled=false
+connector-client.scheduler.get-messages-from-connector-job.repeatInterval=30s
+----
+
+
 === Backend application vs standalone usage
 The domibusConnectorClient-Application is designed to work either as a standalone client, or with a backend application.
 
@@ -101,9 +149,11 @@ If the backend application is connected in push/pull mode (the control of gettin
 
 * *DomibusConnectorClientMessageRestAPI*
 ** link:apidocs/eu/domibus/connector/client/rest/DomibusConnectorClientMessageRestAPI.html[*DomibusConnectorClientMessageRestAPI*,window="_tab"] 
+** Path to service: http:// <url>:<port>/messagerestservice
 ** to request new messages and confirmations
 * *DomibusConnectorClientSubmissionRestAPI*
 ** link:apidocs/eu/domibus/connector/client/rest/DomibusConnectorClientSubmissionRestAPI.html[*DomibusConnectorClientSubmissionRestAPI*,window="_tab"] 
+** Path to service: http:// <url>:<port>/submissionrestservice
 ** to submit messages and trigger confirmations.
 
 The connector client may also be configured to push messages and confirmations after procession to a backend application directly.
@@ -126,3 +176,4 @@ To use those mechanisms, the interfaces link:apidocs/eu/domibus/connector/client
 === User interface (UI)
 There is a standard user interface available for the domibusConnectorClient-Application. It is the "domibusConnectorClient-UI" distribution available at the same repository as the domibusConnectorClient-Application. 
 Though, an own user interface may be developed. The REST service link:apidocs/eu/domibus/connector/client/rest/DomibusConnectorClientRestAPI.html[*DomibusConnectorClientRestAPI*,window="_tab"] is designed to interact with a user interface. This service is also used by the standard user interface.
+The address of this REST service is http:// <url>:<port>/restservice
