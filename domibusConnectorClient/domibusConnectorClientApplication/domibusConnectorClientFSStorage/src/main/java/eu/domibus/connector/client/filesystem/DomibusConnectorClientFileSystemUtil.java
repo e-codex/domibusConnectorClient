@@ -63,6 +63,8 @@ public class DomibusConnectorClientFileSystemUtil {
 		 		throw new DomibusConnectorClientFileSystemException("Neither ebmsId nor backendMessageId set in message!");
 		 	}
 		 	
+		 	
+		 	
 			String fromPartyId = message.getMessageDetails().getFromParty().getPartyId();
 			if(StringUtils.isEmpty(fromPartyId)) {
 				throw new DomibusConnectorClientFileSystemException("No fromPartyId set in message!");
@@ -78,7 +80,7 @@ public class DomibusConnectorClientFileSystemUtil {
 						.append("-")
 						.append(toPartyId)
 						.append("-")
-						.append(messageId)
+						.append(messageId.replaceAll("[\\\\/:*?\"<>|]", "_"))
 						.toString();
 		}
 
