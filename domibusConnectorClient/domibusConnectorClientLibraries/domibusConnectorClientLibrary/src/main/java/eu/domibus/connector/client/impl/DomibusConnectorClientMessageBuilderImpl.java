@@ -120,8 +120,7 @@ public class DomibusConnectorClientMessageBuilderImpl implements DomibusConnecto
 	public DomibusConnectorMessageType addBusinessContentXMLAsBinary(DomibusConnectorMessageType message,
 			byte[] businessContent) {
 		
-		StreamSource streamSource = new StreamSource(new ByteArrayInputStream(
-				Arrays.copyOf(businessContent, businessContent.length)));
+		StreamSource streamSource = new StreamSource(new ByteArrayInputStream(businessContent));
 		
 		return addBusinessContentXMLAsStream(message, streamSource);
 	}

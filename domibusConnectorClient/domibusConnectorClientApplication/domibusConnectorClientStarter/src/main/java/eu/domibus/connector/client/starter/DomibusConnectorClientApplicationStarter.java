@@ -114,7 +114,10 @@ public class DomibusConnectorClientApplicationStarter extends SpringBootServletI
 	                throw new RuntimeException(errorString);
 	            }
 	            try {
-	                p.load(new FileInputStream(connectorConfigFilePath.toFile()));
+	            	
+	                FileInputStream fileInputStream = new FileInputStream(connectorConfigFilePath.toFile());
+					p.load(fileInputStream);
+					fileInputStream.close();
 	                return p;
 	            } catch (IOException e) {
 	                throw new RuntimeException(String.format("Cannot load properties from file [%s], is it a valid and readable properties file?", connectorConfigFilePath), e);

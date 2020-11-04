@@ -20,6 +20,7 @@ public class FSMessageDetails {
         
         try (FileInputStream fileInputStream = new FileInputStream(messagePropertiesFile)) {            
             messageDetails.load(fileInputStream);
+            fileInputStream.close();
         } catch (IOException e1) {
             throw new RuntimeException(e1);
         }

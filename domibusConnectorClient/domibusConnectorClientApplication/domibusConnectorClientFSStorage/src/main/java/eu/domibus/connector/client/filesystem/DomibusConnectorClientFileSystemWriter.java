@@ -1,25 +1,14 @@
 package eu.domibus.connector.client.filesystem;
 
-import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStreamWriter;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.activation.DataHandler;
 import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
-import javax.xml.transform.OutputKeys;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
-import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.stream.StreamResult;
+import javax.xml.transform.TransformerFactoryConfigurationError;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -37,6 +26,7 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmatio
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageContentType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
+import eu.domibus.connector.domain.transition.tools.ConversionTools;
 
 @Component
 //@ConfigurationProperties(prefix = DomibusConnectorClientFSStorageConfiguration.PREFIX)
@@ -63,7 +53,7 @@ public class DomibusConnectorClientFileSystemWriter {
 		LOGGER.debug("Create confirmation file {}", path);
 		File evidenceXml = new File(path);
 		try {
-			byte[] xmlBytes = sourceToByteArray(confirmation.getConfirmation());
+			byte[] xmlBytes = ConversionTools.convertXmlSourceToByteArray(confirmation.getConfirmation());
 			byteArrayToFile(xmlBytes, evidenceXml);
 		} catch (IOException e) {
 			throw new DomibusConnectorClientFileSystemException("Could not create file "
@@ -165,7 +155,7 @@ public class DomibusConnectorClientFileSystemWriter {
 				msgProps.getMessageDetails().put(messageProperties.getContentPdfFileName(), fileName);
 				byte[] document;
 				try {
-					document = dataHandlerToBytes(messageContent.getDocument().getDocument());
+					document = ConversionTools.convertDataHandlerToByteArray(messageContent.getDocument().getDocument());
 					createFile(messageFolder, fileName, document);
 				} catch (IOException e) {
 					LOGGER.error("Could not process business document file {} at messageFolder {}", fileName, messageFolder.getAbsolutePath(), e);
@@ -200,10 +190,13 @@ public class DomibusConnectorClientFileSystemWriter {
 				String fileName = action != null ? action + properties.getXmlFileExtension()
 						: properties.getDefaultXmlFileName();
 				try {
-					byte[] content = sourceToByteArray(messageContent.getXmlContent());
+					byte[] content = ConversionTools.convertXmlSourceToByteArray(messageContent.getXmlContent());
+					if(LOGGER.isDebugEnabled()) {
+						LOGGER.debug("Business content XML before written to file: {}", new String(content));
+					}
 					msgProps.getMessageDetails().put(messageProperties.getContentXmlFileName(),fileName);
 					createFile(messageFolder, fileName, content);
-				}catch(DomibusConnectorClientFileSystemException | IOException e) {
+				}catch(IOException | TransformerFactoryConfigurationError e) {
 					LOGGER.error("Could not process business content file {} at messageFolder {}", fileName, messageFolder.getAbsolutePath(), e);
 				}
 			}
@@ -214,7 +207,7 @@ public class DomibusConnectorClientFileSystemWriter {
 		if (message.getMessageAttachments() != null) {
 			for (DomibusConnectorMessageAttachmentType attachment : message.getMessageAttachments()) {
 				try {
-					byte[] attachmentBytes = dataHandlerToBytes(attachment.getAttachment());
+					byte[] attachmentBytes = ConversionTools.convertDataHandlerToByteArray(attachment.getAttachment());
 					createFile(messageFolder, attachment.getName(), attachmentBytes);
 				} catch (IOException e) {
 					LOGGER.error("Could not process business attachment file {} at messageFolder {}", attachment.getName(), messageFolder.getAbsolutePath(), e);
@@ -227,7 +220,7 @@ public class DomibusConnectorClientFileSystemWriter {
 				String fileName = confirmation.getConfirmationType().name()
 						+ properties.getXmlFileExtension();
 				try {
-					byte[] confirmationBytes = sourceToByteArray(confirmation.getConfirmation());
+					byte[] confirmationBytes = ConversionTools.convertXmlSourceToByteArray(confirmation.getConfirmation());
 					createFile(messageFolder, fileName, confirmationBytes);
 				} catch (IOException e) {
 					LOGGER.error("Could not process confirmation file {} at messageFolder {}",fileName, messageFolder.getAbsolutePath(), e);
@@ -333,28 +326,28 @@ public class DomibusConnectorClientFileSystemWriter {
 		fos.close();
 	}
 
-	private byte[] dataHandlerToBytes(DataHandler dh) throws IOException {
-		InputStream is = dh.getInputStream();
-		byte[] b = new byte[is.available()];
-		is.read(b);
-		return b;
-	}
+//	private byte[] dataHandlerToBytes(DataHandler dh) throws IOException {
+//		InputStream is = dh.getInputStream();
+//		byte[] b = new byte[is.available()];
+//		is.read(b);
+//		return b;
+//	}
 
-	private @NotNull byte[] sourceToByteArray(@NotNull Source xmlInput) throws DomibusConnectorClientFileSystemException {
-		try {
-			Transformer transformer = TransformerFactory.newInstance().newTransformer();
-			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-			ByteArrayOutputStream output = new ByteArrayOutputStream();
-			StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
-			transformer.transform(xmlInput, xmlOutput);
-			byte[] result = output.toByteArray();
-			return new String(result, "UTF-8").getBytes("UTF-8");
-		} catch (IllegalArgumentException | TransformerException | UnsupportedEncodingException e) {
-			throw new DomibusConnectorClientFileSystemException("Exception occured during transforming xml into byte[]", e);
-		}
-	}
+//	private @NotNull byte[] sourceToByteArray(@NotNull Source xmlInput) throws DomibusConnectorClientFileSystemException {
+//		try {
+//			Transformer transformer = TransformerFactory.newInstance().newTransformer();
+//			transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+//			transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+//			transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+//			ByteArrayOutputStream output = new ByteArrayOutputStream();
+//			StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
+//			transformer.transform(xmlInput, xmlOutput);
+//			byte[] result = output.toByteArray();
+//			return new String(result, "UTF-8").getBytes("UTF-8");
+//		} catch (IllegalArgumentException | TransformerException | UnsupportedEncodingException e) {
+//			throw new DomibusConnectorClientFileSystemException("Exception occured during transforming xml into byte[]", e);
+//		}
+//	}
 
 	private File createMessageFolder(DomibusConnectorMessageType message, File messagesDir, boolean createIfNonExistent) throws DomibusConnectorClientFileSystemException {
 

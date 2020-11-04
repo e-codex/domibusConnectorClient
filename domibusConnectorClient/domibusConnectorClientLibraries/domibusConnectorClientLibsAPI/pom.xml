@@ -10,7 +10,7 @@
   <dependencies>
     <dependency>
       <groupId>eu.domibus.connector</groupId>
-      <artifactId>domibusConnectorAPI</artifactId>
+      <artifactId>domibusConnectorAPIlib</artifactId>
       <exclusions>
         <exclusion>
           <artifactId>commons-io</artifactId>

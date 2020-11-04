@@ -200,19 +200,19 @@ public class WsLinkAutoConfiguration {
 	        message.setContent(InputStream.class, bin);
 	    }
 	    
-	    private @NotNull byte[] sourceToByteArray(@NotNull Source xmlInput) {
-			try {
-				Transformer transformer = TransformerFactory.newInstance().newTransformer();
-				transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-				transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-				ByteArrayOutputStream output = new ByteArrayOutputStream();
-				StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
-				transformer.transform(xmlInput, xmlOutput);
-				return output.toByteArray();
-			} catch (IllegalArgumentException | TransformerException e) {
-//				throw new DomibusConnectorClientFileSystemException("Exception occured during transforming xml into byte[]", e);
-			}
-			return null;
-		}
+//	    private @NotNull byte[] sourceToByteArray(@NotNull Source xmlInput) {
+//			try {
+//				Transformer transformer = TransformerFactory.newInstance().newTransformer();
+//				transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+//				transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+//				ByteArrayOutputStream output = new ByteArrayOutputStream();
+//				StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
+//				transformer.transform(xmlInput, xmlOutput);
+//				return output.toByteArray();
+//			} catch (IllegalArgumentException | TransformerException e) {
+////				throw new DomibusConnectorClientFileSystemException("Exception occured during transforming xml into byte[]", e);
+//			}
+//			return null;
+//		}
 	}
 }

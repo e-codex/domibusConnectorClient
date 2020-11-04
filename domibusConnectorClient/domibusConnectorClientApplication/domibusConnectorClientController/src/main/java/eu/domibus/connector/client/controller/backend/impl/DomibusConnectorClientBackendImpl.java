@@ -16,6 +16,7 @@ import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.stream.StreamResult;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -50,6 +51,7 @@ import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
+import eu.domibus.connector.domain.transition.tools.ConversionTools;
 
 @Component
 @ConfigurationProperties(prefix = DomibusConnectorClientControllerConfig.PREFIX)
@@ -295,19 +297,19 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 			clientMessage.setBackendMessageId(originalClientMessage.getBackendMessageId());
 			
 			DomibusConnectorClientConfirmation conf = new DomibusConnectorClientConfirmation();
-			byte[] confirmationBytes = null;
+			byte[] confirmationBytes = ConversionTools.convertXmlSourceToByteArray(confirmation.getConfirmation());
 //			try {
-			try {
-			 Transformer transformer = TransformerFactory.newInstance().newTransformer();
-	            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
-	            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
-	            ByteArrayOutputStream output = new ByteArrayOutputStream();
-	            StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
-					transformer.transform(confirmation.getConfirmation(), xmlOutput);
-	            confirmationBytes =  output.toByteArray();
-			} catch (TransformerException e1) {
-				LOGGER.error("Exception transforming source of confirmation to bytes!",e1);
-			}
+//			try {
+//			 Transformer transformer = TransformerFactory.newInstance().newTransformer();
+//	            transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+//	            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+//	            ByteArrayOutputStream output = new ByteArrayOutputStream();
+//	            StreamResult xmlOutput = new StreamResult(new OutputStreamWriter(output));
+//					transformer.transform(confirmation.getConfirmation(), xmlOutput);
+//	            confirmationBytes =  output.toByteArray();
+//			} catch (TransformerException e1) {
+//				LOGGER.error("Exception transforming source of confirmation to bytes!",e1);
+//			}
 			 
 			conf.setConfirmation(confirmationBytes);
 			conf.setConfirmationType(confirmation.getConfirmationType().name());

@@ -1,11 +1,8 @@
 package eu.domibus.connector.client.filesystem;
 
-import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -13,17 +10,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import javax.activation.DataHandler;
-import javax.activation.DataSource;
 import javax.activation.MimetypesFileTypeMap;
 import javax.validation.Valid;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.StreamUtils;
 import org.springframework.util.StringUtils;
 import org.springframework.validation.annotation.Validated;
 
@@ -44,10 +36,9 @@ import eu.domibus.connector.domain.transition.DomibusConnectorMessageDocumentTyp
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorPartyType;
 import eu.domibus.connector.domain.transition.DomibusConnectorServiceType;
+import eu.domibus.connector.domain.transition.tools.ConversionTools;
 
 @Component
-//@ConfigurationProperties(prefix = DomibusConnectorClientFSStorageConfiguration.PREFIX)
-//@PropertySource("classpath:/connector-client-fs-storage-default.properties")
 @Validated
 @Valid
 public class DomibusConnectorClientFileSystemReader {
@@ -107,20 +98,10 @@ public class DomibusConnectorClientFileSystemReader {
 	public DomibusConnectorMessageType readMessageFromFolder(File messageFolder) throws DomibusConnectorClientFileSystemException {
 		FSMessageDetails messageDetails = DomibusConnectorClientFileSystemUtil.loadMessageProperties(messageFolder, this.messageProperties.getFileName());
 
-//		String backendMessageId = extractBackendMessageId(messageDetails);
-
-//		String newMessageFolderPath = messageFolder.getAbsolutePath().substring(0,
-//				messageFolder.getAbsolutePath().lastIndexOf(File.separator)+1);
-//
-//
-//		messageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(messageFolder, newMessageFolderPath, backendMessageId);
-
 
 		if (messageFolder.exists() && messageFolder.isDirectory() && messageFolder.listFiles().length > 0) {
 			String messageFolderPath = messageFolder.getAbsolutePath();
 			LOGGER.info("Start reading message from folder {}", messageFolderPath);
-
-//			File workMessageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(messageFolder, messageFolderPath, messageProcessingPostfix);
 
 			DomibusConnectorMessageType message = new DomibusConnectorMessageType();
 
@@ -128,19 +109,8 @@ public class DomibusConnectorClientFileSystemReader {
 				message = processMessageFolderFiles(messageFolder, messageDetails);
 			} catch (Exception e) {
 				LOGGER.error("#readMessageFromFolder: an error occured!", e);
-//				File failedMessageFolder = DomibusConnectorClientFileSystemUtil.renameMessageFolder(workMessageFolder, messageFolderPath, messageFailedPostfix);
-
 				throw new DomibusConnectorClientFileSystemException("Could not process message folder "+messageFolder.getAbsolutePath());
 			}
-
-//			messageDetails.getMessageDetails().put(messageProperties.getMessageSentDatetime(),DomibusConnectorClientFileSystemUtil.convertDateToProperty(new Date()));
-//			messageDetails.storePropertiesToFile(new File(workMessageFolder, messageProperties.getFileName()));
-//			try {
-//				DomibusConnectorClientFileSystemUtil.renameMessageFolder(workMessageFolder, messageFolderPath, messageSendingPostfix);
-//			} catch (DomibusConnectorClientFileSystemException e) {
-//				LOGGER.error("",e);
-//			}
-
 
 			return message;
 		}
@@ -189,8 +159,6 @@ public class DomibusConnectorClientFileSystemReader {
 	public byte[] loadFileContentFromMessageFolder(File messageFolder, String fileName) {
 		if (messageFolder.exists() && messageFolder.isDirectory() && messageFolder.listFiles().length > 0) {
 			
-//			FSMessageDetails messageDetails = loadMessageProperties(messageFolder, this.messageProperties.getFileName());
-			
 			String messageFolderPath = messageFolder.getAbsolutePath();
 			LOGGER.debug("Start reading file {} from folder {}", fileName, messageFolderPath);
 			
@@ -236,7 +204,11 @@ public class DomibusConnectorClientFileSystemReader {
 				if (isFile(sub.getName(),messageDetails.getMessageDetails().getProperty(messageProperties.getContentXmlFileName()))) {
 					LOGGER.debug("Found content xml file with name {}", sub.getName());
 					try {
-						messageContent.setXmlContent(fileToSource(sub));
+						if(LOGGER.isDebugEnabled()) {
+							byte[] xmlBytes = fileToByteArray(sub);
+							LOGGER.debug("Business content XML after read from file: {}", new String(xmlBytes));
+						}
+						messageContent.setXmlContent(ConversionTools.convertFileToStreamSource(sub));
 					} catch (IOException e) {
 						throw new DomibusConnectorClientFileSystemException(
 								"Exception creating Source object out of file " + sub.getName());
@@ -244,13 +216,13 @@ public class DomibusConnectorClientFileSystemReader {
 					continue;
 				} else if (isFile(sub.getName(),messageDetails.getMessageDetails().getProperty(messageProperties.getContentPdfFileName()))) {
 					LOGGER.debug("Found content pdf file with name {}", sub.getName());
-					try {
-						document.setDocument(convertToDataHandler(sub));
+//					try {
+						document.setDocument(ConversionTools.convertFileToDataHandler(sub, "application/octet-stream"));
 						document.setDocumentName(sub.getName());
-					} catch (IOException e) {
-						throw new DomibusConnectorClientFileSystemException(
-								"Exception creating DataHandler object out of file " + sub.getName());
-					}
+//					} catch (IOException e) {
+//						throw new DomibusConnectorClientFileSystemException(
+//								"Exception creating DataHandler object out of file " + sub.getName());
+//					}
 					continue;
 				} else if (isFile(sub.getName(),messageDetails.getMessageDetails().getProperty(messageProperties.getDetachedSignatureFileName()))) {
 					LOGGER.debug("Found detached signature file with name {}", sub.getName());
@@ -274,12 +246,12 @@ public class DomibusConnectorClientFileSystemReader {
 					continue;
 				} else if (isConfirmation(sub.getName())) {
 					DomibusConnectorMessageConfirmationType confirmation = new DomibusConnectorMessageConfirmationType();
-					try {
-						confirmation.setConfirmation(fileToSource(sub));
-					} catch (IOException e) {
-						throw new DomibusConnectorClientFileSystemException(
-								"Exception creating Source object out of file " + sub.getName());
-					}
+//					try {
+						confirmation.setConfirmation(ConversionTools.convertFileToStreamSource(sub));
+//					} catch (IOException e) {
+//						throw new DomibusConnectorClientFileSystemException(
+//								"Exception creating Source object out of file " + sub.getName());
+//					}
 					if(sub.getName().indexOf(".xml")>0) {
 						String name = sub.getName().substring(0, sub.getName().indexOf(".xml"));
 						DomibusConnectorConfirmationType valueOf = DomibusConnectorConfirmationType.valueOf(name);
@@ -301,10 +273,10 @@ public class DomibusConnectorClientFileSystemReader {
 					String attachmentId = properties.getAttachmentIdPrefix() + attachmentCount;
 
 					if(!ArrayUtils.isEmpty(attachmentData)){
-						try {
+//						try {
 							DomibusConnectorMessageAttachmentType attachment = new DomibusConnectorMessageAttachmentType();
 
-							attachment.setAttachment(this.convertToDataHandler(sub));
+							attachment.setAttachment(ConversionTools.convertFileToDataHandler(sub, "application/octet-stream"));
 							attachment.setIdentifier(attachmentId);
 							attachment.setName(sub.getName());
 							attachmentCount++;
@@ -312,16 +284,13 @@ public class DomibusConnectorClientFileSystemReader {
 
 							LOGGER.debug("Add attachment {}", attachment.toString());
 							message.getMessageAttachments().add(attachment);
-						} catch (IOException ioe) {
-							String error = String.format("Error while loading attachment from file [%s]", sub);
-							LOGGER.error(error);
-							throw new RuntimeException(error);
-						}
+//						} catch (IOException ioe) {
+//							String error = String.format("Error while loading attachment from file [%s]", sub);
+//							LOGGER.error(error);
+//							throw new RuntimeException(error);
+//						}
 					}
 				}
-
-
-
 			}
 		}
 
@@ -372,24 +341,6 @@ public class DomibusConnectorClientFileSystemReader {
 		return false;
 	}
 
-//	private String extractBackendMessageId(FSMessageDetails messageProperties) {
-//		String backendMessageId = null;
-//		if (messageProperties != null) {
-//			backendMessageId = messageProperties.getMessageDetails().getProperty(this.messageProperties.getBackendMessageId());
-//			LOGGER.debug("Found backendMessageId in Properties: {}", backendMessageId);
-//		}
-//		if (!StringUtils.hasText(backendMessageId)) {
-//			backendMessageId = generateBackendMessageId();
-//			messageProperties.getMessageDetails().put(this.messageProperties.getBackendMessageId(), backendMessageId);
-//			LOGGER.debug("No backendMessageId resolved. Generated " + backendMessageId);
-//		}
-//		return backendMessageId;
-//	}
-//	
-//	private String generateBackendMessageId() {
-//		return UUID.randomUUID().toString() + "@connector-client.eu";
-//	}
-
 	private DomibusConnectorMessageDetailsType convertMessagePropertiesToMessageDetails(FSMessageDetails properties) {
 
 		DomibusConnectorMessageDetailsType messageDetails = new DomibusConnectorMessageDetailsType();
@@ -439,130 +390,30 @@ public class DomibusConnectorClientFileSystemReader {
 	}
 
 	private byte[] fileToByteArray(File file) throws IOException {
-		try (FileInputStream fileInputStream = new FileInputStream(file)) {
-			byte[] data = StreamUtils.copyToByteArray(fileInputStream);
-			return data;
-		} catch (IOException ioe) {
-			throw new RuntimeException("IOExceptio occured while reading from file " + file, ioe);
-		}
+		return Files.readAllBytes(file.toPath());
+//		try (FileInputStream fileInputStream = new FileInputStream(file)) {
+//			byte[] data = StreamUtils.copyToByteArray(fileInputStream);
+//			fileInputStream.close();
+//			return data;
+//		} catch (IOException ioe) {
+//			throw new RuntimeException("IOExceptio occured while reading from file " + file, ioe);
+//		}
 	}
 
-	private Source fileToSource(File file) throws IOException {
-		byte[] bytes = fileToByteArray(file);
-		return new StreamSource(new ByteArrayInputStream(bytes));
-	}
-
-	private DataHandler convertToDataHandler(File file) throws IOException {
-		LOGGER.debug("#convertToDataHandler: converting file [{}] to DataHandler", file);
-		byte[] bytes = fileToByteArray(file);
-		DataSource dataSource = new MyByteArrayDataSource(bytes);
-		DataHandler dh = new DataHandler(dataSource);
-		return dh;
-	}
-
-
-	private static class MyByteArrayDataSource implements DataSource {
-
-		private byte[] buffer;
-
-		public MyByteArrayDataSource(byte[] buffer) {
-			this.buffer = buffer;
-		}
-
-
-		@Override
-		public InputStream getInputStream() throws IOException {
-			return new ByteArrayInputStream(buffer);
-		}
-
-		@Override
-		public OutputStream getOutputStream() throws IOException {
-			throw new UnsupportedOperationException("Read Only Data Source!");
-		}
-
-		@Override
-		public String getContentType() {
-			return "application/octet-stream";
-		}
-
-		@Override
-		public String getName() {
-			return "";
-		}
-
-	}
-
-
-//	public DomibusConnectorClientFSMessageProperties getMessageProperties() {
-//		return messageProperties;
-//	}
-//
-//	public void setMessageProperties(DomibusConnectorClientFSMessageProperties messageProperties) {
-//		this.messageProperties = messageProperties;
+//	private Source fileToSource(File file) throws IOException {
+//		byte[] bytes = fileToByteArray(file);
+//		return new StreamSource(new ByteArrayInputStream(bytes));
 //	}
 
-//	public String getMessageSendingPostfix() {
-//		return messageSendingPostfix;
-//	}
-//
-//	public void setMessageSendingPostfix(String messageSendingPostfix) {
-//		this.messageSendingPostfix = messageSendingPostfix;
-//	}
-//
-//	public String getMessageSentPostfix() {
-//		return messageSentPostfix;
-//	}
-//
-//	public void setMessageSentPostfix(String messageSentPostfix) {
-//		this.messageSentPostfix = messageSentPostfix;
-//	}
-//
-//	public String getMessageFailedPostfix() {
-//		return messageFailedPostfix;
-//	}
-//
-//	public void setMessageFailedPostfix(String messageFailedPostfix) {
-//		this.messageFailedPostfix = messageFailedPostfix;
-//	}
-//
-//	public String getMessageProcessingPostfix() {
-//		return messageProcessingPostfix;
-//	}
-//
-//	public void setMessageProcessingPostfix(String messageProcessingPostfix) {
-//		this.messageProcessingPostfix = messageProcessingPostfix;
+//	private DataHandler convertToDataHandler(File file) throws IOException {
+//		LOGGER.debug("#convertToDataHandler: converting file [{}] to DataHandler", file);
+//		byte[] bytes = fileToByteArray(file);
+//		DataSource dataSource = new MyByteArrayDataSource(bytes);
+//		DataHandler dh = new DataHandler(dataSource);
+//		return dh;
 //	}
 
-//	public String getXmlFileExtension() {
-//		return xmlFileExtension;
-//	}
-//
-//	public void setXmlFileExtension(String xmlFileExtension) {
-//		this.xmlFileExtension = xmlFileExtension;
-//	}
-//
-//	public String getPdfFileExtension() {
-//		return pdfFileExtension;
-//	}
-//
-//	public void setPdfFileExtension(String pdfFileExtension) {
-//		this.pdfFileExtension = pdfFileExtension;
-//	}
-//
-//	public String getPkcs7FileExtension() {
-//		return pkcs7FileExtension;
-//	}
-//
-//	public void setPkcs7FileExtension(String pkcs7FileExtension) {
-//		this.pkcs7FileExtension = pkcs7FileExtension;
-//	}
-//
-//	public String getAttachmentIdPrefix() {
-//		return attachmentIdPrefix;
-//	}
-//
-//	public void setAttachmentIdPrefix(String attachmentIdPrefix) {
-//		this.attachmentIdPrefix = attachmentIdPrefix;
-//	}
+
+	
 
 }
