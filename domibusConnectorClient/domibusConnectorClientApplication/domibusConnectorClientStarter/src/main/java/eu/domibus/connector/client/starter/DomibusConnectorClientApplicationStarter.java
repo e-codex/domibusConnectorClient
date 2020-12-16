@@ -38,7 +38,7 @@ public class DomibusConnectorClientApplicationStarter extends SpringBootServletI
 	public static final String SPRING_CONFIG_LOCATION = "spring.config.location";
 	public static final String SPRING_CONFIG_NAME = "spring.config.name";
 	
-    private ServletContext servletContext;
+   
 	
 	public static void main(String[] args) {
 		runSpringApplication(args);
@@ -87,22 +87,22 @@ public class DomibusConnectorClientApplicationStarter extends SpringBootServletI
         return null;
     }
 	
-	 @Override
-	    public void onStartup(ServletContext servletContext) throws ServletException {
-	        this.servletContext = servletContext;
-
-	        //read logging.config from connector properties and set it before the application context ist started
-	        //so its already available for the spring logging servlet initializer to configure logging!
-	        String connectorConfigFile = getConnectorConfigFile();
-	        if (connectorConfigFile != null) {
-	            Properties p = loadConnectorConfigProperties(connectorConfigFile);
-	            String loggingConfig = p.getProperty("logging.config");
-	            if (loggingConfig != null) {
-	                servletContext.setInitParameter("logging.config", loggingConfig);
-	            }
-	        }
-	        super.onStartup(servletContext);
-	    }
+//	 @Override
+//	    public void onStartup(ServletContext servletContext) throws ServletException {
+//	        this.servletContext = servletContext;
+//
+//	        //read logging.config from connector properties and set it before the application context ist started
+//	        //so its already available for the spring logging servlet initializer to configure logging!
+//	        String connectorConfigFile = getConnectorConfigFile();
+//	        if (connectorConfigFile != null) {
+//	            Properties p = loadConnectorConfigProperties(connectorConfigFile);
+//	            String loggingConfig = p.getProperty("logging.config");
+//	            if (loggingConfig != null) {
+//	                servletContext.setInitParameter("logging.config", loggingConfig);
+//	            }
+//	        }
+//	        super.onStartup(servletContext);
+//	    }
 	 
 	 public static Properties loadConnectorConfigProperties(String connectorConfigFile) {
 	        Properties p = new Properties();
