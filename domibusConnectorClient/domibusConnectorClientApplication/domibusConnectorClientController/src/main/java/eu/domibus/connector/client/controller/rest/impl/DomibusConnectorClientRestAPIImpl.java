@@ -186,7 +186,8 @@ public class DomibusConnectorClientRestAPIImpl implements DomibusConnectorClient
 
 		if(msg.get() !=null) {
 			String storageInfo = msg.get().getStorageInfo();
-			if(storageInfo!=null && !storageInfo.isEmpty()) {
+			DomibusConnectorClientStorageStatus storageStatus = msg.get().getStorageStatus();
+			if(storageInfo!=null && !storageInfo.isEmpty() && storageStatus != DomibusConnectorClientStorageStatus.DELETED) {
 				try {
 					storage.deleteMessageFromStorage(msg.get().getStorageInfo());
 				} catch (DomibusConnectorClientStorageException e) {
