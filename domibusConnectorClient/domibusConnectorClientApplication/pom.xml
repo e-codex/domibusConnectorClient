@@ -4,7 +4,7 @@
   <parent>
     <groupId>eu.domibus.connector-client</groupId>
     <artifactId>domibusConnectorClient</artifactId>
-    <version>4.2.1-SNAPSHOT</version>
+    <version>4.2.1</version>
   </parent>
   <artifactId>domibusConnectorClientApplication</artifactId>
   <packaging>pom</packaging>
@@ -14,7 +14,6 @@
     <module>domibusConnectorClientRestAPI</module>
     <module>domibusConnectorClientStarter</module>
     <module>domibusConnectorClientAppAPI</module>
-    
   </modules>
   <dependencies>
     <dependency>
@@ -36,10 +35,9 @@
       <artifactId>domibusConnectorClientLibsAPI</artifactId>
       <version>${project.version}</version>
     </dependency>
- 
   </dependencies>
   <build>
-  <finalName>domibusConnectorClientApplication-${project.version}</finalName>
+    <finalName>domibusConnectorClientApplication-${project.version}</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -75,7 +73,7 @@
               <goal>single</goal>
             </goals>
             <configuration>
-            <appendAssemblyId>false</appendAssemblyId>
+              <appendAssemblyId>false</appendAssemblyId>
               <descriptors>
                 <descriptor>src/main/assembly/assembleClientApplicationPackage.xml</descriptor>
               </descriptors>
@@ -116,7 +114,6 @@
           <excludePackageNames>eu.domibus.connector.client.ui*</excludePackageNames>
         </configuration>
       </plugin>
-    
     </plugins>
   </reporting>
 </project>
