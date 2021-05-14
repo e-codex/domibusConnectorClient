@@ -33,6 +33,7 @@
     </dependency>
   </dependencies>
   <build>
+  <finalName>domibusConnectorClientLibraries-${project.version}</finalName>
     <plugins>
       <plugin>
         <artifactId>maven-source-plugin</artifactId>
@@ -94,6 +95,7 @@
               <goal>single</goal>
             </goals>
             <configuration>
+            <appendAssemblyId>false</appendAssemblyId>
               <descriptors>
                 <descriptor>src/main/assembly/assembleClientLibrariesPackage.xml</descriptor>
               </descriptors>

@@ -39,7 +39,7 @@
  
   </dependencies>
   <build>
-  <finalName>domibusConnectorClientApplication->${project.version}</finalName>
+  <finalName>domibusConnectorClientApplication-${project.version}</finalName>
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
@@ -75,6 +75,7 @@
               <goal>single</goal>
             </goals>
             <configuration>
+            <appendAssemblyId>false</appendAssemblyId>
               <descriptors>
                 <descriptor>src/main/assembly/assembleClientApplicationPackage.xml</descriptor>
               </descriptors>
