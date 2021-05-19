@@ -57,7 +57,7 @@
 		<!-- ==================== Copying domibusConnectorClientStarter library
 			================= -->
 		<fileSet>
-			<directory>${project.basedir}/domibusConnectorClientStarter/target/
+			<directory>${project.basedir}/domibusConnectorClientUI/target/
 			</directory>
 			<outputDirectory>bin
 			</outputDirectory>

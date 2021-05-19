@@ -19,6 +19,11 @@
       <artifactId>domibusConnectorClientRestAPI</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <!-- <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>domibusConnectorClientUI</artifactId>
+      <version>${project.version}</version>
+    </dependency> -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot</artifactId>
@@ -66,7 +71,7 @@
       </resource>
     </resources>
     <plugins>
-      <plugin>
+    <!-- <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <executions>
@@ -79,15 +84,15 @@
         </executions>
         <configuration>
           <mainClass>eu.domibus.connector.client.starter.DomibusConnectorClientApplicationStarter</mainClass>
-          <!-- alternative fix for xml loading/resolving problem -->
-          <!--                    <requiresUnpack>-->
-          <!--                        <dependency>-->
-          <!--                            <groupId>eu.domibus.connector</groupId>-->
-          <!--                            <artifactId>domibusConnectorAPI</artifactId>-->
-          <!--                        </dependency>-->
-          <!--                    </requiresUnpack>-->
+          alternative fix for xml loading/resolving problem
+                             <requiresUnpack>
+                                 <dependency>
+                                     <groupId>eu.domibus.connector</groupId>
+                                     <artifactId>domibusConnectorAPI</artifactId>
+                                 </dependency>
+                             </requiresUnpack>
         </configuration>
-      </plugin>
+      </plugin> -->
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
         <configuration>

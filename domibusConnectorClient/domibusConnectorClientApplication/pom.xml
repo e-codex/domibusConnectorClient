@@ -14,7 +14,7 @@
     <module>domibusConnectorClientRestAPI</module>
     <module>domibusConnectorClientStarter</module>
     <module>domibusConnectorClientAppAPI</module>
-    <module>domibusConnectorClientWAR</module>
+    <module>domibusConnectorClientUI</module>
   </modules>
   <dependencies>
     <dependency>
@@ -39,7 +39,7 @@
  
   </dependencies>
   <build>
-  <finalName>domibusConnectorClientApplication-${project.version}</finalName>
+  
     <plugins>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
