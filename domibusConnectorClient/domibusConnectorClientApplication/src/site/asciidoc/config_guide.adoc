@@ -145,3 +145,17 @@ spring.jpa.hibernate.ddl-auto = update
 
 org.springframework.boot.logging.LoggingSystem=Log4J2
 ----
+
+=== Configuration properties for the domibusConnectorClientUI
+
+The properties for the UI are only 2 to set:
+
+[source,properties]
+----
+connector-client-rest-url=http://<url>:<port>/restservice
+spring.codec.max-in-memory-size=20MB
+----
+
+For the connector-client-rest-url the parts url and port must reference the client application self. In most cases this will be the standard value "localhost" and "8080". If the "server.port" of the connectorClient application is set, this port then must be used.
+
+The second property is for spring to know the limit of data transferred within one single request between the UI and the applications rest service.
