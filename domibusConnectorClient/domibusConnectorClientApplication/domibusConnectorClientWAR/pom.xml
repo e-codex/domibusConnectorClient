@@ -114,7 +114,7 @@
   </dependencies>
 
   <build>
-    <!-- <finalName>domibusConnectorClientApplication-${project.version}</finalName> -->
+    <finalName>connector-client</finalName>
     <plugins>
 
       <plugin>

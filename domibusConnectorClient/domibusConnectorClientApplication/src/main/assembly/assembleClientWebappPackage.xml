@@ -56,7 +56,7 @@
 
 		<!-- ==================== Copying domibusConnectorClientWAR library
 			================= -->
-		<!-- <fileSet>
+		<fileSet>
 			<directory>${project.basedir}/domibusConnectorClientWAR/target/
 			</directory>
 			<outputDirectory>webapp
@@ -68,7 +68,7 @@
 				<exclude>*-sources.jar</exclude>
 				<exclude>*-javadoc.jar</exclude>
 			</excludes>
-		</fileSet> -->
+		</fileSet>
 
 		<!-- ==================== Copying site documentation ================= -->
 		<fileSet>
@@ -79,12 +79,12 @@
 		</fileSet>
 
 	</fileSets>
-	<files>
+<!-- 	<files>
         <file>
             <source>${project.basedir}/domibusConnectorClientWAR/target/domibusConnectorClientWAR-${project.version}.war</source>
             <outputDirectory>/webapp</outputDirectory>
             <destName>connector-client.war</destName>
         </file>
 
-    </files>
+    </files> -->
 </assembly>
