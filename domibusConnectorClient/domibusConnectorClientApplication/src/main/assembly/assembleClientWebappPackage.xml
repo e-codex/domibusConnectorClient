@@ -1,5 +1,5 @@
 <assembly>
-	<id>Standalone</id>
+	<id>Webapp</id>
 	<formats>
 		<format>zip</format>
 		<format>dir</format>
@@ -9,12 +9,12 @@
 
 		<!-- ==================== Copying file structure ================= -->
 		<fileSet>
-			<directory>${project.basedir}/src/main/resources/application
+			<directory>${project.basedir}/src/main/resources/WAR
 			</directory>
 			<outputDirectory>
 			</outputDirectory>
 		</fileSet>
-		<fileSet>
+		<!-- <fileSet>
 			<directory>.</directory>
 			<outputDirectory>logs</outputDirectory>
 			<excludes>
@@ -41,9 +41,9 @@
 			<excludes>
 				<exclude>*/**</exclude>
 			</excludes>
-		</fileSet>
+		</fileSet> -->
 
-		<fileSet>
+	<!-- 	<fileSet>
 			<directory>${project.basedir}/src/main/resources/application
 			</directory>
 			<outputDirectory>
@@ -52,17 +52,17 @@
 			<includes>
 				<include>*.sh</include>
 			</includes>
-		</fileSet>
+		</fileSet> -->
 
-		<!-- ==================== Copying domibusConnectorClientStarter library
+		<!-- ==================== Copying domibusConnectorClientWAR library
 			================= -->
 		<fileSet>
-			<directory>${project.basedir}/domibusConnectorClientStarter/target/
+			<directory>${project.basedir}/domibusConnectorClientWAR/target/
 			</directory>
-			<outputDirectory>bin
+			<outputDirectory>webapp
 			</outputDirectory>
 			<includes>
-				<include>*.jar</include>
+				<include>*.war</include>
 			</includes>
 			<excludes>
 				<exclude>*-sources.jar</exclude>

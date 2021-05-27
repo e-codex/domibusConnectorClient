@@ -4,12 +4,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.Properties;
-
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -31,6 +27,11 @@ import org.springframework.util.SystemPropertyUtils;
 public class DomibusConnectorClientApplicationStarter extends SpringBootServletInitializer
 {
 
+//	public static void main(String[] args) {
+//		VaadinConnectorClientStarter.runSpringApplication(args);
+//
+//	}
+	
 	private static final Logger LOGGER = LoggerFactory.getLogger(DomibusConnectorClientApplicationStarter.class);
 	
 	public static final String CONNECTOR_CLIENT_CONFIG_FILE = "connector-client.properties";
@@ -107,7 +108,7 @@ public class DomibusConnectorClientApplicationStarter extends SpringBootServletI
 	 public static Properties loadConnectorConfigProperties(String connectorConfigFile) {
 	        Properties p = new Properties();
 	        if (connectorConfigFile != null) {
-	            Path connectorConfigFilePath = Paths.get(connectorConfigFile);
+	            java.nio.file.Path connectorConfigFilePath = Paths.get(connectorConfigFile);
 	            if (!Files.exists(connectorConfigFilePath)) {
 	                String errorString = String.format("Cannot start because the via System Property [%s] provided config file [%s] mapped to path [%s] does not exist!", CONNECTOR_CLIENT_CONFIG_FILE, connectorConfigFile, connectorConfigFilePath);
 	                LOGGER.error(errorString);

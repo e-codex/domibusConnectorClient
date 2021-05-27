@@ -10,7 +10,7 @@
   <modules>
     <module>domibusConnectorClientLibraries</module>
     <module>domibusConnectorClientApplication</module>
-    <module>domibusConnectorClientWAR</module>
+    
   </modules>
   <scm>
     <developerConnection>scm:git:https://secure.e-codex.eu/gitblit/r/Me-CODEX/domibusConnectorClient.git</developerConnection>
@@ -44,6 +44,7 @@
     <h2.version>1.4.200</h2.version>
     <swagger.version>1.5.12</swagger.version>
     <ecodex.utils.version>0.0.16-RELEASE</ecodex.utils.version>
+    <vaadin.version>14.1.17</vaadin.version>
   </properties>
   <dependencyManagement>
     <dependencies>

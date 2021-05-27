@@ -15,6 +15,7 @@
     <module>domibusConnectorClientStarter</module>
     <module>domibusConnectorClientAppAPI</module>
     <module>domibusConnectorClientUI</module>
+    <module>domibusConnectorClientWAR</module>
   </modules>
   <dependencies>
     <dependency>
@@ -75,9 +76,10 @@
               <goal>single</goal>
             </goals>
             <configuration>
-            <appendAssemblyId>false</appendAssemblyId>
+            <!-- <appendAssemblyId>false</appendAssemblyId> -->
               <descriptors>
                 <descriptor>src/main/assembly/assembleClientApplicationPackage.xml</descriptor>
+                <descriptor>src/main/assembly/assembleClientWebappPackage.xml</descriptor>
               </descriptors>
             </configuration>
           </execution>

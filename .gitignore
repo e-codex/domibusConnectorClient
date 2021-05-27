@@ -143,3 +143,11 @@ local.properties
 /domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientStarter/database
 /domibusConnectorClient/domibusConnectorClientLibraries/domibusConnectorClientScheduler/.project
 /domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientUI/*.log
+
+.node_modules/
+/domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientStarter/node_modules/*
+/domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientWAR/node_modules/*
+*/package-lock.json
+*.json
+*.js
+types.d.ts
