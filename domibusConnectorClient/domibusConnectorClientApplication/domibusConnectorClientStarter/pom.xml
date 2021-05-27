@@ -34,7 +34,7 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>domibusConnectorClientUI</artifactId>
       <version>${project.version}</version>
-      <classifier>classes</classifier>
+      <!-- <classifier>classes</classifier> -->
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
