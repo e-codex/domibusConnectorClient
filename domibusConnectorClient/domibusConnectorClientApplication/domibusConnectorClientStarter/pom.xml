@@ -147,7 +147,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <mainClass>eu.domibus.connector.client.VaadinConnectorClientStarter</mainClass>
+          <mainClass>eu.domibus.connector.client.starter.DomibusConnectorClientApplicationStarter</mainClass>
           <requiresUnpack>
             <!--  <dependency>
                                      <groupId>eu.domibus.connector</groupId>
