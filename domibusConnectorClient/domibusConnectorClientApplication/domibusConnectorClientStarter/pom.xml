@@ -34,7 +34,7 @@
       <groupId>${project.groupId}</groupId>
       <artifactId>domibusConnectorClientUI</artifactId>
       <version>${project.version}</version>
-      <!-- <classifier>classes</classifier> -->
+      <classifier>classes</classifier>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -147,16 +147,16 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
         <configuration>
-          <mainClass>eu.domibus.connector.client.starter.DomibusConnectorClientApplicationStarter</mainClass>
+          <mainClass>eu.domibus.connector.client.VaadinConnectorClientStarter</mainClass>
           <requiresUnpack>
             <!--  <dependency>
                                      <groupId>eu.domibus.connector</groupId>
                                      <artifactId>domibusConnectorAPI</artifactId>
                                  </dependency> -->
-            <!--  <dependency>
+            <dependency>
       <groupId>eu.domibus.connector-client</groupId>
       <artifactId>domibusConnectorClientUI</artifactId>
-    </dependency> -->
+    </dependency>
           </requiresUnpack>
         </configuration>
         <executions>
