@@ -4,7 +4,7 @@
   <parent>
     <groupId>eu.domibus.connector-client</groupId>
     <artifactId>domibusConnectorClientLibraries</artifactId>
-    <version>4.3.0-SNAPSHOT</version>
+    <version>4.3.0-RC1</version>
   </parent>
   <artifactId>domibusConnectorClientLibsAPI</artifactId>
   <dependencies>
@@ -13,15 +13,15 @@
       <artifactId>domibusConnectorAPIlib</artifactId>
       <exclusions>
         <exclusion>
-          <artifactId>commons-io</artifactId>
           <groupId>commons-io</groupId>
+          <artifactId>commons-io</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
     <dependency>
-    	<groupId>org.apache.logging.log4j</groupId>
-    <artifactId>log4j-api</artifactId>
-    <version>2.12.1</version>
+      <groupId>org.apache.logging.log4j</groupId>
+      <artifactId>log4j-api</artifactId>
+      <version>2.12.1</version>
     </dependency>
   </dependencies>
   <build>
@@ -32,10 +32,10 @@
         <executions>
           <execution>
             <id>copy-dependencies</id>
-            <phase>package</phase>
             <goals>
               <goal>copy-dependencies</goal>
             </goals>
+            <phase>package</phase>
             <configuration>
               <outputDirectory>${project.build.directory}/lib</outputDirectory>
               <overWriteReleases>false</overWriteReleases>
@@ -52,13 +52,13 @@
           <skipAssembly>true</skipAssembly>
         </configuration>
       </plugin>
-         <plugin>
-          <groupId>org.apache.maven.plugins</groupId>
-          <artifactId>maven-site-plugin</artifactId>
-          <configuration>
-                <skip>true</skip>
-          </configuration>
-        </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+        </configuration>
+      </plugin>
     </plugins>
   </build>
 </project>
