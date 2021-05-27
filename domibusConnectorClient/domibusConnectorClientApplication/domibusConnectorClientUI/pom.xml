@@ -1,50 +1,46 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<parent>
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <parent>
     <groupId>eu.domibus.connector-client</groupId>
     <artifactId>domibusConnectorClientApplication</artifactId>
-    <version>4.3.0-SNAPSHOT</version>
- 	 </parent>
-	<artifactId>domibusConnectorClientUI</artifactId>
-	<!-- <version>4.2.1-SNAPSHOT</version> -->
-	<description>
-		This is the module that holds the user interface for the domibusConnectorClient-Application.
+    <version>4.3.0-RC1</version>
+  </parent>
+  <artifactId>domibusConnectorClientUI</artifactId>
+  <packaging>jar</packaging>
+  <!-- <version>4.2.1-SNAPSHOT</version> -->
+  <description>This is the module that holds the user interface for the domibusConnectorClient-Application.
 		Only reduced documentation included in this site.
-		It is planned to develop an online help for user support.
-	</description>
-	<packaging>jar</packaging>
-	
+		It is planned to develop an online help for user support.</description>
 
-	<distributionManagement>
-		<repository>
-			<id>${ecodex-releases-repo.id}</id>
-			<url>${ecodex-releases-repo.url}</url>
-		</repository>
-		<snapshotRepository>
-			<id>${ecodex-snapshots-repo.id}</id>
-			<url>${ecodex-snapshots-repo.url}</url>
-		</snapshotRepository>
-		<site>
-			<id>${project.artifactId}-site</id>
-			<url>http://www.ecodex.eu/connector-site</url>
-		</site>
-	</distributionManagement>
+  <distributionManagement>
+    <repository>
+      <id>${ecodex-releases-repo.id}</id>
+      <url>${ecodex-releases-repo.url}</url>
+    </repository>
+    <snapshotRepository>
+      <id>${ecodex-snapshots-repo.id}</id>
+      <url>${ecodex-snapshots-repo.url}</url>
+    </snapshotRepository>
+    <site>
+      <id>${project.artifactId}-site</id>
+      <url>http://www.ecodex.eu/connector-site</url>
+    </site>
+  </distributionManagement>
 
-	<properties>
-		<!-- <domibus.connector.client.version>4.2.1</domibus.connector.client.version>
+  <properties>
+    <!-- <domibus.connector.client.version>4.2.1</domibus.connector.client.version>
 		<maven.compiler.source>1.8</maven.compiler.source>
 		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding> -->
 
-		
-		<!-- <org.springframework.boot.version>2.2.3.RELEASE</org.springframework.boot.version> -->
-		<drivers.dir>${project.basedir}/drivers</drivers.dir>
-		<drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
-	</properties>
+    <!-- <org.springframework.boot.version>2.2.3.RELEASE</org.springframework.boot.version> -->
+    <drivers.dir>${project.basedir}/drivers</drivers.dir>
+    <drivers.downloader.phase>pre-integration-test</drivers.downloader.phase>
+  </properties>
 
-	<!-- <dependencyManagement>
+  <!-- <dependencyManagement>
 		<dependencies>
 			<dependency>
 				<groupId>com.vaadin</groupId>
@@ -55,25 +51,25 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement> -->
-	<dependencies>
+  <dependencies>
 
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>domibusConnectorClientRestAPI</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>domibusConnectorClientAppAPI</artifactId>
-			<version>${project.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>domibusConnectorClientController</artifactId>
-			<version>${project.version}</version>
-		</dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>domibusConnectorClientRestAPI</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>domibusConnectorClientAppAPI</artifactId>
+      <version>${project.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>domibusConnectorClientController</artifactId>
+      <version>${project.version}</version>
+    </dependency>
 
-	<!-- 	<dependency>
+    <!-- 	<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 			<exclusions>
@@ -84,102 +80,102 @@
 			</exclusions>
 		</dependency> -->
 
-		<!-- <dependency>
+    <!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-webflux</artifactId>
 			</dependency> -->
-		<!-- <dependency> <groupId>org.projectreactor</groupId> <artifactId>reactor-spring</artifactId> 
+    <!-- <dependency> <groupId>org.projectreactor</groupId> <artifactId>reactor-spring</artifactId> 
 			<version>1.0.1.RELEASE</version> </dependency> -->
 
-		<!-- <dependency>
+    <!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-log4j2</artifactId>
 			</dependency> -->
 
-		<!-- <dependency> <groupId>org.apache.logging.log4j</groupId> <artifactId>log4j-web</artifactId> 
+    <!-- <dependency> <groupId>org.apache.logging.log4j</groupId> <artifactId>log4j-web</artifactId> 
 			<version>2.10.0</version> </dependency> <dependency> <groupId>org.apache.logging.log4j</groupId> 
 			<artifactId>log4j-slf4j-impl</artifactId> <version>2.10.0</version> </dependency> -->
 
-		<!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-test</artifactId> 
+    <!-- <dependency> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-starter-test</artifactId> 
 			<scope>test</scope> </dependency> -->
-		<!-- <dependency> <groupId>${project.groupId}</groupId> <artifactId>domibusConnectorClientStarter</artifactId> 
+    <!-- <dependency> <groupId>${project.groupId}</groupId> <artifactId>domibusConnectorClientStarter</artifactId> 
 			<version>${project.version}</version> <exclusions> <exclusion> <groupId>commons-io</groupId> 
 			<artifactId>commons-io</artifactId> </exclusion> </exclusions> </dependency> -->
 
-		<dependency>
-			<groupId>commons-io</groupId>
-			<artifactId>commons-io</artifactId>
-			</dependency>
+    <dependency>
+      <groupId>commons-io</groupId>
+      <artifactId>commons-io</artifactId>
+    </dependency>
 
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<!-- Replace artifactId with vaadin-core to use only free components -->
-			<artifactId>vaadin</artifactId>
-			<exclusions>
-				<!-- Webjars are only needed when running in Vaadin 13 compatibility 
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <!-- Replace artifactId with vaadin-core to use only free components -->
+      <artifactId>vaadin</artifactId>
+      <exclusions>
+        <!-- Webjars are only needed when running in Vaadin 13 compatibility 
 					mode -->
-				<exclusion>
-					<groupId>com.vaadin.webjar</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.webjars.bowergithub.insites</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.webjars.bowergithub.polymer</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.webjars.bowergithub.polymerelements</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.webjars.bowergithub.vaadin</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-				<exclusion>
-					<groupId>org.webjars.bowergithub.webcomponents</groupId>
-					<artifactId>*</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-spring-boot-starter</artifactId>
-			<exclusions>
-				<!-- Excluding so that webjars are not included. -->
-				<exclusion>
-					<groupId>com.vaadin</groupId>
-					<artifactId>vaadin-core</artifactId>
-				</exclusion>
-			</exclusions>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-devtools</artifactId>
-			<optional>true</optional>
-		</dependency>
-		<dependency>
-			<groupId>com.vaadin</groupId>
-			<artifactId>vaadin-testbench</artifactId>
-			<scope>test</scope>
-			<!-- <exclusions> -->
-			<!-- <exclusion> -->
-			<!-- <groupId>org.objenesis</groupId> -->
-			<!-- <artifactId>objenesis</artifactId> -->
-			<!-- </exclusion> -->
-			<!-- </exclusions> -->
-		</dependency>
+        <exclusion>
+          <groupId>com.vaadin.webjar</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.webjars.bowergithub.insites</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.webjars.bowergithub.polymer</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.webjars.bowergithub.polymerelements</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.webjars.bowergithub.vaadin</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+        <exclusion>
+          <groupId>org.webjars.bowergithub.webcomponents</groupId>
+          <artifactId>*</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>vaadin-spring-boot-starter</artifactId>
+      <exclusions>
+        <!-- Excluding so that webjars are not included. -->
+        <exclusion>
+          <groupId>com.vaadin</groupId>
+          <artifactId>vaadin-core</artifactId>
+        </exclusion>
+      </exclusions>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-devtools</artifactId>
+      <optional>true</optional>
+    </dependency>
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>vaadin-testbench</artifactId>
+      <scope>test</scope>
+      <!-- <exclusions> -->
+      <!-- <exclusion> -->
+      <!-- <groupId>org.objenesis</groupId> -->
+      <!-- <artifactId>objenesis</artifactId> -->
+      <!-- </exclusion> -->
+      <!-- </exclusions> -->
+    </dependency>
 
-	</dependencies>
+  </dependencies>
 
-	<build>
-		<!-- <finalName>domibusConnectorClientApplication-${project.version}</finalName> -->
-		<plugins>
-			<!-- <plugin> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-maven-plugin</artifactId> 
+  <build>
+    <!-- <finalName>domibusConnectorClientApplication-${project.version}</finalName> -->
+    <plugins>
+      <!-- <plugin> <groupId>org.springframework.boot</groupId> <artifactId>spring-boot-maven-plugin</artifactId> 
 				</plugin> -->
-			<!-- <plugin>
+      <!-- <plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
@@ -194,23 +190,23 @@
 					</execution>
 				</executions>
 			</plugin> -->
-			<plugin>
-				<groupId>com.vaadin</groupId>
-				<artifactId>vaadin-maven-plugin</artifactId>
-				<version>${vaadin.version}</version>
-				<configuration>
-					<ignoreMavenProxies>false</ignoreMavenProxies>
+      <plugin>
+        <groupId>com.vaadin</groupId>
+        <artifactId>vaadin-maven-plugin</artifactId>
+        <version>${vaadin.version}</version>
+        <configuration>
+          <ignoreMavenProxies>false</ignoreMavenProxies>
 
-				</configuration>
-				<executions>
-					<execution>
-						<goals>
-							<goal>prepare-frontend</goal>
-						</goals>
-					</execution>
-				</executions>
-			</plugin>
-			<!-- <plugin>
+        </configuration>
+        <executions>
+          <execution>
+            <goals>
+              <goal>prepare-frontend</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+      <!-- <plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<executions>
 					<execution>
@@ -227,21 +223,21 @@
 					</execution>
 				</executions>
 			</plugin> -->
-			<plugin>
-						<artifactId>maven-assembly-plugin</artifactId>
-						<configuration>
-							<skipAssembly>true</skipAssembly>
-						</configuration>
-					</plugin>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-site-plugin</artifactId>
-				<configuration>
-					<skip>true</skip>
-					<skipDeploy>true</skipDeploy>
-				</configuration>
-			</plugin>
-			<!-- <plugin>
+      <plugin>
+        <artifactId>maven-assembly-plugin</artifactId>
+        <configuration>
+          <skipAssembly>true</skipAssembly>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-site-plugin</artifactId>
+        <configuration>
+          <skip>true</skip>
+          <skipDeploy>true</skipDeploy>
+        </configuration>
+      </plugin>
+      <!-- <plugin>
     <artifactId>maven-war-plugin</artifactId>
     <version>2.4</version>
     <configuration>
@@ -249,14 +245,14 @@
         <failOnMissingWebXml>false</failOnMissingWebXml>
     </configuration>
 </plugin> -->
-			<!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-javadoc-plugin</artifactId> 
+      <!-- <plugin> <groupId>org.apache.maven.plugins</groupId> <artifactId>maven-javadoc-plugin</artifactId> 
 				<executions> <execution> <id>attach-javadocs</id> <goals> <goal>jar</goal> 
 				</goals> <configuration> <properties> <maven.javadoc.skip>true</maven.javadoc.skip> 
 				</properties> </configuration> </execution> </executions> </plugin> -->
-		</plugins>
-	</build>
+    </plugins>
+  </build>
 
-	<!-- <profiles>
+  <!-- <profiles>
 		<profile>
 			Production mode is activated using -Pproduction
 			<id>production</id>

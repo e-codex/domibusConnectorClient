@@ -3,14 +3,14 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>eu.domibus.connector-client</groupId>
   <artifactId>domibusConnectorClient</artifactId>
-  <version>4.3.0-SNAPSHOT</version>
+  <version>4.3.0-RC1</version>
   <packaging>pom</packaging>
   <name>domibusConnectorClient</name>
   <description>Project for developing the client for the domibusConnectorWebApp.</description>
   <modules>
     <module>domibusConnectorClientLibraries</module>
     <module>domibusConnectorClientApplication</module>
-    
+
   </modules>
   <scm>
     <developerConnection>scm:git:https://secure.e-codex.eu/gitblit/r/Me-CODEX/domibusConnectorClient.git</developerConnection>
@@ -254,13 +254,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <dependencies>
-          <dependency>
-            <groupId>org.asciidoctor</groupId>
-            <artifactId>asciidoctor-maven-plugin</artifactId>
-            <version>2.0.0-RC.1</version>
-          </dependency>
-        </dependencies>
         <configuration>
           <!-- disable generateReports if you don't want to include the built-in reports -->
           <generateReports>true</generateReports>
@@ -270,6 +263,13 @@
           <inputEncoding>UTF-8</inputEncoding>
           <outputEncoding>UTF-8</outputEncoding>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctor-maven-plugin</artifactId>
+            <version>2.0.0-RC.1</version>
+          </dependency>
+        </dependencies>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
