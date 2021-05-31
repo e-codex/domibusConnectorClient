@@ -16,7 +16,7 @@ This folder contains an example on how to configure the domibusConnectorClientAp
 
 * *Catalina/localhost/connector-client.xml* - An example context initialization file that is named like the WAR file in webapps. This context configuration enables the connector-client webapp to load the proper configuration.
 
-* *connector-client/connector-client.properties*	- properties file containing the most essential properties for the domibusConnectorClient-Application as examples. For further details, please refer to the link:config_guide.html[configuration guide].
+* *connector-client/connector-client.properties*	- properties file containing the most essential properties for the domibusConnectorClient-Application as examples. For further details, please refer to the link:../config_guide.html[configuration guide].
 * *connector-client/log4j2.xml*					- XML file defining the logging. It is preconfigured so that LOG files will be put in the "logs" subfolder.
 
 The structure and files are prepared so that they can be used in an Apache Tomcat 8.
