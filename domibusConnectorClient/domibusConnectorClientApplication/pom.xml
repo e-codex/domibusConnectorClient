@@ -106,7 +106,7 @@
             <dependencySourceInclude>eu.ecodex.utils:*</dependencySourceInclude>
             <dependencySourceInclude>eu.domibus.connector-client:*</dependencySourceInclude>
           </dependencySourceIncludes>
-          <excludePackageNames>eu.domibus.connector.client.ui*</excludePackageNames>
+         <!--  <excludePackageNames>eu.domibus.connector.client.ui*</excludePackageNames> -->
         </configuration>
         <reportSets>
           <reportSet>
