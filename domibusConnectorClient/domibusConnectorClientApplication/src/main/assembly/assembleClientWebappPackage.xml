@@ -71,12 +71,12 @@
 		</fileSet>
 
 		<!-- ==================== Copying site documentation ================= -->
-		<fileSet>
+		<!-- <fileSet>
 			<directory>${project.basedir}/target/site/
 			</directory>
 			<outputDirectory>documentation/site
 			</outputDirectory>
-		</fileSet>
+		</fileSet> -->
 
 	</fileSets>
 <!-- 	<files>
