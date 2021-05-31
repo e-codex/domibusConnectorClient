@@ -13,6 +13,8 @@ The domibusConnectorClient-Application consists of the following modules:
 * domibusConnectorClientFSStorage
 * domibusConnectorClientRestAPI
 * domibusConnectorClientStarter
+* domibusConnectorClientUI
+* domibusConnectorClientWAR
 
 Additionally, the domibusConnectorClient-Application uses the libraries that are contained in the domibusConnectorClient-Libraries package.
 
@@ -78,3 +80,13 @@ image::images/domibusConnectorClientStarter.png[domibusConnectorClientStarter,30
 
 ==== Description
 The domibusConnectorClientStarter is just a module to start the spring boot application context and set the properties file.
+
+=== domibusConnectorClientUI
+
+==== Description
+This module contains all necessary classes and configuration to build the user interface of the domibusConnectorClientApplication
+
+=== domibusConnectorClientWAR
+
+==== Description
+In this module there is only a starter class that enables the domibusConnectorClientApplication to run and be loaded properly in a servlet container. It also builds the WAR file that is distributed in the domibusConnectorClientApplication-Webapp package.

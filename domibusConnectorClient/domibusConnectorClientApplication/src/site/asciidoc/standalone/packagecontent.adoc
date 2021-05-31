@@ -1,11 +1,11 @@
-== Content of the domibusConnectorClient-Application package
+== Content of the domibusConnectorClientApplication-Standalone package
 
-After download and extraction of the "domibusConnectorClient-Application.zip" file the extracted folder has the following content:
+After download and extraction of the "domibusConnectorClientApplication-Standalone.zip" file the extracted folder has the following content:
 
-Diagram: domibusConnectorClient-Application package content
-[#img-domibusConnectorClientApplicationPackageContent]
-[link=images/packagecontent.png,window=_tab]
-image::images/packagecontent.png[domibusConnectorClientApplicationPackageContent,300,200]
+Diagram: domibusConnectorClientApplication-Standalone package content
+[#img-domibusConnectorClientApplicationStandalonePackageContent]
+[link=../images/packagecontent_standalone.png,window=_tab]
+image::../images/packagecontent_standalone.png[domibusConnectorClientApplicationStandalonePackageContent,300,200]
 
 === startConnectorClient scripts
 
@@ -16,7 +16,7 @@ image::images/packagecontent.png[domibusConnectorClientApplicationPackageContent
 === config folder
 This folder contains the following files:
 
-* *connector-client.properties*	- properties file containing the most essential properties for the domibusConnectorClient-Application as examples. For further details, please refer to the link:config_guide.html[configuration guide].
+* *connector-client.properties*	- properties file containing the most essential properties for the domibusConnectorClient-Application as examples. For further details, please refer to the link:../config_guide.html[configuration guide].
 * *log4j2.xml*					- XML file defining the logging. It is preconfigured so that LOG files will be put in the "logs" subfolder.
 
 === database folder
