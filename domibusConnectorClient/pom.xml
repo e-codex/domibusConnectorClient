@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>eu.domibus.connector-client</groupId>
   <artifactId>domibusConnectorClient</artifactId>
-  <version>4.2.1</version>
+  <version>4.2.2</version>
   <packaging>pom</packaging>
   <name>domibusConnectorClient</name>
   <description>Project for developing the client for the domibusConnectorWebApp.</description>
@@ -252,13 +252,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-site-plugin</artifactId>
-        <dependencies>
-          <dependency>
-            <groupId>org.asciidoctor</groupId>
-            <artifactId>asciidoctor-maven-plugin</artifactId>
-            <version>2.0.0-RC.1</version>
-          </dependency>
-        </dependencies>
         <configuration>
           <!-- disable generateReports if you don't want to include the built-in reports -->
           <generateReports>true</generateReports>
@@ -268,6 +261,13 @@
           <inputEncoding>UTF-8</inputEncoding>
           <outputEncoding>UTF-8</outputEncoding>
         </configuration>
+        <dependencies>
+          <dependency>
+            <groupId>org.asciidoctor</groupId>
+            <artifactId>asciidoctor-maven-plugin</artifactId>
+            <version>2.0.0-RC.1</version>
+          </dependency>
+        </dependencies>
       </plugin>
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>

@@ -4,7 +4,7 @@
   <parent>
     <groupId>eu.domibus.connector-client</groupId>
     <artifactId>domibusConnectorClient</artifactId>
-    <version>4.2.1</version>
+    <version>4.2.2</version>
   </parent>
   <artifactId>domibusConnectorClientLibraries</artifactId>
   <packaging>pom</packaging>
@@ -22,8 +22,8 @@
       <artifactId>domibusConnectorAPI</artifactId>
       <exclusions>
         <exclusion>
-          <artifactId>commons-io</artifactId>
           <groupId>commons-io</groupId>
+          <artifactId>commons-io</artifactId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -40,10 +40,10 @@
         <executions>
           <execution>
             <id>attach-sources</id>
-            <phase>verify</phase>
             <goals>
               <goal>jar-no-fork</goal>
             </goals>
+            <phase>verify</phase>
           </execution>
         </executions>
       </plugin>
@@ -68,10 +68,10 @@
         <executions>
           <execution>
             <id>javadoc-jar</id>
-            <phase>package</phase>
             <goals>
               <goal>jar</goal>
             </goals>
+            <phase>package</phase>
             <configuration>
               <includeDependencySources>true</includeDependencySources>
               <dependencySourceIncludes>
@@ -90,10 +90,10 @@
         <executions>
           <execution>
             <id>create-distribution-package</id>
-            <phase>package</phase>
             <goals>
               <goal>single</goal>
             </goals>
+            <phase>package</phase>
             <configuration>
               <appendAssemblyId>false</appendAssemblyId>
               <descriptors>
@@ -110,15 +110,6 @@
       <plugin>
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-javadoc-plugin</artifactId>
-        <reportSets>
-          <reportSet>
-            <id>aggregate-javadoc</id>
-            <reports>
-              <report>aggregate</report>
-            </reports>
-            <inherited>false</inherited>
-          </reportSet>
-        </reportSets>
         <configuration>
           <additionalDependencies>
             <additionalDependency>
@@ -134,6 +125,15 @@
           </dependencySourceIncludes>
           <excludePackageNames>eu.domibus.connector.client.ui*</excludePackageNames>
         </configuration>
+        <reportSets>
+          <reportSet>
+            <id>aggregate-javadoc</id>
+            <reports>
+              <report>aggregate</report>
+            </reports>
+            <inherited>false</inherited>
+          </reportSet>
+        </reportSets>
       </plugin>
     </plugins>
   </reporting>
