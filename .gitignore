@@ -142,6 +142,7 @@ local.properties
 /domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientStarter/messages
 /domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientStarter/database
 /domibusConnectorClient/domibusConnectorClientLibraries/domibusConnectorClientScheduler/.project
+<<<<<<< HEAD
 /domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientUI/*.log
 
 .node_modules/
@@ -151,3 +152,16 @@ local.properties
 *.json
 *.js
 types.d.ts
+=======
+/domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientStarter/node_modules/
+/domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientUI/node_modules/
+/domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientWAR/node_modules/
+/domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientStarter/*.js
+/domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientStarter/*.json
+/domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientUI/*.js
+/domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientUI/*.json
+/domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientWAR/*.js
+/domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientWAR/*.json
+/domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientStarter/*.ts
+/domibusConnectorClient/domibusConnectorClientApplication/domibusConnectorClientUI/*.log
+>>>>>>> 9620b8a... workaround to enable the client to send confirmation trigger with refToMessageId and confirmationType only.

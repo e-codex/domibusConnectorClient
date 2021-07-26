@@ -12,9 +12,12 @@ import eu.domibus.connector.client.DomibusConnectorClientMessageHandler;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.link.DomibusConnectorClientLink;
 import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
+import eu.domibus.connector.domain.transition.DomibusConnectorActionType;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
+import eu.domibus.connector.domain.transition.DomibusConnectorPartyType;
+import eu.domibus.connector.domain.transition.DomibusConnectorServiceType;
 
 @Component
 public class DomibusConnectorClientImpl implements DomibusConnectorClient {
@@ -102,6 +105,14 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 		}
 		DomibusConnectorConfirmationType confirmationType = confirmationMessage.getMessageConfirmations().get(0).getConfirmationType();
 
+		//Workaround for domibusConnector versions 4.2.x and 4.3.x as it checks the presence of Parties when mapping transition to domain model
+		//TODO: make it possible that the following empty action, service, parties are not required for evidence
+        //trigger message! if refToMessageId is set!
+		confirmationMessage.getMessageDetails().setAction(new DomibusConnectorActionType());
+		confirmationMessage.getMessageDetails().setService(new DomibusConnectorServiceType());
+		confirmationMessage.getMessageDetails().setFromParty(new DomibusConnectorPartyType());
+		confirmationMessage.getMessageDetails().setToParty(new DomibusConnectorPartyType());
+		
 		DomibsConnectorAcknowledgementType domibusConnectorAckType = new DomibsConnectorAcknowledgementType();
 		try {
 			LOGGER.debug("Submitting confirmation message with refToMessageId {} and confirmationType {} to connector.", refToMessageId, confirmationType.name());
