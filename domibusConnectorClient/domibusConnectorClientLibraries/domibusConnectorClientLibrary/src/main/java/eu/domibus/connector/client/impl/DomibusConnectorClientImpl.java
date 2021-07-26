@@ -14,6 +14,7 @@ import eu.domibus.connector.client.link.DomibusConnectorClientLink;
 import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
 import eu.domibus.connector.domain.transition.DomibusConnectorActionType;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 import eu.domibus.connector.domain.transition.DomibusConnectorPartyType;
@@ -105,13 +106,8 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 		}
 		DomibusConnectorConfirmationType confirmationType = confirmationMessage.getMessageConfirmations().get(0).getConfirmationType();
 
-		//Workaround for domibusConnector versions 4.2.x and 4.3.x as it checks the presence of Parties when mapping transition to domain model
-		//TODO: make it possible that the following empty action, service, parties are not required for evidence
-        //trigger message! if refToMessageId is set!
-		confirmationMessage.getMessageDetails().setAction(new DomibusConnectorActionType());
-		confirmationMessage.getMessageDetails().setService(new DomibusConnectorServiceType());
-		confirmationMessage.getMessageDetails().setFromParty(new DomibusConnectorPartyType());
-		confirmationMessage.getMessageDetails().setToParty(new DomibusConnectorPartyType());
+		confirmationMessage.setMessageDetails(setDummyValuesForConfirmationTrigger(confirmationMessage.getMessageDetails()));
+		
 		
 		DomibsConnectorAcknowledgementType domibusConnectorAckType = new DomibsConnectorAcknowledgementType();
 		try {
@@ -135,4 +131,22 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 		}
 	}
 	
+	//Workaround for domibusConnector versions 4.2.x and 4.3.x as it checks the presence of Parties when mapping transition to domain model
+			//TODO: make it possible that the following empty action, service, parties are not required for evidence
+	        //trigger message! if refToMessageId is set!
+	private DomibusConnectorMessageDetailsType setDummyValuesForConfirmationTrigger(DomibusConnectorMessageDetailsType messageDetails) {
+		DomibusConnectorPartyType dummyParty = new DomibusConnectorPartyType();
+		dummyParty.setPartyId("DUMMY");
+		
+		messageDetails.setAction(new DomibusConnectorActionType());
+		messageDetails.getAction().setAction("DummyAction");
+		messageDetails.setService(new DomibusConnectorServiceType());
+		messageDetails.getService().setService("DummyService");
+		messageDetails.setFromParty(dummyParty);
+		messageDetails.setToParty(dummyParty);
+		messageDetails.setFinalRecipient("dummyRecipient");
+		messageDetails.setOriginalSender("dummySender");
+		
+		return messageDetails;
+	}
 }
