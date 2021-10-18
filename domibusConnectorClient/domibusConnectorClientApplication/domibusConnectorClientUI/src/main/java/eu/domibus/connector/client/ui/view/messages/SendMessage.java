@@ -81,7 +81,7 @@ public class SendMessage  extends VerticalLayout implements HasUrlParameter<Long
 		add(messageDetailsArea);
 		
 		saveBtn = new Button(new Icon(VaadinIcon.EDIT));
-		saveBtn.setText("Save new Message");
+		saveBtn.setText("Save Message");
 		saveBtn.addClickListener(e -> {
 			BinderValidationStatus<DomibusConnectorClientMessage> validationStatus = messageForm.getBinder().validate();
 			if(validationStatus.isOk()) {
@@ -142,15 +142,15 @@ public class SendMessage  extends VerticalLayout implements HasUrlParameter<Long
 		submitMessageButton = new Button(new Icon(VaadinIcon.CLOUD_UPLOAD_O));
 		submitMessageButton.setText("Submit Message");
 		submitMessageButton.addClickListener(e -> {
-			BinderValidationStatus<DomibusConnectorClientMessage> validationStatus = messageForm.getBinder().validate();
-			if(validationStatus.isOk()) {
+			if(validateMessageForm()) {
 			LumoLabel resultLabel = new LumoLabel();
 			if(!validateMessageForSumission()) {
 				resultLabel.setText("For message submission a BUSINESS_CONTENT and BUSINESS_DOCUMENT must be present!");
 				resultLabel.getStyle().set("color", "red");
 			}else {
 				try {
-					this.messageService.submitStoredMessage(messageForm.getConnectorClientMessage());
+					DomibusConnectorClientMessage msg = this.messageService.saveMessage(messageForm.getConnectorClientMessage());
+					this.messageService.submitStoredMessage(msg);
 					resultLabel.setText("Message successfully submitted!");
 					resultLabel.getStyle().set("color", "green");
 				} catch (ConnectorClientServiceClientException e1) {
@@ -162,7 +162,7 @@ public class SendMessage  extends VerticalLayout implements HasUrlParameter<Long
 			loadPreparedMessage(messageForm.getConnectorClientMessage().getId(), resultLabel);
 			}
 		});
-		submitMessageButton.setEnabled(filesEnabled);
+		submitMessageButton.setEnabled(filesEnabled && validateMessageForm());
 		
 		HorizontalLayout buttons = new HorizontalLayout(
 				saveBtn, uploadFileButton, submitMessageButton
@@ -181,6 +181,11 @@ public class SendMessage  extends VerticalLayout implements HasUrlParameter<Long
 		
 		setSizeFull();
 		
+	}
+	
+	private boolean validateMessageForm() {
+		BinderValidationStatus<DomibusConnectorClientMessage> validationStatus = messageForm.getBinder().validate();
+		return validationStatus.isOk();
 	}
 	
 	private String checkFileValid(String fileName, DomibusConnectorClientMessageFileType fileType) {
