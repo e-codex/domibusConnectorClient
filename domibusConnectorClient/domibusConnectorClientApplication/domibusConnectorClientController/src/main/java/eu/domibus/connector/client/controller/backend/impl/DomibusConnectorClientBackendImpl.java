@@ -1,14 +1,24 @@
 package eu.domibus.connector.client.controller.backend.impl;
 
+import java.io.ByteArrayOutputStream;
+import java.io.OutputStreamWriter;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
+import javax.xml.transform.OutputKeys;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.stream.StreamResult;
 
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.ConversionNotSupportedException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.lang.Nullable;
@@ -21,17 +31,14 @@ import eu.domibus.connector.client.DomibusConnectorClientAppBackend;
 import eu.domibus.connector.client.DomibusConnectorClientMessageBuilder;
 import eu.domibus.connector.client.controller.configuration.DefaultConfirmationAction;
 import eu.domibus.connector.client.controller.configuration.DomibusConnectorClientControllerConfig;
+import eu.domibus.connector.client.controller.configuration.DomibusConnectorClientRestClientConfig;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessage;
 import eu.domibus.connector.client.controller.persistence.model.PDomibusConnectorClientMessageStatus;
 import eu.domibus.connector.client.controller.persistence.service.IDomibusConnectorClientPersistenceService;
 import eu.domibus.connector.client.controller.rest.impl.DomibusConnectorClientDeliveryRestClient;
-import eu.domibus.connector.client.exception.DCCConnectorAcknowledgementException;
-import eu.domibus.connector.client.exception.DCCContentMappingException;
-import eu.domibus.connector.client.exception.DCCMessageDataInvalid;
-import eu.domibus.connector.client.exception.DCCMessageValidationException;
-import eu.domibus.connector.client.exception.DomibusConnectorBackendWebServiceClientException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
+import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientConfirmation;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
@@ -114,7 +121,7 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 			connectorClient.submitNewMessageToConnector(message);
 			clientMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.SENT);
 			
-		} catch (DomibusConnectorBackendWebServiceClientException | DCCConnectorAcknowledgementException | DCCMessageValidationException | DCCContentMappingException e) {
+		} catch (DomibusConnectorClientException e) {
 			clientMessage.setMessageStatus(PDomibusConnectorClientMessageStatus.FAILED);
 			persistenceService.mergeClientMessage(clientMessage);
 			throw new DomibusConnectorClientBackendException("Exception submitting message through domibusConnectorClientLibrary!",e);
@@ -346,7 +353,7 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 		
 		try {
 			connectorClient.triggerConfirmationForMessage(confirmationMessage);
-		} catch (DCCMessageDataInvalid | DCCConnectorAcknowledgementException | DomibusConnectorBackendWebServiceClientException e) {
+		} catch (DomibusConnectorClientException e) {
 			throw new DomibusConnectorClientBackendException(e);
 		}
 		

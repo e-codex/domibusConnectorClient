@@ -1,6 +1,6 @@
 package eu.domibus.connector.client.exception;
 
-public class DCCMessageDataInvalid extends Exception {
+public class DCCMessageDataInvalid extends DomibusConnectorClientException {
 
 	public DCCMessageDataInvalid() {
 		// TODO Auto-generated constructor stub

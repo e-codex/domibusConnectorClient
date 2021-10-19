@@ -1,6 +1,6 @@
 package eu.domibus.connector.client.exception;
 
-public class DCCContentMappingException extends Exception {
+public class DCCContentMappingException extends DomibusConnectorClientException {
 
 	public DCCContentMappingException() {
 		// TODO Auto-generated constructor stub

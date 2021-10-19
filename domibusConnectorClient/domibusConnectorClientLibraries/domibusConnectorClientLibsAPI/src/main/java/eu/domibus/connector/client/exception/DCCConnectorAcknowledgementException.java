@@ -1,6 +1,6 @@
 package eu.domibus.connector.client.exception;
 
-public class DCCConnectorAcknowledgementException extends Exception {
+public class DCCConnectorAcknowledgementException extends DomibusConnectorClientException {
 
 	public DCCConnectorAcknowledgementException() {
 		// TODO Auto-generated constructor stub

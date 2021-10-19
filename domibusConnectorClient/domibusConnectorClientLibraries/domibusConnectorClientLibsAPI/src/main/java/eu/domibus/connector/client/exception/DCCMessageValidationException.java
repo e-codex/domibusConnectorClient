@@ -1,6 +1,6 @@
 package eu.domibus.connector.client.exception;
 
-public class DCCMessageValidationException extends Exception {
+public class DCCMessageValidationException extends DomibusConnectorClientException {
 
 	/**
 	 * @param message

@@ -14,6 +14,7 @@ import eu.domibus.connector.client.exception.DCCContentMappingException;
 import eu.domibus.connector.client.exception.DCCMessageDataInvalid;
 import eu.domibus.connector.client.exception.DCCMessageValidationException;
 import eu.domibus.connector.client.exception.DomibusConnectorBackendWebServiceClientException;
+import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.link.DomibusConnectorClientLink;
 import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
 import eu.domibus.connector.domain.transition.DomibusConnectorActionType;
@@ -37,7 +38,7 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
     private DomibusConnectorClientMessageHandler messageHandler;
     
 	@Override
-	public void submitNewMessageToConnector(DomibusConnectorMessageType message) throws DomibusConnectorBackendWebServiceClientException, DCCConnectorAcknowledgementException, DCCMessageValidationException, DCCContentMappingException {
+	public void submitNewMessageToConnector(DomibusConnectorMessageType message) throws DomibusConnectorClientException {
 		 	MDC.put("backendmessageid", message.getMessageDetails().getBackendMessageId());
 	        DomibsConnectorAcknowledgementType domibusConnectorAckType = null;
 	        
@@ -66,7 +67,7 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 
 
 	@Override
-	public DomibusConnectorMessagesType requestNewMessagesFromConnector() throws DomibusConnectorBackendWebServiceClientException, DCCMessageValidationException, DCCContentMappingException {
+	public DomibusConnectorMessagesType requestNewMessagesFromConnector() throws DomibusConnectorClientException {
 		DomibusConnectorMessagesType messages = null;
 		try {
 			messages = clientService.requestMessagesFromConnector();
@@ -97,7 +98,7 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 	}
 
 	@Override
-	public void triggerConfirmationForMessage(DomibusConnectorMessageType confirmationMessage) throws DCCMessageDataInvalid, DCCConnectorAcknowledgementException, DomibusConnectorBackendWebServiceClientException {
+	public void triggerConfirmationForMessage(DomibusConnectorMessageType confirmationMessage) throws DomibusConnectorClientException {
 
 		String refToMessageId = confirmationMessage.getMessageDetails()!=null?confirmationMessage.getMessageDetails().getRefToMessageId():null;
 
