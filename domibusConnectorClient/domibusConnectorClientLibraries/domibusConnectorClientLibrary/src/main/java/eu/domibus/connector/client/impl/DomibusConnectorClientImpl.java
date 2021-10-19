@@ -9,7 +9,11 @@ import org.springframework.util.CollectionUtils;
 
 import eu.domibus.connector.client.DomibusConnectorClient;
 import eu.domibus.connector.client.DomibusConnectorClientMessageHandler;
-import eu.domibus.connector.client.exception.DomibusConnectorClientException;
+import eu.domibus.connector.client.exception.DCCConnectorAcknowledgementException;
+import eu.domibus.connector.client.exception.DCCContentMappingException;
+import eu.domibus.connector.client.exception.DCCMessageDataInvalid;
+import eu.domibus.connector.client.exception.DCCMessageValidationException;
+import eu.domibus.connector.client.exception.DomibusConnectorBackendWebServiceClientException;
 import eu.domibus.connector.client.link.DomibusConnectorClientLink;
 import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
 import eu.domibus.connector.domain.transition.DomibusConnectorActionType;
@@ -33,7 +37,7 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
     private DomibusConnectorClientMessageHandler messageHandler;
     
 	@Override
-	public void submitNewMessageToConnector(DomibusConnectorMessageType message) throws DomibusConnectorClientException {
+	public void submitNewMessageToConnector(DomibusConnectorMessageType message) throws DomibusConnectorBackendWebServiceClientException, DCCConnectorAcknowledgementException, DCCMessageValidationException, DCCContentMappingException {
 		 	MDC.put("backendmessageid", message.getMessageDetails().getBackendMessageId());
 	        DomibsConnectorAcknowledgementType domibusConnectorAckType = null;
 	        
@@ -41,7 +45,7 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 	        
 	        try {
 	            domibusConnectorAckType = clientService.submitMessageToConnector(message);
-	        } catch (DomibusConnectorClientException e) {
+	        } catch (DomibusConnectorBackendWebServiceClientException e) {
 	            LOGGER.error("Exception submitting message to connector: ", e);
 	            MDC.remove("backendmessageid");
 	            throw e;
@@ -50,23 +54,23 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 	        if(domibusConnectorAckType == null) {
 	        	LOGGER.error("The received acknowledgement for message with backend message ID {} is null! ", message.getMessageDetails().getBackendMessageId());
 	            MDC.remove("backendmessageid");
-	            throw new DomibusConnectorClientException("The received acknowledgement for message with backend message ID "+message.getMessageDetails().getBackendMessageId()+" is null!");
+	            throw new DCCConnectorAcknowledgementException("The received acknowledgement for message with backend message ID "+message.getMessageDetails().getBackendMessageId()+" is null!");
 	        }
 	        if(!domibusConnectorAckType.isResult()) {
 	        	LOGGER.error("The received acknowledgement for message with backend message ID {} is negative! {} ", message.getMessageDetails().getBackendMessageId(), domibusConnectorAckType.getResultMessage());
 	            MDC.remove("backendmessageid");
-	            throw new DomibusConnectorClientException("The received acknowledgement for message with backend message ID "+message.getMessageDetails().getBackendMessageId()+" is negative!");
+	            throw new DCCConnectorAcknowledgementException("The received acknowledgement for message with backend message ID "+message.getMessageDetails().getBackendMessageId()+" is negative!");
 	        }
 
 	}
 
 
 	@Override
-	public DomibusConnectorMessagesType requestNewMessagesFromConnector() throws DomibusConnectorClientException {
+	public DomibusConnectorMessagesType requestNewMessagesFromConnector() throws DomibusConnectorBackendWebServiceClientException, DCCMessageValidationException, DCCContentMappingException {
 		DomibusConnectorMessagesType messages = null;
 		try {
 			messages = clientService.requestMessagesFromConnector();
-		} catch (DomibusConnectorClientException e) {
+		} catch (DomibusConnectorBackendWebServiceClientException e) {
 			LOGGER.error("Exception occurred requesting new messages from connector!");
 			throw e;
 		}
@@ -79,7 +83,7 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 				if(message.getMessageContent()!=null) {
 					try {
 						messageHandler.prepareInboundMessage(message);
-					} catch (DomibusConnectorClientException e1) {
+					} catch (DCCMessageValidationException | DCCContentMappingException e1) {
 						LOGGER.error(e1);
 						e1.printStackTrace();
 						continue;
@@ -93,16 +97,16 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 	}
 
 	@Override
-	public void triggerConfirmationForMessage(DomibusConnectorMessageType confirmationMessage) throws DomibusConnectorClientException {
+	public void triggerConfirmationForMessage(DomibusConnectorMessageType confirmationMessage) throws DCCMessageDataInvalid, DCCConnectorAcknowledgementException, DomibusConnectorBackendWebServiceClientException {
 
 		String refToMessageId = confirmationMessage.getMessageDetails()!=null?confirmationMessage.getMessageDetails().getRefToMessageId():null;
 
 		if(confirmationMessage.getMessageDetails()==null || refToMessageId==null || refToMessageId.isEmpty()) {
-			throw new DomibusConnectorClientException("The field [refToMessageId] in the messageDetails of the confirmationMessage must not be null! It must contain the ebmsId of the originalMessage that should be confirmed!");
+			throw new DCCMessageDataInvalid("The field [refToMessageId] in the messageDetails of the confirmationMessage must not be null! It must contain the ebmsId of the originalMessage that should be confirmed!");
 		}
 
 		if(confirmationMessage.getMessageConfirmations()==null || confirmationMessage.getMessageConfirmations().get(0) == null || confirmationMessage.getMessageConfirmations().get(0).getConfirmationType()==null) {
-			throw new DomibusConnectorClientException("The confirmationMessage must contain one messageConfirmation. This messageConfirmation must contain the confirmationType that should be generated and submitted by the connector!");
+			throw new DCCMessageDataInvalid("The confirmationMessage must contain one messageConfirmation. This messageConfirmation must contain the confirmationType that should be generated and submitted by the connector!");
 		}
 		DomibusConnectorConfirmationType confirmationType = confirmationMessage.getMessageConfirmations().get(0).getConfirmationType();
 
@@ -114,19 +118,19 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 			LOGGER.debug("Submitting confirmation message with refToMessageId {} and confirmationType {} to connector.", refToMessageId, confirmationType.name());
 			domibusConnectorAckType.setResult(true); //when no exception is thrown message is assumed processed successfully!
 			domibusConnectorAckType = clientService.submitMessageToConnector(confirmationMessage);
-		} catch (DomibusConnectorClientException e) {
+		} catch (DomibusConnectorBackendWebServiceClientException e) {
 			LOGGER.error("Exception submitting confirmation message to connector: ", e);
 			throw e;
 		} 
 
 		if(domibusConnectorAckType == null) {
 			LOGGER.error("The received acknowledgement for confirmation message with originalEbmsId {} and confirmationType {} is null! ");
-			throw new DomibusConnectorClientException("The received acknowledgement for confirmation message with originalEbmsId "+refToMessageId+" and confirmationType "+confirmationType.name()+" is null!");
+			throw new DCCConnectorAcknowledgementException("The received acknowledgement for confirmation message with originalEbmsId "+refToMessageId+" and confirmationType "+confirmationType.name()+" is null!");
 		}
 		if(!domibusConnectorAckType.isResult()) {
 			LOGGER.error("The received acknowledgement for confirmation message with originalEbmsId {} and confirmationType {} is negative! \n"
 					+ "ResultMessage: "+domibusConnectorAckType.getResultMessage(), refToMessageId, confirmationType.name());
-			throw new DomibusConnectorClientException("The received acknowledgement for confirmation message with originalEbmsId "+refToMessageId+" and confirmationType "+confirmationType.name()+" is negative! \n"
+			throw new DCCConnectorAcknowledgementException("The received acknowledgement for confirmation message with originalEbmsId "+refToMessageId+" and confirmationType "+confirmationType.name()+" is negative! \n"
 					+ "ResultMessage: "+domibusConnectorAckType.getResultMessage());
 		}
 	}
