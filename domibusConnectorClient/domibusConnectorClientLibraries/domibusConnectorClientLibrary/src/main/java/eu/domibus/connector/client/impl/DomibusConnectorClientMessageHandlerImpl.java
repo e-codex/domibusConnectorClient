@@ -12,11 +12,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.DomibusConnectorClientMessageHandler;
-import eu.domibus.connector.client.exception.DomibusConnectorClientException;
+import eu.domibus.connector.client.exception.DCCContentMappingException;
+import eu.domibus.connector.client.exception.DCCMessageValidationException;
 import eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapper;
 import eu.domibus.connector.client.mapping.DomibusConnectorClientContentMapperException;
-import eu.domibus.connector.client.schema.validation.DCCLocalSchemaValidator;
 import eu.domibus.connector.client.schema.validation.DCCInternationalSchemaValidator;
+import eu.domibus.connector.client.schema.validation.DCCLocalSchemaValidator;
 import eu.domibus.connector.client.schema.validation.DCCSchemaValidationException;
 import eu.domibus.connector.client.schema.validation.SeverityLevel;
 import eu.domibus.connector.client.schema.validation.ValidationResult;
@@ -49,14 +50,14 @@ public class DomibusConnectorClientMessageHandlerImpl implements DomibusConnecto
 	private SeverityLevel schemaValidationMaxSeverityLevel;
 
 	@Override
-	public void prepareInboundMessage(DomibusConnectorMessageType message) throws DomibusConnectorClientException {
+	public void prepareInboundMessage(DomibusConnectorMessageType message) throws DCCMessageValidationException, DCCContentMappingException {
 		validateInternational(message);
 
 		if(contentMapper!=null) {
 			try {
 				contentMapper.mapInboundBusinessContent(message);
 			} catch (DomibusConnectorClientContentMapperException e) {
-				throw new DomibusConnectorClientException("Exception while mapping inbound message with ebmsId: "+ message.getMessageDetails().getEbmsMessageId(),e);
+				throw new DCCContentMappingException("Exception while mapping inbound message with ebmsId: "+ message.getMessageDetails().getEbmsMessageId(),e);
 			}
 		}else {
 			LOGGER.debug("No instance of DomibusConnectorClientContentMapper found in context!");
@@ -66,14 +67,14 @@ public class DomibusConnectorClientMessageHandlerImpl implements DomibusConnecto
 	}
 
 	@Override
-	public void prepareOutboundMessage(DomibusConnectorMessageType message) throws DomibusConnectorClientException {
+	public void prepareOutboundMessage(DomibusConnectorMessageType message) throws DCCMessageValidationException, DCCContentMappingException {
 		validateLocal(message);
 
 		if(contentMapper!=null) {
 			try {
 				contentMapper.mapOutboundBusinessContent(message);
 			} catch (DomibusConnectorClientContentMapperException e) {
-				throw new DomibusConnectorClientException("Exception while mapping outbound message!",e);
+				throw new DCCContentMappingException("Exception while mapping outbound message!",e);
 			}
 		}else {
 			LOGGER.debug("No instance of DomibusConnectorClientContentMapper found in context!");
@@ -83,7 +84,7 @@ public class DomibusConnectorClientMessageHandlerImpl implements DomibusConnecto
 
 	}
 
-	private void validateInternational(DomibusConnectorMessageType message) throws DomibusConnectorClientException {
+	private void validateInternational(DomibusConnectorMessageType message) throws DCCMessageValidationException {
 		if(internationalSchemaValidator!=null) {
 			LOGGER.debug("Instance of DCCInternationalSchemaValidator found in context!");
 			ValidationResult result = internationalSchemaValidator.validateBusinessContentXML(message);
@@ -91,7 +92,7 @@ public class DomibusConnectorClientMessageHandlerImpl implements DomibusConnecto
 			try {
 				checkSchemaValidationResult(result);
 			} catch (DCCSchemaValidationException e) {
-				throw new DomibusConnectorClientException("International Schema Validation has results of max severity level "+schemaValidationMaxSeverityLevel.name()+" or higher! ",e);
+				throw new DCCMessageValidationException("International Schema Validation has results of max severity level "+schemaValidationMaxSeverityLevel.name()+" or higher! ",e);
 
 			}
 		}else {
@@ -99,7 +100,7 @@ public class DomibusConnectorClientMessageHandlerImpl implements DomibusConnecto
 		}
 	}
 
-	private void validateLocal(DomibusConnectorMessageType message) throws DomibusConnectorClientException {
+	private void validateLocal(DomibusConnectorMessageType message) throws DCCMessageValidationException {
 		if(localSchemaValidator!=null) {
 			LOGGER.debug("Instance of DCCLocalSchemaValidator found in context!");
 			ValidationResult result = localSchemaValidator.validateBusinessContentXML(message);
@@ -107,7 +108,7 @@ public class DomibusConnectorClientMessageHandlerImpl implements DomibusConnecto
 			try {
 				checkSchemaValidationResult(result);
 			} catch (DCCSchemaValidationException e) {
-				throw new DomibusConnectorClientException("Local Schema Validation has results of max severity level "+schemaValidationMaxSeverityLevel.name()+" or higher! ",e);
+				throw new DCCMessageValidationException("Local Schema Validation has results of max severity level "+schemaValidationMaxSeverityLevel.name()+" or higher! ",e);
 
 			}
 		}else {
