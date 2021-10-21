@@ -24,6 +24,7 @@ import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType
 import eu.domibus.connector.domain.transition.DomibusConnectorActionType;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageDetailsType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageResponseType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 import eu.domibus.connector.domain.transition.DomibusConnectorPartyType;
@@ -146,7 +147,11 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 				receivedMessages.put(pendingMessagTransportId, message);
 				
 				if(acknowledgeAutomatically) {
-					clientService.acknowledgeMessage(pendingMessagTransportId, true);
+					DomibusConnectorMessageResponseType messageResponseType = new DomibusConnectorMessageResponseType();
+					
+					messageResponseType.setResult(true);
+					messageResponseType.setResponseForMessageId(pendingMessagTransportId);
+					clientService.acknowledgeMessage(messageResponseType);
 				}
 			}
 		}
@@ -154,8 +159,14 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 	}
 	
 	@Override
-	public void acknowledgeMessage(String messageTransportId, boolean result) {
-		clientService.acknowledgeMessage(messageTransportId, result);
+	public void acknowledgeMessage(String messageTransportId, boolean result, String backendMessageId) {
+		DomibusConnectorMessageResponseType messageResponseType = new DomibusConnectorMessageResponseType();
+		
+		messageResponseType.setResult(result);
+		messageResponseType.setResponseForMessageId(messageTransportId);
+		messageResponseType.setAssignedMessageId(backendMessageId);
+		
+		clientService.acknowledgeMessage(messageResponseType);
 	}
 
 	@Override

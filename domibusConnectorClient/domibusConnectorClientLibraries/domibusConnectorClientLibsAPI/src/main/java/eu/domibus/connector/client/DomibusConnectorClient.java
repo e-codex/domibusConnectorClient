@@ -77,8 +77,9 @@ public interface DomibusConnectorClient {
 	 * 
 	 * @param messageTransportId The key of the Map.Entry to the message returned from  {@link DomibusConnectorClient#requestNewMessagesFromConnector(Integer, boolean)}
 	 * @param result If true, the message will be treated as finished successfully by the domibusConnector. If false, the domibusConnector treats the message as failed.
+	 * @param backendMessageId The message ID which the business message has been given by the backend.
 	 */
-	void acknowledgeMessage(String messageTransportId, boolean result);
+	void acknowledgeMessage(String messageTransportId, boolean result, String backendMessageId);
 	
 	
 	

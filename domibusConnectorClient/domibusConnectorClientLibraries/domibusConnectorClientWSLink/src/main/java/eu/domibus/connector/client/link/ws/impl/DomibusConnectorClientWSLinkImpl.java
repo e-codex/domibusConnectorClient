@@ -13,6 +13,7 @@ import eu.domibus.connector.client.exception.DomibusConnectorBackendWebServiceCl
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.link.DomibusConnectorClientLink;
 import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageResponseType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 import eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWebService;
@@ -78,11 +79,8 @@ public class DomibusConnectorClientWSLinkImpl implements DomibusConnectorClientL
 	}
 	
 	@Override
-	public void acknowledgeMessage(String messageTransportId, boolean result) {
-		SubmitMessageResultRequest request = new SubmitMessageResultRequest();
-		request.setMessageTransportId(messageTransportId);
-		request.setResult(result);
-		connectorWsClient.submitMessageResult(request);
+	public void acknowledgeMessage(DomibusConnectorMessageResponseType result) {
+		connectorWsClient.acknowledgeMessage(result);
 	}
 	
 }

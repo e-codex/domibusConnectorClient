@@ -4,6 +4,7 @@ import java.util.List;
 
 import eu.domibus.connector.client.exception.DomibusConnectorBackendWebServiceClientException;
 import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageResponseType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
 
@@ -57,9 +58,8 @@ public interface DomibusConnectorClientLink {
 	 * In case of positive result, the domibusConnector finishes the message. In case of negative result, the domibusConnector
 	 * moves the message to its internal DLQ.
 	 * 
-	 * @param messageTransportId
-	 * @param result
+	 * @param result of type {@link DomibusConnectorMessageResponseType} MUST contain message transport ID as responseForMessageId!
 	 */
-	void acknowledgeMessage(String messageTransportId, boolean result);
+	 void acknowledgeMessage(DomibusConnectorMessageResponseType result);
 	
 }
