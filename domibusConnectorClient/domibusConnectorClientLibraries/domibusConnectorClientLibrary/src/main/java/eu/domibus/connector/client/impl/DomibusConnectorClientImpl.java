@@ -1,5 +1,9 @@
 package eu.domibus.connector.client.impl;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.slf4j.MDC;
@@ -95,6 +99,63 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 		}
 
 		return mappedMessages;
+	}
+	
+	@Override
+	public Map<String,DomibusConnectorMessageType> requestNewMessagesFromConnector(Integer maxFetchCount, boolean acknowledgeAutomatically) throws DomibusConnectorClientException{
+		Map<String,DomibusConnectorMessageType> receivedMessages = new HashMap<String,DomibusConnectorMessageType>();
+		
+		List<String> pendingMessageTransportIds = null;
+		try {
+			pendingMessageTransportIds = clientService.listPendingMessages();
+		}catch(DomibusConnectorBackendWebServiceClientException e) {
+			LOGGER.error("Exception occurred requesting list of pending message transport IDs from connector!");
+			throw e;
+		}
+		
+		if(!CollectionUtils.isEmpty(pendingMessageTransportIds)) {
+			LOGGER.debug("Received {} pending message transport IDs.", pendingMessageTransportIds.size());
+			if(maxFetchCount!=null && pendingMessageTransportIds.size()>maxFetchCount) {
+				
+				pendingMessageTransportIds = pendingMessageTransportIds.subList(0, maxFetchCount-1);
+				LOGGER.debug("Stripped list of pending message transport IDs to {} due to maxFetchCount.", pendingMessageTransportIds.size());
+			}
+			
+			for(String pendingMessagTransportId:pendingMessageTransportIds) {
+				DomibusConnectorMessageType message = null;
+				try {
+					message = clientService.getMessageById(pendingMessagTransportId);
+					
+				}catch(DomibusConnectorBackendWebServiceClientException e) {
+					//In case a message cannot received from the connector, the loop continues and only an error message in the logs will appear.
+					//The message transport ID will then most likely be contained in the next call of listPendingMessages.
+					LOGGER.error("Exception occurred requesting message with transport id {} from connector!");
+					continue;
+				}
+				
+				if(message.getMessageContent()!=null) {
+					try {
+						messageHandler.prepareInboundMessage(message);
+					} catch (DCCMessageValidationException | DCCContentMappingException e1) {
+						LOGGER.error(e1);
+						e1.printStackTrace();
+						continue;
+					}
+				}
+				
+				receivedMessages.put(pendingMessagTransportId, message);
+				
+				if(acknowledgeAutomatically) {
+					clientService.acknowledgeMessage(pendingMessagTransportId, true);
+				}
+			}
+		}
+		return receivedMessages;
+	}
+	
+	@Override
+	public void acknowledgeMessage(String messageTransportId, boolean result) {
+		clientService.acknowledgeMessage(messageTransportId, result);
 	}
 
 	@Override

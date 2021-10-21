@@ -47,5 +47,29 @@ public class ConnectorClientAutoConfiguration {
 //    	return new DomibusConnectorClientContentMapperDefaultImpl();
 //    }
 
+	private boolean acknowledgeMessagesRequired=false;
+	
+	@Nullable
+	private Integer requestMessagesMaxCount;
 
+
+
+	public boolean isAcknowledgeMessagesRequired() {
+		return acknowledgeMessagesRequired;
+	}
+
+	public void setAcknowledgeMessagesRequired(boolean acknowledgeMessagesRequired) {
+		this.acknowledgeMessagesRequired = acknowledgeMessagesRequired;
+	}
+
+	public Integer getRequestMessagesMaxCount() {
+		return requestMessagesMaxCount;
+	}
+
+	public void setRequestMessagesMaxCount(Integer requestMessagesMaxCount) {
+		this.requestMessagesMaxCount = requestMessagesMaxCount;
+	}
+
+
+	
 }

@@ -1,5 +1,7 @@
 package eu.domibus.connector.client;
 
+import java.util.Map;
+
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
@@ -31,7 +33,12 @@ public interface DomibusConnectorClient {
 	 * 
 	 * @return The {@link DomibusConnectorMessagesType} containing the new messages.
 	 * @throws DomibusConnectorClientException if the fetching of new messages from the connector fails
+	 * 
+	 * @deprecated Since this method is a single hit call that requests all messages pending at the domibusConnector. Also, messages received
+	 * via this method do not need acknowledgement and are therefore deleted permanently from the domibusConnector.
+	 * Use {@link DomibusConnectorClient#requestNewMessagesFromConnector(Integer, boolean)} instead.
 	 */
+	@Deprecated
 	public DomibusConnectorMessagesType requestNewMessagesFromConnector () throws DomibusConnectorClientException;
 	
 	/**
@@ -43,6 +50,35 @@ public interface DomibusConnectorClient {
 	 */
 	void triggerConfirmationForMessage(DomibusConnectorMessageType confirmationMessage)
 			throws DomibusConnectorClientException;
+
+
+	/**
+	 * Replaces  {@link DomibusConnectorClient#requestNewMessagesFromConnector()}
+	 * 
+	 * Allows to limit the number of messages that are to be received at one call and also to either self-acknowledge messages to the domibusConnector,
+	 * or do that in a seperate, asynchronous call via {@link DomibusConnectorClient#acknowledgeMessage(String, boolean)}.
+	 * 
+	 * @param maxFetchCount The number of messages to be received in one call. If there are more than that messages pending at the
+	 * domibusConnector, the other messages exceeding this limit will be received with the next call.
+	 * @param acknowledgeAutomatically If true, the domibusConnector immediately acknowledges messages received to the domibusConnector.
+	 * The messages acknowledged are then finished by the domibusConnector and cannot be sent again to the backend client.
+	 * If false, messages have to be acknowledged manually by calling the {@link DomibusConnectorClient#acknowledgeMessage(String, boolean)}
+	 * method. 
+	 * @return a Map where the key is the messageTransportId required to acknowledge the message in a second step. The value is the message itself.
+	 * @throws DomibusConnectorClientException
+	 */
+	Map<String, DomibusConnectorMessageType> requestNewMessagesFromConnector(Integer maxFetchCount,
+			boolean acknowledgeAutomatically) throws DomibusConnectorClientException;
+
+
+	/**
+	 * Method to acknowledge received messages via the {@link DomibusConnectorClient#requestNewMessagesFromConnector(Integer, boolean)} method
+	 * if not acknowledged automatically.
+	 * 
+	 * @param messageTransportId The key of the Map.Entry to the message returned from  {@link DomibusConnectorClient#requestNewMessagesFromConnector(Integer, boolean)}
+	 * @param result If true, the message will be treated as finished successfully by the domibusConnector. If false, the domibusConnector treats the message as failed.
+	 */
+	void acknowledgeMessage(String messageTransportId, boolean result);
 	
 	
 	

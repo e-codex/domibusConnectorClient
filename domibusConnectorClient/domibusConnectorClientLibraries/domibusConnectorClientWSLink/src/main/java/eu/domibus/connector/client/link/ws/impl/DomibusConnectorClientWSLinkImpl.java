@@ -19,6 +19,7 @@ import eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWebServ
 import eu.domibus.connector.ws.backend.webservice.EmptyRequestType;
 import eu.domibus.connector.ws.backend.webservice.GetMessageByIdRequest;
 import eu.domibus.connector.ws.backend.webservice.ListPendingMessageIdsResponse;
+import eu.domibus.connector.ws.backend.webservice.SubmitMessageResultRequest;
 
 public class DomibusConnectorClientWSLinkImpl implements DomibusConnectorClientLink {
 
@@ -49,29 +50,39 @@ public class DomibusConnectorClientWSLinkImpl implements DomibusConnectorClientL
 		}
 	}
 	
+	@Override
 	public List<String> listPendingMessages() throws DomibusConnectorBackendWebServiceClientException{
 		try {
 			ListPendingMessageIdsResponse pendingMessagesIds = connectorWsClient.listPendingMessageIds(new EmptyRequestType());
-			return pendingMessagesIds.getMessageIds();
+			return pendingMessagesIds.getMessageTransportIds();
 		} catch (Exception e) {
 			LOGGER.error("Exeception while calling webservice method 'listPendingMessageIds' at connector!");
 			throw new DomibusConnectorBackendWebServiceClientException("Exeception while calling webservice method 'listPendingMessageIds' at connector!", e);
 		}
 	}
 	
-	public DomibusConnectorMessageType getMessageById(String connectorMessageId) throws DomibusConnectorBackendWebServiceClientException {
+	@Override
+	public DomibusConnectorMessageType getMessageById(String messageTransportId) throws DomibusConnectorBackendWebServiceClientException {
 		try {
 			GetMessageByIdRequest request = new GetMessageByIdRequest();
-			request.setMessageId(connectorMessageId);
+			request.setMessageTransportId(messageTransportId);
 			DomibusConnectorMessageType messageById = connectorWsClient.getMessageById(request);
 			if(messageById!=null) {
 				return messageById;
 			}else
-				throw new DomibusConnectorBackendWebServiceClientException("Connector returned null when message with ID "+connectorMessageId+" was requested!");
+				throw new DomibusConnectorBackendWebServiceClientException("Connector returned null when message with messageTransportId "+messageTransportId+" was requested!");
 		} catch (Exception e) {
-			LOGGER.error("Exeception while requesting message with ID {} from connector!", connectorMessageId);
-			throw new DomibusConnectorBackendWebServiceClientException("Exeception while requesting message with ID "+connectorMessageId+" from connector!", e);
+			LOGGER.error("Exeception while requesting message with messageTransportId {} from connector!", messageTransportId);
+			throw new DomibusConnectorBackendWebServiceClientException("Exeception while requesting message with messageTransportId "+messageTransportId+" from connector!", e);
 		}
+	}
+	
+	@Override
+	public void acknowledgeMessage(String messageTransportId, boolean result) {
+		SubmitMessageResultRequest request = new SubmitMessageResultRequest();
+		request.setMessageTransportId(messageTransportId);
+		request.setResult(result);
+		connectorWsClient.submitMessageResult(request);
 	}
 	
 }
