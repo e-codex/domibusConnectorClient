@@ -62,7 +62,7 @@ public interface DomibusConnectorClient {
 	 * domibusConnector, the other messages exceeding this limit will be received with the next call.
 	 * @param acknowledgeAutomatically If true, the domibusConnector immediately acknowledges messages received to the domibusConnector.
 	 * The messages acknowledged are then finished by the domibusConnector and cannot be sent again to the backend client.
-	 * If false, messages have to be acknowledged manually by calling the {@link DomibusConnectorClient#acknowledgeMessage(String, boolean)}
+	 * If false, messages have to be acknowledged manually by calling the {@link DomibusConnectorClient#acknowledgeMessage(String, boolean, String)}
 	 * method. 
 	 * @return a Map where the key is the messageTransportId required to acknowledge the message in a second step. The value is the message itself.
 	 * @throws DomibusConnectorClientException
