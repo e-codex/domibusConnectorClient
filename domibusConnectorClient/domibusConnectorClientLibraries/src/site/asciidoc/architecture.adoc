@@ -53,7 +53,7 @@ ____
 
 Furthermore, it loads the keystore and builds the ws-security for the webservices.
 
-The properties required, their description and default values (if implemented) for this library are decribed in the link:aggregated-spring-properties.html[Spring Properties] menu of this page with pre-fix "connector-client.connector-link.ws". 
+The properties required, their description and default values (if implemented) for this library are decribed in the link:configuration.html[Configuration] menu of this page with pre-fix "connector-client.connector-link.ws". 
 
 === domibusConnectorClientLibrary
 
@@ -92,6 +92,6 @@ This library is an extension to the domibusConnectorClientLibrary.
 It manages time-triggered jobs to receive/submit messages from/to the domibusConnector.
 
 ==== Contained time-triggered jobs
-*GetMessagesFromConnectorJob* triggers every configurable time period to call the domibusConnector for new messages that have not been delivered yet. The messages are then routed to the *DomibusConnectorClientBackend*. The properties required, their description and default values (if implemented) for this library are decribed in the link:aggregated-spring-properties.html[Spring Properties] menu of this page with pre-fix "connector-client.scheduler.get-messages-from-connector-job".
+*GetMessagesFromConnectorJob* triggers every configurable time period to call the domibusConnector for new messages that have not been delivered yet. The messages are then routed to the *DomibusConnectorClientBackend*. The properties required, their description and default values (if implemented) for this library are decribed in the link:configuration.html[Configuration] menu of this page with pre-fix "connector-client.scheduler.get-messages-from-connector-job".
 
-*SubmitMessagesToConnectorJob* triggers every configurable time period to call the *DomibusConnectorClientBackend* for new messages on the backend of the client to submit them to the domibusConnector. To work properly, the *DomibusConnectorClientBackend* interface *_must_* be implemented. The properties required, their description and default values (if implemented) for this library are decribed in the link:aggregated-spring-properties.html[Spring Properties] menu of this page with pre-fix "connector-client.scheduler.submit-messages-to-connector-job".
+*SubmitMessagesToConnectorJob* triggers every configurable time period to call the *DomibusConnectorClientBackend* for new messages on the backend of the client to submit them to the domibusConnector. To work properly, the *DomibusConnectorClientBackend* interface *_must_* be implemented. The properties required, their description and default values (if implemented) for this library are decribed in the link:configuration.html[Configuration] menu of this page with pre-fix "connector-client.scheduler.submit-messages-to-connector-job".

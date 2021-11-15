@@ -41,6 +41,8 @@ connector-client.library.schemaValidationMaxSeverityLevel=
 #properties to configure the time-triggered job to get messages from the domibusConnector. Not necessary if client is configured as pushEnabled.
 connector-client.scheduler.get-messages-from-connector-job.enabled=false
 connector-client.scheduler.get-messages-from-connector-job.repeatInterval=30s
+connector-client.scheduler.get-messages-from-connector-job.maxFetchCount=10
+connector-client.scheduler.get-messages-from-connector-job.autoAcknowledgeMessages=true
 
 #properties to configure the time-triggered job to check the client backend for new messages to submit.
 connector-client.scheduler.submit-messages-to-connector-job.enabled=false
