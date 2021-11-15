@@ -56,7 +56,7 @@ public interface DomibusConnectorClient {
 	 * Replaces  {@link DomibusConnectorClient#requestNewMessagesFromConnector()}
 	 * 
 	 * Allows to limit the number of messages that are to be received at one call and also to either self-acknowledge messages to the domibusConnector,
-	 * or do that in a seperate, asynchronous call via {@link DomibusConnectorClient#acknowledgeMessage(String, boolean)}.
+	 * or do that in a seperate, asynchronous call via {@link DomibusConnectorClient#acknowledgeMessage(String, boolean, String)}.
 	 * 
 	 * @param maxFetchCount The number of messages to be received in one call. If there are more than that messages pending at the
 	 * domibusConnector, the other messages exceeding this limit will be received with the next call.
