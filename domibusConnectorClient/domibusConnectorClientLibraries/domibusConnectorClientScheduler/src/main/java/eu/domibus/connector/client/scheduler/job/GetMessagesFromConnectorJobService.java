@@ -2,10 +2,10 @@ package eu.domibus.connector.client.scheduler.job;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.Map;
 
 import javax.validation.Valid;
 
-import org.apache.cxf.message.Message;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,7 @@ import eu.domibus.connector.client.DomibusConnectorClient;
 import eu.domibus.connector.client.DomibusConnectorClientBackend;
 import eu.domibus.connector.client.exception.DomibusConnectorClientBackendException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
-import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
-import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 
 @Component
@@ -33,21 +32,26 @@ public class GetMessagesFromConnectorJobService {
 
 	@Autowired
 	private DomibusConnectorClient connectorClient;
+	
+	@Autowired
+	GetMessagesFromConnectorJobConfigurationProperties properties;
 
 
 	public void requestNewMessagesFromConnectorAndDeliverThemToClientBackend() throws DomibusConnectorClientException {
-		DomibusConnectorMessagesType messages = null;
+//		DomibusConnectorMessagesType messages = null;
 		LocalDateTime startTime = LocalDateTime.now();
 		LOGGER.debug("GetMessagesFromConnectorJob started");
 
-		messages = connectorClient.requestNewMessagesFromConnector();
+//		messages = connectorClient.requestNewMessagesFromConnector();
+		Map<String, DomibusConnectorMessageType> received = connectorClient.requestNewMessagesFromConnector(properties.getMaxFetchCount(), properties.isAutoAcknowledgeMessages());
 
-		if (messages!=null && !CollectionUtils.isEmpty(messages.getMessages())) {
-			LOGGER.info("{} new messages from connector to store...", messages.getMessages().size());
-			messages.getMessages().stream().forEach( message -> {
+		if (received!=null && !CollectionUtils.isEmpty(received.values())) {
+			LOGGER.info("{} new messages from connector to store...", received.size());
+			received.forEach((transportId,message) -> {
+				
 				if(message.getMessageContent()!=null) {
 					try {
-						clientBackend.deliverNewMessageToClientBackend(message);
+						clientBackend.deliverNewMessageToClientBackend(message, transportId);
 					} catch (DomibusConnectorClientBackendException e1) {
 						LOGGER.error("Exception occured delivering new message to the client backend", e1);
 

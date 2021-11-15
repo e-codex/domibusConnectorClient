@@ -33,6 +33,16 @@ public interface DomibusConnectorClientBackend {
 	public void deliverNewMessageToClientBackend(DomibusConnectorMessageType message) throws DomibusConnectorClientBackendException;
 	
 	/**
+	 * This method triggers the client's backend to store/put/forward messages received.
+	 * Must be implemented if domibusConnectorClientScheduler is used, or if the client is set up in push/pull mode.
+	 * 
+	 * @param message - The message object received from the connector.
+	 * @param messageTransportId - The transport ID the connector gives a message.
+	 * @throws DomibusConnectorClientBackendException 
+	 */
+	public void deliverNewMessageToClientBackend(DomibusConnectorMessageType message, String messageTransportId) throws DomibusConnectorClientBackendException;
+	
+	/**
 	 * This method triggers the client's backend to store/put/forward confirmation received.
 	 * Must be implemented if domibusConnectorClientScheduler is used, or if the client is set up in push/pull mode.
 	 * 

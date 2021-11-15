@@ -2,6 +2,8 @@ package eu.domibus.connector.client;
 
 import java.util.Map;
 
+import eu.domibus.connector.client.exception.DCCConnectorAcknowledgementException;
+import eu.domibus.connector.client.exception.DomibusConnectorBackendWebServiceClientException;
 import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessagesType;
@@ -21,7 +23,9 @@ public interface DomibusConnectorClient {
 	 * 
 	 * @param message - The {@link DomibusConnectorMessageType} object containing the message information. 
 	 * 					May be built using the {@link DomibusConnectorClientMessageBuilder}.
-	 * @throws DomibusConnectorClientException if the submission fails
+	 * @throws DomibusConnectorClientException if the submission fails. 
+	 * Wrapped exception type {@link DCCConnectorAcknowledgementException} if the message was rejected by the connector or result from connector not available.
+	 * Wrapped exception type {@link DomibusConnectorBackendWebServiceClientException} if the message could not be submitted to the connector.
 	 */
 	public void submitNewMessageToConnector (
 			DomibusConnectorMessageType message) throws DomibusConnectorClientException;
@@ -59,7 +63,7 @@ public interface DomibusConnectorClient {
 	 * or do that in a seperate, asynchronous call via {@link DomibusConnectorClient#acknowledgeMessage(String, boolean, String)}.
 	 * 
 	 * @param maxFetchCount The number of messages to be received in one call. If there are more than that messages pending at the
-	 * domibusConnector, the other messages exceeding this limit will be received with the next call.
+	 * domibusConnector, the other messages exceeding this limit will be received with the next call. If null, all messages will be requested at once.
 	 * @param acknowledgeAutomatically If true, the domibusConnector immediately acknowledges messages received to the domibusConnector.
 	 * The messages acknowledged are then finished by the domibusConnector and cannot be sent again to the backend client.
 	 * If false, messages have to be acknowledged manually by calling the {@link DomibusConnectorClient#acknowledgeMessage(String, boolean, String)}

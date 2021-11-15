@@ -372,6 +372,13 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 		this.confirmationDefaultAction = confirmationDefaultAction;
 	}
 
+	@Override
+	public void deliverNewMessageToClientBackend(DomibusConnectorMessageType message, String messageTransportId)
+			throws DomibusConnectorClientBackendException {
+		deliverNewMessageToClientBackend(message);
+		
+	}
+
 	
 //	private String generateDomibusConnectorClientBackendId() {
 //		return UUID.randomUUID().toString()+"@connector-client.eu";

@@ -29,6 +29,10 @@ public class GetMessagesFromConnectorJobConfigurationProperties {
      * Obsolete, if push mode is enabled.
      */
     private boolean enabled;
+    
+    private int maxFetchCount;
+    
+    private boolean autoAcknowledgeMessages = true;
 
     public DomibusConnectorDuration getRepeatInterval() {
         return repeatInterval;
@@ -45,4 +49,20 @@ public class GetMessagesFromConnectorJobConfigurationProperties {
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
     }
+
+	public int getMaxFetchCount() {
+		return maxFetchCount;
+	}
+
+	public void setMaxFetchCount(int maxFetchCount) {
+		this.maxFetchCount = maxFetchCount;
+	}
+
+	public boolean isAutoAcknowledgeMessages() {
+		return autoAcknowledgeMessages;
+	}
+
+	public void setAutoAcknowledgeMessages(boolean autoAcknowledgeMessages) {
+		this.autoAcknowledgeMessages = autoAcknowledgeMessages;
+	}
 }

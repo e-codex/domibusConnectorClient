@@ -72,6 +72,7 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 
 
 	@Override
+	@Deprecated
 	public DomibusConnectorMessagesType requestNewMessagesFromConnector() throws DomibusConnectorClientException {
 		DomibusConnectorMessagesType messages = null;
 		try {
