@@ -2,15 +2,11 @@ package eu.domibus.connector.client.link.ws.impl;
 
 import java.util.List;
 
-import org.apache.cxf.message.Message;
-import org.apache.cxf.phase.AbstractPhaseInterceptor;
-import org.apache.cxf.phase.Phase;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import eu.domibus.connector.client.exception.DomibusConnectorBackendWebServiceClientException;
-import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.link.DomibusConnectorClientLink;
 import eu.domibus.connector.domain.transition.DomibsConnectorAcknowledgementType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageResponseType;
@@ -20,7 +16,6 @@ import eu.domibus.connector.ws.backend.webservice.DomibusConnectorBackendWebServ
 import eu.domibus.connector.ws.backend.webservice.EmptyRequestType;
 import eu.domibus.connector.ws.backend.webservice.GetMessageByIdRequest;
 import eu.domibus.connector.ws.backend.webservice.ListPendingMessageIdsResponse;
-import eu.domibus.connector.ws.backend.webservice.SubmitMessageResultRequest;
 
 public class DomibusConnectorClientWSLinkImpl implements DomibusConnectorClientLink {
 
