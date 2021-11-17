@@ -23,10 +23,10 @@ public class DynamicMessageForm extends FormLayout{
 	private TextField service = FormsUtil.getFormattedRequiredTextField();
 	private  final TextField action = FormsUtil.getFormattedRequiredTextField();
 	private TextField fromPartyId = FormsUtil.getFormattedRequiredTextField();
-	private TextField fromPartyRole = FormsUtil.getFormattedRequiredTextField();
+	private TextField fromPartyRole = FormsUtil.getFormattedTextField();
 	private TextField fromPartyType = FormsUtil.getFormattedTextField();
 	private TextField toPartyId = FormsUtil.getFormattedRequiredTextField();
-	private TextField toPartyRole = FormsUtil.getFormattedRequiredTextField();
+	private TextField toPartyRole = FormsUtil.getFormattedTextField();
 	private TextField toPartyType = FormsUtil.getFormattedTextField();
 	private TextField storageStatus = FormsUtil.getFormattedTextFieldReadOnly();
 	private TextField storageInfo = FormsUtil.getFormattedTextFieldReadOnly();
@@ -55,8 +55,16 @@ public class DynamicMessageForm extends FormLayout{
 		private void fillForm() {
 			binder.bindInstanceFields(this);
 			
+			binder.forField(backendMessageId)
+			.bind(DomibusConnectorClientMessage::getBackendMessageId, DomibusConnectorClientMessage::setBackendMessageId);
 			addFormItem(backendMessageId, "Backend Message ID"); 
+			
+			binder.forField(ebmsMessageId)
+			.bind(DomibusConnectorClientMessage::getEbmsMessageId, DomibusConnectorClientMessage::setEbmsMessageId);
 			addFormItem(ebmsMessageId, "EBMS Message ID"); 
+			
+			binder.forField(conversationId)
+			.bind(DomibusConnectorClientMessage::getConversationId, DomibusConnectorClientMessage::setConversationId);
 			addFormItem(conversationId, "Conversation ID"); 
 			
 			binder.forField(originalSender).withValidator((Validator<String>) (value, context) -> {
@@ -104,15 +112,19 @@ public class DynamicMessageForm extends FormLayout{
 			}).bind(DomibusConnectorClientMessage::getFromPartyId, DomibusConnectorClientMessage::setFromPartyId);
 			addFormItem(fromPartyId, "From Party ID"); 
 			
-			binder.forField(fromPartyRole).withValidator((Validator<String>) (value, context) -> {
-				if (value.length() < 1) {
-	                return ValidationResult
-	                        .error("From Party Role must not be empty!");
-	            }
-				return ValidationResult.ok();
-			}).bind(DomibusConnectorClientMessage::getFromPartyRole, DomibusConnectorClientMessage::setFromPartyRole);
+			binder.forField(fromPartyRole)
+//			.withValidator((Validator<String>) (value, context) -> {
+//				if (value.length() < 1) {
+//	                return ValidationResult
+//	                        .error("From Party Role must not be empty!");
+//	            }
+//				return ValidationResult.ok();
+//			})
+			.bind(DomibusConnectorClientMessage::getFromPartyRole, DomibusConnectorClientMessage::setFromPartyRole);
 			addFormItem(fromPartyRole, "From Party Role"); 
 			
+			binder.forField(fromPartyType)
+			.bind(DomibusConnectorClientMessage::getFromPartyType, DomibusConnectorClientMessage::setFromPartyType);
 			addFormItem(fromPartyType, "From Party Type"); 
 			
 			binder.forField(toPartyId).withValidator((Validator<String>) (value, context) -> {
@@ -124,15 +136,19 @@ public class DynamicMessageForm extends FormLayout{
 			}).bind(DomibusConnectorClientMessage::getToPartyId, DomibusConnectorClientMessage::setToPartyId);
 			addFormItem(toPartyId, "To Party ID"); 
 			
-			binder.forField(toPartyRole).withValidator((Validator<String>) (value, context) -> {
-				if (value.length() < 1) {
-	                return ValidationResult
-	                        .error("To Party Role must not be empty!");
-	            }
-				return ValidationResult.ok();
-			}).bind(DomibusConnectorClientMessage::getToPartyRole, DomibusConnectorClientMessage::setToPartyRole);
+			binder.forField(toPartyRole)
+//			.withValidator((Validator<String>) (value, context) -> {
+//				if (value.length() < 1) {
+//	                return ValidationResult
+//	                        .error("To Party Role must not be empty!");
+//	            }
+//				return ValidationResult.ok();
+//			})
+			.bind(DomibusConnectorClientMessage::getToPartyRole, DomibusConnectorClientMessage::setToPartyRole);
 			addFormItem(toPartyRole, "To Party Role"); 
 			
+			binder.forField(toPartyType)
+			.bind(DomibusConnectorClientMessage::getToPartyType, DomibusConnectorClientMessage::setToPartyType);
 			addFormItem(toPartyType, "To Party Type");
 			
 			addFormItem(storageStatus, "Storage Status");
