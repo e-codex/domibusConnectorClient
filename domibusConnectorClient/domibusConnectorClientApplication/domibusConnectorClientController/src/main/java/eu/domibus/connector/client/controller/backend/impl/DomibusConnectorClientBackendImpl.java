@@ -373,15 +373,17 @@ public class DomibusConnectorClientBackendImpl implements DomibusConnectorClient
 	}
 
 	@Override
-	public void deliverNewMessageToClientBackend(DomibusConnectorMessageType message, String messageTransportId)
-			throws DomibusConnectorClientBackendException {
-		deliverNewMessageToClientBackend(message);
+	public void deliverNewAcknowledgeableMessageToClientBackend(DomibusConnectorMessageType message,
+			String messageTransportId) throws DomibusConnectorClientBackendException {
+		// TODO Auto-generated method stub
 		
 	}
 
-	
-//	private String generateDomibusConnectorClientBackendId() {
-//		return UUID.randomUUID().toString()+"@connector-client.eu";
-//	}
+	@Override
+	public void deliverNewAcknowledgeableConfirmationToClientBackend(DomibusConnectorMessageType message,
+			String messageTransportId) throws DomibusConnectorClientBackendException {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

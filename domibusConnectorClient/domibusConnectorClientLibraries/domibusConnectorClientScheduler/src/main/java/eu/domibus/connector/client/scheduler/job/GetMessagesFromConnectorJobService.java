@@ -32,44 +32,57 @@ public class GetMessagesFromConnectorJobService {
 
 	@Autowired
 	private DomibusConnectorClient connectorClient;
-	
+
 	@Autowired
 	GetMessagesFromConnectorJobConfigurationProperties properties;
 
 
 	public void requestNewMessagesFromConnectorAndDeliverThemToClientBackend() throws DomibusConnectorClientException {
-//		DomibusConnectorMessagesType messages = null;
+		//		DomibusConnectorMessagesType messages = null;
 		LocalDateTime startTime = LocalDateTime.now();
 		LOGGER.debug("GetMessagesFromConnectorJob started");
 
-//		messages = connectorClient.requestNewMessagesFromConnector();
+		//		messages = connectorClient.requestNewMessagesFromConnector();
 		Map<String, DomibusConnectorMessageType> received = connectorClient.requestNewMessagesFromConnector(properties.getMaxFetchCount(), properties.isAutoAcknowledgeMessages());
 
 		if (received!=null && !CollectionUtils.isEmpty(received.values())) {
 			LOGGER.info("{} new messages from connector to store...", received.size());
 			received.forEach((transportId,message) -> {
-				
-				if(message.getMessageContent()!=null) {
-					try {
-						clientBackend.deliverNewMessageToClientBackend(message, transportId);
-					} catch (DomibusConnectorClientBackendException e1) {
-						LOGGER.error("Exception occured delivering new message to the client backend", e1);
+				boolean isBusinessMessage = message.getMessageContent()!=null;
+				boolean isEvidenceMessage = message.getMessageConfirmations()!=null && !message.getMessageConfirmations().isEmpty();
+				if(properties.isAutoAcknowledgeMessages()) {
+					if(isBusinessMessage) {
+						try {
+							clientBackend.deliverNewMessageToClientBackend(message);
+						} catch (DomibusConnectorClientBackendException e1) {
+							LOGGER.error("Exception occured delivering new message to the client backend", e1);
 
+						}
+					}else if (isEvidenceMessage) {
+						try {
+							clientBackend.deliverNewConfirmationToClientBackend(message);
+						} catch (DomibusConnectorClientBackendException e1) {
+							LOGGER.error("Exception occured delivering new confirmation to the client backend", e1);
+
+						}
 					}
-				}else if (message.getMessageConfirmations()!=null && !message.getMessageConfirmations().isEmpty()) {
-					try {
-						clientBackend.deliverNewConfirmationToClientBackend(message);
-					} catch (DomibusConnectorClientBackendException e1) {
-						LOGGER.error("Exception occured delivering new confirmation to the client backend", e1);
+				} else {
+					if(isBusinessMessage) {
+						try {
+							clientBackend.deliverNewAcknowledgeableMessageToClientBackend(message, transportId);
+						} catch (DomibusConnectorClientBackendException e1) {
+							LOGGER.error("Exception occured delivering new message to the client backend", e1);
 
+						}
+					}else if (isEvidenceMessage) {
+						try {
+							clientBackend.deliverNewAcknowledgeableConfirmationToClientBackend(message, transportId);
+						} catch (DomibusConnectorClientBackendException e1) {
+							LOGGER.error("Exception occured delivering new confirmation to the client backend", e1);
+
+						}
 					}
 				}
-
-				//                try {
-				//                	clientBackend.triggerConfirmationForMessage(message, DomibusConnectorConfirmationType.DELIVERY, null);
-				//				} catch (DomibusConnectorClientBackendException e) {
-				//					LOGGER.error("Exception occured triggering the confirmation for message at the client backend", e);
-				//				}
 
 			});
 		}else {

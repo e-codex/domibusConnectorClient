@@ -34,13 +34,13 @@ public interface DomibusConnectorClientBackend {
 	
 	/**
 	 * This method triggers the client's backend to store/put/forward messages received.
-	 * Must be implemented if domibusConnectorClientScheduler is used, or if the client is set up in push/pull mode.
+	 * Must be implemented if the message pulling with acknowledgement is used.
 	 * 
 	 * @param message - The message object received from the connector.
 	 * @param messageTransportId - The transport ID the connector gives a message.
 	 * @throws DomibusConnectorClientBackendException 
 	 */
-	public void deliverNewMessageToClientBackend(DomibusConnectorMessageType message, String messageTransportId) throws DomibusConnectorClientBackendException;
+	public void deliverNewAcknowledgeableMessageToClientBackend(DomibusConnectorMessageType message, String messageTransportId) throws DomibusConnectorClientBackendException;
 	
 	/**
 	 * This method triggers the client's backend to store/put/forward confirmation received.
@@ -50,6 +50,16 @@ public interface DomibusConnectorClientBackend {
 	 * @throws DomibusConnectorClientBackendException 
 	 */
 	public void deliverNewConfirmationToClientBackend(DomibusConnectorMessageType message) throws DomibusConnectorClientBackendException;
+	
+	/**
+	 * This method triggers the client's backend to store/put/forward confirmation received.
+	 * Must be implemented if the message pulling with acknowledgement is used.
+	 * 
+	 * @param message - The message object containing the confirmation received from the connector.
+	 * @param messageTransportId - The transport ID the connector gives a message.
+	 * @throws DomibusConnectorClientBackendException 
+	 */
+	public void deliverNewAcknowledgeableConfirmationToClientBackend(DomibusConnectorMessageType message, String messageTransportId) throws DomibusConnectorClientBackendException;
 	
 	/**
 	 * This method triggers the connector to generate and send a confirmation.
