@@ -4,6 +4,7 @@ import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.client.scheduler.configuration.DomibusConnectorClientSchedulerAutoConfiguration;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -19,6 +20,7 @@ import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 @EnableConfigurationProperties
 @ConditionalOnProperty(prefix = GetMessagesFromConnectorJobConfigurationProperties.PREFIX, value = "enabled", havingValue = "true")
 @Configuration("getMessagesFromConnectorJobConfiguration")
+@DisallowConcurrentExecution
 public class GetMessagesFromConnectorJobConfiguration implements Job {
 
 	private static final Logger LOGGER = LogManager.getLogger(GetMessagesFromConnectorJobConfiguration.class);

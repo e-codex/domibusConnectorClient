@@ -1,5 +1,6 @@
 package eu.domibus.connector.client.scheduler.job;
 
+import org.quartz.DisallowConcurrentExecution;
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
@@ -17,6 +18,7 @@ import eu.domibus.connector.client.scheduler.configuration.DomibusConnectorClien
 @EnableConfigurationProperties
 @Configuration("submitMessagesToConnectorJobConfiguration")
 @ConditionalOnProperty(value = SubmitMessagesToConnectorJobConfigurationProperties.PREFIX + ".enabled", havingValue = "true")
+@DisallowConcurrentExecution
 public class SubmitMessagesToConnectorJobConfiguration implements Job {
 	
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(SubmitMessagesToConnectorJobConfiguration.class);
