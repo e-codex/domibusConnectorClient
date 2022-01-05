@@ -47,9 +47,11 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 		 	MDC.put("backendmessageid", message.getMessageDetails().getBackendMessageId());
 	        DomibsConnectorAcknowledgementType domibusConnectorAckType = null;
 	        
+	        LOGGER.debug("Preparing message [{}] for submission.", message.getMessageDetails().getBackendMessageId());
 	       messageHandler.prepareOutboundMessage(message);
 	        
 	        try {
+	        	LOGGER.debug("Submitting message [{}]...", message.getMessageDetails().getBackendMessageId());
 	            domibusConnectorAckType = clientService.submitMessageToConnector(message);
 	        } catch (DomibusConnectorBackendWebServiceClientException e) {
 	            LOGGER.error("Exception submitting message to connector: ", e);
@@ -68,6 +70,7 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 	            throw new DCCConnectorAcknowledgementException("The received acknowledgement for message with backend message ID "+message.getMessageDetails().getBackendMessageId()+" is negative!");
 	        }
 
+	        LOGGER.info("Message [{}] submitted.", message.getMessageDetails().getBackendMessageId());
 	}
 
 
