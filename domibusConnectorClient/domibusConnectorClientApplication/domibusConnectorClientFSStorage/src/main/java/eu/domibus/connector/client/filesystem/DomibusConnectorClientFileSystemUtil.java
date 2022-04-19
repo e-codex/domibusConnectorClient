@@ -8,7 +8,7 @@ import java.util.Date;
 import org.apache.commons.io.FileUtils;
 import org.springframework.util.StringUtils;
 
-import eu.domibus.connector.client.filesystem.message.FSMessageDetails;
+import eu.domibus.connector.client.filesystem.standard.DefaultMessageProperties;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 public class DomibusConnectorClientFileSystemUtil {
@@ -35,18 +35,7 @@ public class DomibusConnectorClientFileSystemUtil {
 		return newMessageFolder;
 	}
 	
-	   public static void storeMessagePropertiesToFile(FSMessageDetails messageProperties,
-	            File messagePropertiesFile) {
-	        if (!messagePropertiesFile.exists()) {
-	            try {
-	                messagePropertiesFile.createNewFile();
-	            } catch (IOException e) {
-	                e.printStackTrace();
-	            }
-	        }
 
-	        messageProperties.storePropertiesToFile(messagePropertiesFile);
-	    }
 
 	public static String convertDateToProperty(Date date){
 		return sdf2.format(date);
@@ -84,20 +73,7 @@ public class DomibusConnectorClientFileSystemUtil {
 						.toString();
 		}
 
-		public static FSMessageDetails loadMessageProperties(File message, String messagePropertiesFileName) {
-			String pathname = message.getAbsolutePath() + File.separator + messagePropertiesFileName;
-			LOGGER.debug("#loadMessageProperties: Loading message properties from file {}", pathname);
-			File messagePropertiesFile = new File(pathname);
-			if (!messagePropertiesFile.exists()) {
-				LOGGER.error("#loadMessageProperties: Message properties file '" + messagePropertiesFile.getAbsolutePath()
-				+ "' does not exist. Message cannot be processed!");
-				return null;
-			}
-			FSMessageDetails details = new FSMessageDetails();
-			details.loadPropertiesFromFile(messagePropertiesFile);
 
-			return details;
-		}
 
 	
 }

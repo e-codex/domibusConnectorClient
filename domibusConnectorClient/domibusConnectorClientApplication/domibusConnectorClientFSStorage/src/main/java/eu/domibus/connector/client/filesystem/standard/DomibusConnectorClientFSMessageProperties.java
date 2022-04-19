@@ -1,4 +1,4 @@
-package eu.domibus.connector.client.filesystem.configuration;
+package eu.domibus.connector.client.filesystem.standard;
 
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
@@ -9,10 +9,12 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
+import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSStorageConfiguration;
+
 @Component
 @ConditionalOnProperty(prefix=DomibusConnectorClientFSStorageConfiguration.PREFIX, name=DomibusConnectorClientFSStorageConfiguration.ENABLED_PROPERTY_NAME, havingValue="true")
 @ConfigurationProperties(prefix = DomibusConnectorClientFSMessageProperties.PREFIX)
-@PropertySource("classpath:/connector-client-fs-storage-default.properties")
+@PropertySource("classpath:/connector-client-fs-default-message.properties")
 @Validated
 @Valid
 public class DomibusConnectorClientFSMessageProperties {

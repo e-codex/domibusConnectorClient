@@ -1,0 +1,101 @@
+package eu.domibus.connector.client.filesystem.isupport.writer;
+
+import java.io.File;
+import java.util.Date;
+
+import javax.validation.Valid;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
+import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
+import org.springframework.validation.annotation.Validated;
+
+import eu.domibus.connector.client.filesystem.AbstractDomibusConnectorClientFileSystemWriterImpl;
+import eu.domibus.connector.client.filesystem.DomibusConnectorClientFileSystemException;
+import eu.domibus.connector.client.filesystem.DomibusConnectorClientFileSystemWriter;
+import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSProperties;
+import eu.domibus.connector.client.filesystem.standard.DefaultMessageProperties;
+import eu.domibus.connector.client.filesystem.standard.DomibusConnectorClientFSMessageProperties;
+import eu.domibus.connector.client.storage.DomibusConnectorClientStorageFileType;
+import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageContentType;
+import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
+
+@Component
+@Validated
+@Valid
+@Profile("iSupport")
+public class ISupportFSWriterImpl extends AbstractDomibusConnectorClientFileSystemWriterImpl implements DomibusConnectorClientFileSystemWriter {
+
+	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(ISupportFSWriterImpl.class);
+	
+	@Autowired
+	private DomibusConnectorClientFSProperties properties;
+	
+	@Autowired
+	private DomibusConnectorClientFSMessageProperties messageProperties;
+	
+	@Override
+	protected void putFileToMessageProperties(File messageFolder, String fileName,
+			DomibusConnectorClientStorageFileType fileType) {
+		// nothing to do here since iSupport does not use message properties
+
+	}
+
+	@Override
+	protected void removeFileFromMessageProperties(File messageFolder, String fileName,
+			DomibusConnectorClientStorageFileType fileType) {
+		// nothing to do here since iSupport does not use message properties
+
+	}
+
+	@Override
+	protected void setMessageSentInMessageProperties(File messageFolder) {
+		// nothing to do here since iSupport does not use message properties
+
+	}
+
+	@Override
+	public String writeMessageToFileSystem(DomibusConnectorMessageType message, File messagesDir)
+			throws DomibusConnectorClientFileSystemException {
+		File messageFolder = createMessageFolder(message, messagesDir, true);
+
+		LOGGER.debug("Write new message into folder {}", messageFolder.getAbsolutePath());
+		
+		DomibusConnectorMessageContentType messageContent = message.getMessageContent();
+		if (messageContent != null) {
+			if (messageContent.getDocument() != null) {
+				String fileName = null;
+				if (StringUtils.hasText(messageContent.getDocument().getDocumentName())) {
+					fileName = messageContent.getDocument().getDocumentName();
+				} else {
+					fileName = properties.getDefaultPdfFileName();
+
+				}
+				writeBusinessDocumentToFS(messageFolder, fileName, messageContent);
+				DomibusConnectorDetachedSignatureType detachedSignature = messageContent.getDocument().getDetachedSignature();
+				if (detachedSignature != null && detachedSignature.getDetachedSignature()!=null && detachedSignature.getDetachedSignature().length > 0
+						&& detachedSignature.getMimeType() != null) {
+					writeDetachedSignatureToFS(messageFolder, detachedSignature);
+				}
+			}
+			if (messageContent.getXmlContent() != null){
+				String fileName = messageProperties.getFileName();
+				writeBusinessContentToFS(messageFolder, messageContent, fileName);
+			}
+		}
+	
+		if (message.getMessageAttachments() != null) {
+			writeAttachmentsToFS(message, messageFolder);
+		}
+
+		if (message.getMessageConfirmations() != null) {
+			writeConfirmationsToFS(message, messageFolder);
+		}
+
+		return messageFolder.getAbsolutePath();
+	}
+
+
+}

@@ -12,7 +12,7 @@ import org.springframework.validation.annotation.Validated;
 @Component
 @ConditionalOnProperty(prefix=DomibusConnectorClientFSStorageConfiguration.PREFIX, name=DomibusConnectorClientFSStorageConfiguration.ENABLED_PROPERTY_NAME, havingValue="true")
 @ConfigurationProperties(prefix = DomibusConnectorClientFSProperties.PREFIX)
-@PropertySource("classpath:/connector-client-fs-storage-default.properties")
+@PropertySource("classpath:/connector-client-fs.properties")
 @Validated
 @Valid
 public class DomibusConnectorClientFSProperties {
