@@ -6,6 +6,7 @@ import javax.validation.constraints.NotNull;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.context.properties.NestedConfigurationProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -21,11 +22,9 @@ import eu.domibus.connector.client.filesystem.standard.writer.DefaultFSWriterImp
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorage;
 
 @Configuration
-@ConditionalOnProperty(prefix=DomibusConnectorClientFSStorageConfiguration.PREFIX, name=DomibusConnectorClientFSStorageConfiguration.ENABLED_PROPERTY_NAME, havingValue="true")
-@ConfigurationProperties(prefix = DomibusConnectorClientFSStorageConfiguration.PREFIX)
+@ConditionalOnProperty(prefix=DomibusConnectorClientFSStorageConfiguration.PREFIX, name=DomibusConnectorClientFSStorageConfiguration.ENABLED_PROPERTY_NAME, havingValue="true", matchIfMissing=true)
 @PropertySource("classpath:/connector-client-fs.properties")
-@Validated
-@Valid
+@EnableConfigurationProperties(DomibusConnectorClientFSProperties.class)
 public class DomibusConnectorClientFSStorageConfiguration {
 	
 	public static final String PREFIX = "connector-client.storage.filesystem";

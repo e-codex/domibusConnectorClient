@@ -12,11 +12,7 @@ import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSStorageConfiguration;
 
-@Component
-@ConditionalOnProperty(prefix=DomibusConnectorClientFSStorageConfiguration.PREFIX, name=DomibusConnectorClientFSStorageConfiguration.ENABLED_PROPERTY_NAME, havingValue="true")
 @ConfigurationProperties(prefix = ISupportFSMessageProperties.PREFIX)
-@Profile("iSupport")
-@PropertySource("classpath:/connector-client-fs-isupport-message.properties")
 @Validated
 @Valid
 public class ISupportFSMessageProperties {
