@@ -1,7 +1,6 @@
 package eu.domibus.connector.client.filesystem.isupport.writer;
 
 import java.io.File;
-import java.util.Date;
 
 import javax.validation.Valid;
 
@@ -14,8 +13,7 @@ import org.springframework.validation.annotation.Validated;
 import eu.domibus.connector.client.filesystem.AbstractDomibusConnectorClientFileSystemWriterImpl;
 import eu.domibus.connector.client.filesystem.DomibusConnectorClientFileSystemException;
 import eu.domibus.connector.client.filesystem.DomibusConnectorClientFileSystemWriter;
-import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSProperties;
-import eu.domibus.connector.client.filesystem.standard.DefaultMessageProperties;
+import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSConfigurationProperties;
 import eu.domibus.connector.client.filesystem.standard.DomibusConnectorClientFSMessageProperties;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageFileType;
 import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureType;
@@ -31,7 +29,7 @@ public class ISupportFSWriterImpl extends AbstractDomibusConnectorClientFileSyst
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(ISupportFSWriterImpl.class);
 	
 	@Autowired
-	private DomibusConnectorClientFSProperties properties;
+	private DomibusConnectorClientFSConfigurationProperties properties;
 	
 	@Autowired
 	private DomibusConnectorClientFSMessageProperties messageProperties;

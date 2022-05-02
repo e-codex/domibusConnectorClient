@@ -19,7 +19,7 @@ import org.springframework.validation.annotation.Validated;
 import eu.domibus.connector.client.filesystem.AbstractDomibusConnectorClientFileSystemReaderImpl;
 import eu.domibus.connector.client.filesystem.DomibusConnectorClientFileSystemException;
 import eu.domibus.connector.client.filesystem.DomibusConnectorClientFileSystemReader;
-import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSProperties;
+import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSConfigurationProperties;
 import eu.domibus.connector.client.filesystem.isupport.ISupportFSMessageProperties;
 import eu.domibus.connector.client.filesystem.isupport.sbdh.SBDHJaxbConverter;
 import eu.domibus.connector.client.filesystem.isupport.sbdh.model.StandardBusinessDocumentHeader;
@@ -51,7 +51,7 @@ public class ISupportFSReaderImpl extends AbstractDomibusConnectorClientFileSyst
 	private SBDHJaxbConverter sbdhConverter;
 	
 	@Autowired
-	private DomibusConnectorClientFSProperties properties;
+	private DomibusConnectorClientFSConfigurationProperties properties;
 
 	@Override
 	public Map<String, DomibusConnectorClientStorageFileType> getFileListFromMessageFolder(File messageFolder) {

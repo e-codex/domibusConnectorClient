@@ -6,16 +6,12 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.validation.Valid;
 import javax.xml.transform.TransformerFactoryConfigurationError;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.annotation.Validated;
 
-import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSProperties;
-import eu.domibus.connector.client.filesystem.standard.DefaultMessageProperties;
+import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSConfigurationProperties;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageFileType;
 import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureMimeType;
 import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureType;
@@ -38,7 +34,7 @@ public abstract class AbstractDomibusConnectorClientFileSystemWriterImpl
 
 	
 	@Autowired
-	private DomibusConnectorClientFSProperties properties;
+	private DomibusConnectorClientFSConfigurationProperties properties;
 
 
 	/* (non-Javadoc)

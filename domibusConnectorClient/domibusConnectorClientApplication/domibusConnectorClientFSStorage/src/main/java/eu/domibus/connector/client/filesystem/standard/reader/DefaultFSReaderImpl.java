@@ -6,18 +6,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import javax.activation.MimetypesFileTypeMap;
-import javax.validation.Valid;
 
 import org.apache.commons.lang.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.filesystem.DomibusConnectorClientFileSystemReader;
-import eu.domibus.connector.client.filesystem.DomibusConnectorClientFileSystemUtil;
-import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSProperties;
+import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSConfigurationProperties;
 import eu.domibus.connector.client.filesystem.standard.DefaultMessageProperties;
 import eu.domibus.connector.client.filesystem.standard.DomibusConnectorClientFSMessageProperties;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageFileType;
@@ -49,7 +44,7 @@ public class DefaultFSReaderImpl extends AbstractDomibusConnectorClientFileSyste
 	private DomibusConnectorClientFSMessageProperties messageProperties;
 
 	@Autowired
-	private DomibusConnectorClientFSProperties properties;
+	private DomibusConnectorClientFSConfigurationProperties properties;
 
 
 	public Map<String, DomibusConnectorClientStorageFileType> getFileListFromMessageFolder(File messageFolder){

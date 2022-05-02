@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSProperties;
+import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSConfigurationProperties;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageFileType;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageStatus;
 import eu.domibus.connector.domain.transition.DomibusConnectorConfirmationType;
@@ -23,7 +23,7 @@ public abstract class AbstractDomibusConnectorClientFileSystemReaderImpl
 {
 	
 	@Autowired
-	private DomibusConnectorClientFSProperties properties;
+	private DomibusConnectorClientFSConfigurationProperties properties;
 
 	
 	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(AbstractDomibusConnectorClientFileSystemReaderImpl.class);

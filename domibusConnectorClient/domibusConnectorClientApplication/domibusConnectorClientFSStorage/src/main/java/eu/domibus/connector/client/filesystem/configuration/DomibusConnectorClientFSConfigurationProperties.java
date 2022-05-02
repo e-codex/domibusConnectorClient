@@ -3,16 +3,13 @@ package eu.domibus.connector.client.filesystem.configuration;
 import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
 
-import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.PropertySource;
-import org.springframework.stereotype.Component;
 import org.springframework.validation.annotation.Validated;
 
-@ConfigurationProperties(prefix = DomibusConnectorClientFSProperties.PREFIX)
+@ConfigurationProperties(prefix = DomibusConnectorClientFSConfigurationProperties.PREFIX)
 @Validated
 @Valid
-public class DomibusConnectorClientFSProperties {
+public class DomibusConnectorClientFSConfigurationProperties {
 	
 	public static final String PREFIX = "connector-client.storage.filesystem.properties";
 

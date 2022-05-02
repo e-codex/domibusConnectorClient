@@ -26,11 +26,12 @@ import org.springframework.util.SystemPropertyUtils;
 public class VaadinConnectorClientStarter {
 
 private static final Logger LOGGER = LoggerFactory.getLogger(VaadinConnectorClientStarter.class);
-	
-	public static final String CONNECTOR_CLIENT_CONFIG_FILE = "connector-client.properties";
-	
-	public static final String SPRING_CONFIG_LOCATION = "spring.config.location";
-	public static final String SPRING_CONFIG_NAME = "spring.config.name";
+
+    public static final String CONNECTOR_CLIENT_CONFIG_FILE = "connector-client.properties";
+
+    public static final String SPRING_CONFIG_LOCATION_PROPERTY_NAME = "spring.config.location";
+    public static final String SPRING_CONFIG_NAME_PROPERTY_NAME = "spring.config.name";
+    public static final String SPRING_CONFIG_NAME = "connector-client";
 	
    
 	
@@ -58,14 +59,15 @@ private static final Logger LOGGER = LoggerFactory.getLogger(VaadinConnectorClie
             String configName = connectorConfigFile.substring(lastIndex);
 
             LOGGER.info(String.format("Setting:\n%s=%s\n%s=%s",
-                    SPRING_CONFIG_LOCATION, connectorConfigFile,
-                    SPRING_CONFIG_NAME, configName));
+                    SPRING_CONFIG_LOCATION_PROPERTY_NAME, connectorConfigFile,
+                    SPRING_CONFIG_NAME_PROPERTY_NAME, configName));
 
-            springProperties.setProperty(SPRING_CONFIG_LOCATION, connectorConfigFile);
-            springProperties.setProperty(SPRING_CONFIG_NAME, configName);
+            springProperties.setProperty(SPRING_CONFIG_LOCATION_PROPERTY_NAME, connectorConfigFile);
+            springProperties.setProperty(SPRING_CONFIG_NAME_PROPERTY_NAME, configName);
 
         }else {
             LOGGER.warn("SystemProperty \"{}\" not given or not resolveable! Startup using default spring external configuration!", CONNECTOR_CLIENT_CONFIG_FILE);
+			springProperties.setProperty(SPRING_CONFIG_NAME_PROPERTY_NAME, SPRING_CONFIG_NAME); //look for <SPRING_CONFIG_NAME>.properties in config location
         }
         application.properties(springProperties); //pass the mapped CONNECTOR_CONFIG_FILE to the spring properties...
         return application.sources(VaadinConnectorClientStarter.class);
@@ -98,26 +100,26 @@ private static final Logger LOGGER = LoggerFactory.getLogger(VaadinConnectorClie
 //	        super.onStartup(servletContext);
 //	    }
 	 
-	 public static Properties loadConnectorConfigProperties(String connectorConfigFile) {
-	        Properties p = new Properties();
-	        if (connectorConfigFile != null) {
-	            java.nio.file.Path connectorConfigFilePath = Paths.get(connectorConfigFile);
-	            if (!Files.exists(connectorConfigFilePath)) {
-	                String errorString = String.format("Cannot start because the via System Property [%s] provided config file [%s] mapped to path [%s] does not exist!", CONNECTOR_CLIENT_CONFIG_FILE, connectorConfigFile, connectorConfigFilePath);
-	                LOGGER.error(errorString);
-	                throw new RuntimeException(errorString);
-	            }
-	            try {
-	            	
-	                FileInputStream fileInputStream = new FileInputStream(connectorConfigFilePath.toFile());
-					p.load(fileInputStream);
-					fileInputStream.close();
-	                return p;
-	            } catch (IOException e) {
-	                throw new RuntimeException(String.format("Cannot load properties from file [%s], is it a valid and readable properties file?", connectorConfigFilePath), e);
-	            }
-	        }
-	        return p;
-	    }
+//	 public static Properties loadConnectorConfigProperties(String connectorConfigFile) {
+//	        Properties p = new Properties();
+//	        if (connectorConfigFile != null) {
+//	            java.nio.file.Path connectorConfigFilePath = Paths.get(connectorConfigFile);
+//	            if (!Files.exists(connectorConfigFilePath)) {
+//	                String errorString = String.format("Cannot start because the via System Property [%s] provided config file [%s] mapped to path [%s] does not exist!", CONNECTOR_CLIENT_CONFIG_FILE, connectorConfigFile, connectorConfigFilePath);
+//	                LOGGER.error(errorString);
+//	                throw new RuntimeException(errorString);
+//	            }
+//	            try {
+//
+//	                FileInputStream fileInputStream = new FileInputStream(connectorConfigFilePath.toFile());
+//					p.load(fileInputStream);
+//					fileInputStream.close();
+//	                return p;
+//	            } catch (IOException e) {
+//	                throw new RuntimeException(String.format("Cannot load properties from file [%s], is it a valid and readable properties file?", connectorConfigFilePath), e);
+//	            }
+//	        }
+//	        return p;
+//	    }
 
 }

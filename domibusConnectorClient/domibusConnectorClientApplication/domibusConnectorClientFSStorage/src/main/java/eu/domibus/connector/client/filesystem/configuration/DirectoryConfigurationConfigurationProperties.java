@@ -3,14 +3,22 @@ package eu.domibus.connector.client.filesystem.configuration;
 import java.nio.file.Path;
 
 import eu.domibus.connector.lib.spring.configuration.validation.CheckFolderWriteable;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
-public class DirectoryConfigurationProperties {
+import javax.validation.Valid;
 
+@ConfigurationProperties(prefix = DirectoryConfigurationConfigurationProperties.PREFIX)
+@Validated
+@Valid
+public class DirectoryConfigurationConfigurationProperties {
+
+	public static final String PREFIX = "connector-client.storage.filesystem.messages";
 	@CheckFolderWriteable
 	private Path path;
 	private boolean createIfNonExistent;
 	
-	public DirectoryConfigurationProperties() {
+	public DirectoryConfigurationConfigurationProperties() {
 		// TODO Auto-generated constructor stub
 	}
 

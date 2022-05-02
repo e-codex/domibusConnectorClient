@@ -1,6 +1,5 @@
 package eu.domibus.connector.client.filesystem.standard;
 
-import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSProperties;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSStorageConfiguration;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;

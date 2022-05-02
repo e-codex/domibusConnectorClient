@@ -97,7 +97,7 @@ public class WsLinkAutoConfiguration {
         jaxWsProxyFactoryBean.setAddress(connectorLinkWsProperties.getConnectorAddress());
         jaxWsProxyFactoryBean.setServiceName(DomibusConnectorBackendWSService.SERVICE);
         jaxWsProxyFactoryBean.setEndpointName(DomibusConnectorBackendWSService.DomibusConnectorBackendWebService);
-//        jaxWsProxyFactoryBean.setWsdlURL(DomibusConnectorBackendWSService.WSDL_LOCATION.toString());
+        jaxWsProxyFactoryBean.setWsdlURL(DomibusConnectorBackendWSService.WSDL_LOCATION.toString());
         jaxWsProxyFactoryBean.setBindingId(SOAPBinding.SOAP12HTTP_MTOM_BINDING);
         jaxWsProxyFactoryBean.getInInterceptors().add(new ProcessMessageAfterReceivedFromConnectorInterceptor());
 
