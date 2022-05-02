@@ -193,8 +193,7 @@ public class WsLinkAutoConfiguration {
 			try {
 				payload = IOUtils.readBytesFromStream(in);
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
+                throw new RuntimeException(e);
 			}
 	        ByteArrayInputStream bin = new ByteArrayInputStream(payload);
 	        message.setContent(InputStream.class, bin);
