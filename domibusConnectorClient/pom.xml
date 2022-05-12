@@ -44,12 +44,12 @@
         <maven.site.plugin.version>3.8.2</maven.site.plugin.version>
         <maven.javadoc.plugin.version>3.3.2</maven.javadoc.plugin.version>
         <connector-server.version>4.4.0</connector-server.version>
-        <ecodex-common-spring-dependencies.version>0.0.1-SNAPSHOT</ecodex-common-spring-dependencies.version>
-        <ecodex-common-log4j-dependencies.version>0.0.1-SNAPSHOT</ecodex-common-log4j-dependencies.version>
-        <ecodex-common-cxf-dependencies.version>0.0.1-SNAPSHOT</ecodex-common-cxf-dependencies.version>
-        <ecodex-common-apache-commons-dependencies.version>0.0.1-SNAPSHOT
-        </ecodex-common-apache-commons-dependencies.version>
-        <ecodex-common-jakarta-dependencies.version>0.0.1-SNAPSHOT</ecodex-common-jakarta-dependencies.version>
+        <ecodec-common-dependencies.version>0.1.0-RC1</ecodec-common-dependencies.version>
+        <ecodex-common-spring-dependencies.version>${ecodec-common-dependencies.version}</ecodex-common-spring-dependencies.version>
+        <ecodex-common-log4j-dependencies.version>${ecodec-common-dependencies.version}</ecodex-common-log4j-dependencies.version>
+        <ecodex-common-cxf-dependencies.version>${ecodec-common-dependencies.version}</ecodex-common-cxf-dependencies.version>
+        <ecodex-common-apache-commons-dependencies.version>${ecodec-common-dependencies.version}</ecodex-common-apache-commons-dependencies.version>
+        <ecodex-common-jakarta-dependencies.version>${ecodec-common-dependencies.version}</ecodex-common-jakarta-dependencies.version>
         <!-- <org.springframework.boot.version>2.6.6</org.springframework.boot.version> -->
         <!-- <spring.cloud-version>2021.0.1</spring.cloud-version> -->
         <h2.version>1.4.200</h2.version>
