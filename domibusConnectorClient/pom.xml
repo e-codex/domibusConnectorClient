@@ -50,7 +50,7 @@
         <ecodex-common-cxf-dependencies.version>${ecodec-common-dependencies.version}</ecodex-common-cxf-dependencies.version>
         <ecodex-common-apache-commons-dependencies.version>${ecodec-common-dependencies.version}</ecodex-common-apache-commons-dependencies.version>
         <ecodex-common-jakarta-dependencies.version>${ecodec-common-dependencies.version}</ecodex-common-jakarta-dependencies.version>
-        <!-- <org.springframework.boot.version>2.6.6</org.springframework.boot.version> -->
+        <org.springframework.boot.version>2.6.6</org.springframework.boot.version>
         <!-- <spring.cloud-version>2021.0.1</spring.cloud-version> -->
         <h2.version>1.4.200</h2.version>
         <swagger.version>1.5.12</swagger.version>
@@ -225,6 +225,11 @@
                     <artifactId>spring-properties-reporting-plugin</artifactId>
                     <version>0.9.2-RELEASE</version>
                 </plugin>
+				<plugin>
+					<groupId>org.springframework.boot</groupId>
+					<artifactId>spring-boot-maven-plugin</artifactId>
+					<version>${org.springframework.boot.version}</version>			
+				</plugin>
             </plugins>
         </pluginManagement>
         <plugins>
