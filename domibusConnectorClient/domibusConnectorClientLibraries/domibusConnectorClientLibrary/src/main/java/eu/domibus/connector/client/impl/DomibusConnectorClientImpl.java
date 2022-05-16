@@ -120,7 +120,7 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 		
 		if(!CollectionUtils.isEmpty(pendingMessageTransportIds)) {
 			LOGGER.debug("Received {} pending message transport IDs.", pendingMessageTransportIds.size());
-			if(maxFetchCount!=null && pendingMessageTransportIds.size()>maxFetchCount) {
+			if(maxFetchCount!=null && maxFetchCount.intValue() > 0 && pendingMessageTransportIds.size()>maxFetchCount) {
 				
 				pendingMessageTransportIds = pendingMessageTransportIds.subList(0, maxFetchCount-1);
 				LOGGER.debug("Stripped list of pending message transport IDs to {} due to maxFetchCount.", pendingMessageTransportIds.size());
