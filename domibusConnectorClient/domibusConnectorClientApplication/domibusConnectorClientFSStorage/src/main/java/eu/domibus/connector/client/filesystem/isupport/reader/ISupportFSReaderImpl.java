@@ -55,8 +55,8 @@ public class ISupportFSReaderImpl extends AbstractDomibusConnectorClientFileSyst
 
 	@Override
 	public Map<String, DomibusConnectorClientStorageFileType> getFileListFromMessageFolder(File messageFolder) {
-		Map<String, DomibusConnectorClientStorageFileType> files = new HashMap<String, DomibusConnectorClientStorageFileType>();
-		if (messageFolder.exists() && messageFolder.isDirectory() && messageFolder.listFiles().length > 0) {
+		Map<String, DomibusConnectorClientStorageFileType> files = new HashMap<>();
+		if (messageFolder.canRead() && messageFolder.isDirectory() && messageFolder.listFiles().length > 0) {
 
 			for (File sub : messageFolder.listFiles()) {
 
@@ -88,8 +88,7 @@ public class ISupportFSReaderImpl extends AbstractDomibusConnectorClientFileSyst
 		try {
 			sbdh = sbdhConverter.getSBDH(workMessageFolder, this.messageProperties.getFileName());
 		} catch (JAXBException | IOException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
+			throw new RuntimeException();
 		}
 		
 		DomibusConnectorMessageDetailsType msgDetails = convertSBDHToMessageDetails(sbdh, workMessageFolder.getName());

@@ -17,7 +17,7 @@
     </additionalParameters>
     <module name="domibusConnectorClientStarter" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="eu.domibus.connector.client.starter.DomibusConnectorClientApplicationStarter" />
-    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/../../../../ecodex-lab-box/labenv05/domibus-connector-client-application/" />
+    <option name="WORKING_DIRECTORY" value="file://$PROJECT_DIR$/../../../ecodex-labhome-dev/labenv01/domibus-connector-client-application" />
     <method v="2">
       <option name="Make" enabled="true" />
     </method>
