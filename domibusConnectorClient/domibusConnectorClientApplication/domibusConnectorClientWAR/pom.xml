@@ -241,7 +241,7 @@
                           <id>connector-client-war</id>
                           <files>
                             <file>
-                              <source>${project.basedir}/target/${project.artifactId}-${project.version}.jar</source>
+                              <source>${project.basedir}/target/${project.build.finalName}</source>
                               <outputDirectory>./</outputDirectory>
                               <destName>connector-client.war</destName>
                             </file>
