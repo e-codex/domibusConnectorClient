@@ -58,7 +58,7 @@
     <dependency>
       <groupId>com.vaadin</groupId>
       <!-- Replace artifactId with vaadin-core to use only free components -->
-      <artifactId>vaadin</artifactId>
+      <artifactId>vaadin-core</artifactId>
       <exclusions>
         <!-- Webjars are only needed when running in Vaadin 13 compatibility 
 					mode -->
@@ -196,6 +196,65 @@
               </execution>
             </executions>
           </plugin>
+
+          <plugin>
+            <groupId>org.eclipse.jkube</groupId>
+            <artifactId>openshift-maven-plugin</artifactId>
+            <version>1.7.0</version>
+            <configuration>
+              <skip>false</skip>
+              <buildStrategy>docker</buildStrategy>
+              <resources>
+                <openshiftBuildConfig>
+                  <requests>
+                    <cpu>200m</cpu>
+                    <memory>256Mi</memory>
+                  </requests>
+                  <limits>
+                    <cpu>1000m</cpu>
+                    <memory>1Gi</memory>
+                  </limits>
+                </openshiftBuildConfig>
+              </resources>
+              <images>
+                <image>
+                  <name>dc-connector-client</name>
+                  <build>
+                    <tags>
+                      <tag>4.4.x</tag>
+                      <tag>latest</tag>
+                      <tag>${project.version}</tag>
+                    </tags>
+                    <dockerFile>Dockerfile</dockerFile>
+                    <fromExt>
+                      <name>java:openjdk-8-ubi8</name>
+                      <kind>ImageStreamTag</kind>
+                      <namespace>openshift</namespace>
+                    </fromExt>
+                    <assembly>
+                      <name>connector_client_assembly</name>
+                      <mode>dir</mode>
+                      <targetDir>app</targetDir>
+                      <excludeFinalOutputArtifact>true</excludeFinalOutputArtifact>
+                      <layers>
+                        <layer>
+                          <id>connector-client-war</id>
+                          <files>
+                            <file>
+                              <source>${project.basedir}/target/${project.artifactId}-${project.version}.jar</source>
+                              <outputDirectory>./</outputDirectory>
+                              <destName>connector-client.war</destName>
+                            </file>
+                          </files>
+                        </layer>
+                      </layers>
+                    </assembly>
+                  </build>
+                </image>
+              </images>
+            </configuration>
+          </plugin>
+
         </plugins>
       </build>
     </profile>
