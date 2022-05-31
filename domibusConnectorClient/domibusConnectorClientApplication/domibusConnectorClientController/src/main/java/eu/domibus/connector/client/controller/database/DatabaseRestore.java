@@ -123,6 +123,7 @@ public class DatabaseRestore {
 		}
 		pMessage.setOriginalSender(message.getMessageDetails().getOriginalSender());
 		pMessage.setService(message.getMessageDetails().getService()!=null?message.getMessageDetails().getService().getService():null);
+		pMessage.setServiceType(message.getMessageDetails().getService()!=null?message.getMessageDetails().getService().getServiceType():null);
 		pMessage.setStorageInfo(storageLocation);
 		pMessage.setStorageStatus(DomibusConnectorClientStorageStatus.STORED);
 		if(message.getMessageDetails().getToParty()!=null) {

@@ -147,6 +147,7 @@ public class ResendMessageDialog extends VerticalLayout {
 		replyMessage.setToPartyType(originalMessage.getToPartyType());
 		
 		replyMessage.setService(originalMessage.getService());
+		replyMessage.setServiceType(originalMessage.getServiceType());
 		replyMessage.setAction(originalMessage.getAction());
 		
 		return replyMessage;

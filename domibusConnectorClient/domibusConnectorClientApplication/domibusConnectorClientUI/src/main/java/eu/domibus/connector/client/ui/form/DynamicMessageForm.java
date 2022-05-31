@@ -21,6 +21,7 @@ public class DynamicMessageForm extends FormLayout{
 	private TextField originalSender = FormsUtil.getFormattedRequiredTextField();
 	private TextField finalRecipient = FormsUtil.getFormattedRequiredTextField();
 	private TextField service = FormsUtil.getFormattedRequiredTextField();
+	private TextField serviceType = FormsUtil.getFormattedRequiredTextField();
 	private  final TextField action = FormsUtil.getFormattedRequiredTextField();
 	private TextField fromPartyId = FormsUtil.getFormattedRequiredTextField();
 	private TextField fromPartyRole = FormsUtil.getFormattedTextField();
@@ -59,7 +60,7 @@ public class DynamicMessageForm extends FormLayout{
 			.bind(DomibusConnectorClientMessage::getBackendMessageId, DomibusConnectorClientMessage::setBackendMessageId);
 			addFormItem(backendMessageId, "Backend Message ID"); 
 			
-			binder.forField(ebmsMessageId)
+			binder.forField(ebmsMessageId).withNullRepresentation("")
 			.bind(DomibusConnectorClientMessage::getEbmsMessageId, DomibusConnectorClientMessage::setEbmsMessageId);
 			addFormItem(ebmsMessageId, "EBMS Message ID"); 
 			
@@ -92,8 +93,12 @@ public class DynamicMessageForm extends FormLayout{
 	            }
 				return ValidationResult.ok();
 			}).bind(DomibusConnectorClientMessage::getService, DomibusConnectorClientMessage::setService);
-			addFormItem(service, "Service"); 
-			
+			addFormItem(service, "Service");
+
+			binder.forField(serviceType)
+					.bind(DomibusConnectorClientMessage::getServiceType, DomibusConnectorClientMessage::setServiceType);
+			addFormItem(serviceType, "Service Type");
+
 			binder.forField(action).withValidator((Validator<String>) (value, context) -> {
 				if (value.length() < 1) {
 	                return ValidationResult

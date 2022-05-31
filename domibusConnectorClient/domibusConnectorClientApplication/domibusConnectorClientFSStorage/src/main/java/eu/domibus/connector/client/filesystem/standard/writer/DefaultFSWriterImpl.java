@@ -134,8 +134,10 @@ public class DefaultFSWriterImpl extends AbstractDomibusConnectorClientFileSyste
 		msgDetails.getMessageProperties().put(messageProperties.getOriginalSender(), messageDetails.getOriginalSender());
 		if(messageDetails.getAction()!=null)
 			msgDetails.getMessageProperties().put(messageProperties.getAction(), messageDetails.getAction().getAction());
-		if(messageDetails.getService()!=null)
+		if (messageDetails.getService() != null) {
 			msgDetails.getMessageProperties().put(messageProperties.getService(), messageDetails.getService().getService());
+			msgDetails.getMessageProperties().put(messageProperties.getServiceType(), messageDetails.getService().getServiceType());
+		}
 		if(messageReceived!=null)
 			msgDetails.getMessageProperties().put(messageProperties.getMessageReceivedDatetime(), DomibusConnectorClientFileSystemUtil.convertDateToProperty(messageReceived));
 
