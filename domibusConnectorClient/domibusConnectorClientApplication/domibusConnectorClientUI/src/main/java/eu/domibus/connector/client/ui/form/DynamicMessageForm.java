@@ -21,7 +21,7 @@ public class DynamicMessageForm extends FormLayout{
 	private TextField originalSender = FormsUtil.getFormattedRequiredTextField();
 	private TextField finalRecipient = FormsUtil.getFormattedRequiredTextField();
 	private TextField service = FormsUtil.getFormattedRequiredTextField();
-	private TextField serviceType = FormsUtil.getFormattedRequiredTextField();
+	private TextField serviceType = FormsUtil.getFormattedTextField();
 	private  final TextField action = FormsUtil.getFormattedRequiredTextField();
 	private TextField fromPartyId = FormsUtil.getFormattedRequiredTextField();
 	private TextField fromPartyRole = FormsUtil.getFormattedTextField();
