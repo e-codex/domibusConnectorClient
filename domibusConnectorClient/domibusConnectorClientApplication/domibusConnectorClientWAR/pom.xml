@@ -198,6 +198,21 @@
           </plugin>
 
           <plugin>
+            <groupId>com.google.cloud.tools</groupId>
+            <artifactId>jib-maven-plugin</artifactId>
+            <version>3.2.1</version>
+            <configuration>
+              <skip>false</skip>
+              <from>
+                <image>java:openjdk-8-ubi8</image>
+              </from>
+              <to>
+                <image>image-registry.openshift-image-registry.svc:5000/ju-eu-ejustice-eqs/dc-connector-client</image>
+              </to>
+            </configuration>
+          </plugin>
+
+          <plugin>
             <groupId>org.eclipse.jkube</groupId>
             <artifactId>openshift-maven-plugin</artifactId>
             <version>1.7.0</version>
