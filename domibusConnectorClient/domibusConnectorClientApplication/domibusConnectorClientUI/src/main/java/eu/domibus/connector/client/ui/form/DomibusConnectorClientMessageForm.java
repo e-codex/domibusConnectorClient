@@ -21,6 +21,7 @@ public class DomibusConnectorClientMessageForm extends FormLayout {
 	private TextField originalSender = FormsUtil.getFormattedTextFieldReadOnly();
 	private TextField finalRecipient = FormsUtil.getFormattedTextFieldReadOnly();
 	private TextField service = FormsUtil.getFormattedTextFieldReadOnly();
+	private TextField serviceType = FormsUtil.getFormattedTextFieldReadOnly();
 	private TextField action = FormsUtil.getFormattedTextFieldReadOnly();
 	private TextField fromPartyId = FormsUtil.getFormattedTextFieldReadOnly();
 	private TextField fromPartyRole = FormsUtil.getFormattedTextFieldReadOnly();
@@ -50,11 +51,12 @@ public class DomibusConnectorClientMessageForm extends FormLayout {
 		addFormItem(originalSender, "Original Sender"); 
 		addFormItem(finalRecipient, "Final Recipient"); 
 		addFormItem(service, "Service"); 
-		addFormItem(action, "Action"); 
+		addFormItem(serviceType, "Service Type");
+		addFormItem(action, "Action");
 		addFormItem(fromPartyId, "From Party ID"); 
 		addFormItem(fromPartyRole, "From Party Role"); 
 		addFormItem(fromPartyType, "From Party Type"); 
-		addFormItem(toPartyId, "To Party ID"); 
+		addFormItem(toPartyId, "To Party ID");
 		addFormItem(toPartyRole, "From Party Role"); 
 		addFormItem(toPartyType, "From Party Type"); 
 		addFormItem(storageStatus, "Storage Status");

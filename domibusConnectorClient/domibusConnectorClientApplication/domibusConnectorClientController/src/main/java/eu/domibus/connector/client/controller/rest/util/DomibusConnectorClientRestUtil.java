@@ -108,7 +108,7 @@ public class DomibusConnectorClientRestUtil {
 				clientMessage.getBackendMessageId(), 
 				clientMessage.getEbmsMessageId(), 
 				clientMessage.getConversationId(), 
-				clientMessage.getService(), null, 
+				clientMessage.getService(), clientMessage.getServiceType(),
 				clientMessage.getAction(), 
 				clientMessage.getFromPartyId(), clientMessage.getFromPartyType(), clientMessage.getFromPartyRole(), 
 				clientMessage.getToPartyId(), clientMessage.getToPartyType(), clientMessage.getToPartyRole(), 

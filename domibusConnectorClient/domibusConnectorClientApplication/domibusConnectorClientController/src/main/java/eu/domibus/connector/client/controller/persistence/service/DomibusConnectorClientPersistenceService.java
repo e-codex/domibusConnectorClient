@@ -42,10 +42,13 @@ public class DomibusConnectorClientPersistenceService implements IDomibusConnect
 				newMessage.setEbmsMessageId(messageDetails.getEbmsMessageId());
 				newMessage.setFinalRecipient(messageDetails.getFinalRecipient());
 				newMessage.setOriginalSender(messageDetails.getOriginalSender());
-				if(messageDetails.getAction()!=null)
+				if(messageDetails.getAction()!=null) {
 					newMessage.setAction(messageDetails.getAction().getAction());
-				if(messageDetails.getService()!=null)
+				}
+				if(messageDetails.getService()!=null) {
 					newMessage.setService(messageDetails.getService().getService());
+					newMessage.setServiceType(messageDetails.getService().getServiceType());
+				}
 
 				DomibusConnectorPartyType fromParty = messageDetails.getFromParty();
 				if(fromParty!=null) {

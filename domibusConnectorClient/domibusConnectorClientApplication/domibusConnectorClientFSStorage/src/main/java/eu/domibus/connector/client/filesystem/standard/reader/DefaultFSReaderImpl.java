@@ -219,6 +219,7 @@ public class DefaultFSReaderImpl extends AbstractDomibusConnectorClientFileSyste
 		String service = properties.getMessageProperties().getProperty(messageProperties.getService());
 		DomibusConnectorServiceType domibusConnectorService = new DomibusConnectorServiceType();
 		domibusConnectorService.setService(service);
+		domibusConnectorService.setServiceType(properties.getMessageProperties().getProperty(messageProperties.getServiceType()));
 		messageDetails.setService(domibusConnectorService);
 
 		String conversationId = properties.getMessageProperties().getProperty(messageProperties.getConversationId());

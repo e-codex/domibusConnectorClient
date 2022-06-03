@@ -11,10 +11,7 @@ import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSStorageConfiguration;
 
-//@Component
-//@ConditionalOnProperty(prefix=DomibusConnectorClientFSStorageConfiguration.PREFIX, name=DomibusConnectorClientFSStorageConfiguration.ENABLED_PROPERTY_NAME, havingValue="true")
 @ConfigurationProperties(prefix = DomibusConnectorClientFSMessageProperties.PREFIX)
-//@PropertySource("classpath:/connector-client-fs-default-message.properties")
 @Validated
 @Valid
 public class DomibusConnectorClientFSMessageProperties {
@@ -25,6 +22,10 @@ public class DomibusConnectorClientFSMessageProperties {
 	private String fileName;
 	@NotEmpty
 	private String service;
+
+	@NotEmpty
+	private String serviceType;
+
 	@NotEmpty
 	private String action;
 	@NotEmpty
@@ -69,6 +70,15 @@ public class DomibusConnectorClientFSMessageProperties {
 	public void setService(String service) {
 		this.service = service;
 	}
+
+	public String getServiceType() {
+		return serviceType;
+	}
+
+	public void setServiceType(String serviceType) {
+		this.serviceType = serviceType;
+	}
+
 	public String getAction() {
 		return action;
 	}

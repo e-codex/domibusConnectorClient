@@ -147,7 +147,8 @@ public class ReplyToMessageDialog extends VerticalLayout {
 		replyMessage.setToPartyType(originalMessage.getFromPartyType());
 		
 		replyMessage.setService(originalMessage.getService());
-		
+		replyMessage.setServiceType(originalMessage.getServiceType());
+
 		return replyMessage;
 	}
 
