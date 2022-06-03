@@ -204,10 +204,10 @@
             <configuration>
               <skip>false</skip>
               <from>
-                <image>java:openjdk-8-ubi8</image>
+                <image>default-route-openshift-image-registry.apps.a2.cp.cna.at/openshift/java:openjdk-8-ubi8</image>
               </from>
               <to>
-                <image>image-registry.openshift-image-registry.svc:5000/ju-eu-ejustice-eqs/dc-connector-client</image>
+                <image>default-route-openshift-image-registry.apps.a2.cp.cna.at/ju-eu-ejustice-eqs/dc-connector-client</image>
               </to>
             </configuration>
           </plugin>
