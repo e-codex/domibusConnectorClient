@@ -1,5 +1,5 @@
 <component name="ProjectRunConfigurationManager">
-  <configuration default="false" name="buildWithJib - WIP" type="MavenRunConfiguration" factoryName="Maven">
+  <configuration default="false" name="buildAndPushWithJib" type="MavenRunConfiguration" factoryName="Maven">
     <MavenSettings>
       <option name="myGeneralSettings" />
       <option name="myRunnerSettings">
@@ -27,6 +27,7 @@
           </option>
           <option name="goals">
             <list>
+              <option value="install" />
               <option value="jib:build" />
               <option value="-pl" />
               <option value=":domibusConnectorClientWAR" />
