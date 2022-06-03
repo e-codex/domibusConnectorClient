@@ -66,6 +66,9 @@ public class PDomibusConnectorClientMessage {
 	
 	@Column(name = "SERVICE", length = 255)
     private String service;
+
+	@Column(name = "SERVICE_TYPE", length = 512)
+    private String serviceType;
 	
 	@Column(name = "ACTION", length = 255)
     private String action;
@@ -201,6 +204,14 @@ public class PDomibusConnectorClientMessage {
 	}
 
 	public void setService(String service) {
+		this.service = service;
+	}
+
+	public String getServiceType() {
+		return service;
+	}
+
+	public void setServiceType(String service) {
 		this.service = service;
 	}
 

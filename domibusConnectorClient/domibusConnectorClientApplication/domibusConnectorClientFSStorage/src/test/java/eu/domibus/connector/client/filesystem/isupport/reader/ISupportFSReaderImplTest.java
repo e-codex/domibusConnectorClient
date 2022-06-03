@@ -1,6 +1,8 @@
 package eu.domibus.connector.client.filesystem.isupport.reader;
 
+import eu.domibus.connector.client.filesystem.AbstractDomibusConnectorClientFileSystemReaderImpl;
 import eu.domibus.connector.client.filesystem.DomibusConnectorClientFileSystemException;
+import eu.domibus.connector.client.filesystem.DomibusConnectorClientFileSystemReader;
 import eu.domibus.connector.client.filesystem.configuration.DirectoryConfigurationConfigurationProperties;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSConfigurationProperties;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSStorageConfiguration;
@@ -32,7 +34,7 @@ import java.io.IOException;
 class ISupportFSReaderImplTest {
 
     @Autowired
-    private ISupportFSReaderImpl sut;
+    private DomibusConnectorClientFileSystemReader sut;
 
     @SpringBootApplication(
             scanBasePackages = {"eu.domibus.connector.client.filesystem"}
@@ -47,7 +49,7 @@ class ISupportFSReaderImplTest {
     @org.junit.jupiter.api.Test
     void processMessageFolderFiles() throws DomibusConnectorClientFileSystemException {
         final File testdata = new File("testdata");
-        sut.processMessageFolderFiles(testFolder);
+        sut.readMessageFromFolder(testFolder);
     }
 
     @BeforeEach

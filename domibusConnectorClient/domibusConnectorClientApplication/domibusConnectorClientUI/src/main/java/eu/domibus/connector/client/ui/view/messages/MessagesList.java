@@ -59,6 +59,8 @@ public class MessagesList extends VerticalLayout implements AfterNavigationObser
 	TextField fromPartyIdFilterText = new TextField();
 	TextField toPartyIdFilterText = new TextField();
 	TextField serviceFilterText = new TextField();
+
+	TextField serviceTypeFilterText = new TextField();
 	TextField actionFilterText = new TextField();
 	
 	public MessagesList(@Autowired Messages messagesView, @Autowired VaadingConnectorClientUIServiceClient messageService) {
@@ -322,7 +324,11 @@ public class MessagesList extends VerticalLayout implements AfterNavigationObser
 		serviceFilterText.setWidth("180px");
 		serviceFilterText.setValueChangeMode(ValueChangeMode.EAGER);
 		serviceFilterText.addValueChangeListener(e -> filter());
-		
+
+		serviceTypeFilterText.setPlaceholder("Filter by Service Type");
+		serviceTypeFilterText.setWidth("180px");
+		serviceTypeFilterText.setValueChangeMode(ValueChangeMode.EAGER);
+		serviceTypeFilterText.addValueChangeListener(e -> filter());
 		
 		actionFilterText.setPlaceholder("Filter by Action");
 		actionFilterText.setWidth("180px");
@@ -367,6 +373,7 @@ public class MessagesList extends VerticalLayout implements AfterNavigationObser
 				&& (fromPartyIdFilterText.getValue().isEmpty() || msg.getFromPartyId()!=null && msg.getFromPartyId().toUpperCase().contains(fromPartyIdFilterText.getValue().toUpperCase()))
 				&& (toPartyIdFilterText.getValue().isEmpty() || msg.getToPartyId()!=null && msg.getToPartyId().toUpperCase().contains(toPartyIdFilterText.getValue().toUpperCase()))
 				&& (serviceFilterText.getValue().isEmpty() || msg.getService()!=null && msg.getService().toUpperCase().contains(serviceFilterText.getValue().toUpperCase()))
+				&& (serviceTypeFilterText.getValue().isEmpty() || msg.getServiceType()!=null && msg.getServiceType().toUpperCase().contains(serviceTypeFilterText.getValue().toUpperCase()))
 				&& (actionFilterText.getValue().isEmpty() || msg.getAction()!=null && msg.getAction().toUpperCase().contains(actionFilterText.getValue().toUpperCase()))
 				) {
 				target.addLast(msg);
@@ -388,6 +395,7 @@ public class MessagesList extends VerticalLayout implements AfterNavigationObser
 		grid.addColumn(DomibusConnectorClientMessage::getFromPartyId).setHeader("From Party ID").setWidth("100px");
 		grid.addColumn(DomibusConnectorClientMessage::getToPartyId).setHeader("To Party ID").setWidth("100px");
 		grid.addColumn(DomibusConnectorClientMessage::getService).setHeader("Service").setWidth("100px");
+		grid.addColumn(DomibusConnectorClientMessage::getServiceType).setHeader("Service Type").setWidth("100px");
 		grid.addColumn(DomibusConnectorClientMessage::getAction).setHeader("Action").setWidth("100px");
 		grid.addColumn(DomibusConnectorClientMessage::getCreated).setHeader("Created").setWidth("150px");
 		grid.addColumn(DomibusConnectorClientMessage::getMessageStatus).setHeader("Message status").setWidth("100px");
