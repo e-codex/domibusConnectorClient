@@ -4,7 +4,7 @@
   <parent>
     <groupId>eu.domibus.connector-client</groupId>
     <artifactId>domibusConnectorClientApplication</artifactId>
-    <version>4.4.5-SNAPSHOT</version>
+    <version>4.4.5</version>
   </parent>
   <artifactId>domibusConnectorClientStarter</artifactId>
   <packaging>jar</packaging>
@@ -50,7 +50,7 @@
     <!-- added as Dependency, looks like that here is a URL resolver registered 
 			which resolves the problem with resolving the imports within WSDL and other 
 			schema resolvements -->
- <!--    <dependency>
+    <!--    <dependency>
       <groupId>org.springframework.cloud</groupId>
       <artifactId>spring-cloud-starter-config</artifactId>
       <exclusions>
@@ -74,12 +74,12 @@
       <exclusions>
         <!-- Excluding so that webjars are not included. -->
         <exclusion>
-          <groupId>com.vaadin</groupId>
           <artifactId>vaadin-core</artifactId>
+          <groupId>com.vaadin</groupId>
         </exclusion>
         <exclusion>
-        	<groupId>org.springframework.boot</groupId>
-        	<artifactId>spring-boot-starter-logging</artifactId>
+          <artifactId>spring-boot-starter-logging</artifactId>
+          <groupId>org.springframework.boot</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -91,28 +91,28 @@
         <!-- Webjars are only needed when running in Vaadin 13 compatibility 
 					mode -->
         <exclusion>
+          <artifactId>*</artifactId>
           <groupId>com.vaadin.webjar</groupId>
-          <artifactId>*</artifactId>
         </exclusion>
         <exclusion>
+          <artifactId>*</artifactId>
           <groupId>org.webjars.bowergithub.insites</groupId>
-          <artifactId>*</artifactId>
         </exclusion>
         <exclusion>
+          <artifactId>*</artifactId>
           <groupId>org.webjars.bowergithub.polymer</groupId>
-          <artifactId>*</artifactId>
         </exclusion>
         <exclusion>
+          <artifactId>*</artifactId>
           <groupId>org.webjars.bowergithub.polymerelements</groupId>
-          <artifactId>*</artifactId>
         </exclusion>
         <exclusion>
+          <artifactId>*</artifactId>
           <groupId>org.webjars.bowergithub.vaadin</groupId>
-          <artifactId>*</artifactId>
         </exclusion>
         <exclusion>
-          <groupId>org.webjars.bowergithub.webcomponents</groupId>
           <artifactId>*</artifactId>
+          <groupId>org.webjars.bowergithub.webcomponents</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -133,10 +133,6 @@
         <groupId>com.vaadin</groupId>
         <artifactId>vaadin-maven-plugin</artifactId>
         <version>${vaadin.version}</version>
-        <configuration>
-          <ignoreMavenProxies>false</ignoreMavenProxies>
-
-        </configuration>
         <executions>
           <execution>
             <goals>
@@ -144,10 +140,21 @@
             </goals>
           </execution>
         </executions>
+        <configuration>
+          <ignoreMavenProxies>false</ignoreMavenProxies>
+        </configuration>
       </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>build-info</goal>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
         <configuration>
           <mainClass>eu.domibus.connector.client.VaadinConnectorClientStarter</mainClass>
           <requiresUnpack>
@@ -157,14 +164,6 @@
             </dependency>
           </requiresUnpack>
         </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>build-info</goal>
-              <goal>repackage</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
       <plugin>
         <artifactId>maven-assembly-plugin</artifactId>
@@ -185,17 +184,6 @@
     <profile>
       <!-- Production mode is activated using -Pproduction -->
       <id>production</id>
-      <properties>
-        <vaadin.productionMode>true</vaadin.productionMode>
-      </properties>
-
-      <dependencies>
-        <dependency>
-          <groupId>com.vaadin</groupId>
-          <artifactId>flow-server-production-mode</artifactId>
-        </dependency>
-      </dependencies>
-
       <build>
         <plugins>
           <plugin>
@@ -205,22 +193,30 @@
               <jvmArguments>-Dvaadin.productionMode</jvmArguments>
             </configuration>
           </plugin>
-
           <plugin>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-maven-plugin</artifactId>
             <version>${vaadin.version}</version>
             <executions>
               <execution>
+                <phase>compile</phase>
                 <goals>
                   <goal>build-frontend</goal>
                 </goals>
-                <phase>compile</phase>
               </execution>
             </executions>
           </plugin>
         </plugins>
       </build>
+      <properties>
+        <vaadin.productionMode>true</vaadin.productionMode>
+      </properties>
+      <dependencies>
+        <dependency>
+          <groupId>com.vaadin</groupId>
+          <artifactId>flow-server-production-mode</artifactId>
+        </dependency>
+      </dependencies>
     </profile>
   </profiles>
 </project>

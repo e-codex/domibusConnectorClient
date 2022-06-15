@@ -4,7 +4,7 @@
   <parent>
     <groupId>eu.domibus.connector-client</groupId>
     <artifactId>domibusConnectorClientLibraries</artifactId>
-    <version>4.4.5-SNAPSHOT</version>
+    <version>4.4.5</version>
   </parent>
   <artifactId>domibusConnectorClientWSLink</artifactId>
   <packaging>jar</packaging>
@@ -31,8 +31,8 @@
       <artifactId>cxf-spring-boot-starter-jaxws</artifactId>
       <exclusions>
         <exclusion>
-          <groupId>org.springframework.boot</groupId>
           <artifactId>spring-boot-starter-logging</artifactId>
+          <groupId>org.springframework.boot</groupId>
         </exclusion>
       </exclusions>
     </dependency>
@@ -55,56 +55,56 @@
       <artifactId>cxf-rt-ws-security</artifactId>
       <exclusions>
         <exclusion>
-          <groupId>org.opensaml</groupId>
           <artifactId>opensaml-saml-impl</artifactId>
+          <groupId>org.opensaml</groupId>
         </exclusion>
         <exclusion>
-          <groupId>org.opensaml</groupId>
           <artifactId>opensaml-xacml-saml-impl</artifactId>
+          <groupId>org.opensaml</groupId>
         </exclusion>
         <exclusion>
-          <groupId>org.opensaml</groupId>
           <artifactId>opensaml-xacml-impl</artifactId>
+          <groupId>org.opensaml</groupId>
         </exclusion>
       </exclusions>
     </dependency>
-<!--    <dependency>-->
-<!--      <groupId>org.springframework</groupId>-->
-<!--      <artifactId>spring-context</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.apache.cxf</groupId>-->
-<!--      <artifactId>cxf-rt-frontend-jaxws</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.apache.cxf</groupId>-->
-<!--      <artifactId>cxf-rt-transports-http</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.apache.cxf</groupId>-->
-<!--      <artifactId>cxf-rt-transports-jms</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.apache.cxf</groupId>-->
-<!--      <artifactId>cxf-rt-bindings-soap</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.boot</groupId>-->
-<!--      <artifactId>spring-boot</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>javax.servlet</groupId>-->
-<!--      <artifactId>javax.servlet-api</artifactId>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.springframework</groupId>-->
-<!--      <artifactId>spring-test</artifactId>-->
-<!--      <scope>test</scope>-->
-<!--    </dependency>-->
-<!--    <dependency>-->
-<!--      <groupId>org.springframework.boot</groupId>-->
-<!--      <artifactId>spring-boot-autoconfigure</artifactId>-->
-<!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.springframework</groupId>-->
+    <!--      <artifactId>spring-context</artifactId>-->
+    <!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.apache.cxf</groupId>-->
+    <!--      <artifactId>cxf-rt-frontend-jaxws</artifactId>-->
+    <!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.apache.cxf</groupId>-->
+    <!--      <artifactId>cxf-rt-transports-http</artifactId>-->
+    <!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.apache.cxf</groupId>-->
+    <!--      <artifactId>cxf-rt-transports-jms</artifactId>-->
+    <!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.apache.cxf</groupId>-->
+    <!--      <artifactId>cxf-rt-bindings-soap</artifactId>-->
+    <!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.springframework.boot</groupId>-->
+    <!--      <artifactId>spring-boot</artifactId>-->
+    <!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>javax.servlet</groupId>-->
+    <!--      <artifactId>javax.servlet-api</artifactId>-->
+    <!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.springframework</groupId>-->
+    <!--      <artifactId>spring-test</artifactId>-->
+    <!--      <scope>test</scope>-->
+    <!--    </dependency>-->
+    <!--    <dependency>-->
+    <!--      <groupId>org.springframework.boot</groupId>-->
+    <!--      <artifactId>spring-boot-autoconfigure</artifactId>-->
+    <!--    </dependency>-->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-test</artifactId>
