@@ -208,11 +208,11 @@ public class PDomibusConnectorClientMessage {
 	}
 
 	public String getServiceType() {
-		return service;
+		return serviceType;
 	}
 
-	public void setServiceType(String service) {
-		this.service = service;
+	public void setServiceType(String serviceType) {
+		this.serviceType = serviceType;
 	}
 
 	public String getAction() {
