@@ -4,11 +4,7 @@
   <parent>
     <groupId>eu.domibus.connector-client</groupId>
     <artifactId>domibusConnectorClientLibraries</artifactId>
-<<<<<<< HEAD
-    <version>4.4.5-SNAPSHOT</version>
-=======
     <version>4.4.5</version>
->>>>>>> remotes/origin/published/4.4.x
   </parent>
   <artifactId>domibusConnectorClientLibsAPI</artifactId>
   <dependencies>
@@ -17,34 +13,6 @@
       <artifactId>domibusConnectorAPIlib</artifactId>
       <exclusions>
         <exclusion>
-<<<<<<< HEAD
-          <groupId>commons-io</groupId>
-          <artifactId>commons-io</artifactId>
-        </exclusion>
-      </exclusions>
-    </dependency>
-    <dependency>
-      <groupId>org.apache.logging.log4j</groupId>
-      <artifactId>log4j-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.xml.ws</groupId>
-      <artifactId>jaxws-ri</artifactId>
-      <version>2.3.2</version>
-      <type>pom</type>
-      <exclusions>
-        <exclusion>
-          <groupId>org.jvnet.staxex</groupId>
-          <artifactId>stax-ex</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>jakarta.jws</groupId>
-          <artifactId>jakarta.jws-api</artifactId>
-        </exclusion>
-        <exclusion>
-          <groupId>com.fasterxml.woodstox</groupId>
-          <artifactId>woodstox-core</artifactId>
-=======
           <artifactId>commons-io</artifactId>
           <groupId>commons-io</groupId>
         </exclusion>
@@ -55,16 +23,10 @@
         <exclusion>
           <artifactId>*</artifactId>
           <groupId>org.springframework.cloud</groupId>
->>>>>>> remotes/origin/published/4.4.x
         </exclusion>
       </exclusions>
     </dependency>
     <dependency>
-<<<<<<< HEAD
-      <groupId>org.jvnet.staxex</groupId>
-      <artifactId>stax-ex</artifactId>
-      <version>1.8.3</version>
-=======
       <groupId>javax.xml.ws</groupId>
       <artifactId>jaxws-api</artifactId>
     </dependency>
@@ -79,19 +41,14 @@
     <dependency>
       <groupId>com.sun.xml.bind</groupId>
       <artifactId>jaxb-impl</artifactId>
->>>>>>> remotes/origin/published/4.4.x
     </dependency>
     <dependency>
       <groupId>jakarta.jws</groupId>
       <artifactId>jakarta.jws-api</artifactId>
-<<<<<<< HEAD
-      <version>2.1.0</version>
-=======
     </dependency>
     <dependency>
       <groupId>org.apache.logging.log4j</groupId>
       <artifactId>log4j-api</artifactId>
->>>>>>> remotes/origin/published/4.4.x
     </dependency>
   </dependencies>
   <build>
@@ -102,17 +59,10 @@
         <executions>
           <execution>
             <id>copy-dependencies</id>
-<<<<<<< HEAD
-            <goals>
-              <goal>copy-dependencies</goal>
-            </goals>
-            <phase>package</phase>
-=======
             <phase>package</phase>
             <goals>
               <goal>copy-dependencies</goal>
             </goals>
->>>>>>> remotes/origin/published/4.4.x
             <configuration>
               <outputDirectory>${project.build.directory}/lib</outputDirectory>
               <overWriteReleases>false</overWriteReleases>
