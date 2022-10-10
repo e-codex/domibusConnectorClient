@@ -9,6 +9,10 @@
 * adds some configuration for containerized deployments.
 
 
+=== 4.4.6
+
+* Internal changes on build
+
 ==== Known Issues
 
 * None
