@@ -10,6 +10,7 @@
   <modules>
     <module>domibusConnectorClientLibraries</module>
     <module>domibusConnectorClientApplication</module>
+    <module>domibusConnectorClientDocumentation</module>
   </modules>
   <scm>
     <developerConnection>scm:git:https://secure.e-codex.eu/gitblit/r/Me-CODEX/domibusConnectorClient.git</developerConnection>
