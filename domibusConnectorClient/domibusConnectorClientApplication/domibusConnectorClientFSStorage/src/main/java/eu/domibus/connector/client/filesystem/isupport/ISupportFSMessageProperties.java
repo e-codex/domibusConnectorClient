@@ -25,6 +25,10 @@ public class ISupportFSMessageProperties {
 	private String service;
 	@NotEmpty
 	private String action;
+	@NotEmpty
+	private String fromPartyRole;
+	@NotEmpty
+	private String toPartyRole;
 	
 	public String getFileName() {
 		return fileName;
@@ -43,6 +47,18 @@ public class ISupportFSMessageProperties {
 	}
 	public void setAction(String action) {
 		this.action = action;
+	}
+	public String getFromPartyRole() {
+		return fromPartyRole;
+	}
+	public void setFromPartyRole(String fromPartyRole) {
+		this.fromPartyRole = fromPartyRole;
+	}
+	public String getToPartyRole() {
+		return toPartyRole;
+	}
+	public void setToPartyRole(String toPartyRole) {
+		this.toPartyRole = toPartyRole;
 	}
 
 }

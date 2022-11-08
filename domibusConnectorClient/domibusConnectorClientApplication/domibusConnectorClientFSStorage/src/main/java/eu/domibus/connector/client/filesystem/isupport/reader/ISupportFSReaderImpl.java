@@ -181,21 +181,21 @@ public class ISupportFSReaderImpl extends AbstractDomibusConnectorClientFileSyst
 		
 		String fromPartyId = sbdh.getTransport().getSender().getIdentifier();
 		
-//		String fromPartyRole = properties.getMessageProperties().getProperty(messageProperties.getFromPartyRole());
+		String fromPartyRole = messageProperties.getFromPartyRole();
 
 
 		DomibusConnectorPartyType fromParty = new DomibusConnectorPartyType();
 		fromParty.setPartyId(fromPartyId);
-//		fromParty.setRole(fromPartyRole);
+		fromParty.setRole(fromPartyRole);
 		messageDetails.setFromParty(fromParty);
 
 
 
 		String toPartyId = sbdh.getTransport().getReceiver().getIdentifier();
-//		String toPartyRole = properties.getMessageProperties().getProperty(messageProperties.getToPartyRole());
+		String toPartyRole = messageProperties.getToPartyRole();
 		DomibusConnectorPartyType toParty = new DomibusConnectorPartyType();
 		toParty.setPartyId(toPartyId);
-//		toParty.setRole(toPartyRole);
+		toParty.setRole(toPartyRole);
 		messageDetails.setToParty(toParty);
 
 		String action = messageProperties.getAction();
