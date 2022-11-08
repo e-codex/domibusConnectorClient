@@ -38,7 +38,7 @@
 		<menu name="Configuration">
 			<item name="Guide to configure the application" href="config_guide.html" />
 			<item name="Certificates/Keys Required" href="certs_keys.html" />
-			
+			<item name="iSupport specific configuration" href="isupport_config_guide.html" />
 		</menu>
 		<menu name="domibusConnectorClientApplication-Standalone">
 			<item name="Package description" href="standalone/packagecontent.html" />

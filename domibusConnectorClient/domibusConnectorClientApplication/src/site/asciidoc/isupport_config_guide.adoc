@@ -1,0 +1,43 @@
+== Additional configuration to run the domibusConnectorClient-Application in iSupport mode
+
+iSupport has a special setup to interact between the iSupport backend application and e-CODEX.
+Messages are stored in a different way to the filesystem for the domibusConnectorClient (dCC) to pick up than the standard of the dCC foresees.
+To cope with those specialities, a profile "iSupport" has been implemented with a certain filesystem handling.
+
+=== Activating the iSupport profile
+
+To let the dCC know that it must respect the iSupport specific filesystem handling, a standard spring property to enable profiles must be set with the iSupport value.
+In the properties file it looks like this: 
+
+[source,properties]
+----
+
+#activate to enable iSupport message structure
+spring.profiles.active=iSupport
+
+----
+
+=== Setting iSupport specific message properties
+
+An e-CODEX message requires some necessary ebms specific data to be able to be addressed properly.
+Only a few of them are delivered within an iSupport message from the iSupport backend application.
+Those that are required, but missing, need to be set with standard values in the properties of the domibusConnectorClient.
+
+[source,properties]
+----
+
+connector-client.storage.filesystem.message-properties.fileName=header.xml
+connector-client.storage.filesystem.message-properties.service=service
+connector-client.storage.filesystem.message-properties.serviceType=service
+connector-client.storage.filesystem.message-properties.action=action
+connector-client.storage.filesystem.message-properties.fromPartyRole=GW
+connector-client.storage.filesystem.message-properties.fromPartyIdType=GW
+connector-client.storage.filesystem.message-properties.toPartyRole=GW
+connector-client.storage.filesystem.message-properties.toPartyIdType=GW
+
+
+----
+
+All of those properties are instantiated with default values. Its the values listed above. If those standard values need to be different, then the corresponding property just needs to be set in the config properties file of the domibusConnectorClient.
+
+The values mostly depend on values given by the p-Modes.
