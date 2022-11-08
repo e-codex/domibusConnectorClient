@@ -24,11 +24,17 @@ public class ISupportFSMessageProperties {
 	@NotEmpty
 	private String service;
 	@NotEmpty
+	private String serviceType;
+	@NotEmpty
 	private String action;
 	@NotEmpty
 	private String fromPartyRole;
 	@NotEmpty
+	private String fromPartyIdType;
+	@NotEmpty
 	private String toPartyRole;
+	@NotEmpty
+	private String toPartyIdType;
 	
 	public String getFileName() {
 		return fileName;
@@ -41,6 +47,12 @@ public class ISupportFSMessageProperties {
 	}
 	public void setService(String service) {
 		this.service = service;
+	}
+	public String getServiceType() {
+		return serviceType;
+	}
+	public void setServiceType(String serviceType) {
+		this.serviceType = serviceType;
 	}
 	public String getAction() {
 		return action;
@@ -59,6 +71,18 @@ public class ISupportFSMessageProperties {
 	}
 	public void setToPartyRole(String toPartyRole) {
 		this.toPartyRole = toPartyRole;
+	}
+	public String getFromPartyIdType() {
+		return fromPartyIdType;
+	}
+	public void setFromPartyIdType(String fromPartyIdType) {
+		this.fromPartyIdType = fromPartyIdType;
+	}
+	public String getToPartyIdType() {
+		return toPartyIdType;
+	}
+	public void setToPartyIdType(String toPartyIdType) {
+		this.toPartyIdType = toPartyIdType;
 	}
 
 }

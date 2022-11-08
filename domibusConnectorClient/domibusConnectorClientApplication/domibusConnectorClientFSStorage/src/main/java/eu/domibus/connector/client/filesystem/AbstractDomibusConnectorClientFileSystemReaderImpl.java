@@ -37,7 +37,7 @@ public abstract class AbstractDomibusConnectorClientFileSystemReaderImpl
 		if (messageReadyPostfix == null) {
 			messageReadyPostfix = "";
 		}
-		LOGGER.debug("#readUnsentMessages: Searching for folders with ending {}", );
+//		LOGGER.debug("#readUnsentMessages: Searching for folders with ending {}", );
 		List<File> messagesUnsent = new ArrayList<File>();
 
 		if (outgoingMessagesDir.listFiles().length > 0) {

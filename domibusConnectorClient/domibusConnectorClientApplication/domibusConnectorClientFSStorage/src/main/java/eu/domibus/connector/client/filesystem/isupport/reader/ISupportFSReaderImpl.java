@@ -180,21 +180,26 @@ public class ISupportFSReaderImpl extends AbstractDomibusConnectorClientFileSyst
 
 		
 		String fromPartyId = sbdh.getTransport().getSender().getIdentifier();
-		
+		String fromPartyIdType = messageProperties.getFromPartyIdType();
 		String fromPartyRole = messageProperties.getFromPartyRole();
 
 
 		DomibusConnectorPartyType fromParty = new DomibusConnectorPartyType();
 		fromParty.setPartyId(fromPartyId);
+		fromParty.setPartyIdType(fromPartyIdType);
 		fromParty.setRole(fromPartyRole);
 		messageDetails.setFromParty(fromParty);
 
 
 
 		String toPartyId = sbdh.getTransport().getReceiver().getIdentifier();
+		String toPartyIdType = messageProperties.getToPartyIdType();
 		String toPartyRole = messageProperties.getToPartyRole();
+		
+		
 		DomibusConnectorPartyType toParty = new DomibusConnectorPartyType();
 		toParty.setPartyId(toPartyId);
+		toParty.setPartyIdType(toPartyIdType);
 		toParty.setRole(toPartyRole);
 		messageDetails.setToParty(toParty);
 
@@ -204,8 +209,11 @@ public class ISupportFSReaderImpl extends AbstractDomibusConnectorClientFileSyst
 		messageDetails.setAction(domibusConnectorAction);
 
 		String service = messageProperties.getService();
+		String serviceType = messageProperties.getServiceType();
 		DomibusConnectorServiceType domibusConnectorService = new DomibusConnectorServiceType();
 		domibusConnectorService.setService(service);
+		domibusConnectorService.setServiceType(serviceType);
+		
 		messageDetails.setService(domibusConnectorService);
 
 		String conversationId = sbdh.getTransport().getCaseId();
