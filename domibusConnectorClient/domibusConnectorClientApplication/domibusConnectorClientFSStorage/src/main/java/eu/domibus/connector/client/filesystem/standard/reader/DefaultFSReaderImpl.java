@@ -16,7 +16,9 @@ import org.springframework.util.StringUtils;
 import javax.activation.MimetypesFileTypeMap;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 //@Component
@@ -33,6 +35,27 @@ public class DefaultFSReaderImpl extends AbstractDomibusConnectorClientFileSyste
 	@Autowired
 	private DomibusConnectorClientFSConfigurationProperties properties;
 
+	
+	@Override
+	public List<File> readUnsentMessages(File outgoingMessagesDir){
+		String messageReadyPostfix = properties.getMessageReadyPostfix();
+		if (messageReadyPostfix == null) {
+			messageReadyPostfix = "";
+		}
+		LOGGER.debug("#readUnsentMessages: Searching for folders with ending {}", messageReadyPostfix);
+		List<File> messagesUnsent = new ArrayList<File>();
+
+		if (outgoingMessagesDir.listFiles().length > 0) {
+			for (File sub : outgoingMessagesDir.listFiles()) {
+				if (sub.isDirectory()
+						&& sub.getName().endsWith(messageReadyPostfix)) {
+					messagesUnsent.add(sub);
+				}
+			}
+		}
+
+		return messagesUnsent;
+	}
 
 	public Map<String, DomibusConnectorClientStorageFileType> getFileListFromMessageFolder(File messageFolder){
 		Map<String, DomibusConnectorClientStorageFileType> files = new HashMap<String, DomibusConnectorClientStorageFileType>();

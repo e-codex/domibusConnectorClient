@@ -2,7 +2,9 @@ package eu.domibus.connector.client.filesystem.isupport.reader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.activation.MimetypesFileTypeMap;
@@ -52,6 +54,35 @@ public class ISupportFSReaderImpl extends AbstractDomibusConnectorClientFileSyst
 	
 	@Autowired
 	private DomibusConnectorClientFSConfigurationProperties properties;
+	
+	@Override
+	public List<File> readUnsentMessages(File messagesDir){
+		File outgoingMessagesDir = new File(messagesDir, messageProperties.getiSupportOutgoingDir());
+		
+		if(!outgoingMessagesDir.exists()) {
+			outgoingMessagesDir.mkdir();
+			if(!outgoingMessagesDir.exists()) {
+				LOGGER.error("Problem with directories.");
+	            return null;
+			}
+			
+		}
+		
+//		LOGGER.debug("#readUnsentMessages: Searching for folders with ending {}", );
+		List<File> messagesUnsent = new ArrayList<File>();
+
+		if (outgoingMessagesDir.listFiles().length > 0) {
+			for (File sub : outgoingMessagesDir.listFiles()) {
+				if (sub.isDirectory()){
+					File processedFile = new File(sub, messageProperties.getProcessedFileName());
+					if(!processedFile.exists())
+						messagesUnsent.add(sub);
+				}
+			}
+		}
+
+		return messagesUnsent;
+	}
 
 	@Override
 	public Map<String, DomibusConnectorClientStorageFileType> getFileListFromMessageFolder(File messageFolder) {
@@ -160,6 +191,14 @@ public class ISupportFSReaderImpl extends AbstractDomibusConnectorClientFileSyst
 		if(messageContent.getXmlContent()!=null)
 			message.setMessageContent(messageContent);
 
+		File messageProcessedFile = new File(workMessageFolder,messageProperties.getProcessedFileName());
+		try {
+			messageProcessedFile.createNewFile();
+		} catch (IOException e) {
+			throw new DomibusConnectorClientFileSystemException("File to mark message as processed could not be created for message "+workMessageFolder.getPath());
+		}
+		
+		
 
 		return message;
 	}

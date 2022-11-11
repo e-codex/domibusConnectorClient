@@ -32,25 +32,7 @@ public abstract class AbstractDomibusConnectorClientFileSystemReaderImpl
 	 * @see eu.domibus.connector.client.filesystem.DomibusConnectorClientFileSystemReader#readUnsentMessages(java.io.File)
 	 */
 //	@Override
-	public List<File> readUnsentMessages(File outgoingMessagesDir){
-		String messageReadyPostfix = properties.getMessageReadyPostfix();
-		if (messageReadyPostfix == null) {
-			messageReadyPostfix = "";
-		}
-//		LOGGER.debug("#readUnsentMessages: Searching for folders with ending {}", );
-		List<File> messagesUnsent = new ArrayList<File>();
 
-		if (outgoingMessagesDir.listFiles().length > 0) {
-			for (File sub : outgoingMessagesDir.listFiles()) {
-				if (sub.isDirectory()
-						&& sub.getName().endsWith(messageReadyPostfix)) {
-					messagesUnsent.add(sub);
-				}
-			}
-		}
-
-		return messagesUnsent;
-	}
 
 	/* (non-Javadoc)
 	 * @see eu.domibus.connector.client.filesystem.DomibusConnectorClientFileSystemReader#readMessagesFromDirWithPostfix(java.io.File, java.lang.String)

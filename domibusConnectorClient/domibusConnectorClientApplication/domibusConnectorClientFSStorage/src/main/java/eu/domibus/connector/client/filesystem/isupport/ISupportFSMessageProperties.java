@@ -35,6 +35,13 @@ public class ISupportFSMessageProperties {
 	private String toPartyRole;
 	@NotEmpty
 	private String toPartyIdType;
+	@NotEmpty
+	private String iSupportIncomingDir;
+	@NotEmpty
+	private String iSupportOutgoingDir;
+	@NotEmpty
+	private String processedFileName;
+	
 	
 	public String getFileName() {
 		return fileName;
@@ -83,6 +90,24 @@ public class ISupportFSMessageProperties {
 	}
 	public void setToPartyIdType(String toPartyIdType) {
 		this.toPartyIdType = toPartyIdType;
+	}
+	public String getiSupportIncomingDir() {
+		return iSupportIncomingDir;
+	}
+	public void setiSupportIncomingDir(String iSupportIncomingDir) {
+		this.iSupportIncomingDir = iSupportIncomingDir;
+	}
+	public String getiSupportOutgoingDir() {
+		return iSupportOutgoingDir;
+	}
+	public void setiSupportOutgoingDir(String iSupportOutgoingDir) {
+		this.iSupportOutgoingDir = iSupportOutgoingDir;
+	}
+	public String getProcessedFileName() {
+		return processedFileName;
+	}
+	public void setProcessedFileName(String processedFileName) {
+		this.processedFileName = processedFileName;
 	}
 
 }

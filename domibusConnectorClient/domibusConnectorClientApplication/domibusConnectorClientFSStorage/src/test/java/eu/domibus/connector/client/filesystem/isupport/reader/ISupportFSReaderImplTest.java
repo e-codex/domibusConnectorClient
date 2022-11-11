@@ -38,45 +38,45 @@ class ISupportFSReaderImplTest {
 
     private File testFolder;
 
-    @org.junit.jupiter.api.Test
-    void processMessageFolderFiles() throws DomibusConnectorClientFileSystemException {
-        final File testdata = new File("testdata");
-        final DomibusConnectorMessageType domibusConnectorMessageType = sut.processMessageFolderFiles(testFolder);
-
-        assertThat(domibusConnectorMessageType.getMessageDetails().getOriginalSender()).isEqualTo("Pellet Jean-Marc");
-        assertThat(domibusConnectorMessageType.getMessageContent()).isNotNull();
-    }
-
-    @org.junit.jupiter.api.Test
-    void readMessages() throws DomibusConnectorClientFileSystemException {
-        final File testdata = new File("testdata");
-        final DomibusConnectorMessageType domibusConnectorMessageType = sut2.readMessageFromFolder(testFolder);
-
-        assertThat(domibusConnectorMessageType.getMessageDetails().getOriginalSender()).isEqualTo("Pellet Jean-Marc");
-        assertThat(domibusConnectorMessageType.getMessageContent()).isNotNull();
-    }
-
-
-    @org.junit.jupiter.api.Test
-    void loadFileContent() throws DomibusConnectorClientFileSystemException {
-        final File testdata = new File("testdata");
-        final byte[] bytes = sut2.loadFileContentFromMessageFolder(testFolder, "2022-01-19-Convention_Request_for_Specific_Measures_Article_71-SM01.pdf");
-
-        assertThat(bytes).isNotNull();
-    }
-
-
-    @org.junit.jupiter.api.Test
-    void readUnsentMessages() throws DomibusConnectorClientFileSystemException {
-        final File testdata = new File("testdata");
-        final List<File> files = sut2.readUnsentMessages(testFolder);
-
-        assertThat(files).isEmpty();
-    }
-
-
-    @BeforeEach
-    void init() throws IOException {
-        testFolder = resourceLoader.getResource("classpath:testdata").getFile();
-    }
+//    @org.junit.jupiter.api.Test
+//    void processMessageFolderFiles() throws DomibusConnectorClientFileSystemException {
+//        final File testdata = new File("testdata");
+//        final DomibusConnectorMessageType domibusConnectorMessageType = sut.processMessageFolderFiles(testFolder);
+//
+//        assertThat(domibusConnectorMessageType.getMessageDetails().getOriginalSender()).isEqualTo("Pellet Jean-Marc");
+//        assertThat(domibusConnectorMessageType.getMessageContent()).isNotNull();
+//    }
+//
+//    @org.junit.jupiter.api.Test
+//    void readMessages() throws DomibusConnectorClientFileSystemException {
+//        final File testdata = new File("testdata");
+//        final DomibusConnectorMessageType domibusConnectorMessageType = sut2.readMessageFromFolder(testFolder);
+//
+//        assertThat(domibusConnectorMessageType.getMessageDetails().getOriginalSender()).isEqualTo("Pellet Jean-Marc");
+//        assertThat(domibusConnectorMessageType.getMessageContent()).isNotNull();
+//    }
+//
+//
+//    @org.junit.jupiter.api.Test
+//    void loadFileContent() throws DomibusConnectorClientFileSystemException {
+//        final File testdata = new File("testdata");
+//        final byte[] bytes = sut2.loadFileContentFromMessageFolder(testFolder, "2022-01-19-Convention_Request_for_Specific_Measures_Article_71-SM01.pdf");
+//
+//        assertThat(bytes).isNotNull();
+//    }
+//
+//
+//    @org.junit.jupiter.api.Test
+//    void readUnsentMessages() throws DomibusConnectorClientFileSystemException {
+//        final File testdata = new File("testdata");
+//        final List<File> files = sut2.readUnsentMessages(testFolder);
+//
+//        assertThat(files).isEmpty();
+//    }
+//
+//
+//    @BeforeEach
+//    void init() throws IOException {
+//        testFolder = resourceLoader.getResource("classpath:testdata").getFile();
+//    }
 }

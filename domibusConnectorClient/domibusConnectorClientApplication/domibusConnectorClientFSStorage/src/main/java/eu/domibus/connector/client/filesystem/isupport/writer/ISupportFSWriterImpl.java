@@ -1,6 +1,7 @@
 package eu.domibus.connector.client.filesystem.isupport.writer;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.validation.Valid;
 
@@ -14,7 +15,7 @@ import eu.domibus.connector.client.filesystem.AbstractDomibusConnectorClientFile
 import eu.domibus.connector.client.filesystem.DomibusConnectorClientFileSystemException;
 import eu.domibus.connector.client.filesystem.DomibusConnectorClientFileSystemWriter;
 import eu.domibus.connector.client.filesystem.configuration.DomibusConnectorClientFSConfigurationProperties;
-import eu.domibus.connector.client.filesystem.standard.DomibusConnectorClientFSMessageProperties;
+import eu.domibus.connector.client.filesystem.isupport.ISupportFSMessageProperties;
 import eu.domibus.connector.client.storage.DomibusConnectorClientStorageFileType;
 import eu.domibus.connector.domain.transition.DomibusConnectorDetachedSignatureType;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageContentType;
@@ -32,7 +33,7 @@ public class ISupportFSWriterImpl extends AbstractDomibusConnectorClientFileSyst
 	private DomibusConnectorClientFSConfigurationProperties properties;
 	
 	@Autowired
-	private DomibusConnectorClientFSMessageProperties messageProperties;
+	private ISupportFSMessageProperties messageProperties;
 	
 	@Override
 	protected void putFileToMessageProperties(File messageFolder, String fileName,
@@ -57,7 +58,18 @@ public class ISupportFSWriterImpl extends AbstractDomibusConnectorClientFileSyst
 	@Override
 	public String writeMessageToFileSystem(DomibusConnectorMessageType message, File messagesDir)
 			throws DomibusConnectorClientFileSystemException {
-		File messageFolder = createMessageFolder(message, messagesDir, true);
+		File iSupportIncomingMessagesDir = new File(messagesDir, messageProperties.getiSupportIncomingDir());
+		
+		if(!iSupportIncomingMessagesDir.exists()) {
+			iSupportIncomingMessagesDir.mkdir();
+			if(!iSupportIncomingMessagesDir.exists()) {
+				LOGGER.error("Problem with directories.");
+	            return null;
+			}
+			
+		}
+		
+		File messageFolder = createMessageFolder(message, iSupportIncomingMessagesDir, true);
 
 		LOGGER.debug("Write new message into folder {}", messageFolder.getAbsolutePath());
 		
