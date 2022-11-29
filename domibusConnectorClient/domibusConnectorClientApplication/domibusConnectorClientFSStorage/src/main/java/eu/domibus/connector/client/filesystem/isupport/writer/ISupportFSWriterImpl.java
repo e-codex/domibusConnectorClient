@@ -70,6 +70,7 @@ public class ISupportFSWriterImpl extends AbstractDomibusConnectorClientFileSyst
 		}
 		
 		File messageFolder = createMessageFolder(message, iSupportIncomingMessagesDir, true);
+		
 
 		LOGGER.debug("Write new message into folder {}", messageFolder.getAbsolutePath());
 		
@@ -83,7 +84,7 @@ public class ISupportFSWriterImpl extends AbstractDomibusConnectorClientFileSyst
 					fileName = properties.getDefaultPdfFileName();
 
 				}
-				writeBusinessDocumentToFS(messageFolder, fileName, messageContent);
+//				writeBusinessDocumentToFS(messageFolder, fileName, messageContent);
 				DomibusConnectorDetachedSignatureType detachedSignature = messageContent.getDocument().getDetachedSignature();
 				if (detachedSignature != null && detachedSignature.getDetachedSignature()!=null && detachedSignature.getDetachedSignature().length > 0
 						&& detachedSignature.getMimeType() != null) {
@@ -105,6 +106,34 @@ public class ISupportFSWriterImpl extends AbstractDomibusConnectorClientFileSyst
 		}
 
 		return messageFolder.getAbsolutePath();
+	}
+	
+	@Override
+	protected File createMessageFolder(DomibusConnectorMessageType message, File messagesDir, boolean createIfNonExistent) throws DomibusConnectorClientFileSystemException {
+		String documentName=null;
+		if(message.getMessageContent()!=null && message.getMessageContent().getDocument()!=null && message.getMessageContent().getDocument().getDocumentName()!=null) {
+			documentName = message.getMessageContent().getDocument().getDocumentName();
+		}
+		
+		if(StringUtils.hasText(documentName)) {
+		
+			LOGGER.debug("Creating message folder {} in iSupportIncomingMessagesDir {}", documentName, messagesDir.getAbsolutePath());
+			
+			File messageFolder = new File(messagesDir, documentName);
+			if (createIfNonExistent && (!messageFolder.exists() || !messageFolder.isDirectory())) {
+				LOGGER.debug("Message folder {} does not exist. Create folder!",
+						messageFolder.getAbsolutePath());
+				if (!messageFolder.mkdir()) {
+					throw new DomibusConnectorClientFileSystemException(
+							"Message folder cannot be created!");
+				}
+			}
+		
+			return messageFolder;
+		}else {
+			return super.createMessageFolder(message, messagesDir, createIfNonExistent);
+		}
+		
 	}
 
 

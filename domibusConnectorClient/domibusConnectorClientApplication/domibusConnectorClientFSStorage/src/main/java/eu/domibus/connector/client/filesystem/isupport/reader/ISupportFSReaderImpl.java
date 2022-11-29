@@ -144,6 +144,9 @@ public class ISupportFSReaderImpl extends AbstractDomibusConnectorClientFileSyst
 						throw new DomibusConnectorClientFileSystemException(
 								"Exception creating Source object out of file " + sub.getName());
 					}
+					LOGGER.debug("Set {} as document name", workMessageFolder.getName());
+					document.setDocumentName(workMessageFolder.getName());
+					document.setDocument(ConversionTools.convertFileToDataHandler(sub, "text/xml"));
 					continue;
 				} else if (isConfirmation(sub.getName())) {
 					DomibusConnectorMessageConfirmationType confirmation = new DomibusConnectorMessageConfirmationType();
