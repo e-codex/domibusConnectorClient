@@ -7,7 +7,7 @@ public class MessageNotFoundException extends Exception {
 	}
 
 	/**
-	 * @param message
+	 * @param message message
 	 */
 	public MessageNotFoundException(String message) {
 		super(message);

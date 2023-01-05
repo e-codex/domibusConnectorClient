@@ -55,8 +55,8 @@ public interface DomibusConnectorClientSubmissionRestAPI {
 	 * domibusConnector which then generates the confirmation and submits it to the original sender of the message. The generated confirmation also is sent back to the
 	 * domibusConnectorClient and stored there.
 	 * 
-	 * @param refToMessageId
-	 * @param confirmationType
+	 * @param refToMessageId refToMessageId
+	 * @param confirmationType confirmationType
 	 * @return success
 	 * @throws MessageSubmissionException MessageSubmissionException
 	 * @throws ParameterException ParameterException
