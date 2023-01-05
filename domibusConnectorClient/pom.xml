@@ -53,15 +53,11 @@
     <h2.version>1.4.200</h2.version>
     <swagger.version>1.5.12</swagger.version>
     <ecodex.utils.version>0.0.21-RELEASE</ecodex.utils.version>
-    <vaadin.version>14.1.17</vaadin.version>
+    <vaadin.version>22.0.26</vaadin.version>
     <org.apache.log4j2.version>2.17.0</org.apache.log4j2.version>
   </properties>
   <dependencyManagement>
     <dependencies>
-      <!-- <dependency> import dependencies via dependency Management from webConnector
-                4.0 <groupId>eu.domibus.connector</groupId> <artifactId>domibusConnector</artifactId>
-                <version>${connector-server.version}</version> <type>pom</type> <scope>import</scope>
-                </dependency> -->
       <dependency>
         <groupId>eu.ecodex.common.utils</groupId>
         <artifactId>ecodex-common-spring-dependencies</artifactId>
@@ -125,10 +121,6 @@
         <artifactId>domibusConnectorAPIlib</artifactId>
         <version>${connector-server.version}</version>
       </dependency>
-      <!-- <dependency> <groupId>eu.domibus.connector-client</groupId> <artifactId>domibusConnectorClientLibrary</artifactId>
-                <version>${project.version}</version> </dependency> <dependency> <groupId>eu.domibus.connector-client</groupId>
-                <artifactId>domibusConnectorClientWsLink</artifactId> <version>${project.version}</version>
-                </dependency> -->
       <dependency>
         <groupId>io.swagger</groupId>
         <artifactId>swagger-annotations</artifactId>
