@@ -23,7 +23,7 @@ public interface DomibusConnectorDeliveryClient {
 	 * Before delivered, the {@link eu.domibus.connector.client.DomibusConnectorClientMessageHandler} is called.
 	 * 
 	 * @param message - The business message delivered by the domibusConnector.
-	 * @throws DomibusConnectorClientException 
+	 * @throws DomibusConnectorClientException DomibusConnectorClientException
 	 */
 	public void receiveDeliveredMessageFromConnector(DomibusConnectorMessageType message) throws DomibusConnectorClientException;
 	
