@@ -33,7 +33,7 @@ public interface DomibusConnectorClientStorage {
 	 * 
 	 * @param message - The message to be stored
 	 * @return The location path where the message has been stored.
-	 * @throws DomibusConnectorClientStorageException
+	 * @throws DomibusConnectorClientStorageException DomibusConnectorClientStorageException
 	 */
 	String storeMessage(DomibusConnectorMessageType message) 
 			throws DomibusConnectorClientStorageException;
@@ -44,8 +44,8 @@ public interface DomibusConnectorClientStorage {
 	 * 
 	 * @param message - The confirmation message received from the connector.
 	 * @param storageLocation - The storage location path where the original message is stored.
-	 * @throws DomibusConnectorClientStorageException
-	 * @throws IllegalArgumentException
+	 * @throws DomibusConnectorClientStorageException DomibusConnectorClientStorageException
+	 * @throws IllegalArgumentException IllegalArgumentException
 	 */
 	void storeConfirmationToMessage(DomibusConnectorMessageType message, String storageLocation) 
 			throws DomibusConnectorClientStorageException, IllegalArgumentException;
@@ -54,8 +54,8 @@ public interface DomibusConnectorClientStorage {
 	/**
 	 * Checks, if the storage location path still exists.
 	 * 
-	 * @param storageLocation
-	 * @return
+	 * @param storageLocation storageLocation
+	 * @return DomibusConnectorClientStorageStatus
 	 */
 	DomibusConnectorClientStorageStatus checkStorageStatus(String storageLocation);
 	
@@ -66,8 +66,8 @@ public interface DomibusConnectorClientStorage {
 	 * @param storageLocation - The storage location path where to search for the file.
 	 * @param name - The name of the file as stored inside the storage location.
 	 * @return The bytes of the file.
-	 * @throws DomibusConnectorClientStorageException
-	 * @throws IllegalArgumentException
+	 * @throws DomibusConnectorClientStorageException DomibusConnectorClientStorageException
+	 * @throws IllegalArgumentException IllegalArgumentException
 	 */
 	byte[] loadFileContentFromStorageLocation(String storageLocation, String name) 
 			throws DomibusConnectorClientStorageException, IllegalArgumentException;
@@ -77,8 +77,8 @@ public interface DomibusConnectorClientStorage {
 	 * 
 	 * @param storageLocation - The storage location path where to search for files.
 	 * @return A Map where the key is the fileName found and the value the type of file. 
-	 * @throws DomibusConnectorClientStorageException
-	 * @throws IllegalArgumentException
+	 * @throws DomibusConnectorClientStorageException DomibusConnectorClientStorageException
+	 * @throws IllegalArgumentException IllegalArgumentException
 	 */
 	Map<String, DomibusConnectorClientStorageFileType> listContentAtStorageLocation(String storageLocation) 
 			throws DomibusConnectorClientStorageException, IllegalArgumentException;
@@ -88,8 +88,8 @@ public interface DomibusConnectorClientStorage {
 	 * 
 	 * @param storageLocation - The storage location path.
 	 * @return The message loaded from the storage containing all contents found there.
-	 * @throws DomibusConnectorClientStorageException
-	 * @throws IllegalArgumentException
+	 * @throws DomibusConnectorClientStorageException DomibusConnectorClientStorageException
+	 * @throws IllegalArgumentException IllegalArgumentException
 	 */
 	DomibusConnectorMessageType getStoredMessage(String storageLocation) 
 			throws DomibusConnectorClientStorageException, IllegalArgumentException;
@@ -100,8 +100,8 @@ public interface DomibusConnectorClientStorage {
 	 * 
 	 * @param storageLocation - The storage location path where the submitted message is stored.
 	 * @return The new storage location path after renaming.
-	 * @throws DomibusConnectorClientStorageException
-	 * @throws IllegalArgumentException
+	 * @throws DomibusConnectorClientStorageException DomibusConnectorClientStorageException
+	 * @throws IllegalArgumentException IllegalArgumentException
 	 */
 	String updateStoredMessageToSent(String storageLocation) 
 			throws DomibusConnectorClientStorageException, IllegalArgumentException;
@@ -113,8 +113,8 @@ public interface DomibusConnectorClientStorage {
 	 * @param fileName - The name of the file to be stored including filetype suffix.
 	 * @param fileType - The type of file to be stored.
 	 * @param content - The content of the file to be stored as bytes.
-	 * @throws DomibusConnectorClientStorageException
-	 * @throws IllegalArgumentException
+	 * @throws DomibusConnectorClientStorageException DomibusConnectorClientStorageException
+	 * @throws IllegalArgumentException IllegalArgumentException
 	 */
 	void storeFileIntoStorage(String storageLocation, String fileName, DomibusConnectorClientStorageFileType fileType, byte[] content) 
 			throws DomibusConnectorClientStorageException, IllegalArgumentException;
@@ -123,8 +123,8 @@ public interface DomibusConnectorClientStorage {
 	 * Complete removes everything contained at the given storage location.
 	 * 
 	 * @param storageLocation - The storage location path that should be removed.
-	 * @throws DomibusConnectorClientStorageException
-	 * @throws IllegalArgumentException
+	 * @throws DomibusConnectorClientStorageException DomibusConnectorClientStorageException
+	 * @throws IllegalArgumentException IllegalArgumentException
 	 */
 	void deleteMessageFromStorage(String storageLocation) 
 			throws DomibusConnectorClientStorageException, IllegalArgumentException;
@@ -135,8 +135,8 @@ public interface DomibusConnectorClientStorage {
 	 * @param storageLocation - The storage location path the given file should be removed from.
 	 * @param fileName - The name of the file that should be removed.
 	 * @param fileType - The type of the file. May result in changes of contents of the message details.
-	 * @throws DomibusConnectorClientStorageException
-	 * @throws IllegalArgumentException
+	 * @throws DomibusConnectorClientStorageException DomibusConnectorClientStorageException
+	 * @throws IllegalArgumentException IllegalArgumentException
 	 */
 	void deleteFileFromStorage(String storageLocation, String fileName,	DomibusConnectorClientStorageFileType fileType) 
 			throws DomibusConnectorClientStorageException, IllegalArgumentException;
