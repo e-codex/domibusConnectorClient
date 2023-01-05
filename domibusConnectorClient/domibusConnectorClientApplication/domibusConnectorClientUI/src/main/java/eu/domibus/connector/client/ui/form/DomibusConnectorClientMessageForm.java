@@ -1,13 +1,12 @@
 package eu.domibus.connector.client.ui.form;
 
-import com.vaadin.flow.component.dependency.HtmlImport;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.Binder;
 
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 
-@HtmlImport("styles/shared-styles.html")
+
 public class DomibusConnectorClientMessageForm extends FormLayout {
 
 	/**
