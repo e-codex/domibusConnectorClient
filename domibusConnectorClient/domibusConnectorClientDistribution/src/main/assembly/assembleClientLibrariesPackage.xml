@@ -1,127 +1,142 @@
-<assembly>
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.1"
+		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.1 https://maven.apache.org/xsd/assembly-2.1.1.xsd">
 	<id>Libraries</id>
 	<formats>
 		<format>zip</format>
 		<format>dir</format>
 	</formats>
 	<includeBaseDirectory>false</includeBaseDirectory>
-	<fileSets>
-		
-		<!-- ==================== Copying libraries ================= -->
-		
-		<!-- ==================== domibusConnectorAPI ================= -->
-		<fileSet>
-			<directory>${project.basedir}/domibusConnectorClientLibsAPI/target/lib/
-			</directory>
-			<outputDirectory>libraries/domibusConnectorAPI
-			</outputDirectory>
+
+	<dependencySets>
+		<dependencySet>
+			<outputDirectory>/</outputDirectory>
+			<useProjectArtifact>true</useProjectArtifact>
+			<scope>runtime</scope>
 			<includes>
-				<include>domibusConnectorAPI*.jar</include>
+				<include>eu.domibus.connector-client:domibusConnectorClientLibsAPI:*</include>
 			</includes>
-		</fileSet>
-		
-		<!-- ==================== domibusConnectorClientLibsAPI ================= -->
-		<fileSet>
-			<directory>${project.basedir}/domibusConnectorClientLibsAPI/target/
-			</directory>
-			<outputDirectory>libraries/domibusConnectorClientLibsAPI
-			</outputDirectory>
-			<includes>
-				<include>*.jar</include>
-			</includes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.basedir}/domibusConnectorClientLibsAPI/
-			</directory>
-			<outputDirectory>libraries/domibusConnectorClientLibsAPI
-			</outputDirectory>
-			<includes>
-				<include>pom.xml</include>
-			</includes>
-		</fileSet>
-		
-		
-		<!-- ==================== domibusConnectorClientLibrary ================= -->
-		
-		<fileSet>
-			<directory>${project.basedir}/domibusConnectorClientLibrary/target/
-			</directory>
-			<outputDirectory>libraries/domibusConnectorClientLibrary
-			</outputDirectory>
-			<includes>
-				<include>*.jar</include>
-			</includes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.basedir}/domibusConnectorClientLibrary/
-			</directory>
-			<outputDirectory>libraries/domibusConnectorClientLibrary
-			</outputDirectory>
-			<includes>
-				<include>pom.xml</include>
-			</includes>
-		</fileSet>
-		
-		
-		<!-- ==================== domibusConnectorClientScheduler ================= -->
-		
-		<fileSet>
-			<directory>${project.basedir}/domibusConnectorClientScheduler/target/
-			</directory>
-			<outputDirectory>libraries/domibusConnectorClientScheduler
-			</outputDirectory>
-			<includes>
-				<include>*.jar</include>
-			</includes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.basedir}/domibusConnectorClientScheduler/
-			</directory>
-			<outputDirectory>libraries/domibusConnectorClientScheduler
-			</outputDirectory>
-			<includes>
-				<include>pom.xml</include>
-			</includes>
-		</fileSet>
-		
-		<!-- ==================== domibusConnectorClientWSLink ================= -->
-		
-		<fileSet>
-			<directory>${project.basedir}/domibusConnectorClientWSLink/target/
-			</directory>
-			<outputDirectory>libraries/domibusConnectorClientWSLink
-			</outputDirectory>
-			<includes>
-				<include>*.jar</include>
-			</includes>
-		</fileSet>
-		<fileSet>
-			<directory>${project.basedir}/domibusConnectorClientWSLink/
-			</directory>
-			<outputDirectory>libraries/domibusConnectorClientWSLink
-			</outputDirectory>
-			<includes>
-				<include>pom.xml</include>
-			</includes>
-		</fileSet>
-		
-		<!-- ==================== Copying site documentation ================= -->
-		<fileSet>
-			<directory>${project.basedir}/target/site
-			</directory>
-			<outputDirectory>documentation/site
-			</outputDirectory>
-		</fileSet>
-		
-		<!-- ==================== Copying example properties ================= -->
-		<fileSet>
-			<directory>${project.basedir}/src/main/resources/libraries/properties
-			</directory>
-			<outputDirectory>documentation/properties
-			</outputDirectory>
-		</fileSet>
-			
-	</fileSets>
+		</dependencySet>
+	</dependencySets>
+
+
+<!--	<fileSets>-->
+<!--		-->
+<!--		&lt;!&ndash; ==================== Copying libraries ================= &ndash;&gt;-->
+<!--		-->
+<!--		&lt;!&ndash; ==================== domibusConnectorAPI ================= &ndash;&gt;-->
+<!--&lt;!&ndash;		<fileSet>&ndash;&gt;-->
+<!--&lt;!&ndash;			<directory>${project.basedir}/domibusConnectorClientLibsAPI/target/lib/&ndash;&gt;-->
+<!--&lt;!&ndash;			</directory>&ndash;&gt;-->
+<!--&lt;!&ndash;			<outputDirectory>libraries/domibusConnectorAPI&ndash;&gt;-->
+<!--&lt;!&ndash;			</outputDirectory>&ndash;&gt;-->
+<!--&lt;!&ndash;			<includes>&ndash;&gt;-->
+<!--&lt;!&ndash;				<include>domibusConnectorAPI*.jar</include>&ndash;&gt;-->
+<!--&lt;!&ndash;			</includes>&ndash;&gt;-->
+<!--&lt;!&ndash;		</fileSet>&ndash;&gt;-->
+<!--		-->
+<!--		&lt;!&ndash; ==================== domibusConnectorClientLibsAPI ================= &ndash;&gt;-->
+<!--		<fileSet>-->
+<!--			<directory>${project.basedir}/domibusConnectorClientLibsAPI/target/-->
+<!--			</directory>-->
+<!--			<outputDirectory>libraries/domibusConnectorClientLibsAPI-->
+<!--			</outputDirectory>-->
+<!--			<includes>-->
+<!--				<include>*.jar</include>-->
+<!--			</includes>-->
+<!--		</fileSet>-->
+<!--		<fileSet>-->
+<!--			<directory>${project.basedir}/domibusConnectorClientLibsAPI/-->
+<!--			</directory>-->
+<!--			<outputDirectory>libraries/domibusConnectorClientLibsAPI-->
+<!--			</outputDirectory>-->
+<!--			<includes>-->
+<!--				<include>pom.xml</include>-->
+<!--			</includes>-->
+<!--		</fileSet>-->
+<!--		-->
+<!--		-->
+<!--		&lt;!&ndash; ==================== domibusConnectorClientLibrary ================= &ndash;&gt;-->
+<!--		-->
+<!--		<fileSet>-->
+<!--			<directory>${project.basedir}/domibusConnectorClientLibrary/target/-->
+<!--			</directory>-->
+<!--			<outputDirectory>libraries/domibusConnectorClientLibrary-->
+<!--			</outputDirectory>-->
+<!--			<includes>-->
+<!--				<include>*.jar</include>-->
+<!--			</includes>-->
+<!--		</fileSet>-->
+<!--		<fileSet>-->
+<!--			<directory>${project.basedir}/domibusConnectorClientLibrary/-->
+<!--			</directory>-->
+<!--			<outputDirectory>libraries/domibusConnectorClientLibrary-->
+<!--			</outputDirectory>-->
+<!--			<includes>-->
+<!--				<include>pom.xml</include>-->
+<!--			</includes>-->
+<!--		</fileSet>-->
+<!--		-->
+<!--		-->
+<!--		&lt;!&ndash; ==================== domibusConnectorClientScheduler ================= &ndash;&gt;-->
+<!--		-->
+<!--		<fileSet>-->
+<!--			<directory>${project.basedir}/domibusConnectorClientScheduler/target/-->
+<!--			</directory>-->
+<!--			<outputDirectory>libraries/domibusConnectorClientScheduler-->
+<!--			</outputDirectory>-->
+<!--			<includes>-->
+<!--				<include>*.jar</include>-->
+<!--			</includes>-->
+<!--		</fileSet>-->
+<!--		<fileSet>-->
+<!--			<directory>${project.basedir}/domibusConnectorClientScheduler/-->
+<!--			</directory>-->
+<!--			<outputDirectory>libraries/domibusConnectorClientScheduler-->
+<!--			</outputDirectory>-->
+<!--			<includes>-->
+<!--				<include>pom.xml</include>-->
+<!--			</includes>-->
+<!--		</fileSet>-->
+<!--		-->
+<!--		&lt;!&ndash; ==================== domibusConnectorClientWSLink ================= &ndash;&gt;-->
+<!--		-->
+<!--		<fileSet>-->
+<!--			<directory>${project.basedir}/domibusConnectorClientWSLink/target/-->
+<!--			</directory>-->
+<!--			<outputDirectory>libraries/domibusConnectorClientWSLink-->
+<!--			</outputDirectory>-->
+<!--			<includes>-->
+<!--				<include>*.jar</include>-->
+<!--			</includes>-->
+<!--		</fileSet>-->
+<!--		<fileSet>-->
+<!--			<directory>${project.basedir}/domibusConnectorClientWSLink/-->
+<!--			</directory>-->
+<!--			<outputDirectory>libraries/domibusConnectorClientWSLink-->
+<!--			</outputDirectory>-->
+<!--			<includes>-->
+<!--				<include>pom.xml</include>-->
+<!--			</includes>-->
+<!--		</fileSet>-->
+<!--		-->
+<!--		&lt;!&ndash; ==================== Copying site documentation ================= &ndash;&gt;-->
+<!--		<fileSet>-->
+<!--			<directory>${project.basedir}/target/site-->
+<!--			</directory>-->
+<!--			<outputDirectory>documentation/site-->
+<!--			</outputDirectory>-->
+<!--		</fileSet>-->
+<!--		-->
+<!--		&lt;!&ndash; ==================== Copying example properties ================= &ndash;&gt;-->
+<!--		<fileSet>-->
+<!--			<directory>${project.basedir}/src/main/resources/libraries/properties-->
+<!--			</directory>-->
+<!--			<outputDirectory>documentation/properties-->
+<!--			</outputDirectory>-->
+<!--		</fileSet>-->
+<!--			-->
+<!--	</fileSets>-->
 
 
 </assembly>

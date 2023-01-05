@@ -1,10 +1,27 @@
-<assembly>
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.1"
+		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.1 https://maven.apache.org/xsd/assembly-2.1.1.xsd">
 	<id>Libraries</id>
 	<formats>
 		<format>zip</format>
 		<format>dir</format>
 	</formats>
 	<includeBaseDirectory>false</includeBaseDirectory>
+<!--	<moduleSets>-->
+<!--		<moduleSet>-->
+<!--			<useAllReactorProjects>true</useAllReactorProjects>-->
+<!--			<includes>-->
+<!--				<include>${project.groupId}:domibusConnectorClientLibsAPI</include>-->
+<!--			</includes>-->
+<!--			<binaries>-->
+<!--&lt;!&ndash;				<attachmentClassifier>site</attachmentClassifier>&ndash;&gt;-->
+<!--&lt;!&ndash;				<outputDirectory>doc</outputDirectory>&ndash;&gt;-->
+<!--&lt;!&ndash;				<outputFileNameMapping>website.${module.extension}</outputFileNameMapping>&ndash;&gt;-->
+<!--			</binaries>-->
+<!--		</moduleSet>-->
+<!--	</moduleSets>-->
+
+
 	<fileSets>
 		
 		<!-- ==================== Copying libraries ================= -->

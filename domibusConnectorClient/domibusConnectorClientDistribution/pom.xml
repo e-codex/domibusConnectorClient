@@ -10,10 +10,11 @@
   <packaging>pom</packaging>
 
   <dependencies>
-    <dependency>
-      <groupId></groupId>
-      <artifactId></artifactId>
-    </dependency>
+      <dependency>
+        <groupId>${project.groupId}</groupId>
+        <artifactId>domibusConnectorClientLibsAPI</artifactId>
+        <version>${project.version}</version>
+      </dependency>
   </dependencies>
 
 <!--  <dependencies>-->

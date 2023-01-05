@@ -161,6 +161,11 @@
           <version>${maven.enforcer.plugin.version}</version>
         </plugin>
         <plugin>
+          <groupId>com.vaadin</groupId>
+          <artifactId>vaadin-maven-plugin</artifactId>
+          <version>${vaadin.version}</version>
+        </plugin>
+        <plugin>
           <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-javadoc-plugin</artifactId>
           <version>${maven.javadoc.plugin.version}</version>
@@ -353,4 +358,5 @@
       </build>
     </profile>
   </profiles>
+
 </project>

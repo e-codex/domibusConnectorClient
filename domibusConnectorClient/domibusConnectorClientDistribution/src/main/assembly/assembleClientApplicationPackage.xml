@@ -1,82 +1,113 @@
-<assembly>
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.1"
+		  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		  xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.1 https://maven.apache.org/xsd/assembly-2.1.1.xsd">
 	<id>Standalone</id>
 	<formats>
 		<format>zip</format>
 		<!-- <format>dir</format> -->
 	</formats>
 	<includeBaseDirectory>false</includeBaseDirectory>
-	<fileSets>
 
-		<!-- ==================== Copying file structure ================= -->
-		<fileSet>
-			<directory>${project.basedir}/src/main/resources/application
-			</directory>
-			<outputDirectory>
-			</outputDirectory>
-		</fileSet>
-		<fileSet>
-			<directory>.</directory>
-			<outputDirectory>logs</outputDirectory>
-			<excludes>
-				<exclude>*/**</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>.</directory>
-			<outputDirectory>database</outputDirectory>
-			<excludes>
-				<exclude>*/**</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>.</directory>
-			<outputDirectory>messages</outputDirectory>
-			<excludes>
-				<exclude>*/**</exclude>
-			</excludes>
-		</fileSet>
-		<fileSet>
-			<directory>.</directory>
-			<outputDirectory>lib</outputDirectory>
-			<excludes>
-				<exclude>*/**</exclude>
-			</excludes>
-		</fileSet>
-
-		<fileSet>
-			<directory>${project.basedir}/src/main/resources/application
-			</directory>
-			<outputDirectory>
-			</outputDirectory>
-			<fileMode>777</fileMode>
+	<moduleSets>
+		<moduleSet>
+			<useAllReactorProjects>true</useAllReactorProjects>
 			<includes>
-				<include>*.sh</include>
+				<include>*:domibusConnectorClientLibsAPI</include>
 			</includes>
-		</fileSet>
+			<binaries>
+				<outputDirectory>lib</outputDirectory>
+				<!--				<attachmentClassifier>site</attachmentClassifier>-->
+				<!--				<outputDirectory>doc</outputDirectory>-->
+				<!--				<outputFileNameMapping>website.${module.extension}</outputFileNameMapping>-->
+			</binaries>
+			<sources>
+				<outputDirectory>src</outputDirectory>
+			</sources>
+		</moduleSet>
+	</moduleSets>
 
-		<!-- ==================== Copying domibusConnectorClientStarter library
-			================= -->
-		<fileSet>
-			<directory>${project.basedir}/domibusConnectorClientStarter/target/
-			</directory>
-			<outputDirectory>bin
-			</outputDirectory>
-			<includes>
-				<include>*.jar</include>
-			</includes>
-			<excludes>
-				<exclude>*-sources.jar</exclude>
-				<exclude>*-javadoc.jar</exclude>
-			</excludes>
-		</fileSet>
 
-		<!-- ==================== Copying site documentation ================= -->
-		<fileSet>
-			<directory>${project.basedir}/target/site/
-			</directory>
-			<outputDirectory>documentation/site
-			</outputDirectory>
-		</fileSet>
+<!--	<dependencySets>-->
+<!--		<dependencySet>-->
 
-	</fileSets>
+<!--			<includes>-->
+<!--				<include>eu.domibus.connector-client:domibusConnectorClientLibsAPI:*</include>-->
+<!--			</includes>-->
+<!--		</dependencySet>-->
+<!--	</dependencySets>-->
+
+<!--	<fileSets>-->
+
+<!--		&lt;!&ndash; ==================== Copying file structure ================= &ndash;&gt;-->
+<!--		<fileSet>-->
+<!--			<directory>${project.basedir}/src/main/resources/application-->
+<!--			</directory>-->
+<!--			<outputDirectory>-->
+<!--			</outputDirectory>-->
+<!--		</fileSet>-->
+<!--		<fileSet>-->
+<!--			<directory>.</directory>-->
+<!--			<outputDirectory>logs</outputDirectory>-->
+<!--			<excludes>-->
+<!--				<exclude>*/**</exclude>-->
+<!--			</excludes>-->
+<!--		</fileSet>-->
+<!--		<fileSet>-->
+<!--			<directory>.</directory>-->
+<!--			<outputDirectory>database</outputDirectory>-->
+<!--			<excludes>-->
+<!--				<exclude>*/**</exclude>-->
+<!--			</excludes>-->
+<!--		</fileSet>-->
+<!--		<fileSet>-->
+<!--			<directory>.</directory>-->
+<!--			<outputDirectory>messages</outputDirectory>-->
+<!--			<excludes>-->
+<!--				<exclude>*/**</exclude>-->
+<!--			</excludes>-->
+<!--		</fileSet>-->
+<!--		<fileSet>-->
+<!--			<directory>.</directory>-->
+<!--			<outputDirectory>lib</outputDirectory>-->
+<!--			<excludes>-->
+<!--				<exclude>*/**</exclude>-->
+<!--			</excludes>-->
+<!--		</fileSet>-->
+
+<!--		<fileSet>-->
+<!--			<directory>${project.basedir}/src/main/resources/application-->
+<!--			</directory>-->
+<!--			<outputDirectory>-->
+<!--			</outputDirectory>-->
+<!--			<fileMode>777</fileMode>-->
+<!--			<includes>-->
+<!--				<include>*.sh</include>-->
+<!--			</includes>-->
+<!--		</fileSet>-->
+
+<!--		&lt;!&ndash; ==================== Copying domibusConnectorClientStarter library-->
+<!--			================= &ndash;&gt;-->
+<!--		<fileSet>-->
+<!--			<directory>${project.basedir}/domibusConnectorClientStarter/target/-->
+<!--			</directory>-->
+<!--			<outputDirectory>bin-->
+<!--			</outputDirectory>-->
+<!--			<includes>-->
+<!--				<include>*.jar</include>-->
+<!--			</includes>-->
+<!--			<excludes>-->
+<!--				<exclude>*-sources.jar</exclude>-->
+<!--				<exclude>*-javadoc.jar</exclude>-->
+<!--			</excludes>-->
+<!--		</fileSet>-->
+
+<!--		&lt;!&ndash; ==================== Copying site documentation ================= &ndash;&gt;-->
+<!--		<fileSet>-->
+<!--			<directory>${project.basedir}/target/site/-->
+<!--			</directory>-->
+<!--			<outputDirectory>documentation/site-->
+<!--			</outputDirectory>-->
+<!--		</fileSet>-->
+
+<!--	</fileSets>-->
 </assembly>
