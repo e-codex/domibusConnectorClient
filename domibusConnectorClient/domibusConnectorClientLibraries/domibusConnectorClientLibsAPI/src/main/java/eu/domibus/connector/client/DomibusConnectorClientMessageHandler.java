@@ -21,8 +21,8 @@ public interface DomibusConnectorClientMessageHandler {
 	 * Last, the message gets again validated with an implementation of {@link eu.domibus.connector.client.schema.validation.DCCLocalSchemaValidator} if present.
 	 * 
 	 * @param message - The message object holding the business content XML at message/MessageContent/contentXML
-	 * @throws DCCContentMappingException 
-	 * @throws DCCMessageValidationException 
+	 * @throws DCCContentMappingException  DCCContentMappingException
+	 * @throws DCCMessageValidationException  DCCMessageValidationException
 	 */
 	void prepareInboundMessage(DomibusConnectorMessageType message)
 			throws DCCMessageValidationException, DCCContentMappingException;
@@ -34,8 +34,8 @@ public interface DomibusConnectorClientMessageHandler {
 	 * Last, the message gets again validated with an implementation of {@link eu.domibus.connector.client.schema.validation.DCCLocalSchemaValidator} if present.
 	 * 
 	 * @param message - The message object holding the business content XML at message/MessageContent/contentXML
-	 * @throws DCCContentMappingException 
-	 * @throws DCCMessageValidationException 
+	 * @throws DCCContentMappingException  DCCContentMappingException
+	 * @throws DCCMessageValidationException  DCCMessageValidationException
 	 */
 	void prepareOutboundMessage(DomibusConnectorMessageType message)
 			throws DCCMessageValidationException, DCCContentMappingException;
