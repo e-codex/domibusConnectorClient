@@ -42,9 +42,9 @@ public interface DomibusConnectorClientSubmissionRestAPI {
 	 * @param message The domibusConnectorClient message to be processed and submitted to the domibusConnector. This message object
 	 * must already be built completely with all message files attached, as the domibusConnectorClient presumes that the message submitted is already prepared.
 	 * @return success
-	 * @throws MessageSubmissionException
-	 * @throws StorageException
-	 * @throws ParameterException
+	 * @throws MessageSubmissionException MessageSubmissionException
+	 * @throws StorageException StorageException
+	 * @throws ParameterException ParameterException
 	 */
 	@PostMapping(
 			value = SUBMIT_NEW_MESSAGE_FROM_BACKEND_TO_CONNECTOR_CLIENT, consumes = "application/json", produces = "application/json")
@@ -58,9 +58,9 @@ public interface DomibusConnectorClientSubmissionRestAPI {
 	 * @param refToMessageId
 	 * @param confirmationType
 	 * @return success
-	 * @throws MessageSubmissionException
-	 * @throws ParameterException
-	 * @throws MessageNotFoundException
+	 * @throws MessageSubmissionException MessageSubmissionException
+	 * @throws ParameterException ParameterException
+	 * @throws MessageNotFoundException MessageNotFoundException
 	 */
 	@PostMapping(
 			value = TRIGGER_CONFIRMATION_AT_CONNECTOR_CLIENT, consumes = "application/json", produces = "application/json")
