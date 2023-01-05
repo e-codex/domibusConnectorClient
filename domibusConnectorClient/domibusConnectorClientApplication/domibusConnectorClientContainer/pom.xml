@@ -124,14 +124,14 @@
             <artifactId>jib-maven-plugin</artifactId>
             <configuration>
               <skip>false</skip>
-              <extraDirectories>
-                <paths>
-                  <path>
-                    <from>${project.build.directory}/jib-extra-libs</from>
-                    <into>/app/libs</into>
-                  </path>
-                </paths>
-              </extraDirectories>
+<!--              <extraDirectories>-->
+<!--                <paths>-->
+<!--                  <path>-->
+<!--                    <from>${project.build.directory}/jib-extra-libs</from>-->
+<!--                    <into>/app/libs</into>-->
+<!--                  </path>-->
+<!--                </paths>-->
+<!--              </extraDirectories>-->
               <container>
 
                 <mainClass>org.springframework.boot.loader.PropertiesLauncher</mainClass>
