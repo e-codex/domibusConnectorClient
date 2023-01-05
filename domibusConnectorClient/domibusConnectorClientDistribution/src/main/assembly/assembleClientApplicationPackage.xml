@@ -27,14 +27,16 @@
 	</moduleSets>
 
 
-<!--	<dependencySets>-->
-<!--		<dependencySet>-->
+	<dependencySets>
+		<dependencySet>
 
-<!--			<includes>-->
-<!--				<include>eu.domibus.connector-client:domibusConnectorClientLibsAPI:*</include>-->
-<!--			</includes>-->
-<!--		</dependencySet>-->
-<!--	</dependencySets>-->
+			<includes>
+				<include>*:domibusConnectorClientStarter:*</include>
+			</includes>
+			<outputDirectory>bin</outputDirectory>
+		</dependencySet>
+
+	</dependencySets>
 
 <!--	<fileSets>-->
 

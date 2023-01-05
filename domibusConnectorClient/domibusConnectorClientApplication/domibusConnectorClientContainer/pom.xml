@@ -8,23 +8,28 @@
   </parent>
   <artifactId>domibusConnectorClientContainer</artifactId>
   <packaging>jar</packaging>
-<!--  <dependencyManagement>-->
-<!--    <dependencies>-->
-<!--      <dependency>-->
-<!--        <groupId>com.vaadin</groupId>-->
-<!--        <artifactId>vaadin-bom</artifactId>-->
-<!--        <version>${vaadin.version}</version>-->
-<!--        <type>pom</type>-->
-<!--        <scope>import</scope>-->
-<!--      </dependency>-->
-<!--    </dependencies>-->
-<!--  </dependencyManagement>-->
+  <dependencyManagement>
+    <dependencies>
+      <dependency>
+        <groupId>com.vaadin</groupId>
+        <artifactId>vaadin-bom</artifactId>
+        <version>${vaadin.version}</version>
+        <type>pom</type>
+        <scope>import</scope>
+      </dependency>
+    </dependencies>
+  </dependencyManagement>
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>domibusConnectorClientUI</artifactId>
       <version>${project.version}</version>
       <classifier>classes</classifier>
+    </dependency>
+    <dependency>
+      <groupId>${project.groupId}</groupId>
+      <artifactId>domibusConnectorClientStarter</artifactId>
+      <version>${project.version}</version>
     </dependency>
     <dependency>
       <groupId>org.springframework.boot</groupId>
@@ -117,32 +122,21 @@
           <plugin>
             <groupId>com.google.cloud.tools</groupId>
             <artifactId>jib-maven-plugin</artifactId>
-            <version>3.2.1</version>
-<!--            <configuration>-->
-<!--              <skip>false</skip>-->
-<!--              <from>-->
-<!--                <image>default-route-openshift-image-registry.apps.a2.cp.cna.at/openshift/java:openjdk-11-ubi8</image>-->
-<!--              </from>-->
-<!--              <to>-->
-<!--                <image>default-route-openshift-image-registry.apps.a2.cp.cna.at/ju-eu-ejustice-eqs/dc-connector-client</image>-->
-<!--              </to>-->
-<!--              -->
-<!--              -->
-<!--            </configuration>-->
             <configuration>
-<!--              <extraDirectories>-->
-<!--                <paths>-->
-<!--                  <path>-->
-<!--                    <from>${project.build.directory}/jib-extra-libs</from>-->
-<!--                    <into>/app/libs</into>-->
-<!--                  </path>-->
-<!--                </paths>-->
-<!--              </extraDirectories>-->
+              <skip>false</skip>
+              <extraDirectories>
+                <paths>
+                  <path>
+                    <from>${project.build.directory}/jib-extra-libs</from>
+                    <into>/app/libs</into>
+                  </path>
+                </paths>
+              </extraDirectories>
               <container>
 
                 <mainClass>org.springframework.boot.loader.PropertiesLauncher</mainClass>
                 <jvmFlags>
-                  <jvmFlag>-Dspring.config.name=connector</jvmFlag>
+                  <jvmFlag>-Dspring.config.name=connector-client</jvmFlag>
                   <jvmFlag>-Dloader.main=eu.domibus.connector.client.starter.DomibusConnectorClientApplicationStarter</jvmFlag>
                 </jvmFlags>
                 <ports>
@@ -160,6 +154,15 @@
                 </tags>
               </to>
             </configuration>
+            <executions>
+              <execution>
+                <id>upload-image</id>
+                <goals>
+                  <goal>build</goal>
+                </goals>
+                <phase>install</phase>
+              </execution>
+            </executions>
           </plugin>
         </plugins>
       </build>
