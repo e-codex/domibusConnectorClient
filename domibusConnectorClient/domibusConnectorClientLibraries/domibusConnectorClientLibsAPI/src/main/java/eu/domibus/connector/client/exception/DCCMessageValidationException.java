@@ -3,10 +3,10 @@ package eu.domibus.connector.client.exception;
 public class DCCMessageValidationException extends DomibusConnectorClientException {
 
 	/**
-	 * @param message
-	 * @param cause
-	 * @param enableSuppression
-	 * @param writableStackTrace
+	 * @param message message
+	 * @param cause cause
+	 * @param enableSuppression enableSupression
+	 * @param writableStackTrace writableStackTrace
 	 */
 	public DCCMessageValidationException(String message, Throwable cause, boolean enableSuppression,
 			boolean writableStackTrace) {
@@ -15,8 +15,8 @@ public class DCCMessageValidationException extends DomibusConnectorClientExcepti
 	}
 
 	/**
-	 * @param message
-	 * @param cause
+	 * @param message message
+	 * @param cause cause
 	 */
 	public DCCMessageValidationException(String message, Throwable cause) {
 		super(message, cause);
@@ -24,7 +24,7 @@ public class DCCMessageValidationException extends DomibusConnectorClientExcepti
 	}
 
 	/**
-	 * @param message
+	 * @param message message
 	 */
 	public DCCMessageValidationException(String message) {
 		super(message);
@@ -32,7 +32,7 @@ public class DCCMessageValidationException extends DomibusConnectorClientExcepti
 	}
 
 	/**
-	 * @param cause
+	 * @param cause cause
 	 */
 	public DCCMessageValidationException(Throwable cause) {
 		super(cause);

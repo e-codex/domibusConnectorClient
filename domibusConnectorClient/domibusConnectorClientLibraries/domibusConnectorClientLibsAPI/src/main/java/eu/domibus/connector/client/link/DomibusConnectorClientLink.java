@@ -29,7 +29,7 @@ public interface DomibusConnectorClientLink {
 	/**
 	 * Delegate method to submit a message from the domibusConnectorClientLibrary to the backend of the domibusConnector.
 	 * 
-	 * @param message
+	 * @param message message
 	 * @return the result of the submission
 	 * @throws DomibusConnectorBackendWebServiceClientException  DomibusConnectorBackendWebServiceClientException
 	 */
@@ -46,7 +46,7 @@ public interface DomibusConnectorClientLink {
 	/**
 	 * Requests the message for the given message transport ID. Transport ID is received when calling listPendingMessages.
 	 * 
-	 * @param messageTransportId
+	 * @param messageTransportId messageTransportId
 	 * @return the message
 	 * @throws DomibusConnectorBackendWebServiceClientException DomibusConnectorBackendWebServiceClientException
 	 */
