@@ -17,7 +17,7 @@ public interface DomibusConnectorClientDeliveryRestClientAPI {
 	 * 
 	 * @param newConfirmationMessage a client message object holding the new confirmation received by the domibusConnectorClient and the original
 	 * backendMessageId of the message.
-	 * @throws Exception
+	 * @throws Exception Exception
 	 */
 	void deliverNewConfirmationFromConnectorClientToBackend(DomibusConnectorClientMessage newConfirmationMessage) throws Exception;
 
@@ -25,7 +25,7 @@ public interface DomibusConnectorClientDeliveryRestClientAPI {
 	 * This method is called by the domibusConnectorClient to push a new message to the backend application.
 	 * 
 	 * @param newMessage
-	 * @throws Exception
+	 * @throws Exception Exception
 	 */
 	void deliverNewMessageFromConnectorClientToBackend(DomibusConnectorClientMessage newMessage) throws Exception;
 }
