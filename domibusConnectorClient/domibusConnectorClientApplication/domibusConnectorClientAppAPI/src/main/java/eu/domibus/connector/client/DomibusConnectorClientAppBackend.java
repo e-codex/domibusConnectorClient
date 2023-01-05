@@ -10,9 +10,9 @@ public interface DomibusConnectorClientAppBackend extends DomibusConnectorClient
 	 * Therefore it is important that the message entirely is stored before triggering this method.
 	 * 
 	 * @param storageLocation - The path in the storage where the message is placed.
-	 * @throws DomibusConnectorClientBackendException
-	 * @throws DomibusConnectorClientStorageException
-	 * @throws IllegalArgumentException
+	 * @throws DomibusConnectorClientBackendException backend exception
+	 * @throws DomibusConnectorClientStorageException storage exception
+	 * @throws IllegalArgumentException illegal arguments
 	 */
 	void submitStoredClientBackendMessage(String storageLocation) throws DomibusConnectorClientBackendException, DomibusConnectorClientStorageException, IllegalArgumentException;
 	
