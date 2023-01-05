@@ -69,7 +69,7 @@ public interface DomibusConnectorClient {
 	 * If false, messages have to be acknowledged manually by calling the {@link DomibusConnectorClient#acknowledgeMessage(String, boolean, String)}
 	 * method. 
 	 * @return a Map where the key is the messageTransportId required to acknowledge the message in a second step. The value is the message itself.
-	 * @throws DomibusConnectorClientException
+	 * @throws DomibusConnectorClientException any error
 	 */
 	Map<String, DomibusConnectorMessageType> requestNewMessagesFromConnector(Integer maxFetchCount,
 			boolean acknowledgeAutomatically) throws DomibusConnectorClientException;
