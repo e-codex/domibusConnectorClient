@@ -140,9 +140,6 @@
             </goals>
           </execution>
         </executions>
-        <configuration>
-          <ignoreMavenProxies>false</ignoreMavenProxies>
-        </configuration>
       </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
@@ -163,6 +160,7 @@
               <artifactId>domibusConnectorClientUI</artifactId>
             </dependency>
           </requiresUnpack>
+          <classifier>spring</classifier>
         </configuration>
       </plugin>
       <plugin>
@@ -191,6 +189,7 @@
             <artifactId>spring-boot-maven-plugin</artifactId>
             <configuration>
               <jvmArguments>-Dvaadin.productionMode</jvmArguments>
+              <classifier>spring</classifier>
             </configuration>
           </plugin>
           <plugin>

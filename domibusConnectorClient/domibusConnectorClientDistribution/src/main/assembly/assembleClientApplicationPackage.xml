@@ -8,23 +8,23 @@
 	</formats>
 	<includeBaseDirectory>false</includeBaseDirectory>
 
-	<moduleSets>
-		<moduleSet>
-			<useAllReactorProjects>true</useAllReactorProjects>
-			<includes>
-				<include>*:domibusConnectorClientLibsAPI</include>
-			</includes>
-			<binaries>
-				<outputDirectory>lib</outputDirectory>
-				<!--				<attachmentClassifier>site</attachmentClassifier>-->
-				<!--				<outputDirectory>doc</outputDirectory>-->
-				<!--				<outputFileNameMapping>website.${module.extension}</outputFileNameMapping>-->
-			</binaries>
-			<sources>
-				<outputDirectory>src</outputDirectory>
-			</sources>
-		</moduleSet>
-	</moduleSets>
+<!--	<moduleSets>-->
+<!--		<moduleSet>-->
+<!--			<useAllReactorProjects>true</useAllReactorProjects>-->
+<!--			<includes>-->
+<!--				<include>*:domibusConnectorClientLibsAPI</include>-->
+<!--			</includes>-->
+<!--			<binaries>-->
+<!--				<outputDirectory>lib</outputDirectory>-->
+<!--				&lt;!&ndash;				<attachmentClassifier>site</attachmentClassifier>&ndash;&gt;-->
+<!--				&lt;!&ndash;				<outputDirectory>doc</outputDirectory>&ndash;&gt;-->
+<!--				&lt;!&ndash;				<outputFileNameMapping>website.${module.extension}</outputFileNameMapping>&ndash;&gt;-->
+<!--			</binaries>-->
+<!--			<sources>-->
+<!--				<outputDirectory>src</outputDirectory>-->
+<!--			</sources>-->
+<!--		</moduleSet>-->
+<!--	</moduleSets>-->
 
 
 	<dependencySets>
@@ -38,36 +38,34 @@
 
 	</dependencySets>
 
-<!--	<fileSets>-->
+	<fileSets>
 
-<!--		&lt;!&ndash; ==================== Copying file structure ================= &ndash;&gt;-->
+		<!-- ==================== Copying file structure ================= -->
 <!--		<fileSet>-->
-<!--			<directory>${project.basedir}/src/main/resources/application-->
-<!--			</directory>-->
-<!--			<outputDirectory>-->
-<!--			</outputDirectory>-->
+<!--			<directory>${project.basedir}/src/main/resources/application</directory>-->
+<!--			<outputDirectory></outputDirectory>-->
 <!--		</fileSet>-->
-<!--		<fileSet>-->
-<!--			<directory>.</directory>-->
-<!--			<outputDirectory>logs</outputDirectory>-->
-<!--			<excludes>-->
-<!--				<exclude>*/**</exclude>-->
-<!--			</excludes>-->
-<!--		</fileSet>-->
-<!--		<fileSet>-->
-<!--			<directory>.</directory>-->
-<!--			<outputDirectory>database</outputDirectory>-->
-<!--			<excludes>-->
-<!--				<exclude>*/**</exclude>-->
-<!--			</excludes>-->
-<!--		</fileSet>-->
-<!--		<fileSet>-->
-<!--			<directory>.</directory>-->
-<!--			<outputDirectory>messages</outputDirectory>-->
-<!--			<excludes>-->
-<!--				<exclude>*/**</exclude>-->
-<!--			</excludes>-->
-<!--		</fileSet>-->
+		<fileSet>
+			<directory>.</directory>
+			<outputDirectory>logs</outputDirectory>
+			<excludes>
+				<exclude>*/**</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>.</directory>
+			<outputDirectory>database</outputDirectory>
+			<excludes>
+				<exclude>*/**</exclude>
+			</excludes>
+		</fileSet>
+		<fileSet>
+			<directory>.</directory>
+			<outputDirectory>messages</outputDirectory>
+			<excludes>
+				<exclude>*/**</exclude>
+			</excludes>
+		</fileSet>
 <!--		<fileSet>-->
 <!--			<directory>.</directory>-->
 <!--			<outputDirectory>lib</outputDirectory>-->
@@ -111,5 +109,5 @@
 <!--			</outputDirectory>-->
 <!--		</fileSet>-->
 
-<!--	</fileSets>-->
+	</fileSets>
 </assembly>

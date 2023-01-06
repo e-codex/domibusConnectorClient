@@ -88,7 +88,6 @@
           </execution>
         </executions>
         <configuration>
-          <ignoreMavenProxies>false</ignoreMavenProxies>
         </configuration>
       </plugin>
     </plugins>
@@ -159,6 +158,7 @@
                 <id>upload-image</id>
                 <goals>
                   <goal>build</goal>
+                  <goal>buildTar</goal>
                 </goals>
                 <phase>install</phase>
               </execution>
