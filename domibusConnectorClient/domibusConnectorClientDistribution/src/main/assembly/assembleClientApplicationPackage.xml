@@ -4,18 +4,21 @@
 	<id>Standalone</id>
 	<formats>
 		<format>zip</format>
-		<!-- <format>dir</format> -->
+		 <format>dir</format>
 	</formats>
 	<includeBaseDirectory>false</includeBaseDirectory>
 
 <!--	<moduleSets>-->
 <!--		<moduleSet>-->
 <!--			<useAllReactorProjects>true</useAllReactorProjects>-->
+<!--			<includeSubModules>true</includeSubModules>-->
 <!--			<includes>-->
-<!--				<include>*:domibusConnectorClientLibsAPI</include>-->
+<!--&lt;!&ndash;				<include>*:domibusConnectorClientStarter</include>&ndash;&gt;-->
 <!--			</includes>-->
 <!--			<binaries>-->
-<!--				<outputDirectory>lib</outputDirectory>-->
+<!--				<outputDirectory>bin</outputDirectory>-->
+<!--				<attachmentClassifier>spring</attachmentClassifier>-->
+<!--				<outputFileNameMapping>connectorClient.jar</outputFileNameMapping>-->
 <!--				&lt;!&ndash;				<attachmentClassifier>site</attachmentClassifier>&ndash;&gt;-->
 <!--				&lt;!&ndash;				<outputDirectory>doc</outputDirectory>&ndash;&gt;-->
 <!--				&lt;!&ndash;				<outputFileNameMapping>website.${module.extension}</outputFileNameMapping>&ndash;&gt;-->
@@ -31,9 +34,10 @@
 		<dependencySet>
 
 			<includes>
-				<include>*:domibusConnectorClientStarter:*</include>
+				<include>*:domibusConnectorClientStarter:jar:spring:${project.version}</include>
 			</includes>
 			<outputDirectory>bin</outputDirectory>
+			<outputFileNameMapping>connectorClient.jar</outputFileNameMapping>
 		</dependencySet>
 
 	</dependencySets>
