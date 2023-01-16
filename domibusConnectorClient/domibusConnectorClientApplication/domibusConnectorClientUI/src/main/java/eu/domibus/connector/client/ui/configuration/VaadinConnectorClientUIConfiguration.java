@@ -9,7 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 @Configuration
 public class VaadinConnectorClientUIConfiguration {
 	
-	@Value("${connector-client-rest-url:http://localhost:${server.port}}")
+	@Value("${connector-client-rest-url:''}")
 	private String connectorClientRestURL;
 
 	@Value("${server.port}")
@@ -17,9 +17,9 @@ public class VaadinConnectorClientUIConfiguration {
 	
 	@Bean
 	public WebClient restClient(WebClient.Builder builder) {
-//		if (serverPort > 1024 && StringUtils.isEmpty(connectorClientRestURL)) {
-//			return builder.baseUrl("http://localhost:" + serverPort + "/").build();
-//		}
+		if (serverPort > 1024 && StringUtils.isEmpty(connectorClientRestURL)) {
+			return builder.baseUrl("http://localhost:" + serverPort + "/").build();
+		}
 		return builder.baseUrl(connectorClientRestURL).build();
 	}
 }
