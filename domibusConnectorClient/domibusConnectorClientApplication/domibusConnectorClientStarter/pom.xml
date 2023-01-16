@@ -176,6 +176,31 @@
           <skip>true</skip>
         </configuration>
       </plugin>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-target-workdir</id>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>eu.domibus.connector-client</groupId>
+                  <artifactId>domibusConnectorClientConfig</artifactId>
+                  <version>${project.version}</version>
+                  <classifier>config</classifier>
+                  <type>zip</type>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>target/workdir</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
     </plugins>
   </build>
   <profiles>

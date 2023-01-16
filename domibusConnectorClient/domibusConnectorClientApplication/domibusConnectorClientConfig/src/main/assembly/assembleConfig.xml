@@ -1,0 +1,60 @@
+<assembly xmlns="http://maven.apache.org/ASSEMBLY/2.1.1"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/ASSEMBLY/2.1.1 https://maven.apache.org/xsd/assembly-2.1.1.xsd">
+    <id>config</id>
+    <formats>
+        <format>zip</format>
+        <format>dir</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+<!--    <dependencySets>-->
+<!--        <dependencySet>-->
+<!--            <unpack>true</unpack>-->
+<!--            <includes>-->
+<!--                <include>*:domibusConnectorTestdata:zip:*:*</include>-->
+<!--            </includes>-->
+<!--            <outputDirectory>config</outputDirectory>-->
+<!--        </dependencySet>-->
+<!--    </dependencySets>-->
+
+
+    <fileSets>
+        <fileSet>
+            <outputDirectory>config</outputDirectory>
+            <directory>target/testkeystores</directory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <outputDirectory>config</outputDirectory>
+            <directory>src/main/config/labenv01</directory>
+            <includes>
+                <include>*/**</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>.</directory>
+            <outputDirectory>logs</outputDirectory>
+            <excludes>
+                <exclude>*/**</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>.</directory>
+            <outputDirectory>database</outputDirectory>
+            <excludes>
+                <exclude>*/**</exclude>
+            </excludes>
+        </fileSet>
+        <fileSet>
+            <directory>.</directory>
+            <outputDirectory>messages</outputDirectory>
+            <excludes>
+                <exclude>*/**</exclude>
+            </excludes>
+        </fileSet>
+
+    </fileSets>
+</assembly>

@@ -17,6 +17,7 @@
     <module>domibusConnectorClientUI</module>
     <module>domibusConnectorClientWAR</module>
     <module>domibusConnectorClientContainer</module>
+    <module>domibusConnectorClientConfig</module>
   </modules>
   <dependencies>
     <dependency>

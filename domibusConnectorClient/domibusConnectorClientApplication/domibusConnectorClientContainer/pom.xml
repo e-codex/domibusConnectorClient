@@ -119,18 +119,49 @@
             </executions>
           </plugin>
           <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <executions>
+              <execution>
+                <id>unpack-target-workdir</id>
+                <goals>
+                  <goal>unpack</goal>
+                </goals>
+                <phase>process-resources</phase>
+                <configuration>
+                  <artifactItems>
+                    <artifactItem>
+                      <groupId>eu.domibus.connector-client</groupId>
+                      <artifactId>domibusConnectorClientConfig</artifactId>
+                      <version>${project.version}</version>
+                      <classifier>config</classifier>
+                      <type>zip</type>
+                    </artifactItem>
+                  </artifactItems>
+                  <outputDirectory>${project.build.directory}/jib-extra-folder</outputDirectory>
+                </configuration>
+              </execution>
+            </executions>
+          </plugin>
+          <plugin>
             <groupId>com.google.cloud.tools</groupId>
             <artifactId>jib-maven-plugin</artifactId>
             <configuration>
               <skip>false</skip>
-<!--              <extraDirectories>-->
+              <extraDirectories>
 <!--                <paths>-->
 <!--                  <path>-->
 <!--                    <from>${project.build.directory}/jib-extra-libs</from>-->
 <!--                    <into>/app/libs</into>-->
 <!--                  </path>-->
 <!--                </paths>-->
-<!--              </extraDirectories>-->
+                <paths>
+                  <path>
+                    <from>${project.build.directory}/jib-extra-folder</from>
+                    <into>/app</into>
+                  </path>
+                </paths>
+              </extraDirectories>
               <container>
 
                 <mainClass>org.springframework.boot.loader.PropertiesLauncher</mainClass>
