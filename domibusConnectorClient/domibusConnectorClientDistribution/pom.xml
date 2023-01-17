@@ -32,10 +32,6 @@
                         </goals>
                         <configuration>
                             <descriptorSourceDirectory>src/main/assembly</descriptorSourceDirectory>
-                            <!--              <descriptors>-->
-                            <!--                <descriptor>src/main/assembly/assembleClientApplicationPackage.xml</descriptor>-->
-                            <!--                <descriptor>src/main/assembly/assembleClientWebappPackage.xml</descriptor>-->
-                            <!--              </descriptors>-->
                         </configuration>
                     </execution>
                 </executions>
