@@ -61,6 +61,7 @@
       <artifactId>domibusConnectorClientConfig</artifactId>
       <version>${project.version}</version>
       <scope>runtime</scope>
+      <classifier>config</classifier>
       <type>zip</type>
     </dependency>
 
