@@ -1,70 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
-  <parent>
-    <groupId>eu.domibus.connector-client</groupId>
-    <artifactId>domibusConnectorClient</artifactId>
-    <version>4.4.7-SNAPSHOT</version>
-  </parent>
-  <artifactId>domibusConnectorClientDistribution</artifactId>
-  <packaging>pom</packaging>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <parent>
+        <groupId>eu.domibus.connector-client</groupId>
+        <artifactId>domibusConnectorClient</artifactId>
+        <version>4.4.7-SNAPSHOT</version>
+    </parent>
+    <artifactId>domibusConnectorClientDistribution</artifactId>
+    <packaging>pom</packaging>
 
-  <dependencies>
-      <dependency>
-        <groupId>${project.groupId}</groupId>
-        <artifactId>domibusConnectorClientLibsAPI</artifactId>
-        <version>${project.version}</version>
-      </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>domibusConnectorClientStarter</artifactId>
-      <version>${project.version}</version>
-      <classifier>spring</classifier>
-    </dependency>
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnectorClientLibsAPI</artifactId>
+            <version>${project.version}</version>
+        </dependency>
 
-<!--  <dependencies>-->
-<!--    <dependency>-->
-<!--      <groupId>eu.domibus.connector</groupId>-->
-<!--      <artifactId>domibusConnectorAPI</artifactId>-->
-<!--      <exclusions>-->
-<!--        <exclusion>-->
-<!--          <artifactId>commons-io</artifactId>-->
-<!--          <groupId>commons-io</groupId>-->
-<!--        </exclusion>-->
-<!--      </exclusions>-->
-<!--    </dependency>-->
-<!--    &lt;!&ndash; <dependency>-->
-<!--      <groupId>eu.ecodex.utils</groupId>-->
-<!--      <artifactId>spring-property-configuration-validator</artifactId>-->
-<!--    </dependency> &ndash;&gt;-->
-<!--    <dependency>-->
-<!--      <groupId>${project.groupId}</groupId>-->
-<!--      <artifactId>domibusConnectorClientLibsAPI</artifactId>-->
-<!--      <version>${project.version}</version>-->
-<!--    </dependency>-->
-<!--  </dependencies>-->
-  <build>
-    <plugins>
-      <plugin>
-        <artifactId>maven-assembly-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>create-distribution-package</id>
-            <phase>package</phase>
-            <goals>
-              <goal>single</goal>
-            </goals>
-            <configuration>
-              <descriptorSourceDirectory>src/main/assembly</descriptorSourceDirectory>
-<!--              <descriptors>-->
-<!--                <descriptor>src/main/assembly/assembleClientApplicationPackage.xml</descriptor>-->
-<!--                <descriptor>src/main/assembly/assembleClientWebappPackage.xml</descriptor>-->
-<!--              </descriptors>-->
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
-    </plugins>
-  </build>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <artifactId>maven-assembly-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>create-distribution-package</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>single</goal>
+                        </goals>
+                        <configuration>
+                            <descriptorSourceDirectory>src/main/assembly</descriptorSourceDirectory>
+                            <!--              <descriptors>-->
+                            <!--                <descriptor>src/main/assembly/assembleClientApplicationPackage.xml</descriptor>-->
+                            <!--                <descriptor>src/main/assembly/assembleClientWebappPackage.xml</descriptor>-->
+                            <!--              </descriptors>-->
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>
