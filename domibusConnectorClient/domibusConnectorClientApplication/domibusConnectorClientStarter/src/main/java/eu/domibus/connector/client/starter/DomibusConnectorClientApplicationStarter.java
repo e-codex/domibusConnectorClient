@@ -26,12 +26,7 @@ import org.springframework.util.SystemPropertyUtils;
 @PropertySource({"classpath:/default-connector-client.properties"})
 public class DomibusConnectorClientApplicationStarter extends SpringBootServletInitializer
 {
-
-//	public static void main(String[] args) {
-//		VaadinConnectorClientStarter.runSpringApplication(args);
-//
-//	}
-	
+    
 	private static final Logger LOGGER = LoggerFactory.getLogger(DomibusConnectorClientApplicationStarter.class);
 	
 	public static final String CONNECTOR_CLIENT_CONFIG_FILE = "connector-client.properties";
@@ -89,44 +84,5 @@ public class DomibusConnectorClientApplicationStarter extends SpringBootServletI
         }
         return null;
     }
-	
-//	 @Override
-//	    public void onStartup(ServletContext servletContext) throws ServletException {
-//	        this.servletContext = servletContext;
-//
-//	        //read logging.config from connector properties and set it before the application context ist started
-//	        //so its already available for the spring logging servlet initializer to configure logging!
-//	        String connectorConfigFile = getConnectorConfigFile();
-//	        if (connectorConfigFile != null) {
-//	            Properties p = loadConnectorConfigProperties(connectorConfigFile);
-//	            String loggingConfig = p.getProperty("logging.config");
-//	            if (loggingConfig != null) {
-//	                servletContext.setInitParameter("logging.config", loggingConfig);
-//	            }
-//	        }
-//	        super.onStartup(servletContext);
-//	    }
-	 
-//	 public static Properties loadConnectorConfigProperties(String connectorConfigFile) {
-//	        Properties p = new Properties();
-//	        if (connectorConfigFile != null) {
-//	            java.nio.file.Path connectorConfigFilePath = Paths.get(connectorConfigFile);
-//	            if (!Files.exists(connectorConfigFilePath)) {
-//	                String errorString = String.format("Cannot start because the via System Property [%s] provided config file [%s] mapped to path [%s] does not exist!", CONNECTOR_CLIENT_CONFIG_FILE, connectorConfigFile, connectorConfigFilePath);
-//	                LOGGER.error(errorString);
-//	                throw new RuntimeException(errorString);
-//	            }
-//	            try {
-//
-//	                FileInputStream fileInputStream = new FileInputStream(connectorConfigFilePath.toFile());
-//					p.load(fileInputStream);
-//					fileInputStream.close();
-//	                return p;
-//	            } catch (IOException e) {
-//	                throw new RuntimeException(String.format("Cannot load properties from file [%s], is it a valid and readable properties file?", connectorConfigFilePath), e);
-//	            }
-//	        }
-//	        return p;
-//	    }
 
 }
