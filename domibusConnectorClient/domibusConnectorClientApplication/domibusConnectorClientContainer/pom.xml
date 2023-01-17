@@ -194,6 +194,7 @@
                 <image>centralrepo.apps.a3.cp.cna.at/brz-ju-images-poc-docker/jueu/dc-connector-client</image>
                 <tags>
                   <tag>${project.version}</tag>
+                  <tag>latest</tag>
                 </tags>
               </to>
             </configuration>
