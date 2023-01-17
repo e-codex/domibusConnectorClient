@@ -11,7 +11,13 @@
       <param>
         <option name="name" value="connector-client.connector-link.ws.connector-address" />
       </param>
+      <param>
+        <option name="enabled" value="true" />
+        <option name="name" value="server.port" />
+        <option name="value" value="7088" />
+      </param>
     </additionalParameters>
+    <option name="DEBUG_MODE" value="true" />
     <module name="domibusConnectorClientStarter" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="eu.domibus.connector.client.starter.DomibusConnectorClientApplicationStarter" />
     <option name="WORKING_DIRECTORY" value="file://$ProjectFileDir$/domibusConnectorClientApplication/domibusConnectorClientStarter/target/workdir" />

@@ -20,13 +20,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.util.SystemPropertyUtils;
 
-@SpringBootApplication(scanBasePackages = "eu.domibus.connector.client")
-@EnableScheduling
-@EnableTransactionManagement
-@PropertySource({"classpath:/default-connector-client.properties"})
+@DomibusConnectorClient
 public class DomibusConnectorClientApplicationStarter extends SpringBootServletInitializer
 {
-    
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DomibusConnectorClientApplicationStarter.class);
 	
 	public static final String CONNECTOR_CLIENT_CONFIG_FILE = "connector-client.properties";

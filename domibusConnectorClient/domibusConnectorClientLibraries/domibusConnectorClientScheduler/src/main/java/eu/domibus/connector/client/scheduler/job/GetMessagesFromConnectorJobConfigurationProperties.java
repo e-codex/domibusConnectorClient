@@ -11,7 +11,6 @@ import org.springframework.validation.annotation.Validated;
 
 import eu.domibus.connector.lib.spring.configuration.types.DomibusConnectorDuration;
 
-@Component
 @ConfigurationProperties(prefix = GetMessagesFromConnectorJobConfigurationProperties.PREFIX)
 @Validated
 @Valid
@@ -21,16 +20,16 @@ public class GetMessagesFromConnectorJobConfigurationProperties {
 
     @NestedConfigurationProperty
     @NotNull
-    private DomibusConnectorDuration repeatInterval;
+    private DomibusConnectorDuration repeatInterval = DomibusConnectorDuration.valueOf("30s");
 
     /**
      * Boolean as String value. May be "true" or "false". 
      * Enables the timer-triggered job to get messages from the domibusConnector via pull mode.
      * Obsolete, if push mode is enabled.
      */
-    private boolean enabled;
+    private boolean enabled = false;
     
-    private int maxFetchCount;
+    private int maxFetchCount = 20;
     
     private boolean autoAcknowledgeMessages = true;
 

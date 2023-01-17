@@ -3,9 +3,7 @@ package eu.domibus.connector.client.ui.service;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.annotation.Resource;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.reactive.function.client.WebClient;
@@ -14,14 +12,19 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessage;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageFile;
 import eu.domibus.connector.client.rest.model.DomibusConnectorClientMessageList;
+import eu.domibus.connector.client.ui.configuration.VaadinConnectorClientUIConfiguration;
 import reactor.core.publisher.Mono;
 
 @Controller
 public class VaadingConnectorClientUIServiceClient
 {
 
-	@Resource(name="restClient")
-	private WebClient client;
+
+	private final WebClient client;
+
+	public VaadingConnectorClientUIServiceClient(@Qualifier(VaadinConnectorClientUIConfiguration.CLIENT_UI_REST_CLIENT_QUALIFIER) WebClient client) {
+		this.client = client;
+	}
 
 	public DomibusConnectorClientMessageList getAllMessages() {
 

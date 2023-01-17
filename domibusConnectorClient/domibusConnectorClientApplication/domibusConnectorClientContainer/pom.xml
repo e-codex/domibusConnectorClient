@@ -8,23 +8,11 @@
   </parent>
   <artifactId>domibusConnectorClientContainer</artifactId>
   <packaging>jar</packaging>
-<!--  <dependencyManagement>-->
-<!--    <dependencies>-->
-<!--      <dependency>-->
-<!--        <groupId>com.vaadin</groupId>-->
-<!--        <artifactId>vaadin-bom</artifactId>-->
-<!--        <version>${vaadin.version}</version>-->
-<!--        <type>pom</type>-->
-<!--        <scope>import</scope>-->
-<!--      </dependency>-->
-<!--    </dependencies>-->
-<!--  </dependencyManagement>-->
   <dependencies>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>domibusConnectorClientUI</artifactId>
       <version>${project.version}</version>
-      <classifier>classes</classifier>
     </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
@@ -69,13 +57,44 @@
         </exclusion>
       </exclusions>
     </dependency>
+<!--    <dependency>-->
+<!--      <groupId>org.springframework.boot</groupId>-->
+<!--      <artifactId>spring-boot-loader</artifactId>-->
+<!--    </dependency>-->
     <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-loader</artifactId>
+      <groupId>eu.domibus.connector-client</groupId>
+      <artifactId>domibusConnectorClientConfig</artifactId>
+      <version>${project.version}</version>
+      <scope>provided</scope>
     </dependency>
   </dependencies>
   <build>
     <plugins>
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-dependency-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>unpack-target-workdir</id>
+            <goals>
+              <goal>unpack</goal>
+            </goals>
+            <phase>process-resources</phase>
+            <configuration>
+              <artifactItems>
+                <artifactItem>
+                  <groupId>eu.domibus.connector-client</groupId>
+                  <artifactId>domibusConnectorClientConfig</artifactId>
+                  <version>${project.version}</version>
+                  <classifier>config</classifier>
+                  <type>zip</type>
+                </artifactItem>
+              </artifactItems>
+              <outputDirectory>${project.build.directory}/workdir</outputDirectory>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>com.vaadin</groupId>
         <artifactId>vaadin-maven-plugin</artifactId>
@@ -123,7 +142,7 @@
             <artifactId>maven-dependency-plugin</artifactId>
             <executions>
               <execution>
-                <id>unpack-target-workdir</id>
+                <id>unpack-jib-extra-folder</id>
                 <goals>
                   <goal>unpack</goal>
                 </goals>
@@ -149,12 +168,6 @@
             <configuration>
               <skip>false</skip>
               <extraDirectories>
-<!--                <paths>-->
-<!--                  <path>-->
-<!--                    <from>${project.build.directory}/jib-extra-libs</from>-->
-<!--                    <into>/app/libs</into>-->
-<!--                  </path>-->
-<!--                </paths>-->
                 <paths>
                   <path>
                     <from>${project.build.directory}/jib-extra-folder</from>
@@ -167,7 +180,7 @@
                 <mainClass>org.springframework.boot.loader.PropertiesLauncher</mainClass>
                 <jvmFlags>
                   <jvmFlag>-Dspring.config.name=connector-client</jvmFlag>
-                  <jvmFlag>-Dloader.main=eu.domibus.connector.client.starter.DomibusConnectorClientApplicationStarter</jvmFlag>
+                  <jvmFlag>-Dloader.main=eu.domibus.connector.client.cnt.Starter</jvmFlag>
                 </jvmFlags>
                 <ports>
                   <port>8080</port>

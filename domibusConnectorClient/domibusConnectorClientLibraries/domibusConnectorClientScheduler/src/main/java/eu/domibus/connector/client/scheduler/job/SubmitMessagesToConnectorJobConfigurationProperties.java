@@ -5,19 +5,19 @@ import org.springframework.stereotype.Component;
 
 import eu.domibus.connector.lib.spring.configuration.types.DomibusConnectorDuration;
 
-@Component
+
 @ConfigurationProperties(prefix = SubmitMessagesToConnectorJobConfigurationProperties.PREFIX)
 public class SubmitMessagesToConnectorJobConfigurationProperties {
 
     public static final String PREFIX = "connector-client.scheduler.submit-messages-to-connector-job";
 
-    private DomibusConnectorDuration repeatInterval;
+    private DomibusConnectorDuration repeatInterval = DomibusConnectorDuration.valueOf("30s");
 
     /**
      * Boolean as String value. May be "true" or "false". 
      * Enables the timer-triggered job to search for new messages to submit via the DomibusConnectorBackendClient.
      */
-    private boolean enabled;
+    private boolean enabled = false;
 
     public DomibusConnectorDuration getRepeatInterval() {
         return repeatInterval;

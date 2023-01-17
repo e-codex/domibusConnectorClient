@@ -15,39 +15,37 @@ import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
 
 import eu.domibus.connector.client.scheduler.configuration.DomibusConnectorClientSchedulerAutoConfiguration;
 
-@EnableConfigurationProperties
+@EnableConfigurationProperties(SubmitMessagesToConnectorJobConfigurationProperties.class)
 @Configuration("submitMessagesToConnectorJobConfiguration")
 @ConditionalOnProperty(value = SubmitMessagesToConnectorJobConfigurationProperties.PREFIX + ".enabled", havingValue = "true")
-@DisallowConcurrentExecution
-public class SubmitMessagesToConnectorJobConfiguration implements Job {
+public class SubmitMessagesToConnectorJobConfiguration {
 	
-	org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(SubmitMessagesToConnectorJobConfiguration.class);
-
-	@Autowired
-    SubmitMessagesToConnectorJobService submitMessagesToConnectorJob;
-
-//	@Value("${connector.client.timer.check.outgoing.messages.ms}")
-//    private Long repeatInterval;
-
-	@Autowired
-	SubmitMessagesToConnectorJobConfigurationProperties properties;
-
-	@Override
-	public void execute(JobExecutionContext context) throws JobExecutionException {
-		LOGGER.debug("Running SubmitMessagesToConnectorJob");
-		submitMessagesToConnectorJob.checkClientBackendForNewMessagesAndSubmitThemToConnector();
-	}
-
-	@Bean(name = "submitMessagesToConnectorJob")
+	static final org.slf4j.Logger LOGGER = org.slf4j.LoggerFactory.getLogger(SubmitMessagesToConnectorJobConfiguration.class);
+	@Bean
+	@Qualifier("submitMessagesToConnectorJob")
 	public JobDetailFactoryBean submitMessagesToConnectorJob() {
-		return DomibusConnectorClientSchedulerAutoConfiguration.createJobDetail(this.getClass());
+		return DomibusConnectorClientSchedulerAutoConfiguration.createJobDetail(SubmitMessagesToConnectorJob.class);
 	}
 
 	@Bean(name = "submitMessagesToConnectorTrigger")
-	public SimpleTriggerFactoryBean submitMessagesToConnectorTrigger(@Qualifier("submitMessagesToConnectorJob") JobDetailFactoryBean jdfb ) {
+	public SimpleTriggerFactoryBean submitMessagesToConnectorTrigger(@Qualifier("submitMessagesToConnectorJob") JobDetailFactoryBean jdfb,
+																	 SubmitMessagesToConnectorJobConfigurationProperties properties) {
 		LOGGER.debug("create SimpleTriggerFactoryBean: submitMessagesToConnectorTrigger");
 		return DomibusConnectorClientSchedulerAutoConfiguration.createTrigger(jdfb.getObject(),
 				properties.getRepeatInterval().getMilliseconds(), 0L);
+	}
+
+	@DisallowConcurrentExecution
+	public static class SubmitMessagesToConnectorJob implements Job {
+
+		@Autowired
+		private SubmitMessagesToConnectorJobService submitMessagesToConnectorJob;
+
+		@Override
+		public void execute(JobExecutionContext context) throws JobExecutionException {
+			LOGGER.debug("Running SubmitMessagesToConnectorJob");
+			submitMessagesToConnectorJob.checkClientBackendForNewMessagesAndSubmitThemToConnector();
+		}
 	}
 
 }

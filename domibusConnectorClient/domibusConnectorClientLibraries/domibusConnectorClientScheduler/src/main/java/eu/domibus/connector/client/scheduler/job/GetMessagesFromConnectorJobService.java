@@ -8,8 +8,6 @@ import javax.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.validation.annotation.Validated;
 
@@ -20,21 +18,22 @@ import eu.domibus.connector.client.exception.DomibusConnectorClientException;
 import eu.domibus.connector.domain.transition.DomibusConnectorMessageType;
 
 
-@Component
+
 @Validated
 @Valid
 public class GetMessagesFromConnectorJobService {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GetMessagesFromConnectorJobService.class);
 
-	@Autowired
-	private DomibusConnectorClientBackend clientBackend;
+	private final DomibusConnectorClientBackend clientBackend;
+	private final DomibusConnectorClient connectorClient;
+	private final GetMessagesFromConnectorJobConfigurationProperties properties;
 
-	@Autowired
-	private DomibusConnectorClient connectorClient;
-
-	@Autowired
-	GetMessagesFromConnectorJobConfigurationProperties properties;
+	public GetMessagesFromConnectorJobService(DomibusConnectorClientBackend clientBackend, DomibusConnectorClient connectorClient, GetMessagesFromConnectorJobConfigurationProperties properties) {
+		this.clientBackend = clientBackend;
+		this.connectorClient = connectorClient;
+		this.properties = properties;
+	}
 
 
 	public void requestNewMessagesFromConnectorAndDeliverThemToClientBackend() throws DomibusConnectorClientException {
