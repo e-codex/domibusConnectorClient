@@ -75,31 +75,31 @@
   </dependencies>
   <build>
     <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-dependency-plugin</artifactId>
-        <executions>
-          <execution>
-            <id>unpack-target-workdir</id>
-            <goals>
-              <goal>unpack</goal>
-            </goals>
-            <phase>process-resources</phase>
-            <configuration>
-              <artifactItems>
-                <artifactItem>
-                  <groupId>eu.domibus.connector-client</groupId>
-                  <artifactId>domibusConnectorClientConfig</artifactId>
-                  <version>${project.version}</version>
-                  <classifier>config</classifier>
-                  <type>zip</type>
-                </artifactItem>
-              </artifactItems>
-              <outputDirectory>${project.build.directory}/workdir</outputDirectory>
-            </configuration>
-          </execution>
-        </executions>
-      </plugin>
+<!--      <plugin>-->
+<!--        <groupId>org.apache.maven.plugins</groupId>-->
+<!--        <artifactId>maven-dependency-plugin</artifactId>-->
+<!--        <executions>-->
+<!--          <execution>-->
+<!--            <id>unpack-target-workdir</id>-->
+<!--            <goals>-->
+<!--              <goal>unpack</goal>-->
+<!--            </goals>-->
+<!--            <phase>process-sources</phase>-->
+<!--            <configuration>-->
+<!--              <artifactItems>-->
+<!--                <artifactItem>-->
+<!--                  <groupId>eu.domibus.connector-client</groupId>-->
+<!--                  <artifactId>domibusConnectorClientConfig</artifactId>-->
+<!--                  <version>${project.version}</version>-->
+<!--                  <classifier>config</classifier>-->
+<!--                  <type>zip</type>-->
+<!--                </artifactItem>-->
+<!--              </artifactItems>-->
+<!--              <outputDirectory>${project.build.directory}/workdir</outputDirectory>-->
+<!--            </configuration>-->
+<!--          </execution>-->
+<!--        </executions>-->
+<!--      </plugin>-->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -135,13 +135,6 @@
       <id>jib</id>
       <build>
         <plugins>
-<!--          <plugin>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-maven-plugin</artifactId>-->
-<!--            <configuration>-->
-<!--              <jvmArguments>-Dvaadin.productionMode</jvmArguments>-->
-<!--            </configuration>-->
-<!--          </plugin>-->
           <plugin>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-maven-plugin</artifactId>
@@ -160,7 +153,7 @@
             <artifactId>maven-dependency-plugin</artifactId>
             <executions>
               <execution>
-                <id>unpack-jib-extra-folder</id>
+                <id>unpack-into-jib-extra-folder</id>
                 <goals>
                   <goal>unpack</goal>
                 </goals>
