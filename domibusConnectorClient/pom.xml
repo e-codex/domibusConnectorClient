@@ -55,6 +55,7 @@
     <ecodex.utils.version>0.0.21-RELEASE</ecodex.utils.version>
     <vaadin.version>22.0.26</vaadin.version>
     <org.apache.log4j2.version>2.17.0</org.apache.log4j2.version>
+    <build.timestamp>${maven.build.timestamp}</build.timestamp>
   </properties>
   <dependencyManagement>
     <dependencies>

@@ -71,13 +71,7 @@
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
-    <dependency>
-      <groupId>eu.domibus.connector</groupId>
-      <artifactId>domibusConnectorTestData</artifactId>
-      <version>${connector-server.version}</version>
-      <classifier>testkeystores</classifier>
-      <type>jar</type>
-    </dependency>
+
   </dependencies>
   <build>
     <plugins>
@@ -141,13 +135,13 @@
       <id>jib</id>
       <build>
         <plugins>
-          <plugin>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-            <configuration>
-              <jvmArguments>-Dvaadin.productionMode</jvmArguments>
-            </configuration>
-          </plugin>
+<!--          <plugin>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-maven-plugin</artifactId>-->
+<!--            <configuration>-->
+<!--              <jvmArguments>-Dvaadin.productionMode</jvmArguments>-->
+<!--            </configuration>-->
+<!--          </plugin>-->
           <plugin>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-maven-plugin</artifactId>
