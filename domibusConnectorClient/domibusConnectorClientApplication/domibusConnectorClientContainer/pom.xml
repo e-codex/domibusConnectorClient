@@ -67,6 +67,13 @@
       <version>${project.version}</version>
       <scope>provided</scope>
     </dependency>
+    <dependency>
+      <groupId>eu.domibus.connector</groupId>
+      <artifactId>domibusConnectorTestData</artifactId>
+      <version>${connector-server.version}</version>
+      <classifier>testkeystores</classifier>
+      <type>jar</type>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
