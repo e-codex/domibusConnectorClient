@@ -239,6 +239,14 @@
           <artifactId>spring-boot-maven-plugin</artifactId>
           <version>${org.springframework.boot.version}</version>
         </plugin>
+        <plugin>
+          <groupId>com.vaadin</groupId>
+          <artifactId>vaadin-maven-plugin</artifactId>
+          <version>${vaadin.version}</version>
+          <configuration>
+
+          </configuration>
+        </plugin>
       </plugins>
     </pluginManagement>
     <plugins>
