@@ -133,7 +133,7 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 				}catch(DomibusConnectorBackendWebServiceClientException e) {
 					//In case a message cannot received from the connector, the loop continues and only an error message in the logs will appear.
 					//The message transport ID will then most likely be contained in the next call of listPendingMessages.
-					LOGGER.warn("Exception occurred requesting message with transport id [{}] from connector!", pendingMessagTransportId);
+					LOGGER.error("Exception occurred requesting message with transport id {} from connector!");
 					continue;
 				}
 				
@@ -143,26 +143,26 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 						messageHandler.prepareInboundMessage(message);
 					} catch (DCCMessageValidationException | DCCContentMappingException e1) {
 						String error = String.format("Failed to prepareInboundMessage for [%s]", pendingMessagTransportId);
-						LOGGER.warn(error, e1);
+						LOGGER.error(error, e1);
 						continue;
 					}
 				}
 				
 				receivedMessages.put(pendingMessagTransportId, message);
-
-				try {
-					if (acknowledgeAutomatically) {
-						DomibusConnectorMessageResponseType messageResponseType = new DomibusConnectorMessageResponseType();
-
-						messageResponseType.setResult(true);
-						messageResponseType.setResponseForMessageId(pendingMessagTransportId);
+				
+				if(acknowledgeAutomatically) {
+					DomibusConnectorMessageResponseType messageResponseType = new DomibusConnectorMessageResponseType();
+					
+					messageResponseType.setResult(true);
+					messageResponseType.setResponseForMessageId(pendingMessagTransportId);
+					try {
 						clientService.acknowledgeMessage(messageResponseType);
+					} catch (Exception e) {
+						//any exception here should not affect further processing!
+						String error = String.format("Failed to submit MessageACK for [%s]", pendingMessagTransportId);
+						LOGGER.warn(error, e);
+						continue;
 					}
-				} catch (Exception e) {
-					//any exception here should not affect further processing!
-					String error = String.format("Failed to submit MessageACK for [%s]", pendingMessagTransportId);
-					LOGGER.warn(error, e);
-					continue;
 				}
 			}
 		}
@@ -177,7 +177,11 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 		messageResponseType.setResponseForMessageId(messageTransportId);
 		messageResponseType.setAssignedMessageId(backendMessageId);
 		
-		clientService.acknowledgeMessage(messageResponseType);
+		try {
+			clientService.acknowledgeMessage(messageResponseType);
+			}catch(DomibusConnectorBackendWebServiceClientException e) {
+				LOGGER.error("Exception occurred acknowledge pending message with message transport id {} to connector!", messageResponseType.getResponseForMessageId(), e);
+			}
 	}
 
 	@Override

@@ -74,8 +74,13 @@ public class DomibusConnectorClientWSLinkImpl implements DomibusConnectorClientL
 	}
 	
 	@Override
-	public void acknowledgeMessage(DomibusConnectorMessageResponseType result) {
-		connectorWsClient.acknowledgeMessage(result);
+	public void acknowledgeMessage(DomibusConnectorMessageResponseType result) throws DomibusConnectorBackendWebServiceClientException {
+		try {
+			connectorWsClient.acknowledgeMessage(result);
+		} catch (Exception e) {
+			LOGGER.error("Exeception while send acknowledge of message with messageTransportId {} to connector!", result.getResponseForMessageId());
+			throw new DomibusConnectorBackendWebServiceClientException("Exeception while send acknowledge of message with messageTransportId "+result.getResponseForMessageId()+" to connector!", e);
+		}
 	}
 	
 }

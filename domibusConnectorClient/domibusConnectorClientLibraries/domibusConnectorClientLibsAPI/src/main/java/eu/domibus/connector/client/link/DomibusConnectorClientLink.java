@@ -59,7 +59,8 @@ public interface DomibusConnectorClientLink {
 	 * moves the message to its internal DLQ.
 	 * 
 	 * @param result of type {@link DomibusConnectorMessageResponseType} MUST contain message transport ID as responseForMessageId!
+	 * @throws DomibusConnectorBackendWebServiceClientException 
 	 */
-	 void acknowledgeMessage(DomibusConnectorMessageResponseType result);
+	 void acknowledgeMessage(DomibusConnectorMessageResponseType result) throws DomibusConnectorBackendWebServiceClientException;
 	
 }
