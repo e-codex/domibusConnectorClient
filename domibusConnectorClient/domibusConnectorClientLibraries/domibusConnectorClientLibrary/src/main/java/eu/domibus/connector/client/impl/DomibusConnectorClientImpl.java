@@ -155,7 +155,12 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 					
 					messageResponseType.setResult(true);
 					messageResponseType.setResponseForMessageId(pendingMessagTransportId);
+					try {
 					clientService.acknowledgeMessage(messageResponseType);
+					}catch(DomibusConnectorBackendWebServiceClientException e) {
+						LOGGER.error("Exception occurred auto-acknowledge pending message with message transport id {} to connector!", messageResponseType.getResponseForMessageId(), e);
+						continue;
+					}
 				}
 			}
 		}
@@ -170,7 +175,11 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 		messageResponseType.setResponseForMessageId(messageTransportId);
 		messageResponseType.setAssignedMessageId(backendMessageId);
 		
-		clientService.acknowledgeMessage(messageResponseType);
+		try {
+			clientService.acknowledgeMessage(messageResponseType);
+			}catch(DomibusConnectorBackendWebServiceClientException e) {
+				LOGGER.error("Exception occurred acknowledge pending message with message transport id {} to connector!", messageResponseType.getResponseForMessageId(), e);
+			}
 	}
 
 	@Override
