@@ -3,7 +3,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>eu.domibus.connector-client</groupId>
   <artifactId>domibusConnectorClient</artifactId>
-  <version>4.4.8-SNAPSHOT</version>
+  <version>4.4.8</version>
   <packaging>pom</packaging>
   <name>domibusConnectorClient</name>
   <description>Project for developing the client for the domibusConnectorWebApp.</description>
@@ -351,8 +351,9 @@
                 </goals>
               </execution>
             </executions>
-            <configuration>  <failOnError>false</failOnError></configuration>
-            
+            <configuration>
+              <failOnError>false</failOnError>
+            </configuration>
           </plugin>
         </plugins>
       </build>
