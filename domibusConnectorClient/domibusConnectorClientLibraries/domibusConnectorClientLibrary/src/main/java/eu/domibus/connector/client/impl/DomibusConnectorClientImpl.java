@@ -95,7 +95,6 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 						messageHandler.prepareInboundMessage(message);
 					} catch (DCCMessageValidationException | DCCContentMappingException e1) {
 						LOGGER.error(e1);
-						e1.printStackTrace();
 						continue;
 					}
 				}
@@ -134,28 +133,36 @@ public class DomibusConnectorClientImpl implements DomibusConnectorClient {
 				}catch(DomibusConnectorBackendWebServiceClientException e) {
 					//In case a message cannot received from the connector, the loop continues and only an error message in the logs will appear.
 					//The message transport ID will then most likely be contained in the next call of listPendingMessages.
-					LOGGER.error("Exception occurred requesting message with transport id {} from connector!");
+					LOGGER.warn("Exception occurred requesting message with transport id [{}] from connector!", pendingMessagTransportId);
 					continue;
 				}
 				
 				if(message.getMessageContent()!=null) {
 					try {
+						//any exception here should not affect further processing!
 						messageHandler.prepareInboundMessage(message);
 					} catch (DCCMessageValidationException | DCCContentMappingException e1) {
-						LOGGER.error(e1);
-						e1.printStackTrace();
+						String error = String.format("Failed to prepareInboundMessage for [%s]", pendingMessagTransportId);
+						LOGGER.warn(error, e1);
 						continue;
 					}
 				}
 				
 				receivedMessages.put(pendingMessagTransportId, message);
-				
-				if(acknowledgeAutomatically) {
-					DomibusConnectorMessageResponseType messageResponseType = new DomibusConnectorMessageResponseType();
-					
-					messageResponseType.setResult(true);
-					messageResponseType.setResponseForMessageId(pendingMessagTransportId);
-					clientService.acknowledgeMessage(messageResponseType);
+
+				try {
+					if (acknowledgeAutomatically) {
+						DomibusConnectorMessageResponseType messageResponseType = new DomibusConnectorMessageResponseType();
+
+						messageResponseType.setResult(true);
+						messageResponseType.setResponseForMessageId(pendingMessagTransportId);
+						clientService.acknowledgeMessage(messageResponseType);
+					}
+				} catch (Exception e) {
+					//any exception here should not affect further processing!
+					String error = String.format("Failed to submit MessageACK for [%s]", pendingMessagTransportId);
+					LOGGER.warn(error, e);
+					continue;
 				}
 			}
 		}
