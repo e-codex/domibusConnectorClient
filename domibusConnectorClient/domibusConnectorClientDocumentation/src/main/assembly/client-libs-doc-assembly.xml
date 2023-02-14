@@ -10,8 +10,8 @@
 
 	<fileSets>
 		<fileSet>
-			<directory>target/generated-docs/client-libs</directory>
-			<outputDirectory>doc</outputDirectory>
+			<directory>target/generated-docs/doc/client-libs</directory>
+			<outputDirectory>doc/client-libs</outputDirectory>
 			<includes>
 				<include>*/**</include>
 			</includes>

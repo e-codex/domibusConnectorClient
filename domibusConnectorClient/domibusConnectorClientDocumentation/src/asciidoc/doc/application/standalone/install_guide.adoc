@@ -1,3 +1,13 @@
+:path: ../../../
+
+ifndef::basepath[]
+:basepath: {path}
+endif::basepath[]
+
+ifndef::header[]
+include::{basepath}/header.adoc[]
+endif::header[]
+
 == Installation guilde for the domibusConnectorClientApplication-Standalone
 
 After downloading and extracting the domibusConnectorClientApplication-Standalone.zip, the structure given is explained at the

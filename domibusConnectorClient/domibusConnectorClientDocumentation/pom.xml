@@ -9,7 +9,9 @@
     </parent>
     <artifactId>domibusConnectorClientDocumentation</artifactId>
     <packaging>pom</packaging>
-
+    <properties>
+        <html.docu.output.directory>target/generated-docs/doc</html.docu.output.directory>
+    </properties>
     <build>
         <plugins>
             <plugin>
@@ -26,7 +28,11 @@
                         <configuration>
                             <outputDirectory>${html.docu.output.directory}</outputDirectory>
                             <backend>html5</backend>
+                            <attributes>
+                                <webimagedir>./doc/images</webimagedir>
+                            </attributes>
                         </configuration>
+
                     </execution>
                     <execution>
                         <id>generate-pdf-doc</id>
@@ -75,6 +81,7 @@
                         <!--                        <imagesdir>../images</imagesdir>-->
                         <icons>font</icons>
                     </attributes>
+                    <backend>html5</backend>
                     <preserveDirectories>true</preserveDirectories>
                     <requires>
                         <require>asciidoctor-diagram</require>
@@ -103,7 +110,7 @@
                                     </includes>
                                 </resource>
                             </resources>
-                            <outputDirectory>${html.docu.output.directory}/../</outputDirectory>
+                            <outputDirectory>${html.docu.output.directory}</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>

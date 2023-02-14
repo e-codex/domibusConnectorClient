@@ -1,0 +1,15 @@
+:path: ../../
+
+ifndef::basepath[]
+:basepath: {path}
+endif::basepath[]
+
+ifndef::header[]
+include::{basepath}/header.adoc[]
+endif::header[]
+
+= Domibus Connector Client Application
+
+* link:architecture.html[Architecture]
+* link:config_guide.html[Config Guide]
+* link:isupport_config_guide.html[iSupport Config Guide]

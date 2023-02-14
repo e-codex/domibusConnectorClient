@@ -1,3 +1,14 @@
+:path: ../../
+
+ifndef::basepath[]
+:basepath: {path}
+endif::basepath[]
+
+ifndef::header[]
+include::{basepath}/header.adoc[]
+endif::header[]
+
+
 == Configuration guilde for the domibusConnectorClient
 
 This page describes what properties must/can be set for the domibusConnectorClient-Application.

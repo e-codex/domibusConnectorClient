@@ -1,0 +1,19 @@
+:path: ../
+
+ifndef::basepath[]
+:basepath: {path}
+endif::basepath[]
+
+ifndef::header[]
+include::{basepath}/header.adoc[]
+endif::header[]
+
+
+= Domibus Connector Client
+
+The domibusConnectorClient is split into 2 main parts
+
+* DomibusConnectorClientApplication link:application/index.html[Documentation]
+* DomibusConnectorClientLibs link:client-libs/index.html[Documentation]
+
+* link:changelog/changelog.html[Changelog]

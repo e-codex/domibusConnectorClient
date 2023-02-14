@@ -1,11 +1,21 @@
+:path: ../../../
+
+ifndef::basepath[]
+:basepath: {path}
+endif::basepath[]
+
+ifndef::header[]
+include::{basepath}/header.adoc[]
+endif::header[]
+
 == Content of the domibusConnectorClientApplication-Webapp package
 
 After download and extraction of the "domibusConnectorClientApplication-Webapp.zip" file the extracted folder has the following content:
 
 Diagram: domibusConnectorClientApplication-Webapp package content
 [#img-domibusConnectorClientApplicationWebappPackageContent]
-[link=../images/packagecontent_webapp.png,window=_tab]
-image::../images/packagecontent_webapp.png[domibusConnectorClientApplicationWebappPackageContent,300,200]
+[link={imagesdir}/packagecontent_webapp.png,window=_tab]
+image::packagecontent_webapp.png[domibusConnectorClientApplicationWebappPackageContent,300,200]
 
 
 === documentation folder

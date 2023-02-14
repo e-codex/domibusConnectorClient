@@ -1,11 +1,21 @@
+:path: ../../../
+
+ifndef::basepath[]
+:basepath: {path}
+endif::basepath[]
+
+ifndef::header[]
+include::{basepath}/header.adoc[]
+endif::header[]
+
 == Content of the domibusConnectorClientApplication-Standalone package
 
 After download and extraction of the "domibusConnectorClientApplication-Standalone.zip" file the extracted folder has the following content:
 
 Diagram: domibusConnectorClientApplication-Standalone package content
 [#img-domibusConnectorClientApplicationStandalonePackageContent]
-[link=../images/packagecontent_standalone.png,window=_tab]
-image::../images/packagecontent_standalone.png[domibusConnectorClientApplicationStandalonePackageContent,300,200]
+[link={imagesdir}/packagecontent_standalone.png,window=_tab]
+image::packagecontent_standalone.png[domibusConnectorClientApplicationStandalonePackageContent,300,200]
 
 === startConnectorClient scripts
 

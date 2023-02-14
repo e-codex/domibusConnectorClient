@@ -13,7 +13,7 @@
 *.pdf binary
 *.jpg binary
 *.zip binary
-
+*.png binary
 
 
 # Java sources

@@ -21,7 +21,7 @@
 			<includes>
 				<include>*:domibusConnectorClientDocumentation:zip:client-application-doc:${project.version}</include>
 			</includes>
-			<outputDirectory>.</outputDirectory>
+			<outputDirectory>documentation</outputDirectory>
 			<unpack>true</unpack>
 		</dependencySet>
 

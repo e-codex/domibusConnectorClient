@@ -1,3 +1,14 @@
+:path: ../../
+
+ifndef::basepath[]
+:basepath: {path}
+endif::basepath[]
+
+ifndef::header[]
+include::{basepath}/header.adoc[]
+endif::header[]
+
+
 == Certificates, Keys and Keystores required
 This guide explains the certificates and keys required for the domibusConnectorClient-Application to communicate with the domibusConnector.
 
@@ -8,7 +19,7 @@ This guide will *NOT* cover how keypairs and stores are created. Please refer to
 Diagram: domibusConnectorClient-Application required keys
 [#img-domibusConnectorClient-Application required keys]
 [link=images/domibusConnectorClient_keys_stores.png,window=_tab]
-image::images/domibusConnectorClient_keys_stores.png[domibusConnectorClient-Application required keys,300,200]
+image::domibusConnectorClient_keys_stores.png[domibusConnectorClient-Application required keys,300,200]
 
 
 === Required keypairs
