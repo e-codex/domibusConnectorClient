@@ -165,6 +165,7 @@
           <version>${maven.javadoc.plugin.version}</version>
           <configuration>
             <failOnError>false</failOnError>
+            <doclint>none</doclint>
           </configuration>
         </plugin>
         <plugin>
