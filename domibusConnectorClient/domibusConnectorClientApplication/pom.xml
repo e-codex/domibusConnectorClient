@@ -66,25 +66,6 @@
           </execution>
         </executions>
       </plugin>
-<!--      <plugin>-->
-<!--        <artifactId>maven-assembly-plugin</artifactId>-->
-<!--        <executions>-->
-<!--          <execution>-->
-<!--            <id>create-distribution-package</id>-->
-<!--            <phase>package</phase>-->
-<!--            <goals>-->
-<!--              <goal>single</goal>-->
-<!--            </goals>-->
-<!--            <configuration>-->
-<!--              &lt;!&ndash; <appendAssemblyId>false</appendAssemblyId> &ndash;&gt;-->
-<!--              <descriptors>-->
-<!--                <descriptor>src/main/assembly/assembleClientApplicationPackage.xml</descriptor>-->
-<!--                <descriptor>src/main/assembly/assembleClientWebappPackage.xml</descriptor>-->
-<!--              </descriptors>-->
-<!--            </configuration>-->
-<!--          </execution>-->
-<!--        </executions>-->
-<!--      </plugin>-->
     </plugins>
   </build>
   <reporting>

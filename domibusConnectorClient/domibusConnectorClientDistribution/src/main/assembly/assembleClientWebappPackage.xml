@@ -10,99 +10,21 @@
 
 	<dependencySets>
 		<dependencySet>
-			<outputDirectory>/</outputDirectory>
+			<outputDirectory>/webapp</outputDirectory>
 			<useProjectArtifact>true</useProjectArtifact>
-			<useProjectAttachments>true</useProjectAttachments>
-			<unpack>true</unpack>
-			<scope>runtime</scope>
 			<includes>
-				<include>eu.domibus.connector-client:domibusConnectorClientLibsAPI</include>
+				<include>*:domibusConnectorClientWar:*</include>
 			</includes>
+		</dependencySet>
+		<dependencySet>
+			<includes>
+				<include>*:domibusConnectorClientDocumentation:zip:all-doc:${project.version}</include>
+			</includes>
+			<outputDirectory>.</outputDirectory>
+			<unpack>true</unpack>
 		</dependencySet>
 	</dependencySets>
 
 
 
-<!--	<fileSets>-->
-
-<!--		&lt;!&ndash; ==================== Copying file structure ================= &ndash;&gt;-->
-<!--		<fileSet>-->
-<!--			<directory>${project.basedir}/src/main/resources/WAR-->
-<!--			</directory>-->
-<!--			<outputDirectory>-->
-<!--			</outputDirectory>-->
-<!--		</fileSet>-->
-<!--		&lt;!&ndash; <fileSet>-->
-<!--			<directory>.</directory>-->
-<!--			<outputDirectory>logs</outputDirectory>-->
-<!--			<excludes>-->
-<!--				<exclude>*/**</exclude>-->
-<!--			</excludes>-->
-<!--		</fileSet>-->
-<!--		<fileSet>-->
-<!--			<directory>.</directory>-->
-<!--			<outputDirectory>database</outputDirectory>-->
-<!--			<excludes>-->
-<!--				<exclude>*/**</exclude>-->
-<!--			</excludes>-->
-<!--		</fileSet>-->
-<!--		<fileSet>-->
-<!--			<directory>.</directory>-->
-<!--			<outputDirectory>messages</outputDirectory>-->
-<!--			<excludes>-->
-<!--				<exclude>*/**</exclude>-->
-<!--			</excludes>-->
-<!--		</fileSet>-->
-<!--		<fileSet>-->
-<!--			<directory>.</directory>-->
-<!--			<outputDirectory>lib</outputDirectory>-->
-<!--			<excludes>-->
-<!--				<exclude>*/**</exclude>-->
-<!--			</excludes>-->
-<!--		</fileSet> &ndash;&gt;-->
-
-<!--	&lt;!&ndash; 	<fileSet>-->
-<!--			<directory>${project.basedir}/src/main/resources/application-->
-<!--			</directory>-->
-<!--			<outputDirectory>-->
-<!--			</outputDirectory>-->
-<!--			<fileMode>777</fileMode>-->
-<!--			<includes>-->
-<!--				<include>*.sh</include>-->
-<!--			</includes>-->
-<!--		</fileSet> &ndash;&gt;-->
-
-<!--		&lt;!&ndash; ==================== Copying domibusConnectorClientWAR library-->
-<!--			================= &ndash;&gt;-->
-<!--		<fileSet>-->
-<!--			<directory>${project.basedir}/domibusConnectorClientWAR/target/-->
-<!--			</directory>-->
-<!--			<outputDirectory>webapps-->
-<!--			</outputDirectory>-->
-<!--			<includes>-->
-<!--				<include>*.war</include>-->
-<!--			</includes>-->
-<!--			<excludes>-->
-<!--				<exclude>*-sources.jar</exclude>-->
-<!--				<exclude>*-javadoc.jar</exclude>-->
-<!--			</excludes>-->
-<!--		</fileSet>-->
-
-<!--		&lt;!&ndash; ==================== Copying site documentation ================= &ndash;&gt;-->
-<!--		<fileSet>-->
-<!--			<directory>${project.basedir}/target/site/-->
-<!--			</directory>-->
-<!--			<outputDirectory>documentation/site-->
-<!--			</outputDirectory>-->
-<!--		</fileSet>-->
-
-<!--	</fileSets>-->
-<!-- 	<files>
-        <file>
-            <source>${project.basedir}/domibusConnectorClientWAR/target/domibusConnectorClientWAR-${project.version}.war</source>
-            <outputDirectory>/webapp</outputDirectory>
-            <destName>connector-client.war</destName>
-        </file>
-
-    </files> -->
 </assembly>

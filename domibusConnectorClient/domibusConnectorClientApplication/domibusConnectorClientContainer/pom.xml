@@ -68,7 +68,7 @@
     <dependency>
       <groupId>eu.domibus.connector</groupId>
       <artifactId>domibusConnectorTestData</artifactId>
-      <version>${connector-server.version}</version>
+      <version>${connector-testdata.version}</version>
       <classifier>testkeystores</classifier>
     </dependency>
   </dependencies>

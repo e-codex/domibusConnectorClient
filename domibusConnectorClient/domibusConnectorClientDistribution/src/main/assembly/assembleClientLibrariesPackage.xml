@@ -14,8 +14,15 @@
 			<useProjectArtifact>true</useProjectArtifact>
 			<scope>runtime</scope>
 			<includes>
-				<include>eu.domibus.connector-client:domibusConnectorClientLibsAPI:*</include>
+				<include>*:domibusConnectorClientLibsAPI:*</include>
 			</includes>
+		</dependencySet>
+		<dependencySet>
+			<includes>
+				<include>*:domibusConnectorClientDocumentation:zip:client-libs-doc:${project.version}</include>
+			</includes>
+			<outputDirectory>.</outputDirectory>
+			<unpack>true</unpack>
 		</dependencySet>
 	</dependencySets>
 

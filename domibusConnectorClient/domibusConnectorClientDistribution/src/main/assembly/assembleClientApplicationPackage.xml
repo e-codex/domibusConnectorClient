@@ -8,36 +8,21 @@
 	</formats>
 	<includeBaseDirectory>false</includeBaseDirectory>
 
-<!--	<moduleSets>-->
-<!--		<moduleSet>-->
-<!--			<useAllReactorProjects>true</useAllReactorProjects>-->
-<!--			<includeSubModules>true</includeSubModules>-->
-<!--			<includes>-->
-<!--&lt;!&ndash;				<include>*:domibusConnectorClientStarter</include>&ndash;&gt;-->
-<!--			</includes>-->
-<!--			<binaries>-->
-<!--				<outputDirectory>bin</outputDirectory>-->
-<!--				<attachmentClassifier>spring</attachmentClassifier>-->
-<!--				<outputFileNameMapping>connectorClient.jar</outputFileNameMapping>-->
-<!--				&lt;!&ndash;				<attachmentClassifier>site</attachmentClassifier>&ndash;&gt;-->
-<!--				&lt;!&ndash;				<outputDirectory>doc</outputDirectory>&ndash;&gt;-->
-<!--				&lt;!&ndash;				<outputFileNameMapping>website.${module.extension}</outputFileNameMapping>&ndash;&gt;-->
-<!--			</binaries>-->
-<!--			<sources>-->
-<!--				<outputDirectory>src</outputDirectory>-->
-<!--			</sources>-->
-<!--		</moduleSet>-->
-<!--	</moduleSets>-->
-
 
 	<dependencySets>
 		<dependencySet>
-
 			<includes>
-				<include>*:domibusConnectorClientStarter:jar:spring:${project.version}</include>
+				<include>*:domibusConnectorClientStarter:jar:*:${project.version}</include>
 			</includes>
 			<outputDirectory>bin</outputDirectory>
 			<outputFileNameMapping>connectorClient.jar</outputFileNameMapping>
+		</dependencySet>
+		<dependencySet>
+			<includes>
+				<include>*:domibusConnectorClientDocumentation:zip:client-application-doc:${project.version}</include>
+			</includes>
+			<outputDirectory>.</outputDirectory>
+			<unpack>true</unpack>
 		</dependencySet>
 
 	</dependencySets>
@@ -89,29 +74,6 @@
 <!--			</includes>-->
 <!--		</fileSet>-->
 
-<!--		&lt;!&ndash; ==================== Copying domibusConnectorClientStarter library-->
-<!--			================= &ndash;&gt;-->
-<!--		<fileSet>-->
-<!--			<directory>${project.basedir}/domibusConnectorClientStarter/target/-->
-<!--			</directory>-->
-<!--			<outputDirectory>bin-->
-<!--			</outputDirectory>-->
-<!--			<includes>-->
-<!--				<include>*.jar</include>-->
-<!--			</includes>-->
-<!--			<excludes>-->
-<!--				<exclude>*-sources.jar</exclude>-->
-<!--				<exclude>*-javadoc.jar</exclude>-->
-<!--			</excludes>-->
-<!--		</fileSet>-->
-
-<!--		&lt;!&ndash; ==================== Copying site documentation ================= &ndash;&gt;-->
-<!--		<fileSet>-->
-<!--			<directory>${project.basedir}/target/site/-->
-<!--			</directory>-->
-<!--			<outputDirectory>documentation/site-->
-<!--			</outputDirectory>-->
-<!--		</fileSet>-->
 
 	</fileSets>
 </assembly>

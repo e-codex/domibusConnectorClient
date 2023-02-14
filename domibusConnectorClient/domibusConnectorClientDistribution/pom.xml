@@ -16,6 +16,45 @@
             <artifactId>domibusConnectorClientLibsAPI</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnectorClientStarter</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnectorClientWAR</artifactId>
+            <version>${project.version}</version>
+            <type>war</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnectorClientDocumentation</artifactId>
+            <version>${project.version}</version>
+            <classifier>all-doc</classifier>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnectorClientDocumentation</artifactId>
+            <version>${project.version}</version>
+            <classifier>client-application-doc</classifier>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnectorClientDocumentation</artifactId>
+            <version>${project.version}</version>
+            <classifier>client-libs-doc</classifier>
+            <type>zip</type>
+        </dependency>
+        <dependency>
+            <groupId>${project.groupId}</groupId>
+            <artifactId>domibusConnectorClientConfig</artifactId>
+            <version>${project.version}</version>
+            <classifier>startscripts</classifier>
+            <type>zip</type>
+        </dependency>
 
     </dependencies>
 
