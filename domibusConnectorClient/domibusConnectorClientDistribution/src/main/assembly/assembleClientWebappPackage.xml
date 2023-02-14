@@ -13,7 +13,7 @@
 			<outputDirectory>/webapp</outputDirectory>
 			<useProjectArtifact>true</useProjectArtifact>
 			<includes>
-				<include>*:domibusConnectorClientWar:*</include>
+				<include>*:domibusConnectorClientWar:war:*:${project.version}</include>
 			</includes>
 		</dependencySet>
 		<dependencySet>
