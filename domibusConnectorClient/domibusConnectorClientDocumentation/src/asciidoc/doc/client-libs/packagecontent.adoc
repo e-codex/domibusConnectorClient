@@ -28,5 +28,7 @@ Each libraries subfolder contains the following files:
 * *_-javadoc.jar_* - contains the API documentation (javadoc) of the library. This apidoc is merged to the apidocs of this site documentation.
 * *_pom.xml_*       - this is the project definition file of the library. Details on the pom.xml and its contents can be found in the documentation of *Apache Maven*.
 
+NOTE: You can also integrate it directly via maven dependency into your application.
+
 === libraries subfolder
 The description of the libraries, their purpose and usage can be found in the link:architecture.html[architecture documentation].

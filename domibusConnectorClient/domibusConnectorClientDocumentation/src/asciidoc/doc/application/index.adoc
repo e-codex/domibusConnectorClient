@@ -13,3 +13,6 @@ endif::header[]
 * link:architecture.html[Architecture]
 * link:config_guide.html[Config Guide]
 * link:isupport_config_guide.html[iSupport Config Guide]
+
+* link:standalone/install_guide.html[Standalone Application]
+* link:webapp/packagecontent.html[Web Application]

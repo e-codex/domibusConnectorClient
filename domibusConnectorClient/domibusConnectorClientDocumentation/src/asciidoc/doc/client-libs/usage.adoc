@@ -1,0 +1,41 @@
+:path: ../../
+
+ifndef::basepath[]
+:basepath: {path}
+endif::basepath[]
+
+ifndef::header[]
+include::{basepath}/header.adoc[]
+endif::header[]
+
+== Integrating in your code
+
+=== Maven Repository
+
+Configure the maven repository at your project.
+[source, xml]
+....
+<repository>
+    <id>ecodex-maven-repo</id>
+    <url>https://secure.e-codex.eu/nexus/content/groups/public/</url>
+</repository>
+....
+
+NOTE: Keep in mind that the repository is username password protected. For more information consult the maven manual.
+
+=== Adding maven dependencies
+
+Add or remove the required dependencies from your project. Replace 'domibus-connector-client.version' with the domibusConnectorClient Version.
+
+[source, xml]
+....
+<dependency>
+  <groupId>eu.domibus.connector-client</groupId>
+  <artifactId>domibusConnectorClientLibrary</artifactId>
+  <version>${domibus-connector-client.version}</version>
+</dependency>
+....
+
+
+
+
