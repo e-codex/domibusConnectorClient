@@ -20,6 +20,14 @@
       <artifactId>domibusConnectorClientStarter</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>flow-server</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>vaadin-lumo-theme</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <plugins>
@@ -65,13 +73,6 @@
       <build>
         <plugins>
           <plugin>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-maven-plugin</artifactId>
-            <configuration>
-              <jvmArguments>-Dvaadin.productionMode</jvmArguments>
-            </configuration>
-          </plugin>
-          <plugin>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-maven-plugin</artifactId>
             <executions>
@@ -84,15 +85,12 @@
           </plugin>
         </plugins>
       </build>
-      <properties>
-        <vaadin.productionMode>true</vaadin.productionMode>
-      </properties>
-      <dependencies>
-        <dependency>
-          <groupId>com.vaadin</groupId>
-          <artifactId>flow-server-production-mode</artifactId>
-        </dependency>
-      </dependencies>
+<!--      <dependencies>-->
+<!--        <dependency>-->
+<!--          <groupId>com.vaadin</groupId>-->
+<!--          <artifactId>flow-server-production-mode</artifactId>-->
+<!--        </dependency>-->
+<!--      </dependencies>-->
     </profile>
   </profiles>
 </project>

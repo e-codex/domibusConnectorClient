@@ -194,6 +194,40 @@
         </plugin>
         <plugin>
           <groupId>org.apache.maven.plugins</groupId>
+          <artifactId>maven-clean-plugin</artifactId>
+          <version>3.2.0</version>
+          <configuration>
+            <filesets>
+              <fileset>
+                <directory>frontend</directory>
+                <includes>
+                  <include>**</include>
+                </includes>
+                <followSymlinks>false</followSymlinks>
+              </fileset>
+              <fileset>
+                <directory>node_modules</directory>
+                <includes>
+                  <include>**/*</include>
+                </includes>
+                <followSymlinks>false</followSymlinks>
+              </fileset>
+              <fileset>
+                <directory>.</directory>
+                <includes>
+                  <include>package.json</include>
+                  <include>webpack.config.js</include>
+                  <include>webpack.generated.js</include>
+                  <include>tsconfig.json</include>
+                  <include>velocity.log</include>
+                </includes>
+                <followSymlinks>false</followSymlinks>
+              </fileset>
+            </filesets>
+          </configuration>
+        </plugin>
+        <plugin>
+          <groupId>org.apache.maven.plugins</groupId>
           <artifactId>maven-site-plugin</artifactId>
           <version>${maven.site.plugin.version}</version>
           <configuration>
