@@ -64,8 +64,14 @@
       <classifier>config</classifier>
       <type>zip</type>
     </dependency>
-
-
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>flow-server</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>com.vaadin</groupId>
+      <artifactId>vaadin-lumo-theme</artifactId>
+    </dependency>
   </dependencies>
   <build>
     <resources>
@@ -82,7 +88,6 @@
       <plugin>
         <groupId>com.vaadin</groupId>
         <artifactId>vaadin-maven-plugin</artifactId>
-        <version>${vaadin.version}</version>
         <executions>
           <execution>
             <goals>
@@ -148,10 +153,8 @@
           <plugin>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-maven-plugin</artifactId>
-            <version>${vaadin.version}</version>
             <executions>
               <execution>
-                <phase>compile</phase>
                 <goals>
                   <goal>build-frontend</goal>
                 </goals>
@@ -163,12 +166,6 @@
       <properties>
         <vaadin.productionMode>true</vaadin.productionMode>
       </properties>
-      <dependencies>
-        <dependency>
-          <groupId>com.vaadin</groupId>
-          <artifactId>flow-server-production-mode</artifactId>
-        </dependency>
-      </dependencies>
     </profile>
   </profiles>
 </project>

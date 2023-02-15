@@ -74,10 +74,8 @@
           <plugin>
             <groupId>com.vaadin</groupId>
             <artifactId>vaadin-maven-plugin</artifactId>
-            <version>${vaadin.version}</version>
             <executions>
               <execution>
-                <phase>compile</phase>
                 <goals>
                   <goal>build-frontend</goal>
                 </goals>
