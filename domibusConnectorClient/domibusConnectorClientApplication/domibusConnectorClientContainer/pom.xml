@@ -71,6 +71,12 @@
       <artifactId>domibusConnectorTestData</artifactId>
       <version>${connector-testdata.version}</version>
       <classifier>testkeystores</classifier>
+      <exclusions>
+        <exclusion>
+          <groupId>eu.domibus.connector</groupId>
+          <artifactId>domibusConnectorControllerAPI</artifactId>
+        </exclusion>
+      </exclusions>
     </dependency>
   </dependencies>
   <build>
