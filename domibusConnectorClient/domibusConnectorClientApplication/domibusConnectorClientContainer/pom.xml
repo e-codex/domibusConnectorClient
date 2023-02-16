@@ -74,31 +74,29 @@
   </dependencies>
   <build>
     <plugins>
-<!--      <plugin>-->
-<!--        <groupId>org.apache.maven.plugins</groupId>-->
-<!--        <artifactId>maven-dependency-plugin</artifactId>-->
-<!--        <executions>-->
-<!--          <execution>-->
-<!--            <id>unpack-target-workdir</id>-->
-<!--            <goals>-->
-<!--              <goal>unpack</goal>-->
-<!--            </goals>-->
-<!--            <phase>process-sources</phase>-->
-<!--            <configuration>-->
-<!--              <artifactItems>-->
-<!--                <artifactItem>-->
-<!--                  <groupId>eu.domibus.connector-client</groupId>-->
-<!--                  <artifactId>domibusConnectorClientConfig</artifactId>-->
-<!--                  <version>${project.version}</version>-->
-<!--                  <classifier>config</classifier>-->
-<!--                  <type>zip</type>-->
-<!--                </artifactItem>-->
-<!--              </artifactItems>-->
-<!--              <outputDirectory>${project.build.directory}/workdir</outputDirectory>-->
-<!--            </configuration>-->
-<!--          </execution>-->
-<!--        </executions>-->
-<!--      </plugin>-->
+      <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-resources-plugin</artifactId>
+        <executions>
+          <execution>
+            <id>copy-k8s-resources</id>
+            <!-- here the phase you need -->
+            <phase>validate</phase>
+            <goals>
+              <goal>copy-resources</goal>
+            </goals>
+            <configuration>
+              <outputDirectory>${basedir}/target/k8s</outputDirectory>
+              <resources>
+                <resource>
+                  <directory>src/main/k8s</directory>
+                  <filtering>true</filtering>
+                </resource>
+              </resources>
+            </configuration>
+          </execution>
+        </executions>
+      </plugin>
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
@@ -124,6 +122,13 @@
           </execution>
         </executions>
         <configuration>
+        </configuration>
+      </plugin>
+      <plugin>
+        <groupId>org.eclipse.jkube</groupId>
+        <artifactId>openshift-maven-plugin</artifactId>
+        <configuration>
+          <skip>false</skip>
         </configuration>
       </plugin>
     </plugins>
@@ -204,7 +209,6 @@
                 <image>centralrepo.apps.a3.cp.cna.at/brz-ju-images-poc-docker/jueu/dc-connector-client</image>
                 <tags>
                   <tag>${project.version}</tag>
-                  <tag>latest</tag>
                 </tags>
               </to>
             </configuration>

@@ -1,0 +1,19 @@
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: env01-connector-client-route
+  labels:
+    app: env01-connector-client
+spec:
+  host: env01-connector-client-ju-eu-ejustice-eqs.apps.a2.cp.cna.at
+  path: /
+  to:
+    kind: Service
+    name: env01-connector-client-svc
+    weight: 100
+  port:
+    targetPort: env01-connector-client-service-port
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None

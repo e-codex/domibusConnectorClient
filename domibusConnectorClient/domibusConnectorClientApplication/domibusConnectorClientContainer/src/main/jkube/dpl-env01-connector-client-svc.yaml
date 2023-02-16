@@ -1,0 +1,17 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: env01-connector-client-svc
+  labels:
+    app: env01-connector-client
+spec:
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: env01-connector-client-service-port
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  internalTrafficPolicy: Cluster
+  selector:
+    app: env01-connector-client

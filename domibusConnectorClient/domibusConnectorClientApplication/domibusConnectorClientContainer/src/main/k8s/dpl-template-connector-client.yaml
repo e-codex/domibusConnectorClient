@@ -1,0 +1,148 @@
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: ${lab.id}-connector-client-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  resources:
+    requests:
+      storage: 1Gi
+  storageClassName: netapp-trident-brz-retain
+  volumeMode: Filesystem
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dpl-${lab.id}-connector-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ${lab.id}-connector-client
+  template:
+    metadata:
+      labels:
+        app: ${lab.id}-connector-client
+        pod.cp.cna.at/ingress: allow
+    spec:
+      volumes:
+        - name: ecx-keystores
+          configMap:
+            name: ecx-keystores
+            defaultMode: 420
+        - name: temp
+          emptyDir: {}
+        - name: storage
+          persistentVolumeClaim:
+            claimName: ${lab.id}-connector-client-pvc
+      initContainers:
+        - name: ${lab.id}-connector-client-init
+          image: default-route-openshift-image-registry.apps.a2.cp.cna.at/cp-baseimages/brz-cp-ubi:latest
+          volumeMounts:
+          - name: storage
+            mountPath: /app/data
+            subPath: ${lab.id}/connector-client
+          command:
+          - /bin/sh
+          args:
+          - "-c"
+          - "/bin/mkdir -p /app/data/messages"
+          resources:
+            limits:
+              cpu: 100m
+              memory: 128Mi
+            request:
+              cpu: 50m
+              memory: 64Mi
+      containers:
+        - name: ${lab.id}-connector-client
+          image: centralrepo.apps.a3.cp.cna.at/brz-ju-images-poc-docker/jueu/dc-connector-client:${project.version}
+          # image: default-route-openshift-image-registry.apps.a2.cp.cna.at/ju-eu-ejustice-eqs/dc-connector-client
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          resources:
+            limits:
+              cpu: 200m
+              memory: 1Gi
+            request:
+              cpu: 50m
+              memory: 256Mi
+          env:
+            - name: SPRING_DATASOURCE_URL
+              value: "jdbc:h2:file:/app/data/connector-client.db"
+            - name: SPRING_DATASOURCE_USERNAME
+              value: connector-client
+            - name: SPRING_DATASOURCE_PASSWORD
+              value: connector-client
+            - name: CONNECTOR_CLIENT_STORAGE_FILESYSTEM_MESSAGES_PATH
+              value: /app/data/messages
+            - name: CONNECTOR_CLIENT_CONNECTOR_LINK_WS_CONNECTOR_ADDRESS
+              value: http://${lab.id}-connector-svc:8080/services/backend
+            - name: DEBUG
+              value: "true"
+            - name: SERVER_PORT
+              value: "8081"              
+          volumeMounts:
+            - name: storage
+              mountPath: /app/data
+              subPath: ${lab.id}/connector-client
+            # - name: ecx-keystores
+            #   mountPath: /app/config/keystores
+          terminationMessagePath: /dev/termination-log
+          terminationMessagePolicy: File
+          imagePullPolicy: Always
+      restartPolicy: Always
+      terminationGracePeriodSeconds: 30
+      dnsPolicy: ClusterFirst
+      securityContext: {}
+      schedulerName: default-scheduler
+  strategy:
+    type: Recreate
+    resources:
+      limits:
+        cpu: 200m
+        memory: 1Gi
+      request:
+        cpu: 50m
+        memory: 256Mi 
+  revisionHistoryLimit: 10
+---
+kind: Service
+apiVersion: v1
+metadata:
+  name: ${lab.id}-connector-client-svc
+  labels:
+    app: ${lab.id}-connector-client
+spec:  
+  ipFamilies:
+    - IPv4
+  ports:
+    - name: ${lab.id}-connector-client-service-port
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+  internalTrafficPolicy: Cluster  
+  selector:
+    app: ${lab.id}-connector-client
+---
+kind: Route
+apiVersion: route.openshift.io/v1
+metadata:
+  name: ${lab.id}-connector-client-route
+  labels:
+    app: ${lab.id}-connector-client
+spec:
+  host: ${lab.id}-connector-client-ju-eu-ejustice-eqs.apps.a2.cp.cna.at
+  path: /
+  to:
+    kind: Service
+    name: ${lab.id}-connector-client-svc
+    weight: 100
+  port:
+    targetPort: ${lab.id}-connector-client-service-port
+  tls:
+    termination: edge
+    insecureEdgeTerminationPolicy: Redirect
+  wildcardPolicy: None
