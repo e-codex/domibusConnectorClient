@@ -17,6 +17,8 @@
         <option name="value" value="7088" />
       </param>
     </additionalParameters>
+    <option name="ALTERNATIVE_JRE_PATH" value="11" />
+    <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="DEBUG_MODE" value="true" />
     <module name="domibusConnectorClientStarter" />
     <option name="SPRING_BOOT_MAIN_CLASS" value="eu.domibus.connector.client.starter.DomibusConnectorClientApplicationStarter" />
