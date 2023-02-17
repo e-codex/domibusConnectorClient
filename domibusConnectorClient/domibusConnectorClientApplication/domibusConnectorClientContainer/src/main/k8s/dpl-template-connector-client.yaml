@@ -50,11 +50,11 @@ spec:
           - "/bin/mkdir -p /app/data/messages"
           resources:
             limits:
-              cpu: 100m
-              memory: 128Mi
-            request:
               cpu: 50m
               memory: 64Mi
+            request:
+              cpu: 10m
+              memory: 32Mi
       containers:
         - name: ${lab.id}-connector-client
           image: centralrepo.apps.a3.cp.cna.at/brz-ju-images-poc-docker/jueu/dc-connector-client:${project.version}
@@ -66,8 +66,8 @@ spec:
               protocol: TCP
           resources:
             limits:
-              cpu: 200m
-              memory: 1Gi
+              cpu: 100m
+              memory: 512Mi
             request:
               cpu: 50m
               memory: 256Mi
@@ -102,13 +102,6 @@ spec:
       schedulerName: default-scheduler
   strategy:
     type: Recreate
-    resources:
-      limits:
-        cpu: 200m
-        memory: 1Gi
-      request:
-        cpu: 50m
-        memory: 256Mi 
   revisionHistoryLimit: 10
 ---
 kind: Service
